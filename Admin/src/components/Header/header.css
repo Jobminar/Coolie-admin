@@ -1,0 +1,48 @@
+.main-header{
+    /* border: 1px solid black; */
+    height: 4rem;
+    margin: none;
+    padding: none;
+    background-color: #030B33;
+    display: grid;
+    grid-template-columns: 30% 40% 30%;
+}
+/* .main-header div{
+    border: 1px solid white;
+} */
+.logo-section{
+    /* border: 1px solid white; */
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    padding-left: 3rem;
+}
+.logo-section img{
+    width: 4.5rem;
+    height: 4.5rem;
+}
+.logic-section{
+    /* border: 1px solid white; */
+    display: flex;
+    align-items: center;
+    padding-left: 2rem;
+    
+}
+
+
+.logic-section input{
+    height: 2rem;
+    background-color: #030B33;
+    /* border: 1px solid #FFFFFF; */
+    border-radius: 10px;
+    color: white;
+    padding-left: 2rem;
+}
+.notification-section{
+    /* border: 1px solid white; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    color: white;
+}

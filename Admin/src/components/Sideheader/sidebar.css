@@ -1,0 +1,38 @@
+.container{
+    display: flex;
+    height: auto;
+}
+
+.sidebar{
+    padding: 2rem 0rem;
+    /* border: 1px solid black; */
+    border-right: 1px solid #030B33;
+    border-bottom: 1px solid #030B33;
+    height: auto;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    justify-content: top;
+    align-items: center;
+}
+.sidebar div{
+    /* border: 1px solid black; */
+    padding: 1rem;
+    border-radius: 10px;
+    font-family: Roboto;
+    font-size: 27px;
+    font-weight: 500;
+    line-height: 30.5px;
+    text-align: left;
+    padding: 10px;
+    cursor: pointer;
+    }
+.sidebar div:hover{
+    cursor: pointer;
+}  
+  .sidebar div.active {
+    background-color:#030B33;
+    color: white;
+  }
+  

@@ -1,4 +1,5 @@
 import Routing from "./Routing"
+import './App.css'
 
 
 function App() {
@@ -6,7 +7,11 @@ function App() {
 
   return (
     <>
-            <Routing/>
+    <div className="App">
+    <Routing/>
+    </div>
+      
+            
     </>
   )
 }

@@ -1,0 +1,22 @@
+.tabs-container{
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid black;
+    gap: 2rem;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23.44px;
+    text-align: left;
+    margin-left: 0.5rem;
+
+}
+.jobsarea{
+    font-family: Roboto;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 37.5px;
+    text-align: left;
+    margin-left: 2rem;
+
+}
