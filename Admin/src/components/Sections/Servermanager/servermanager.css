@@ -1,0 +1,124 @@
+/* Base container to take full page height */
+.servermanager-container {
+    padding: 20px;
+    font-family: Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    /* Full height */
+    box-sizing: border-box;
+    /* Include padding and border in element's total width and height */
+}
+
+/* Flex container for cards */
+.card-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    /* Allow wrapping for better responsiveness */
+}
+
+/* Card styling */
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+    flex: 1 1 45%;
+    /* Flex-grow, flex-shrink, flex-basis for responsiveness */
+    box-sizing: border-box;
+    /* Include padding and border in element's total width and height */
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Form group styling */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Label styling */
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Input and textarea styling */
+.form-group input[type="text"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    /* Include padding and border in element's total width and height */
+}
+
+/* Checkbox styling */
+.form-group input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Button styling */
+button {
+    padding: 10px 20px;
+    background-color: #030B33;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #002244;
+}
+
+/* Hamburger icon styling */
+.hamburger-icon {
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Add button styling */
+.add-button {
+    margin-left: 10px;
+    background-color: #030B33;
+}
+
+/* Menu styling */
+.menu {
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Menu item styling */
+.menu-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Submit button specific styling */
+.submit-button {
+    background-color: #030B33;
+}
+
+.submit-button:hover {
+    background-color: #002244;
+}
+
+/* Add service form styling */
+.add-service-form {
+    flex: 1 1 100%;
+    /* Full width in its own row */
+}

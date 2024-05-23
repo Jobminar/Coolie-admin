@@ -1,28 +1,35 @@
-import React, { useState } from 'react';
-import './jobsarea.css'
-import Pendingjobs from './tabs/pendig-jobs/pendingjobs';
-import Completedjobs from './tabs/completed-jobs/completedjobs';
-import Currentlyservingjobs from './tabs/currentlyserving-jobs/currentlyserving-jobs';
-import Acceptedbyproviders from './tabs/acceptedby-providers/acceptedby-providers';
-import Declinedbyproviders from './tabs/declainedby-providers/declinedby-providers';
-import Customercancelledjobs from './tabs/customercancelled-jobs/customercancelledjobs';
+import React, { useState } from "react";
+import "./jobsarea.css";
+
+import Completedjobs from "./tabs/completed-jobs/completedjobs";
+import Currentlyservingjobs from "./tabs/currentlyserving-jobs/currentlyserving-jobs";
+import Acceptedbyproviders from "./tabs/acceptedby-providers/acceptedby-providers";
+import Declinedbyproviders from "./tabs/declinedby-providers/declinedby-providers";
+import Customercancelledjobs from "./tabs/customercancelled-jobs/customercancelledjobs";
+import Allocatedjobs from "./tabs/allocated-jobs/allocatedjobs";
+import Unallocatedjobs from "./tabs/unallocated-jobs/unallocatedjobs";
 
 const Jobsarea = () => {
-  const [activeTab, setActiveTab] = useState('freshfruits');
+  const [activeTab, setActiveTab] = useState("pendingjobs");
+  const [activeSubTab, setActiveSubTab] = useState("allocatedjobs");
 
   const renderSelectedComponent = () => {
     switch (activeTab) {
-      case 'pendingjobs':
-        return <Pendingjobs/>
-      case 'completedjobs':
-        return <Completedjobs />;
-      case 'currentlyservingjobs':
+      case "pendingjobs":
+        return activeSubTab === "allocatedjobs" ? (
+          <Allocatedjobs />
+        ) : (
+          <Unallocatedjobs />
+        );
+      case "currentlyservingjobs":
         return <Currentlyservingjobs />;
-      case 'acceptedbyproviders':
+      case "completedjobs":
+        return <Completedjobs />;
+      case "acceptedbyproviders":
         return <Acceptedbyproviders />;
-      case 'declainedbyproviders':
+      case "declinedbyproviders":
         return <Declinedbyproviders />;
-      case 'customercancelledjobs':
+      case "customercancelledjobs":
         return <Customercancelledjobs />;
       default:
         return null;
@@ -31,58 +38,77 @@ const Jobsarea = () => {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+    if (tab !== "pendingjobs") {
+      setActiveSubTab("");
+    } else {
+      setActiveSubTab("allocatedjobs");
+    }
   };
 
   return (
-    <div  className='services-container'>
-      <div>
-        <p className='jobsarea'>Jobs area</p>
+    <div className="services-container">
+      <div className="header-container">
+        <p className="jobsarea">Jobs Area</p>
+        <button className="add-job-button">Add Job</button>
       </div>
-  
       <div className="tabs-container">
         <div
-          className={`tab ${activeTab === 'pendingjobs' && 'active'}`}
-          onClick={() => handleTabClick('pendingjobs')}
+          className={`tab ${activeTab === "pendingjobs" && "active"}`}
+          onClick={() => handleTabClick("pendingjobs")}
         >
-          {/* <img src={general} alt="" width={30}/> */}
           Pending jobs
         </div>
         <div
-          className={`tab ${activeTab === 'completedjobs' && 'active'}`}
-          onClick={() => handleTabClick('completedjobs')}
+          className={`tab ${activeTab === "currentlyservingjobs" && "active"}`}
+          onClick={() => handleTabClick("currentlyservingjobs")}
         >
-          {/* <img src={denting} alt="" width={30}/> */}
-          Completed jobs
-        </div>
-        <div
-          className={`tab ${activeTab === 'currentlyservingjobs' && 'active'}`}
-          onClick={() => handleTabClick('currentlyservingjobs')}
-        >
-          {/* <img src={denting} alt="" width={30}/> */}
           Currently serving jobs
         </div>
         <div
-          className={`tab ${activeTab === 'acceptedbyproviders' && 'active'}`}
-          onClick={() => handleTabClick('acceptedbyproviders')}
+          className={`tab ${activeTab === "completedjobs" && "active"}`}
+          onClick={() => handleTabClick("completedjobs")}
         >
-          {/* <img src={ac} alt="" width={30}/> */}
+          Completed jobs
+        </div>
+        <div
+          className={`tab ${activeTab === "acceptedbyproviders" && "active"}`}
+          onClick={() => handleTabClick("acceptedbyproviders")}
+        >
           Accepted by providers
         </div>
         <div
-          className={`tab ${activeTab === 'declainedbyproviders' && 'active'}`}
-          onClick={() => handleTabClick('declainedbyproviders')}
+          className={`tab ${activeTab === "declinedbyproviders" && "active"}`}
+          onClick={() => handleTabClick("declinedbyproviders")}
         >
-          {/* <img src={accident} alt="" width={30}/> */}
-          Declained by providers
+          Declined by providers
         </div>
         <div
-          className={`tab ${activeTab === 'customercancelledjobs' && 'active'}`}
-          onClick={() => handleTabClick('customercancelledjobs')}
+          className={`tab ${activeTab === "customercancelledjobs" && "active"}`}
+          onClick={() => handleTabClick("customercancelledjobs")}
         >
-          {/* <img src={battery} alt="" width={30}/> */}
           Customer cancelled jobs
         </div>
       </div>
+      {activeTab === "pendingjobs" && (
+        <div className="sub-tabs-container">
+          <div
+            className={`sub-tab ${
+              activeSubTab === "allocatedjobs" && "active"
+            }`}
+            onClick={() => setActiveSubTab("allocatedjobs")}
+          >
+            Allocated Jobs
+          </div>
+          <div
+            className={`sub-tab ${
+              activeSubTab === "unallocatedjobs" && "active"
+            }`}
+            onClick={() => setActiveSubTab("unallocatedjobs")}
+          >
+            Unallocated Jobs
+          </div>
+        </div>
+      )}
       {renderSelectedComponent()}
     </div>
   );

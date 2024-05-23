@@ -1,7 +1,42 @@
-.tabs-container{
+/* jobsarea.css */
+.services-container {
+    font-family: Roboto, sans-serif;
+}
+
+.header-container {
+    position: relative;
+    padding: 0 2rem;
+}
+
+.jobsarea {
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 37.5px;
+    text-align: left;
+    margin-left: 2rem;
+}
+
+.add-job-button {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: 500;
+    font-style: bold;
+    padding: 10px 20px;
+    background-color: #F5F5F5;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tabs-container {
     display: flex;
     justify-content: space-between;
-    border: 1px solid black;
     gap: 2rem;
     font-family: Roboto;
     font-size: 15px;
@@ -9,14 +44,32 @@
     line-height: 23.44px;
     text-align: left;
     margin-left: 0.5rem;
-
 }
-.jobsarea{
-    font-family: Roboto;
-    font-size: 32px;
-    font-weight: 500;
-    line-height: 37.5px;
-    text-align: left;
-    margin-left: 2rem;
 
+.tab {
+    cursor: pointer;
+    padding: 10px;
+    position: relative;
+}
+
+.tab.active {
+    border-bottom: 2px solid #FF0000;
+}
+
+.sub-tabs-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.sub-tab {
+    cursor: pointer;
+    padding: 10px;
+    position: relative;
+    margin-left: 10px;
+}
+
+.sub-tab.active {
+    border-bottom: 2px solid #FF0000;
 }
