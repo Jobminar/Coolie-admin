@@ -1,4 +1,4 @@
-.usermanager-container {
+.usercornercontainer {
     padding: 20px;
     font-family: Roboto, sans-serif;
     height: 100vh;
@@ -6,7 +6,7 @@
     flex-direction: column;
 }
 
-.tabs {
+/* .tabs {
     display: flex;
     margin-bottom: 20px;
 }
@@ -21,9 +21,9 @@
 .tab.active {
     background-color: #030B33;
     color: #fff;
-}
+} */
 
-.table-container {
+.usertablecontainer {
     flex: 1;
     overflow-y: auto;
 }

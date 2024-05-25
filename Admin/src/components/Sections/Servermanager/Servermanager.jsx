@@ -38,20 +38,19 @@ const Servermanager = () => {
       <div className="card-container">
         <div className="card">
           <div className="form-group">
-            <label>Select Category</label>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <button
-                className="hamburger-icon"
-                onClick={() => setShowCategoryMenu(!showCategoryMenu)}
-              >
-                &#9776;
-              </button>
               <span>{selectedCategory || "Select Category"}</span>
               <button
                 className="add-button"
                 onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}
               >
                 +
+              </button>
+              <button
+                className="hamburger-icon"
+                onClick={() => setShowCategoryMenu(!showCategoryMenu)}
+              >
+                &#9776;
               </button>
             </div>
           </div>

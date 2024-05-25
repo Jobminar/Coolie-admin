@@ -46,12 +46,12 @@ const Jobsarea = () => {
   };
 
   return (
-    <div className="services-container">
-      <div className="header-container">
+    <div className="jobcontainer">
+      <div className="jobsheader">
         <p className="jobsarea">Jobs Area</p>
         <button className="add-job-button">Add Job</button>
       </div>
-      <div className="tabs-container">
+      <div className="jobstabs">
         <div
           className={`tab ${activeTab === "pendingjobs" && "active"}`}
           onClick={() => handleTabClick("pendingjobs")}
@@ -90,7 +90,7 @@ const Jobsarea = () => {
         </div>
       </div>
       {activeTab === "pendingjobs" && (
-        <div className="sub-tabs-container">
+        <div className="jobs-tabs-container">
           <div
             className={`sub-tab ${
               activeSubTab === "allocatedjobs" && "active"

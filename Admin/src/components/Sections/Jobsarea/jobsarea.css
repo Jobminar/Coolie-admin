@@ -1,9 +1,9 @@
 /* jobsarea.css */
-.services-container {
+.jobcontainer {
     font-family: Roboto, sans-serif;
 }
 
-.header-container {
+.jobsheader {
     position: relative;
     padding: 0 2rem;
 }
@@ -34,7 +34,7 @@
     cursor: pointer;
 }
 
-.tabs-container {
+.jobstabs {
     display: flex;
     justify-content: space-between;
     gap: 2rem;
@@ -56,7 +56,7 @@
     border-bottom: 2px solid #FF0000;
 }
 
-.sub-tabs-container {
+.jobs-tabs-container {
     display: flex;
     justify-content: flex-start;
     gap: 2rem;

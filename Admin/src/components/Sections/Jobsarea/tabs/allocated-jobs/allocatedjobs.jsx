@@ -2,7 +2,7 @@
 import React from "react";
 
 const Allocatedjobs = () => {
-  return <div>Allocated jobs content</div>;
+  return <div></div>;
 };
 
 export default Allocatedjobs;

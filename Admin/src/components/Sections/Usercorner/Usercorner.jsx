@@ -47,7 +47,7 @@ const UserManager = () => {
   };
 
   return (
-    <div className="usermanager-container">
+    <div className="usercornercontainer">
       <div className="tabs">
         {Object.keys(data).map((tab) => (
           <button
@@ -59,7 +59,7 @@ const UserManager = () => {
           </button>
         ))}
       </div>
-      <div className="table-container">
+      <div className="usertablecontainer">
         <table>
           <thead>
             <tr>

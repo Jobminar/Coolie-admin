@@ -62,18 +62,7 @@
 }
 
 /* Button styling */
-button {
-    padding: 10px 20px;
-    background-color: #030B33;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
 
-button:hover {
-    background-color: #002244;
-}
 
 /* Hamburger icon styling */
 .hamburger-icon {
