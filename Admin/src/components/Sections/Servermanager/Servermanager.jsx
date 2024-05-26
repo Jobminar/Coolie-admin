@@ -3,13 +3,12 @@ import AddServiceForm from "./AddServiceForm";
 import "./servermanager.css"; // Ensure the CSS file is correctly linked
 
 const Servermanager = () => {
+  const [expandedCard, setExpandedCard] = useState(null);
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const [showSubCategoryMenu, setShowSubCategoryMenu] = useState(false);
+  const [showServiceVariantsMenu, setShowServiceVariantsMenu] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
-  const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
-  const [showAddSubCategoryForm, setShowAddSubCategoryForm] = useState(false);
-  const [showServiceVariants, setShowServiceVariants] = useState(false);
   const [showServiceForm, setShowServiceForm] = useState(false);
 
   const categories = ["Cleaning service", "Salon At Home", "Add new category"];
@@ -24,31 +23,32 @@ const Servermanager = () => {
 
   const handleCategorySelect = (category) => {
     if (category === "Add new category") {
-      setShowAddCategoryForm(true);
+      setExpandedCard("category");
     } else {
       setSelectedCategory(category);
-      setShowCategoryMenu(false);
+      setExpandedCard(null);
       setShowSubCategoryMenu(true);
-      setShowServiceVariants(false);
+      setShowServiceVariantsMenu(false);
       setShowServiceForm(false);
     }
   };
 
   const handleSubCategorySelect = (subCategory) => {
     if (subCategory === "Add new sub-category") {
-      setShowAddSubCategoryForm(true);
-      setShowServiceVariants(false);
+      setExpandedCard("subcategory");
+      setShowServiceVariantsMenu(false);
       setShowServiceForm(false);
     } else {
       setSelectedSubCategory(subCategory);
-      setShowSubCategoryMenu(false);
-      setShowServiceVariants(true);
-      setShowAddSubCategoryForm(false);
+      setExpandedCard(null);
+      setShowServiceVariantsMenu(true);
+      setShowServiceForm(false);
     }
   };
 
   const handleServiceVariantSelect = (variant) => {
     if (variant === "Add New Service Variant") {
+      setExpandedCard("serviceVariant");
       setShowServiceForm(true);
     } else {
       setShowServiceForm(false);
@@ -56,8 +56,12 @@ const Servermanager = () => {
   };
 
   const handleAddSubCategory = () => {
-    setShowAddSubCategoryForm(false);
-    setShowServiceVariants(true);
+    setExpandedCard(null);
+    setShowServiceVariantsMenu(true);
+  };
+
+  const toggleServiceForm = () => {
+    setShowServiceForm((prev) => !prev);
   };
 
   return (
@@ -65,13 +69,20 @@ const Servermanager = () => {
       <h2>Manage Service</h2>
 
       <div className="card-container">
-        <div className="card fixed-card">
+        <div
+          className={`card ${expandedCard === "category" ? "expanded" : ""}`}
+          id="category-card"
+        >
           <div className="form-group">
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <span>{selectedCategory || "Select Category"}</span>
+            <div className="category-header">
+              <span>Select Category</span>
               <button
                 className="add-button"
-                onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}
+                onClick={() =>
+                  setExpandedCard(
+                    expandedCard === "category" ? null : "category",
+                  )
+                }
               >
                 +
               </button>
@@ -89,7 +100,9 @@ const Servermanager = () => {
               {categories.map((category, index) => (
                 <div
                   key={index}
-                  className="menu-item"
+                  className={`menu-item ${
+                    selectedCategory === category ? "selected" : ""
+                  }`}
                   onClick={() => handleCategorySelect(category)}
                 >
                   {category}
@@ -98,8 +111,8 @@ const Servermanager = () => {
             </div>
           )}
 
-          {showAddCategoryForm && (
-            <div className="card add-category-card">
+          {expandedCard === "category" && (
+            <div className="add-category-form">
               <h3>Add Category</h3>
               <div className="form-group">
                 <label>Category Name:</label>
@@ -107,7 +120,10 @@ const Servermanager = () => {
               </div>
               <div className="form-group">
                 <label>Category Icon:</label>
-                <input type="file" />
+                <input type="file" id="categoryIcon" />
+                <label htmlFor="categoryIcon" className="upload-icon-label">
+                  <i className="upload-icon">&#128247;</i> Upload
+                </label>
               </div>
               <div className="form-group">
                 <label>Category Type:</label>
@@ -124,21 +140,27 @@ const Servermanager = () => {
         </div>
 
         {selectedCategory && (
-          <div className="card fixed-card">
+          <div
+            className={`card ${
+              expandedCard === "subcategory" ? "expanded" : ""
+            }`}
+            id="subcategory-card"
+          >
             <div className="form-group">
-              <label>Select Sub-Category</label>
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div className="category-header">
                 <button
                   className="hamburger-icon"
                   onClick={() => setShowSubCategoryMenu(!showSubCategoryMenu)}
                 >
                   &#9776;
                 </button>
-                <span>{selectedSubCategory || "Select Sub-Category"}</span>
+                <span>Select Sub-Category</span>
                 <button
                   className="add-button"
                   onClick={() =>
-                    setShowAddSubCategoryForm(!showAddSubCategoryForm)
+                    setExpandedCard(
+                      expandedCard === "subcategory" ? null : "subcategory",
+                    )
                   }
                 >
                   +
@@ -151,7 +173,9 @@ const Servermanager = () => {
                 {subCategories.map((subCategory, index) => (
                   <div
                     key={index}
-                    className="menu-item"
+                    className={`menu-item ${
+                      selectedSubCategory === subCategory ? "selected" : ""
+                    }`}
                     onClick={() => handleSubCategorySelect(subCategory)}
                   >
                     {subCategory}
@@ -159,75 +183,89 @@ const Servermanager = () => {
                 ))}
               </div>
             )}
+
+            {expandedCard === "subcategory" && (
+              <div className="add-sub-category-form">
+                <h3>Add Sub-Category</h3>
+                <div className="form-group">
+                  <label>Sub-Category Name:</label>
+                  <input type="text" />
+                </div>
+                <div className="form-group">
+                  <label>Sub-Category Icon:</label>
+                  <input type="file" id="subCategoryIcon" />
+                  <label
+                    htmlFor="subCategoryIcon"
+                    className="upload-icon-label"
+                  >
+                    <i className="upload-icon">&#128247;</i> Upload
+                  </label>
+                </div>
+                <div className="form-group">
+                  <label>Sub-Category Type:</label>
+                  <select>
+                    <option>Normal</option>
+                    <option>Deep</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Hour</option>
+                    <option>Daily</option>
+                    <option>Monthly</option>
+                  </select>
+                </div>
+                <button
+                  className="submit-button"
+                  onClick={handleAddSubCategory}
+                >
+                  Add
+                </button>
+              </div>
+            )}
           </div>
         )}
 
-        {showAddSubCategoryForm && (
-          <div className="card add-sub-category-card fixed-card">
-            <h3>Add Sub-Category</h3>
+        {selectedSubCategory && (
+          <div
+            className={`card ${
+              expandedCard === "serviceVariant" ? "expanded" : ""
+            }`}
+            id="service-variant-card"
+          >
             <div className="form-group">
-              <label>Sub-Category Name:</label>
-              <input type="text" />
-            </div>
-            <div className="form-group">
-              <label>Sub-Category Icon:</label>
-              <input type="file" />
-            </div>
-            <div className="form-group">
-              <label>Sub-Category Type:</label>
-              <select>
-                <option>Normal</option>
-                <option>Deep</option>
-                <option>Male</option>
-                <option>Female</option>
-                <option>Hour</option>
-                <option>Daily</option>
-                <option>Monthly</option>
-              </select>
-            </div>
-            <button className="submit-button" onClick={handleAddSubCategory}>
-              Add
-            </button>
-          </div>
-        )}
-
-        {showServiceVariants && (
-          <div className="card fixed-card">
-            <div className="form-group">
-              <label>Service Variants</label>
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div className="category-header">
                 <button
                   className="hamburger-icon"
-                  onClick={() => setShowSubCategoryMenu(!showSubCategoryMenu)}
+                  onClick={() =>
+                    setShowServiceVariantsMenu(!showServiceVariantsMenu)
+                  }
                 >
                   &#9776;
                 </button>
-                <span>{selectedSubCategory || "Select Sub-Category"}</span>
-                <button
-                  className="add-button"
-                  onClick={() => setShowServiceForm(true)}
-                >
+                <span>Service Variants</span>
+                <button className="add-button" onClick={toggleServiceForm}>
                   +
                 </button>
               </div>
             </div>
 
-            <div className="menu">
-              {serviceVariants.map((variant, index) => (
-                <div
-                  key={index}
-                  className="menu-item"
-                  onClick={() => handleServiceVariantSelect(variant)}
-                >
-                  {variant}
-                </div>
-              ))}
-            </div>
+            {showServiceVariantsMenu && (
+              <div className="menu">
+                {serviceVariants.map((variant, index) => (
+                  <div
+                    key={index}
+                    className={`menu-item ${showServiceForm ? "selected" : ""}`}
+                    onClick={() => handleServiceVariantSelect(variant)}
+                  >
+                    {variant}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
-
-        {showServiceForm && <AddServiceForm />}
       </div>
+
+      {showServiceForm && <AddServiceForm />}
     </div>
   );
 };
