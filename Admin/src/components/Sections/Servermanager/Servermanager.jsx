@@ -9,7 +9,11 @@ const Servermanager = () => {
   const [showServiceVariantsMenu, setShowServiceVariantsMenu] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
+  const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
+  const [showAddSubCategoryForm, setShowAddSubCategoryForm] = useState(false);
   const [showServiceForm, setShowServiceForm] = useState(false);
+  const [categoryIcon, setCategoryIcon] = useState(null);
+  const [subCategoryIcon, setSubCategoryIcon] = useState(null);
 
   const categories = ["Cleaning service", "Salon At Home", "Add new category"];
   const subCategories = [
@@ -23,10 +27,11 @@ const Servermanager = () => {
 
   const handleCategorySelect = (category) => {
     if (category === "Add new category") {
-      setExpandedCard("category");
+      setShowAddCategoryForm(true);
     } else {
       setSelectedCategory(category);
-      setExpandedCard(null);
+      setShowCategoryMenu(false);
+      setShowAddCategoryForm(false);
       setShowSubCategoryMenu(true);
       setShowServiceVariantsMenu(false);
       setShowServiceForm(false);
@@ -35,12 +40,13 @@ const Servermanager = () => {
 
   const handleSubCategorySelect = (subCategory) => {
     if (subCategory === "Add new sub-category") {
-      setExpandedCard("subcategory");
+      setShowAddSubCategoryForm(true);
       setShowServiceVariantsMenu(false);
       setShowServiceForm(false);
     } else {
       setSelectedSubCategory(subCategory);
-      setExpandedCard(null);
+      setShowSubCategoryMenu(false);
+      setShowAddSubCategoryForm(false);
       setShowServiceVariantsMenu(true);
       setShowServiceForm(false);
     }
@@ -48,20 +54,22 @@ const Servermanager = () => {
 
   const handleServiceVariantSelect = (variant) => {
     if (variant === "Add New Service Variant") {
-      setExpandedCard("serviceVariant");
       setShowServiceForm(true);
     } else {
       setShowServiceForm(false);
     }
   };
 
-  const handleAddSubCategory = () => {
-    setExpandedCard(null);
-    setShowServiceVariantsMenu(true);
-  };
-
   const toggleServiceForm = () => {
     setShowServiceForm((prev) => !prev);
+  };
+
+  const handleCategoryIconChange = (e) => {
+    setCategoryIcon(URL.createObjectURL(e.target.files[0]));
+  };
+
+  const handleSubCategoryIconChange = (e) => {
+    setSubCategoryIcon(URL.createObjectURL(e.target.files[0]));
   };
 
   return (
@@ -69,20 +77,13 @@ const Servermanager = () => {
       <h2>Manage Service</h2>
 
       <div className="card-container">
-        <div
-          className={`card ${expandedCard === "category" ? "expanded" : ""}`}
-          id="category-card"
-        >
+        <div className="card" id="category-card">
           <div className="form-group">
             <div className="category-header">
               <span>Select Category</span>
               <button
                 className="add-button"
-                onClick={() =>
-                  setExpandedCard(
-                    expandedCard === "category" ? null : "category",
-                  )
-                }
+                onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}
               >
                 +
               </button>
@@ -110,43 +111,54 @@ const Servermanager = () => {
               ))}
             </div>
           )}
-
-          {expandedCard === "category" && (
-            <div className="add-category-form">
-              <h3>Add Category</h3>
-              <div className="form-group">
-                <label>Category Name:</label>
-                <input type="text" />
-              </div>
-              <div className="form-group">
-                <label>Category Icon:</label>
-                <input type="file" id="categoryIcon" />
-                <label htmlFor="categoryIcon" className="upload-icon-label">
-                  <i className="upload-icon">&#128247;</i> Upload
-                </label>
-              </div>
-              <div className="form-group">
-                <label>Category Type:</label>
-                <select>
-                  <option>Normal / Deep</option>
-                  <option>Male / Female</option>
-                  <option>Hour / Daily / Monthly</option>
-                  <option>Laundry / Dry cleaning</option>
-                </select>
-              </div>
-              <button className="submit-button">Add</button>
-            </div>
-          )}
         </div>
 
+        {showAddCategoryForm && (
+          <div className="card add-category-form">
+            <h3>Add Category</h3>
+            <div className="input-container">
+              <label>Category Name:</label>
+              <input type="text" className="bottom-border-input" />
+            </div>
+            <div className="upload-container">
+              <div className="input-container">
+                <label>Category Icon:</label>
+                <div className="file-upload">
+                  <input
+                    type="file"
+                    id="categoryIcon"
+                    onChange={handleCategoryIconChange}
+                  />
+                  <label htmlFor="categoryIcon" className="upload-icon-label">
+                    <i className="upload-icon">&#128247;</i> Upload
+                  </label>
+                </div>
+                {categoryIcon && (
+                  <img
+                    src={categoryIcon}
+                    alt="Category Icon"
+                    className="upload-preview"
+                  />
+                )}
+              </div>
+            </div>
+            <div className="input-container">
+              <label>Category Type:</label>
+              <select className="bottom-border-input">
+                <option>Normal / Deep</option>
+                <option>Male / Female</option>
+                <option>Hour / Daily / Monthly</option>
+                <option>Laundry / Dry cleaning</option>
+              </select>
+            </div>
+            <button className="submit-button">Add</button>
+          </div>
+        )}
+
         {selectedCategory && (
-          <div
-            className={`card ${
-              expandedCard === "subcategory" ? "expanded" : ""
-            }`}
-            id="subcategory-card"
-          >
+          <div className="card" id="subcategory-card">
             <div className="form-group">
+              <label>Select Sub-Category</label>
               <div className="category-header">
                 <button
                   className="hamburger-icon"
@@ -158,9 +170,7 @@ const Servermanager = () => {
                 <button
                   className="add-button"
                   onClick={() =>
-                    setExpandedCard(
-                      expandedCard === "subcategory" ? null : "subcategory",
-                    )
+                    setShowAddSubCategoryForm(!showAddSubCategoryForm)
                   }
                 >
                   +
@@ -183,17 +193,25 @@ const Servermanager = () => {
                 ))}
               </div>
             )}
+          </div>
+        )}
 
-            {expandedCard === "subcategory" && (
-              <div className="add-sub-category-form">
-                <h3>Add Sub-Category</h3>
-                <div className="form-group">
-                  <label>Sub-Category Name:</label>
-                  <input type="text" />
-                </div>
-                <div className="form-group">
-                  <label>Sub-Category Icon:</label>
-                  <input type="file" id="subCategoryIcon" />
+        {showAddSubCategoryForm && (
+          <div className="card add-sub-category-form">
+            <h3>Add Sub-Category</h3>
+            <div className="input-container">
+              <label>Sub-Category Name:</label>
+              <input type="text" className="bottom-border-input" />
+            </div>
+            <div className="upload-container">
+              <div className="input-container">
+                <label>Sub-Category Icon:</label>
+                <div className="file-upload">
+                  <input
+                    type="file"
+                    id="subCategoryIcon"
+                    onChange={handleSubCategoryIconChange}
+                  />
                   <label
                     htmlFor="subCategoryIcon"
                     className="upload-icon-label"
@@ -201,37 +219,35 @@ const Servermanager = () => {
                     <i className="upload-icon">&#128247;</i> Upload
                   </label>
                 </div>
-                <div className="form-group">
-                  <label>Sub-Category Type:</label>
-                  <select>
-                    <option>Normal</option>
-                    <option>Deep</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                    <option>Hour</option>
-                    <option>Daily</option>
-                    <option>Monthly</option>
-                  </select>
-                </div>
-                <button
-                  className="submit-button"
-                  onClick={handleAddSubCategory}
-                >
-                  Add
-                </button>
+                {subCategoryIcon && (
+                  <img
+                    src={subCategoryIcon}
+                    alt="Sub-Category Icon"
+                    className="upload-preview"
+                  />
+                )}
               </div>
-            )}
+            </div>
+            <div className="input-container">
+              <label>Sub-Category Type:</label>
+              <select className="bottom-border-input">
+                <option>Normal</option>
+                <option>Deep</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Hour</option>
+                <option>Daily</option>
+                <option>Monthly</option>
+              </select>
+            </div>
+            <button className="submit-button">Add</button>
           </div>
         )}
 
         {selectedSubCategory && (
-          <div
-            className={`card ${
-              expandedCard === "serviceVariant" ? "expanded" : ""
-            }`}
-            id="service-variant-card"
-          >
+          <div className="card" id="service-variant-card">
             <div className="form-group">
+              <label>Service Variants</label>
               <div className="category-header">
                 <button
                   className="hamburger-icon"
