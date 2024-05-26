@@ -8,7 +8,7 @@
     /* border: 1px solid black; */
     border-right: 1px solid #030B33;
     border-bottom: 1px solid #030B33;
-    height: auto;
+    height: 1300px;
     width: 280px;
     display: flex;
     flex-direction: column;
