@@ -1,5 +1,6 @@
 .container{
-    display: flex;
+    display: grid;
+    grid-template-columns: 20% 78%;
     height: auto;
 }
 

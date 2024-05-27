@@ -1,0 +1,98 @@
+.loyality-title{
+    font-family: Roboto;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 37.5px;
+    text-align: left;
+
+}
+.loyality{
+    /* border: 1px solid black; */
+    width: 20% 78%;
+}
+button{
+    background-color: yellow;
+    width: 12rem;
+    height: 3rem;
+    border-radius: 10px;
+    margin:0rem 2rem;
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 28.13px;
+    text-align: center;
+    color: white;
+    border: none;
+
+}
+button:hover{
+    cursor: pointer;
+}
+.loyality-title{
+    font-family: Roboto;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 37.5px;
+    text-align: left;
+    padding: 2rem;
+    
+}
+.loyality-main{
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 1rem;
+}
+.loyality-sub-con{
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 15rem;
+    height: 22rem;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+
+}
+.button{
+    display: flex;
+    justify-content: right;
+}
+.loyality-sub-con img{
+    width: 10rem;
+    height: 10rem;
+    padding: 1rem 0rem;
+    /* border-bottom: 1px solid gray; */
+}
+.medal-brief h3{
+    font-family: Roboto;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 25.5px;
+    text-align: center;
+    margin: 0px;
+    padding: 5px;
+
+}
+.medal-brief p{
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 18.75px;
+    text-align: left;
+    margin: 10px;
+    padding: 5px;
+       
+}
+.buttons{
+    display: flex;
+    gap: 2rem;
+    justify-content: space-evenly;
+    align-items: center;
+    /* border: 1px solid gray; */
+
+}
+.buttons:hover{
+    cursor: pointer;
+}
