@@ -1,52 +1,118 @@
-.container {
+.sidebar-container {
     display: flex;
     height: auto;
 }
 
 .sidebar {
     padding: 2rem 0rem;
-    /* border: 1px solid black; */
     border-right: 1px solid #030B33;
     border-bottom: 1px solid #030B33;
     height: 1300px;
     width: 280px;
     display: flex;
     flex-direction: column;
-    gap: 4rem;
-    justify-content: top;
+    gap: 2rem;
+    justify-content: flex-start;
     align-items: center;
 }
 
 .sidebar div {
-    /* Remove padding */
     padding: 2px;
-    /* Set width and height */
     width: 200px;
-    /* Adjust to your desired width */
     height: 50px;
-    /* Adjust to your desired height */
-
     border-radius: 50px;
-    font-family: Roboto;
-    font-size: 22px;
+    font-family: Roboto, sans-serif;
+    font-size: 18px;
     font-weight: 400;
     line-height: 30px;
-    text-align: left;
+    text-align: center;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, color 0.3s;
+}
 
-    /* Optionally, use flex to center the text vertically and horizontally */
+.sidebar div:hover {
+    background-color: #e0e0e0;
+}
+
+.sidebar div.active,
+.dropdown-menu div.active {
+    background-color: #030B33;
+    color: white;
+    border-radius: 30px;
+
+}
+
+.dropdown {
+    width: 200px;
+    transition: height 0.3s ease;
+    overflow: hidden;
+    border-radius: 50px;
+}
+
+.dropdown-header {
+    padding: 10px 10px;
+    cursor: pointer;
+    background-color: #030B33;
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0;
+    height: 30px;
+    line-height: 1;
+    z-index: 1;
+    /* Ensure it stays on top */
+}
+
+.dropdown-header:hover {
+    background-color: #e0e0e0;
+    color: black;
+}
+
+.dropdown-menu {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+    /* Adjust this value to reduce the gap */
+    z-index: 0;
+    /* Ensure it stays below the header */
+}
+
+.dropdown-menu div {
+    background-color: #030B33;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 0 0 10px 10px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-
-.sidebar div:hover {
-    cursor: pointer;
+.dropdown-menu div:hover {
+    background-color: #e0e0e0;
+    color: black;
 }
 
-.sidebar div.active {
+.dropdown-menu div:not(:last-child) {
+    border-bottom: 1px solid #030B33;
+    ;
+    /* Remove the gap between dropdown items */
+}
+
+.dropdown.active {
     background-color: #030B33;
     color: white;
-
+    border-radius: 10px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 180px;
+    /* Adjust this value to expand the height */
 }

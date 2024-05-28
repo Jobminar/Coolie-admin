@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpFromBracket } from "@fortawesome/free-solid-svg-icons";
-import AddServiceForm from "./AddServiceForm";
-import ServiceDetailCard from "./ServiceDetailCard";
+import {
+  faArrowUpFromBracket,
+  faEdit,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
+import EditServiceForm from "./EditServiceForm";
 import "./servermanager.css"; // Ensure the CSS file is correctly linked
 
-const Servermanager = () => {
+const ManageService = () => {
   const [expandedCard, setExpandedCard] = useState(null);
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const [showSubCategoryMenu, setShowSubCategoryMenu] = useState(false);
   const [showServiceVariantsMenu, setShowServiceVariantsMenu] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
-  const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
-  const [showAddSubCategoryForm, setShowAddSubCategoryForm] = useState(false);
-  const [showServiceForm, setShowServiceForm] = useState(false);
+  const [showEditCategoryForm, setShowEditCategoryForm] = useState(false);
+  const [showEditSubCategoryForm, setShowEditSubCategoryForm] = useState(false);
   const [categoryIcon, setCategoryIcon] = useState(null);
   const [subCategoryIcon, setSubCategoryIcon] = useState(null);
   const [categoryName, setCategoryName] = useState("");
@@ -24,13 +26,12 @@ const Servermanager = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [serviceVariant, setServiceVariant] = useState("");
 
-  const categories = ["Cleaning service", "Salon At Home", "Add new category"];
+  const categories = ["Cleaning service", "Salon At Home"];
   const subCategories = [
     "Kitchen cleaning",
     "House cleaning",
     "Swimming pool",
     "Salon At Home",
-    "Add new sub-category",
   ];
 
   const servicesMap = {
@@ -63,7 +64,6 @@ const Servermanager = () => {
         tag: false,
         cashAfterService: true,
       },
-      { name: "Add New Service" },
     ],
     "House cleaning": [
       {
@@ -94,7 +94,6 @@ const Servermanager = () => {
         tag: false,
         cashAfterService: true,
       },
-      { name: "Add New Service" },
     ],
     "Swimming pool": [
       {
@@ -125,7 +124,6 @@ const Servermanager = () => {
         tag: false,
         cashAfterService: true,
       },
-      { name: "Add New Service" },
     ],
     "Salon At Home": [
       {
@@ -156,50 +154,28 @@ const Servermanager = () => {
         tag: false,
         cashAfterService: true,
       },
-      { name: "Add New Service" },
     ],
   };
 
   const handleCategorySelect = (category) => {
-    if (category === "Add new category") {
-      setShowAddCategoryForm(true);
-    } else {
-      setSelectedCategory(category);
-      setShowCategoryMenu(false);
-      setShowAddCategoryForm(false);
-      setShowSubCategoryMenu(true);
-      setShowServiceVariantsMenu(false);
-      setShowServiceForm(false);
-    }
+    setSelectedCategory(category);
+    setCategoryName(category); // Set the initial value of the category name
+    setShowCategoryMenu(false);
+    setShowEditCategoryForm(true);
+    setShowEditSubCategoryForm(false);
+    setShowServiceVariantsMenu(false);
   };
 
   const handleSubCategorySelect = (subCategory) => {
-    if (subCategory === "Add new sub-category") {
-      setShowAddSubCategoryForm(true);
-      setShowServiceVariantsMenu(false);
-      setShowServiceForm(false);
-    } else {
-      setSelectedSubCategory(subCategory);
-      setShowSubCategoryMenu(false);
-      setShowAddSubCategoryForm(false);
-      setShowServiceVariantsMenu(true);
-      setShowServiceForm(false);
-    }
+    setSelectedSubCategory(subCategory);
+    setSubCategoryName(subCategory); // Set the initial value of the sub-category name
+    setShowSubCategoryMenu(false);
+    setShowEditSubCategoryForm(true);
+    setShowServiceVariantsMenu(false);
   };
 
   const handleServiceSelect = (service) => {
-    if (service.name === "Add New Service") {
-      setShowServiceForm(true);
-      setSelectedService(null); // Hide ServiceDetailCard
-    } else {
-      setSelectedService(service);
-      setShowServiceForm(false); // Hide AddServiceForm
-    }
-  };
-
-  const toggleServiceForm = () => {
-    setShowServiceForm((prev) => !prev);
-    setSelectedService(null); // Hide ServiceDetailCard
+    setSelectedService(service);
   };
 
   const handleCategoryIconChange = (e) => {
@@ -210,7 +186,7 @@ const Servermanager = () => {
     setSubCategoryIcon(URL.createObjectURL(e.target.files[0]));
   };
 
-  const handleAddCategory = () => {
+  const handleEditCategory = () => {
     if (categoryName.trim() === "") {
       setCategoryError("Category name is required.");
       return;
@@ -219,38 +195,77 @@ const Servermanager = () => {
       setCategoryError("Service variant is required.");
       return;
     }
-    // Logic to add category
-    setShowAddSubCategoryForm(true);
+    // Logic to edit category
+    setShowEditSubCategoryForm(true);
   };
 
-  const handleAddSubCategory = () => {
+  const handleEditSubCategory = () => {
     if (subCategoryName.trim() === "") {
       setSubCategoryError("Sub-category name is required.");
       return;
     }
-    // Logic to add sub-category
-    setShowServiceForm(true);
+    // Logic to edit sub-category
+    setShowEditSubCategoryForm(false);
+    setShowServiceVariantsMenu(false);
+    setSelectedService({
+      name: "Example Service",
+      type: "Normal cleaning",
+      price: "100",
+      time: "1 hour",
+      description: "Example service description",
+      locations: "All",
+      city: "Example City",
+      tax: "5",
+      commission: "10",
+      mostBooked: true,
+      tag: true,
+      cashAfterService: false,
+    });
   };
 
-  const closeServiceDetailCard = () => {
+  const handleEditServiceVariant = () => {
+    if (serviceVariant.trim() === "") {
+      setCategoryError("Service variant is required.");
+      return;
+    }
+    setShowServiceVariantsMenu(false);
+    setSelectedService({
+      name: "Example Service",
+      type: serviceVariant,
+      price: "100",
+      time: "1 hour",
+      description: "Example service description",
+      locations: "All",
+      city: "Example City",
+      tax: "5",
+      commission: "10",
+      mostBooked: true,
+      tag: true,
+      cashAfterService: false,
+    });
+  };
+
+  const closeEditServiceForm = () => {
     setSelectedService(null);
+  };
+
+  const handleCancelEditCategory = () => {
+    setShowEditCategoryForm(false);
+  };
+
+  const handleCancelEditSubCategory = () => {
+    setShowEditSubCategoryForm(false);
   };
 
   return (
     <div className="servermanager-container">
-      <h2>Add Service</h2>
+      <h2>Manage Service</h2>
 
       <div className="card-container">
         <div className="card" id="category-card">
           <div className="form-group">
             <div className="category-header">
               <span>Select Category</span>
-              <button
-                className="add-button"
-                onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}
-              >
-                +
-              </button>
               <button
                 className="hamburger-icon"
                 onClick={() => setShowCategoryMenu(!showCategoryMenu)}
@@ -268,18 +283,34 @@ const Servermanager = () => {
                   className={`menu-item ${
                     selectedCategory === category ? "selected" : ""
                   }`}
-                  onClick={() => handleCategorySelect(category)}
                 >
-                  {category}
+                  <span onClick={() => handleCategorySelect(category)}>
+                    {category}
+                  </span>
+                  <FontAwesomeIcon
+                    icon={faEdit}
+                    className="edit-icon"
+                    onClick={() => {
+                      setShowEditCategoryForm(true);
+                      setCategoryName(category); // Set the initial value for the category name input
+                    }}
+                  />
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {showAddCategoryForm && (
-          <div className="card add-category-form">
-            <h3>Add Category</h3>
+        {showEditCategoryForm && (
+          <div className="card edit-category-form">
+            <h3>
+              Edit Category
+              <FontAwesomeIcon
+                icon={faTimes}
+                className="cancel-icon"
+                onClick={handleCancelEditCategory}
+              />
+            </h3>
             <div className="input-container">
               <label>Category Name:</label>
               <input
@@ -329,55 +360,26 @@ const Servermanager = () => {
                 <option value="Monthly">Monthly</option>
               </select>
             </div>
-            <button className="submit-button" onClick={handleAddCategory}>
-              Add
+            <button
+              id="update-category-button"
+              className="submit-button"
+              onClick={handleEditCategory}
+            >
+              Update
             </button>
           </div>
         )}
 
-        {selectedCategory && (
-          <div className="card" id="subcategory-card">
-            <div className="form-group">
-              <div className="category-header">
-                <span>Select Sub-Category</span>
-                <button
-                  className="add-button"
-                  onClick={() =>
-                    setShowAddSubCategoryForm(!showAddSubCategoryForm)
-                  }
-                >
-                  +
-                </button>
-                <button
-                  className="hamburger-icon"
-                  onClick={() => setShowSubCategoryMenu(!showSubCategoryMenu)}
-                >
-                  &#9776;
-                </button>
-              </div>
-            </div>
-
-            {showSubCategoryMenu && (
-              <div className="menu">
-                {subCategories.map((subCategory, index) => (
-                  <div
-                    key={index}
-                    className={`menu-item ${
-                      selectedSubCategory === subCategory ? "selected" : ""
-                    }`}
-                    onClick={() => handleSubCategorySelect(subCategory)}
-                  >
-                    {subCategory}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {showAddSubCategoryForm && (
-          <div className="card add-sub-category-form">
-            <h3>Add Sub-Category</h3>
+        {showEditSubCategoryForm && (
+          <div className="card edit-sub-category-form">
+            <h3>
+              Edit Sub-Category
+              <FontAwesomeIcon
+                icon={faTimes}
+                className="cancel-icon"
+                onClick={handleCancelEditSubCategory}
+              />
+            </h3>
             <div className="input-container">
               <label>Sub-Category Name:</label>
               <input
@@ -412,20 +414,21 @@ const Servermanager = () => {
                 />
               )}
             </div>
-            <button className="submit-button" onClick={handleAddSubCategory}>
-              Add
+            <button
+              id="update-subcategory-button"
+              className="submit-button"
+              onClick={handleEditSubCategory}
+            >
+              Update
             </button>
           </div>
         )}
 
-        {selectedSubCategory && (
+        {showServiceVariantsMenu && (
           <div className="card" id="service-card">
             <div className="form-group">
               <div className="category-header">
                 <span>Select Service</span>
-                <button className="add-button" onClick={toggleServiceForm}>
-                  +
-                </button>
                 <button
                   className="hamburger-icon"
                   onClick={() =>
@@ -446,27 +449,40 @@ const Servermanager = () => {
                       className={`menu-item ${
                         selectedService === service ? "selected" : ""
                       }`}
-                      onClick={() => handleServiceSelect(service)}
                     >
-                      {service.name}
+                      <span onClick={() => handleServiceSelect(service)}>
+                        {service.name}
+                      </span>
+                      <FontAwesomeIcon
+                        icon={faEdit}
+                        className="edit-icon"
+                        onClick={() => setSelectedService(service)}
+                      />
                     </div>
                   ),
                 )}
               </div>
             )}
+            <button
+              id="update-service-variant-button"
+              className="submit-button"
+              onClick={handleEditServiceVariant}
+            >
+              Update
+            </button>
           </div>
         )}
       </div>
 
-      {showServiceForm && <AddServiceForm />}
       {selectedService && (
         <>
           <hr style={{ borderTop: "2px solid #D70D09", height: "1px" }} />
-          <ServiceDetailCard
+          <EditServiceForm
             service={selectedService}
-            category={selectedCategory}
-            subCategory={selectedSubCategory}
-            onClose={closeServiceDetailCard}
+            onSave={(updatedService) => {
+              // Logic to save the updated service
+              closeEditServiceForm();
+            }}
           />
         </>
       )}
@@ -474,4 +490,4 @@ const Servermanager = () => {
   );
 };
 
-export default Servermanager;
+export default ManageService;

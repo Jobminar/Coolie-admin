@@ -1,4 +1,5 @@
 .servermanager-container {
+    font-family: Roboto;
     padding: 20px;
 }
 
@@ -47,9 +48,27 @@
 .add-button,
 .hamburger-icon {
     background: none;
-    border: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 1.2em;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.add-button {
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+.hamburger-icon {
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .menu {
@@ -60,6 +79,8 @@
 }
 
 .menu-item {
+    display: flex;
+    justify-content: space-between;
     padding: 10px;
     cursor: pointer;
     border-bottom: 1px solid #ccc;
@@ -78,6 +99,15 @@
     background-color: #e0e0e0;
 }
 
+.edit-icon {
+    color: black !important;
+}
+
+.cancel-icon {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
 .add-category-form,
 .add-sub-category-form {
     margin-top: 10px;
@@ -86,7 +116,6 @@
     display: flex;
     flex-direction: column;
     padding: 0;
-    /* Remove padding */
 }
 
 .add-category-form h3,
@@ -99,7 +128,6 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px 5px 0 0;
-    margin: 0px 0px 0px 0px;
 }
 
 .input-container {
@@ -107,33 +135,31 @@
     border-radius: 5px;
     margin-bottom: 10px;
     padding: 10px;
-    margin-left: 0px;
-    /* Negative margin to merge with parent */
-    margin-right: 0px;
-    /* Negative margin to merge with parent */
+    width: 100%;
 }
 
 .upload-container {
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-bottom: 10px;
+    margin: 20px 0;
     padding: 10px;
-    margin-left: 0px;
-    /* Negative margin to merge with parent */
-    margin-right: 0px;
-    /* Negative margin to merge with parent */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .upload-icon-label {
     display: flex;
     align-items: center;
     cursor: pointer;
-    margin-top: 5px;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .upload-icon {
     font-size: 1.2em;
-    margin-right: 5px;
+    margin-left: 10px;
 }
 
 .upload-preview {
@@ -155,7 +181,7 @@
 }
 
 .bottom-border-input:focus {
-    border-bottom-color: #007bff;
+    border-bottom-color: #039F54;
 }
 
 .add-category-form label,
@@ -178,21 +204,22 @@
 
 .add-category-form select:focus,
 .add-sub-category-form select:focus {
-    border-bottom-color: #007bff;
+    border-bottom-color: #039F54;
 }
 
 .add-category-form .submit-button,
 .add-sub-category-form .submit-button {
-    background-color: #000;
+    background-color: #030B33;
     color: #fff;
     border: none;
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
-    margin: 10px;
-    width: 93%;
+    margin: 10px auto;
+    width: 50%;
     font-size: 14px;
     font-weight: bold;
+    text-align: center;
 }
 
 .add-category-form .submit-button:hover,
@@ -200,7 +227,6 @@
     background-color: #444;
 }
 
-/* AddServiceForm specific styles */
 .add-service-form {
     display: flex;
     flex-direction: column;
@@ -208,7 +234,7 @@
     width: 100%;
     max-width: 600px;
     margin: 20px 0;
-    padding: 20px;
+    padding: 25px;
     border: 1px solid #ccc;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -223,7 +249,22 @@
 }
 
 .bottom-border-input:focus {
-    border-bottom-color: #007bff;
+    border-bottom-color: #039F54;
+}
+
+.textarea-input {
+    border: 1px solid #000;
+    padding: 10px;
+    outline: none;
+    font-size: 14px;
+    width: 100%;
+    resize: vertical;
+    height: 100px;
+    border-radius: 5px;
+}
+
+.textarea-input:focus {
+    border-color: #039F54;
 }
 
 .toggle-group {
@@ -265,16 +306,50 @@
 }
 
 .submit-button {
-    background-color: #007bff;
+    background-color: #030B33;
     color: #fff;
     border: none;
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 20px;
-    width: 100%;
+    width: 70%;
+    align-self: flex-end;
 }
 
 .submit-button:hover {
-    background-color: #0056b3;
+    background-color: #444;
+}
+
+.file-upload {
+    display: none;
+}
+
+#update-category-button,
+#update-subcategory-button,
+#update-service-variant-button {
+    background-color: #030B33;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px auto;
+    width: 50%;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#update-category-button:hover,
+#update-subcategory-button:hover,
+#update-service-variant-button:hover {
+    background-color: #444;
+}
+
+.edit-category-form,
+.edit-sub-category-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

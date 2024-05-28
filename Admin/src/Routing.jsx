@@ -10,6 +10,7 @@ import Header from "./components/Header/header";
 import Sidebar from "./components/Sideheader/sidebar";
 import Jobsarea from "./components/Sections/Jobsarea/jobsarea";
 import Servermanager from "./components/Sections/Servermanager/Servermanager";
+import ManageService from "./components/Sections/Servermanager/ManageService"; // Import ManageService
 import Providerscorner from "./components/Sections/Providerscorner/Providerscorner";
 import Loyalitycards from "./components/Sections/Loyalitycards/Loyalitycards";
 import Banners from "./components/Sections/Banners/Banners";
@@ -27,6 +28,8 @@ const Routing = () => {
           <Routes>
             <Route path="/" element={<Jobsarea />} />
             <Route path="/servermanager" element={<Servermanager />} />
+            <Route path="/manageservice" element={<ManageService />} />{" "}
+            {/* Add ManageService route */}
             <Route path="/usercorner" element={<UserManager />} />
             <Route path="/providersrcorner" element={<Providerscorner />} />
             <Route path="/loyalitycards" element={<Loyalitycards />} />
