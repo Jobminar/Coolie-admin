@@ -6,6 +6,7 @@
     background-color: #030B33;
     display: grid;
     grid-template-columns: 30% 40% 30%;
+    width: 100%;
 }
 /* .main-header div{
     border: 1px solid white;

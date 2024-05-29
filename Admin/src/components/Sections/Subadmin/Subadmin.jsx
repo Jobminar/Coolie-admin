@@ -1,8 +1,11 @@
 import React from 'react'
+import './Subadmin.css'
 
 const Subadmin = () => {
   return (
-    <div>Subadmin</div>
+    <>
+        
+    </>
   )
 }
 

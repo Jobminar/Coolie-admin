@@ -1,49 +1,47 @@
-import React from "react";
-import { IconButton } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import "./Banners.css";
+import React from 'react'
+import './banners.css'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import kitchen from '../../../assets/images/kitchen.png'
+import cleaning from '../../../assets/images/cleaning.png'
 
 const Banners = () => {
   return (
-    <div className="banners-container">
-      <header className="banners-header">
-        <h2>Banners</h2>
-        <div className="banners-actions">
-          <IconButton className="btn delete-btn">
-            <DeleteIcon /> Delete
-          </IconButton>
-          <IconButton className="btn">
-            <EditIcon />
-          </IconButton>
-        </div>
-      </header>
-      <div className="banners-grid">
-        {[...Array(3)].map((_, index) => (
-          <div key={index} className="banners-row">
-            <div className="banner">
-              <img src="/path/to/cleaning-banner.jpg" alt="Cleaning Banner" />
-              <div className="banner-overlay">
-                <span>Cleaning Banner</span>
-                <IconButton className="edit-icon">
-                  <EditIcon />
-                </IconButton>
+     <>
+      
+     <div className='banners'>
+         <h1>Banners</h1>
+         <div className='banner-buttos'>
+              <div className='delete-button'>
+                  Delete 
+                  <DeleteOutlineOutlinedIcon/>
               </div>
-            </div>
-            <div className="banner">
-              <img src="/path/to/kitchen-banner.jpg" alt="Kitchen Banner" />
-              <div className="banner-overlay">
-                <span>Kitchen Banner</span>
-                <IconButton className="edit-icon">
-                  <EditIcon />
-                </IconButton>
+              <div className='edit-button'>
+                   <EditOutlinedIcon/>
               </div>
+         </div>
+         <div className='main-banners'>
+            <div className='Kitchen-cleaning'> 
+               <img src={kitchen} alt='kitchen'/>
+
+               <p>Kitchen cleaning
+               </p>
+               <div className='edit'>
+                     <EditOutlinedIcon/>
+               </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+            <div className='cleaning'>
+               <img src={cleaning} alt='cleaning'/>
+               <p>cleaning</p>
+            </div>
+            <div className='clean-edit'>
+                     <EditOutlinedIcon/>
+               </div>
+
+         </div>
+     </div>
+     </>
+  )
+}
 
 export default Banners;
