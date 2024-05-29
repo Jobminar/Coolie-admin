@@ -1,25 +1,15 @@
 import React from "react";
-import "./servermanager.css"; // Ensure the CSS file is correctly linked
+import "./servicemanager.css"; // Ensure the CSS file is correctly linked
 
 const AddServiceForm = () => {
   return (
     <form className="add-service-form">
+      <h3>Add Service</h3>
       <div className="form-group">
         <label>Service Name:</label>
         <input type="text" className="bottom-border-input" />
       </div>
-      <div className="form-group">
-        <label>Service Type:</label>
-        <select className="bottom-border-input">
-          <option>Normal</option>
-          <option>Deep</option>
-          <option>Male</option>
-          <option>Female</option>
-          <option>Hour</option>
-          <option>Daily</option>
-          <option>Monthly</option>
-        </select>
-      </div>
+
       <div className="form-group">
         <label>Service Price:</label>
         <input type="text" className="bottom-border-input" />
@@ -30,29 +20,15 @@ const AddServiceForm = () => {
       </div>
       <div className="form-group">
         <label>Description:</label>
-        <textarea className="bottom-border-input"></textarea>
+        <textarea className="textarea-input"></textarea>
       </div>
       <div className="form-group">
         <label>Locations:</label>
         <input type="text" className="bottom-border-input" />
       </div>
       <div className="form-group">
-        <label>Latitude:</label>
+        <label>City:</label>
         <input type="text" className="bottom-border-input" />
-      </div>
-      <div className="form-group">
-        <label>Longitude:</label>
-        <input type="text" className="bottom-border-input" />
-      </div>
-      <div className="form-group">
-        <label>Radius:</label>
-        <select className="bottom-border-input">
-          {[...Array(50).keys()].map((i) => (
-            <option key={i + 1} value={i + 1}>
-              {i + 1} km
-            </option>
-          ))}
-        </select>
       </div>
       <div className="form-group">
         <label>TAX %:</label>

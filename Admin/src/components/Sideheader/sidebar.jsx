@@ -1,18 +1,24 @@
 import React, { useState } from "react";
-import "./sidebar.css";
+import { FaCaretDown } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import "./sidebar.css";
 
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState("/");
+  const [serviceManagerDropdown, setServiceManagerDropdown] = useState(false);
 
   const handleNavigation = (path) => {
     setActiveItem(path);
     navigate(path);
   };
 
+  const toggleServiceManagerDropdown = () => {
+    setServiceManagerDropdown((prev) => !prev);
+  };
+
   return (
-    <div className="mainContainer">
+    <div className="sidebar-container">
       <div className="sidebar">
         <div
           className={activeItem === "/" ? "active" : ""}
@@ -20,11 +26,33 @@ const Sidebar = ({ children }) => {
         >
           Jobs Area
         </div>
-        <div
-          className={activeItem === "/servermanager" ? "active" : ""}
-          onClick={() => handleNavigation("/servermanager")}
-        >
-          Server manager
+        <div className={`dropdown ${serviceManagerDropdown ? "active" : ""}`}>
+          <div
+            className={
+              activeItem === "/servermanager" || activeItem === "/manageservice"
+                ? "active"
+                : ""
+            }
+            onClick={toggleServiceManagerDropdown}
+          >
+            Service Manager <FaCaretDown />
+          </div>
+          {serviceManagerDropdown && (
+            <div className="dropdown-menu">
+              <div
+                className={activeItem === "/addservice" ? "active" : ""}
+                onClick={() => handleNavigation("/addservice")}
+              >
+                Add Service
+              </div>
+              <div
+                className={activeItem === "/manageservice" ? "active" : ""}
+                onClick={() => handleNavigation("/manageservice")}
+              >
+                Manage Service
+              </div>
+            </div>
+          )}
         </div>
         <div
           className={activeItem === "/usercorner" ? "active" : ""}
@@ -42,7 +70,7 @@ const Sidebar = ({ children }) => {
           className={activeItem === "/loyalitycards" ? "active" : ""}
           onClick={() => handleNavigation("/loyalitycards")}
         >
-          Loyality Cards
+          Loyalty Cards
         </div>
         <div
           className={activeItem === "/banners" ? "active" : ""}
