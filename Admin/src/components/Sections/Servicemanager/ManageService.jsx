@@ -6,7 +6,7 @@ import {
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import EditServiceForm from "./EditServiceForm";
-import "./servermanager.css"; // Ensure the CSS file is correctly linked
+import "./manageservice.css"; // Ensure the CSS file is correctly linked
 
 const ManageService = () => {
   const [expandedCard, setExpandedCard] = useState(null);
@@ -258,16 +258,16 @@ const ManageService = () => {
   };
 
   return (
-    <div className="servermanager-container">
+    <div className="manageservice-container">
       <h2>Manage Service</h2>
 
-      <div className="card-container">
-        <div className="card" id="category-card">
-          <div className="form-group">
-            <div className="category-header">
+      <div className="manageservice-card-container">
+        <div className="manageservice-card" id="category-card">
+          <div className="manageservice-form-group">
+            <div className="manageservice-category-header">
               <span>Select Category</span>
               <button
-                className="hamburger-icon"
+                className="manageservice-hamburger-icon"
                 onClick={() => setShowCategoryMenu(!showCategoryMenu)}
               >
                 &#9776;
@@ -276,11 +276,11 @@ const ManageService = () => {
           </div>
 
           {showCategoryMenu && (
-            <div className="menu">
+            <div className="manageservice-menu">
               {categories.map((category, index) => (
                 <div
                   key={index}
-                  className={`menu-item ${
+                  className={`manageservice-menu-item ${
                     selectedCategory === category ? "selected" : ""
                   }`}
                 >
@@ -289,7 +289,7 @@ const ManageService = () => {
                   </span>
                   <FontAwesomeIcon
                     icon={faEdit}
-                    className="edit-icon"
+                    className="manageservice-edit-icon"
                     onClick={() => {
                       setShowEditCategoryForm(true);
                       setCategoryName(category); // Set the initial value for the category name input
@@ -302,51 +302,54 @@ const ManageService = () => {
         </div>
 
         {showEditCategoryForm && (
-          <div className="card edit-category-form">
+          <div className="manageservice-card manageservice-edit-category-form">
             <h3>
               Edit Category
               <FontAwesomeIcon
                 icon={faTimes}
-                className="cancel-icon"
+                className="manageservice-cancel-icon"
                 onClick={handleCancelEditCategory}
               />
             </h3>
-            <div className="input-container">
+            <div className="manageservice-input-container">
               <label>Category Name:</label>
               <input
                 type="text"
-                className="bottom-border-input"
+                className="manageservice-bottom-border-input"
                 value={categoryName}
                 onChange={(e) => setCategoryName(e.target.value)}
               />
               {categoryError && <span className="error">{categoryError}</span>}
             </div>
-            <div className="upload-container">
+            <div className="manageservice-upload-container">
               <input
                 type="file"
                 id="categoryIcon"
                 onChange={handleCategoryIconChange}
-                className="file-upload"
+                className="manageservice-file-upload"
               />
-              <label htmlFor="categoryIcon" className="upload-icon-label">
+              <label
+                htmlFor="categoryIcon"
+                className="manageservice-upload-icon-label"
+              >
                 Choose Icon
                 <FontAwesomeIcon
                   icon={faArrowUpFromBracket}
-                  className="upload-icon"
+                  className="manageservice-upload-icon"
                 />
               </label>
               {categoryIcon && (
                 <img
                   src={categoryIcon}
                   alt="Category Icon"
-                  className="upload-preview"
+                  className="manageservice-upload-preview"
                 />
               )}
             </div>
-            <div className="input-container">
+            <div className="manageservice-input-container">
               <label>Service Variant:</label>
               <select
-                className="bottom-border-input"
+                className="manageservice-bottom-border-input"
                 value={serviceVariant}
                 onChange={(e) => setServiceVariant(e.target.value)}
               >
@@ -361,8 +364,8 @@ const ManageService = () => {
               </select>
             </div>
             <button
-              id="update-category-button"
-              className="submit-button"
+              id="manageservice-update-category-button"
+              className="manageservice-submit-button"
               onClick={handleEditCategory}
             >
               Update
@@ -371,20 +374,20 @@ const ManageService = () => {
         )}
 
         {showEditSubCategoryForm && (
-          <div className="card edit-sub-category-form">
+          <div className="manageservice-card manageservice-edit-sub-category-form">
             <h3>
               Edit Sub-Category
               <FontAwesomeIcon
                 icon={faTimes}
-                className="cancel-icon"
+                className="manageservice-cancel-icon"
                 onClick={handleCancelEditSubCategory}
               />
             </h3>
-            <div className="input-container">
+            <div className="manageservice-input-container">
               <label>Sub-Category Name:</label>
               <input
                 type="text"
-                className="bottom-border-input"
+                className="manageservice-bottom-border-input"
                 value={subCategoryName}
                 onChange={(e) => setSubCategoryName(e.target.value)}
               />
@@ -392,31 +395,34 @@ const ManageService = () => {
                 <span className="error">{subCategoryError}</span>
               )}
             </div>
-            <div className="upload-container">
+            <div className="manageservice-upload-container">
               <input
                 type="file"
                 id="subCategoryIcon"
                 onChange={handleSubCategoryIconChange}
-                className="file-upload"
+                className="manageservice-file-upload"
               />
-              <label htmlFor="subCategoryIcon" className="upload-icon-label">
+              <label
+                htmlFor="subCategoryIcon"
+                className="manageservice-upload-icon-label"
+              >
                 Choose Icon
                 <FontAwesomeIcon
                   icon={faArrowUpFromBracket}
-                  className="upload-icon"
+                  className="manageservice-upload-icon"
                 />
               </label>
               {subCategoryIcon && (
                 <img
                   src={subCategoryIcon}
                   alt="Sub-Category Icon"
-                  className="upload-preview"
+                  className="manageservice-upload-preview"
                 />
               )}
             </div>
             <button
-              id="update-subcategory-button"
-              className="submit-button"
+              id="manageservice-update-subcategory-button"
+              className="manageservice-submit-button"
               onClick={handleEditSubCategory}
             >
               Update
@@ -425,12 +431,12 @@ const ManageService = () => {
         )}
 
         {showServiceVariantsMenu && (
-          <div className="card" id="service-card">
-            <div className="form-group">
-              <div className="category-header">
+          <div className="manageservice-card" id="service-card">
+            <div className="manageservice-form-group">
+              <div className="manageservice-category-header">
                 <span>Select Service</span>
                 <button
-                  className="hamburger-icon"
+                  className="manageservice-hamburger-icon"
                   onClick={() =>
                     setShowServiceVariantsMenu(!showServiceVariantsMenu)
                   }
@@ -441,12 +447,12 @@ const ManageService = () => {
             </div>
 
             {showServiceVariantsMenu && (
-              <div className="menu">
+              <div className="manageservice-menu">
                 {(servicesMap[selectedSubCategory] || []).map(
                   (service, index) => (
                     <div
                       key={index}
-                      className={`menu-item ${
+                      className={`manageservice-menu-item ${
                         selectedService === service ? "selected" : ""
                       }`}
                     >
@@ -455,7 +461,7 @@ const ManageService = () => {
                       </span>
                       <FontAwesomeIcon
                         icon={faEdit}
-                        className="edit-icon"
+                        className="manageservice-edit-icon"
                         onClick={() => setSelectedService(service)}
                       />
                     </div>
@@ -464,8 +470,8 @@ const ManageService = () => {
               </div>
             )}
             <button
-              id="update-service-variant-button"
-              className="submit-button"
+              id="manageservice-update-service-variant-button"
+              className="manageservice-submit-button"
               onClick={handleEditServiceVariant}
             >
               Update

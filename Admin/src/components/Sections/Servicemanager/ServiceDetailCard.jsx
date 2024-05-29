@@ -1,5 +1,5 @@
 import React from "react";
-import "./servermanager.css"; // Ensure the CSS file is correctly linked
+import "./servicemanager.css"; // Ensure the CSS file is correctly linked
 
 const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
   return (

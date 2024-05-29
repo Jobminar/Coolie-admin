@@ -1,16 +1,16 @@
-.servermanager-container {
-    font-family: Roboto;
+.manageservice-container {
+    font-family: Roboto, sans-serif;
     padding: 20px;
 }
 
-.card-container {
+.manageservice-card-container {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
     align-items: flex-start;
 }
 
-.card {
+.manageservice-card {
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
@@ -22,15 +22,11 @@
     flex: 0 1 auto;
 }
 
-.expanded {
-    height: auto;
-}
-
-.form-group {
+.manageservice-form-group {
     margin-bottom: 10px;
 }
 
-.category-header {
+.manageservice-category-header {
     display: flex;
     align-items: center;
     border: 1px solid #ccc;
@@ -38,15 +34,15 @@
     margin: -10px -10px 10px -10px;
 }
 
-.category-header span {
+.manageservice-category-header span {
     flex-grow: 1;
     text-align: center;
     font-size: 16px;
     font-weight: bold;
 }
 
-.add-button,
-.hamburger-icon {
+.manageservice-add-button,
+.manageservice-hamburger-icon {
     background: none;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -60,25 +56,25 @@
     padding: 0;
 }
 
-.add-button {
+.manageservice-add-button {
     margin-left: auto;
     margin-right: 10px;
 }
 
-.hamburger-icon {
+.manageservice-hamburger-icon {
     margin-left: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-.menu {
+.manageservice-menu {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-top: 10px;
     padding: 5px;
 }
 
-.menu-item {
+.manageservice-menu-item {
     display: flex;
     justify-content: space-between;
     padding: 10px;
@@ -87,29 +83,29 @@
     font-size: 14px;
 }
 
-.menu-item.selected {
+.manageservice-menu-item.selected {
     background-color: #f0f0f0;
 }
 
-.menu-item:last-child {
+.manageservice-menu-item:last-child {
     border-bottom: none;
 }
 
-.menu-item:hover {
+.manageservice-menu-item:hover {
     background-color: #e0e0e0;
 }
 
-.edit-icon {
+.manageservice-edit-icon {
     color: black !important;
 }
 
-.cancel-icon {
+.manageservice-cancel-icon {
     margin-left: 10px;
     cursor: pointer;
 }
 
-.add-category-form,
-.add-sub-category-form {
+.manageservice-edit-category-form,
+.manageservice-edit-sub-category-form {
     margin-top: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -118,8 +114,8 @@
     padding: 0;
 }
 
-.add-category-form h3,
-.add-sub-category-form h3 {
+.manageservice-edit-category-form h3,
+.manageservice-edit-sub-category-form h3 {
     margin: 0 0 10px 0;
     font-size: 16px;
     font-weight: bold;
@@ -130,15 +126,15 @@
     border-radius: 5px 5px 0 0;
 }
 
-.input-container {
+.manageservice-input-container {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 10px;
     padding: 10px;
-    width: 100%;
+    width: 92.9%;
 }
 
-.upload-container {
+.manageservice-upload-container {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin: 20px 0;
@@ -146,10 +142,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+    width: 92.9%;
 }
 
-.upload-icon-label {
+.manageservice-upload-icon-label {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -157,12 +153,12 @@
     justify-content: space-between;
 }
 
-.upload-icon {
+.manageservice-upload-icon {
     font-size: 1.2em;
     margin-left: 10px;
 }
 
-.upload-preview {
+.manageservice-upload-preview {
     margin-top: 10px;
     max-width: 100px;
     max-height: 100px;
@@ -170,7 +166,7 @@
     border-radius: 5px;
 }
 
-.bottom-border-input {
+.manageservice-bottom-border-input {
     border: none;
     border-bottom: 1px solid #000;
     padding: 10px;
@@ -180,19 +176,19 @@
     width: 100%;
 }
 
-.bottom-border-input:focus {
+.manageservice-bottom-border-input:focus {
     border-bottom-color: #039F54;
 }
 
-.add-category-form label,
-.add-sub-category-form label {
+.manageservice-edit-category-form label,
+.manageservice-edit-sub-category-form label {
     margin-bottom: 5px;
     font-size: 14px;
     font-weight: bold;
 }
 
-.add-category-form select,
-.add-sub-category-form select {
+.manageservice-edit-category-form select,
+.manageservice-edit-sub-category-form select {
     border: none;
     border-bottom: 1px solid #000;
     padding: 10px;
@@ -202,13 +198,13 @@
     width: 100%;
 }
 
-.add-category-form select:focus,
-.add-sub-category-form select:focus {
+.manageservice-edit-category-form select:focus,
+.manageservice-edit-sub-category-form select:focus {
     border-bottom-color: #039F54;
 }
 
-.add-category-form .submit-button,
-.add-sub-category-form .submit-button {
+.manageservice-edit-category-form .submit-button,
+.manageservice-edit-sub-category-form .submit-button {
     background-color: #030B33;
     color: #fff;
     border: none;
@@ -222,12 +218,12 @@
     text-align: center;
 }
 
-.add-category-form .submit-button:hover,
-.add-sub-category-form .submit-button:hover {
+.manageservice-edit-category-form .submit-button:hover,
+.manageservice-edit-sub-category-form .submit-button:hover {
     background-color: #444;
 }
 
-.add-service-form {
+.manageservice-edit-service-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -240,7 +236,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.bottom-border-input {
+.manageservice-bottom-border-input {
     border: none;
     border-bottom: 2px solid #000;
     padding: 5px;
@@ -248,11 +244,11 @@
     transition: border-bottom-color 0.3s;
 }
 
-.bottom-border-input:focus {
+.manageservice-bottom-border-input:focus {
     border-bottom-color: #039F54;
 }
 
-.textarea-input {
+.manageservice-textarea-input {
     border: 1px solid #000;
     padding: 10px;
     outline: none;
@@ -263,17 +259,17 @@
     border-radius: 5px;
 }
 
-.textarea-input:focus {
+.manageservice-textarea-input:focus {
     border-color: #039F54;
 }
 
-.toggle-group {
+.manageservice-toggle-group {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.toggle-input {
+.manageservice-toggle-input {
     appearance: none;
     width: 40px;
     height: 20px;
@@ -285,11 +281,11 @@
     transition: background-color 0.3s;
 }
 
-.toggle-input:checked {
+.manageservice-toggle-input:checked {
     background-color: green;
 }
 
-.toggle-input::before {
+.manageservice-toggle-input::before {
     content: '';
     position: absolute;
     top: 3px;
@@ -301,11 +297,11 @@
     transition: transform 0.3s;
 }
 
-.toggle-input:checked::before {
+.manageservice-toggle-input:checked::before {
     transform: translateX(20px);
 }
 
-.submit-button {
+.manageservice-submit-button {
     background-color: #030B33;
     color: #fff;
     border: none;
@@ -317,17 +313,17 @@
     align-self: flex-end;
 }
 
-.submit-button:hover {
+.manageservice-submit-button:hover {
     background-color: #444;
 }
 
-.file-upload {
+.manageservice-file-upload {
     display: none;
 }
 
-#update-category-button,
-#update-subcategory-button,
-#update-service-variant-button {
+#manageservice-update-category-button,
+#manageservice-update-subcategory-button,
+#manageservice-update-service-variant-button {
     background-color: #030B33;
     color: #fff;
     border: none;
@@ -341,14 +337,14 @@
     text-align: center;
 }
 
-#update-category-button:hover,
-#update-subcategory-button:hover,
-#update-service-variant-button:hover {
+#manageservice-update-category-button:hover,
+#manageservice-update-subcategory-button:hover,
+#manageservice-update-service-variant-button:hover {
     background-color: #444;
 }
 
-.edit-category-form,
-.edit-sub-category-form {
+.manageservice-edit-category-form,
+.manageservice-edit-sub-category-form {
     display: flex;
     flex-direction: column;
     align-items: center;

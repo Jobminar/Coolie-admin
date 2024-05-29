@@ -40,8 +40,8 @@ const Sidebar = ({ children }) => {
           {serviceManagerDropdown && (
             <div className="dropdown-menu">
               <div
-                className={activeItem === "/servermanager" ? "active" : ""}
-                onClick={() => handleNavigation("/servermanager")}
+                className={activeItem === "/addservice" ? "active" : ""}
+                onClick={() => handleNavigation("/addservice")}
               >
                 Add Service
               </div>

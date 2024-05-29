@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpFromBracket } from "@fortawesome/free-solid-svg-icons";
 import AddServiceForm from "./AddServiceForm";
 import ServiceDetailCard from "./ServiceDetailCard";
-import "./servermanager.css"; // Ensure the CSS file is correctly linked
+import "./servicemanager.css"; // Ensure the CSS file is correctly linked
 
 const Servermanager = () => {
   const [expandedCard, setExpandedCard] = useState(null);
@@ -240,19 +240,19 @@ const Servermanager = () => {
     <div className="servermanager-container">
       <h2>Add Service</h2>
 
-      <div className="card-container">
-        <div className="card" id="category-card">
-          <div className="form-group">
-            <div className="category-header">
+      <div className="servermanager-card-container">
+        <div className="servermanager-card" id="category-card">
+          <div className="servermanager-form-group">
+            <div className="servermanager-category-header">
               <span>Select Category</span>
               <button
-                className="add-button"
+                className="servermanager-add-button"
                 onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}
               >
                 +
               </button>
               <button
-                className="hamburger-icon"
+                className="servermanager-hamburger-icon"
                 onClick={() => setShowCategoryMenu(!showCategoryMenu)}
               >
                 &#9776;
@@ -261,11 +261,11 @@ const Servermanager = () => {
           </div>
 
           {showCategoryMenu && (
-            <div className="menu">
+            <div className="servermanager-menu">
               {categories.map((category, index) => (
                 <div
                   key={index}
-                  className={`menu-item ${
+                  className={`servermanager-menu-item ${
                     selectedCategory === category ? "selected" : ""
                   }`}
                   onClick={() => handleCategorySelect(category)}
@@ -278,44 +278,47 @@ const Servermanager = () => {
         </div>
 
         {showAddCategoryForm && (
-          <div className="card add-category-form">
+          <div className="servermanager-card servermanager-add-category-form">
             <h3>Add Category</h3>
-            <div className="input-container">
+            <div className="servermanager-input-container">
               <label>Category Name:</label>
               <input
                 type="text"
-                className="bottom-border-input"
+                className="servermanager-bottom-border-input"
                 value={categoryName}
                 onChange={(e) => setCategoryName(e.target.value)}
               />
               {categoryError && <span className="error">{categoryError}</span>}
             </div>
-            <div className="upload-container">
+            <div className="servermanager-upload-container">
               <input
                 type="file"
                 id="categoryIcon"
                 onChange={handleCategoryIconChange}
-                className="file-upload"
+                className="servermanager-file-upload"
               />
-              <label htmlFor="categoryIcon" className="upload-icon-label">
+              <label
+                htmlFor="categoryIcon"
+                className="servermanager-upload-icon-label"
+              >
                 Choose Icon
                 <FontAwesomeIcon
                   icon={faArrowUpFromBracket}
-                  className="upload-icon"
+                  className="servermanager-upload-icon"
                 />
               </label>
               {categoryIcon && (
                 <img
                   src={categoryIcon}
                   alt="Category Icon"
-                  className="upload-preview"
+                  className="servermanager-upload-preview"
                 />
               )}
             </div>
-            <div className="input-container">
+            <div className="servermanager-input-container">
               <label>Service Variant:</label>
               <select
-                className="bottom-border-input"
+                className="servermanager-bottom-border-input"
                 value={serviceVariant}
                 onChange={(e) => setServiceVariant(e.target.value)}
               >
@@ -329,19 +332,22 @@ const Servermanager = () => {
                 <option value="Monthly">Monthly</option>
               </select>
             </div>
-            <button className="submit-button" onClick={handleAddCategory}>
+            <button
+              className="servermanager-submit-button"
+              onClick={handleAddCategory}
+            >
               Add
             </button>
           </div>
         )}
 
         {selectedCategory && (
-          <div className="card" id="subcategory-card">
-            <div className="form-group">
-              <div className="category-header">
+          <div className="servermanager-card" id="subcategory-card">
+            <div className="servermanager-form-group">
+              <div className="servermanager-category-header">
                 <span>Select Sub-Category</span>
                 <button
-                  className="add-button"
+                  className="servermanager-add-button"
                   onClick={() =>
                     setShowAddSubCategoryForm(!showAddSubCategoryForm)
                   }
@@ -349,7 +355,7 @@ const Servermanager = () => {
                   +
                 </button>
                 <button
-                  className="hamburger-icon"
+                  className="servermanager-hamburger-icon"
                   onClick={() => setShowSubCategoryMenu(!showSubCategoryMenu)}
                 >
                   &#9776;
@@ -358,11 +364,11 @@ const Servermanager = () => {
             </div>
 
             {showSubCategoryMenu && (
-              <div className="menu">
+              <div className="servermanager-menu">
                 {subCategories.map((subCategory, index) => (
                   <div
                     key={index}
-                    className={`menu-item ${
+                    className={`servermanager-menu-item ${
                       selectedSubCategory === subCategory ? "selected" : ""
                     }`}
                     onClick={() => handleSubCategorySelect(subCategory)}
@@ -376,13 +382,13 @@ const Servermanager = () => {
         )}
 
         {showAddSubCategoryForm && (
-          <div className="card add-sub-category-form">
+          <div className="servermanager-card servermanager-add-sub-category-form">
             <h3>Add Sub-Category</h3>
-            <div className="input-container">
+            <div className="servermanager-input-container">
               <label>Sub-Category Name:</label>
               <input
                 type="text"
-                className="bottom-border-input"
+                className="servermanager-bottom-border-input"
                 value={subCategoryName}
                 onChange={(e) => setSubCategoryName(e.target.value)}
               />
@@ -390,44 +396,53 @@ const Servermanager = () => {
                 <span className="error">{subCategoryError}</span>
               )}
             </div>
-            <div className="upload-container">
+            <div className="servermanager-upload-container">
               <input
                 type="file"
                 id="subCategoryIcon"
                 onChange={handleSubCategoryIconChange}
-                className="file-upload"
+                className="servermanager-file-upload"
               />
-              <label htmlFor="subCategoryIcon" className="upload-icon-label">
+              <label
+                htmlFor="subCategoryIcon"
+                className="servermanager-upload-icon-label"
+              >
                 Choose Icon
                 <FontAwesomeIcon
                   icon={faArrowUpFromBracket}
-                  className="upload-icon"
+                  className="servermanager-upload-icon"
                 />
               </label>
               {subCategoryIcon && (
                 <img
                   src={subCategoryIcon}
                   alt="Sub-Category Icon"
-                  className="upload-preview"
+                  className="servermanager-upload-preview"
                 />
               )}
             </div>
-            <button className="submit-button" onClick={handleAddSubCategory}>
+            <button
+              className="servermanager-submit-button"
+              onClick={handleAddSubCategory}
+            >
               Add
             </button>
           </div>
         )}
 
         {selectedSubCategory && (
-          <div className="card" id="service-card">
-            <div className="form-group">
-              <div className="category-header">
+          <div className="servermanager-card" id="service-card">
+            <div className="servermanager-form-group">
+              <div className="servermanager-category-header">
                 <span>Select Service</span>
-                <button className="add-button" onClick={toggleServiceForm}>
+                <button
+                  className="servermanager-add-button"
+                  onClick={toggleServiceForm}
+                >
                   +
                 </button>
                 <button
-                  className="hamburger-icon"
+                  className="servermanager-hamburger-icon"
                   onClick={() =>
                     setShowServiceVariantsMenu(!showServiceVariantsMenu)
                   }
@@ -438,12 +453,12 @@ const Servermanager = () => {
             </div>
 
             {showServiceVariantsMenu && (
-              <div className="menu">
+              <div className="servermanager-menu">
                 {(servicesMap[selectedSubCategory] || []).map(
                   (service, index) => (
                     <div
                       key={index}
-                      className={`menu-item ${
+                      className={`servermanager-menu-item ${
                         selectedService === service ? "selected" : ""
                       }`}
                       onClick={() => handleServiceSelect(service)}
