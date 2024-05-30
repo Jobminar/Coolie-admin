@@ -19,6 +19,7 @@ import Marketing from "./components/Sections/Marketing/Marketing";
 import Subadmin from "./components/Sections/Subadmin/Subadmin";
 import UserManager from "./components/Sections/Usercorner/Usercorner";
 import Inductionmain from "./components/Sections/Induction/inductionmain";
+import Addsubadmin from "./components/Sections/Subadmin/Addsubadmin";
 
 const Routing = () => {
   return (
@@ -39,6 +40,7 @@ const Routing = () => {
             <Route path="/marketing" element={<Marketing />} />
             <Route path="/subadmin" element={<Subadmin />} />
             <Route path="/inductionmain" element={<Inductionmain />} />
+            <Route path="/addsubadmin" element={<Addsubadmin />} />
           </Routes>
         </Sidebar>
       </BrowserRouter>

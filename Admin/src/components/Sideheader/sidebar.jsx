@@ -18,7 +18,7 @@ const Sidebar = ({ children }) => {
   };
 
   return (
-    <div className="sidebar-container">
+    <div className="mainContainer">
       <div className="sidebar">
         <div
           className={activeItem === "/" ? "active" : ""}
