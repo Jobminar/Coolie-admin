@@ -1,0 +1,12 @@
+.sub-admin-main-con{
+    /* border: 1px solid black; */
+    margin: 2rem;
+    display: flex;
+    justify-content: space-evenly;
+}
+.sub-admin-main-con button{
+    width: 15rem;
+    height: 3rem;
+    background-color: gray;
+
+}

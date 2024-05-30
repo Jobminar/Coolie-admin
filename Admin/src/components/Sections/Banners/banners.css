@@ -1,0 +1,123 @@
+.banners{
+   border: 1px solid black;
+}
+.banners h1{
+    font-family: Roboto;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 37.5px;
+    text-align: left;
+   padding: 0rem 2rem;
+}
+.banner-buttos{
+    display: flex;
+    justify-content: right;
+    padding-right: 2rem;
+    gap: 2rem;
+    
+}
+.delete-button{
+    display: flex;
+    gap: 1rem;
+    border: 1px solid black;
+    border-radius: 10px;
+    align-items: center;
+    padding: 0.5rem;
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 28.13px;
+    text-align: center;
+
+}
+.delete-button:hover{
+     cursor: pointer;
+}
+.edit-button{
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+}
+.edit-button:hover{
+    cursor: pointer;
+}
+.main-banners{
+    display: grid;
+    grid-template-columns: 40% 40%;
+    justify-content: space-evenly;
+    padding: 2rem 0rem;  
+}
+.main-banners img{
+     width: 100%;
+     height: 100%;
+     
+}
+.Kitchen-cleaning {
+    position: relative;
+    display: inline-block;
+}
+
+.Kitchen-cleaning img {
+    display: block;
+}
+  /* fdfghjmk */
+.Kitchen-cleaning p {
+    position: absolute;
+    top: 50%;
+    left: 45%;    
+    transform: translate(-50%, -50%);
+    color: white; /* Adjust the color as needed */
+ 
+    padding: 10px; /* Optional: Adds padding for better readability */
+    margin: 0; /* Removes default margin */
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 28.13px;
+    text-align: center;
+}
+.edit{
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+}
+.edit:hover{
+    cursor: pointer;
+}
+.cleaning {
+    position: relative;
+    display: inline-block;
+}
+
+.cleaning img {
+    display: block;
+}
+
+.cleaning p {
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    color: white; /* Adjust the color as needed */
+ 
+    padding: 10px; /* Optional: Adds padding for better readability */
+    margin: 0; /* Removes default margin */
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 28.13px;
+    text-align: center;
+}
+.clean-edit{
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+}

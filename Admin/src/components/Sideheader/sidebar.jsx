@@ -18,7 +18,7 @@ const Sidebar = ({ children }) => {
   };
 
   return (
-    <div className="sidebar-container">
+    <div className="mainContainer">
       <div className="sidebar">
         <div
           className={activeItem === "/" ? "active" : ""}
@@ -97,8 +97,8 @@ const Sidebar = ({ children }) => {
           Sub-Admin
         </div>
         <div
-          className={activeItem === "/induction" ? "active" : ""}
-          onClick={() => handleNavigation("/induction")}
+          className={activeItem === "/inductionmain" ? "active" : ""}
+          onClick={() => handleNavigation("/inductionmain")}
         >
           Induction
         </div>
@@ -108,6 +108,7 @@ const Sidebar = ({ children }) => {
         >
           Promotion
         </div>
+       
       </div>
       <main>{children}</main>
     </div>
