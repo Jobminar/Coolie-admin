@@ -78,12 +78,12 @@ const Sidebar = ({ children }) => {
         >
           Banners
         </div>
-        <div
+        {/* <div
           className={activeItem === "/accounting" ? "active" : ""}
           onClick={() => handleNavigation("/accounting")}
         >
           Accounting
-        </div>
+        </div> */}
         <div
           className={activeItem === "/marketing" ? "active" : ""}
           onClick={() => handleNavigation("/marketing")}
