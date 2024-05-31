@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import "./usermanager.css"; // Add necessary CSS here
+import { Form, InputGroup, Button } from "react-bootstrap";
+import { Search } from "react-bootstrap-icons";
+import "./usercorner.css";
 
 const UserManager = () => {
   const [selectedTab, setSelectedTab] = useState("Booked Users");
@@ -44,22 +46,58 @@ const UserManager = () => {
       },
       // Add more bronze users data here
     ],
+    Silver: [
+      {
+        id: 404,
+        name: "Geeta",
+        email: "example4@gmail.com",
+        phone: "4455667788",
+        joinDate: "Apr 2, 2021",
+        level: "Silver",
+        points: 0,
+        status: "active",
+      },
+      // Add more silver users data here
+    ],
+    Gold: [
+      {
+        id: 405,
+        name: "Ram",
+        email: "example5@gmail.com",
+        phone: "9988776655",
+        joinDate: "May 1, 2021",
+        level: "Gold",
+        points: 0,
+        status: "inactive",
+      },
+      // Add more gold users data here
+    ],
   };
 
   return (
-    <div className="usercornercontainer">
-      <div className="tabs">
+    <div className="user-manager-container">
+      <div className="header">
+        <h1>Add User</h1>
+        <div className="user-search-bar">
+          <InputGroup>
+            <Form.Control placeholder="Search" className="search-input" />
+
+            <Search variant="outline-secondary" className="searching" />
+          </InputGroup>
+        </div>
+      </div>
+      <div className="tabs-container">
         {Object.keys(data).map((tab) => (
           <button
             key={tab}
-            className={`tab ${selectedTab === tab ? "active" : ""}`}
+            className={`tab-button ${selectedTab === tab ? "active" : ""}`}
             onClick={() => setSelectedTab(tab)}
           >
             {tab}
           </button>
         ))}
       </div>
-      <div className="usertablecontainer">
+      <div className="user-table-container">
         <table>
           <thead>
             <tr>
