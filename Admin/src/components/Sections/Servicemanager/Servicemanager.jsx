@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpFromBracket } from "@fortawesome/free-solid-svg-icons";
 import AddServiceForm from "./AddServiceForm";
 import ServiceDetailCard from "./ServiceDetailCard";
+import SubCategoryForm from "./SubCategoryForm";
+import CategoryForm from "./CategoryForm";
+
 import "./servicemanager.css"; // Ensure the CSS file is correctly linked
 
 const Servermanager = () => {
@@ -23,6 +24,8 @@ const Servermanager = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [serviceVariant, setServiceVariant] = useState("");
   const [categoryId, setCategoryId] = useState(null);
+  const [subCategoryId, setSubCategoryId] = useState(null);
+  const [serviceVariantId, setServiceVariantId] = useState(null);
 
   const categories = ["Cleaning service", "Salon At Home", "Add new category"];
   const subCategories = [
@@ -241,7 +244,7 @@ const Servermanager = () => {
 
     try {
       const response = await fetch(
-        "https://coolie-backend.onrender.com/v1.0/core/categories",
+        "http://13.126.118.3:3000/v1.0/core/categories",
         {
           method: "POST",
           body: formData,
@@ -254,14 +257,14 @@ const Servermanager = () => {
 
       const data = await response.json(); // Assuming server sends back JSON
       console.log("Response data:", data); // Log response data for debugging
-
+      setShowAddSubCategoryForm(true);
       // Store category ID in component state and localStorage
       const categoryId = data._id; // Ensure your API returns _id
       setCategoryId(categoryId); // This setter function should be defined in your component using useState
       localStorage.setItem("categoryId", categoryId);
 
       setShowAddCategoryForm(false);
-      setShowAddSubCategoryForm(true);
+
       setCategoryName("");
       setCategoryIcon(null);
     } catch (error) {
@@ -273,18 +276,28 @@ const Servermanager = () => {
   const handleAddSubCategory = async () => {
     setSubCategoryError("");
 
-    if (subCategoryName.trim() === "") {
-      setSubCategoryError("Sub-category name is required.");
+    if (
+      subCategoryName.trim() === "" ||
+      !subCategoryIcon ||
+      !categoryId ||
+      !serviceVariant
+    ) {
+      setSubCategoryError("All fields are required.");
+      console.error("Validation failed: Missing inputs in subcategory form.");
       return;
     }
 
-    // Step 1: Post the service variant
     const serviceVariantData = {
       name: serviceVariant,
-      description: "Description for " + serviceVariant, // You can modify this as needed
+      description: "Add a description for the service variant",
+      isActive: true,
+      isDeleted: false,
     };
 
+    console.log("Service Variant Data being sent:", serviceVariantData);
+
     try {
+      console.log("Posting service variant...");
       const variantResponse = await fetch(
         "http://13.126.118.3:3000/v1.0/core/service-variants",
         {
@@ -296,47 +309,73 @@ const Servermanager = () => {
         },
       );
 
-      const variantData = await variantResponse.json();
       if (!variantResponse.ok) {
-        throw new Error(variantData.message || "Failed to add service variant");
+        const errorText = await variantResponse.text();
+        console.error(
+          "Failed to post service variant, server responded with:",
+          errorText,
+        );
+        throw new Error("Failed to add service variant");
       }
 
-      // Step 2: Post the subcategory with the service variant ID
-      const subCategoryData = {
-        name: subCategoryName,
-        imageKey: subCategoryIcon, // Ensure this is processed similar to categoryIcon if it's a file
-        categoryId: categoryId, // The ID from category API response
-        serviceVariants: [
-          {
-            serviceVariantId: variantData._id,
-            isActive: true,
-          },
-        ],
-      };
-
-      const subCategoryResponse = await fetch(
-        "http://13.126.118.3:3000/v1.0/core/subcategories",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(subCategoryData),
-        },
+      const variantData = await variantResponse.json();
+      console.log(
+        "Service variant posted successfully, received data:",
+        variantData,
       );
 
-      const subCategoryResponseData = await subCategoryResponse.json();
-      if (!subCategoryResponse.ok) {
-        throw new Error(
-          subCategoryResponseData.message || "Failed to add sub-category",
+      const serviceVariantId = variantData._id;
+      setServiceVariantId(serviceVariantId);
+      console.log("Service Variant ID:", serviceVariantId);
+
+      const formData = new FormData();
+      formData.append("name", subCategoryName);
+      formData.append("image", subCategoryIcon); // Assuming this is a File object
+      formData.append("categoryId", categoryId);
+      formData.append("isActive", true);
+      formData.append("isDeleted", false);
+      formData.append(
+        "serviceVariants",
+        JSON.stringify([{ serviceVariantId, isActive: true }]),
+      );
+
+      // Debugging: Log FormData entries
+      for (let pair of formData.entries()) {
+        console.log(
+          `${pair[0]}: ${
+            pair[1] instanceof Blob ? `File: ${pair[1].name}` : pair[1]
+          }`,
         );
       }
 
-      // If all goes well, clear forms and state
+      console.log("Posting subcategory...");
+      const subCategoryResponse = await fetch(
+        "http://13.126.118.3:3000/v1.0/core/sub-categories",
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+
+      if (!subCategoryResponse.ok) {
+        const errorText = await subCategoryResponse.text();
+        console.error(
+          "Failed to post subcategory, server responded with:",
+          errorText,
+        );
+        throw new Error("Failed to add sub-category");
+      }
+
+      const subCategoryDataResponse = await subCategoryResponse.json();
+      console.log(
+        "Subcategory created successfully, received data:",
+        subCategoryDataResponse,
+      );
+
+      const subCategoryId = subCategoryDataResponse._id;
+      setSubCategoryId(subCategoryId);
       setShowAddSubCategoryForm(false);
-      setSubCategoryName("");
-      setServiceVariant("");
-      // Optionally reset other states as needed
+      setShowServiceForm(true);
     } catch (error) {
       console.error(
         "Error during the addition of service variant or sub-category:",
@@ -346,8 +385,92 @@ const Servermanager = () => {
     }
   };
 
-  const closeServiceDetailCard = () => {
-    setSelectedService(null);
+  const handleAddService = async (serviceData) => {
+    const {
+      serviceName,
+      price,
+      serviceTime,
+      description,
+      locations,
+      taxPercentage,
+      providerCommission,
+      isMostBooked,
+      tag,
+      isCash, // Updated from iscash to isCash
+    } = serviceData;
+
+    const payload = {
+      name: serviceName,
+      description: description,
+      categoryId: categoryId,
+      subCategoryId: subCategoryId,
+      serviceVariants: [
+        {
+          serviceVariantId: serviceVariantId,
+          price: price,
+          serviceTime: serviceTime,
+        },
+      ],
+      locations: locations,
+      taxPercentage: taxPercentage,
+      providerCommission: providerCommission,
+      isMostBooked: isMostBooked,
+      tag: tag,
+      isCash: isCash,
+      isActive: true,
+      isDeleted: false,
+    };
+
+    // Console log each value to verify
+    console.log("Service Name:", serviceName);
+    console.log("Price:", price);
+    console.log("Service Time:", serviceTime);
+    console.log("Description:", description);
+    console.log("Locations:", locations);
+    console.log("Tax Percentage:", taxPercentage);
+    console.log("Provider Commission:", providerCommission);
+    console.log("Is Most Booked:", isMostBooked);
+    console.log("Tag:", tag);
+    console.log("Is Cash:", isCash);
+    console.log("Category ID:", categoryId);
+    console.log("Sub Category ID:", subCategoryId);
+    console.log("Service Variant ID:", serviceVariantId);
+    console.log("Payload:", payload);
+
+    try {
+      console.log("Posting service...");
+      const serviceResponse = await fetch(
+        "http://13.126.118.3:3000/v1.0/core/services",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      if (!serviceResponse.ok) {
+        const errorText = await serviceResponse.text();
+        console.error(
+          "Failed to post service, server responded with:",
+          errorText,
+        );
+        throw new Error("Failed to add service");
+      }
+
+      const serviceDataResponse = await serviceResponse.json();
+      console.log(
+        "Service created successfully, received data:",
+        serviceDataResponse,
+      );
+
+      // Reset form fields and UI states upon successful completion
+      setShowServiceForm(false);
+      setSelectedService(null);
+    } catch (error) {
+      console.error("Error during the addition of service:", error);
+    }
   };
 
   return (
@@ -392,51 +515,16 @@ const Servermanager = () => {
         </div>
 
         {showAddCategoryForm && (
-          <div className="servermanager-card servermanager-add-category-form">
-            <h3>Add Category</h3>
-            <div className="servermanager-input-container">
-              <label>Category Name:</label>
-              <input
-                type="text"
-                className="servermanager-bottom-border-input"
-                value={categoryName}
-                onChange={(e) => setCategoryName(e.target.value)}
-              />
-              {categoryError && <span className="error">{categoryError}</span>}
-            </div>
-            <div className="servermanager-upload-container">
-              <input
-                type="file"
-                id="categoryIcon"
-                onChange={handleCategoryIconChange}
-                className="servermanager-file-upload"
-              />
-              <label
-                htmlFor="categoryIcon"
-                className="servermanager-upload-icon-label"
-              >
-                Choose Icon
-                <FontAwesomeIcon
-                  icon={faArrowUpFromBracket}
-                  className="servermanager-upload-icon"
-                />
-              </label>
-              {categoryIcon && (
-                <img
-                  src={URL.createObjectURL(categoryIcon)}
-                  alt="Category Icon"
-                  className="servermanager-upload-preview"
-                />
-              )}
-            </div>
-
-            <button
-              className="servermanager-submit-button"
-              onClick={handleAddCategory}
-            >
-              Add
-            </button>
-          </div>
+          <CategoryForm
+            {...{
+              categoryName,
+              setCategoryName,
+              categoryError,
+              handleCategoryIconChange,
+              categoryIcon,
+              handleAddCategory,
+            }}
+          />
         )}
 
         {selectedCategory && (
@@ -480,69 +568,16 @@ const Servermanager = () => {
         )}
 
         {showAddSubCategoryForm && (
-          <div className="servermanager-card servermanager-add-sub-category-form">
-            <h3>Add Sub-Category</h3>
-            <div className="servermanager-input-container">
-              <label>Sub-Category Name:</label>
-              <input
-                type="text"
-                className="servermanager-bottom-border-input"
-                value={subCategoryName}
-                onChange={(e) => setSubCategoryName(e.target.value)}
-              />
-              {subCategoryError && (
-                <span className="error">{subCategoryError}</span>
-              )}
-            </div>
-            <div className="servermanager-upload-container">
-              <input
-                type="file"
-                id="subCategoryIcon"
-                onChange={handleSubCategoryIconChange}
-                className="servermanager-file-upload"
-              />
-              <label
-                htmlFor="subCategoryIcon"
-                className="servermanager-upload-icon-label"
-              >
-                Choose Icon
-                <FontAwesomeIcon
-                  icon={faArrowUpFromBracket}
-                  className="servermanager-upload-icon"
-                />
-              </label>
-              {subCategoryIcon && (
-                <img
-                  src={URL.createObjectURL(subCategoryIcon)}
-                  alt="Sub-Category Icon"
-                  className="servermanager-upload-preview"
-                />
-              )}
-            </div>
-            <div className="servermanager-input-container">
-              <label>Service Variant:</label>
-              <select
-                className="servermanager-bottom-border-input"
-                value={serviceVariant}
-                onChange={(e) => setServiceVariant(e.target.value)}
-              >
-                <option value="">Select a variant</option>
-                <option value="Normal cleaning">Normal cleaning</option>
-                <option value="Deep cleaning">Deep cleaning</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Hour">Hour</option>
-                <option value="Daily">Daily</option>
-                <option value="Monthly">Monthly</option>
-              </select>
-            </div>
-            <button
-              className="servermanager-submit-button"
-              onClick={handleAddSubCategory}
-            >
-              Add
-            </button>
-          </div>
+          <SubCategoryForm
+            subCategoryName={subCategoryName}
+            setSubCategoryName={setSubCategoryName}
+            subCategoryError={subCategoryError}
+            handleSubCategoryIconChange={handleSubCategoryIconChange}
+            subCategoryIcon={subCategoryIcon}
+            serviceVariant={serviceVariant}
+            setServiceVariant={setServiceVariant}
+            handleAddSubCategory={handleAddSubCategory}
+          />
         )}
 
         {selectedSubCategory && (
@@ -588,7 +623,7 @@ const Servermanager = () => {
         )}
       </div>
 
-      {showServiceForm && <AddServiceForm />}
+      {showServiceForm && <AddServiceForm onSubmit={handleAddService} />}
       {selectedService && (
         <>
           <hr style={{ borderTop: "2px solid #D70D09", height: "1px" }} />
