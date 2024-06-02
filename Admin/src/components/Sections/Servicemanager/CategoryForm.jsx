@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpFromBracket } from "@fortawesome/free-solid-svg-icons";
@@ -10,17 +10,53 @@ const CategoryForm = ({
   handleCategoryIconChange,
   categoryIcon,
   handleAddCategory,
+  setServiceTypes, // New prop to set service types
 }) => {
+  const [serviceTypeSelection, setServiceTypeSelection] = useState({
+    Cleaning: false,
+    Gender: false,
+    Time: false,
+  });
+
+  const handleServiceTypeChange = (e) => {
+    const { name, checked } = e.target;
+    setServiceTypeSelection((prev) => ({
+      ...prev,
+      [name]: checked,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const selectedServiceTypes = [];
+    if (serviceTypeSelection["Cleaning"]) {
+      selectedServiceTypes.push("Normal cleaning", "Deep cleaning");
+    }
+    if (serviceTypeSelection["Gender"]) {
+      selectedServiceTypes.push("Male", "Female");
+    }
+    if (serviceTypeSelection["Time"]) {
+      selectedServiceTypes.push("Hour", "Daily", "Monthly");
+    }
+    setServiceTypes(selectedServiceTypes); // Pass selected service types to parent
+    handleAddCategory(); // Add category after setting service types
+  };
+
   return (
-    <div className="servermanager-card servermanager-add-category-form">
+    <form
+      className="servermanager-card servermanager-add-category-form"
+      onSubmit={handleSubmit}
+    >
       <h3>Add Category</h3>
       <div className="servermanager-input-container">
-        <label>Category Name:</label>
+        <label htmlFor="categoryName">Category Name:</label>
         <input
           type="text"
+          id="categoryName"
           className="servermanager-bottom-border-input"
           value={categoryName}
           onChange={(e) => setCategoryName(e.target.value)}
+          aria-label="Category Name"
         />
         {categoryError && <span className="error">{categoryError}</span>}
       </div>
@@ -30,6 +66,7 @@ const CategoryForm = ({
           id="categoryIcon"
           onChange={handleCategoryIconChange}
           className="servermanager-file-upload"
+          aria-label="Category Icon"
         />
         <label
           htmlFor="categoryIcon"
@@ -44,29 +81,62 @@ const CategoryForm = ({
         {categoryIcon && (
           <img
             src={URL.createObjectURL(categoryIcon)}
-            alt="Category Icon"
+            alt="Category Icon Preview"
             className="servermanager-upload-preview"
           />
         )}
       </div>
+      <div className="servermanager-input-container">
+        <label>Service Types:</label>
+        <div className="checkbox-group">
+          <label>
+            <input
+              type="checkbox"
+              name="Cleaning"
+              checked={serviceTypeSelection["Cleaning"]}
+              onChange={handleServiceTypeChange}
+            />
+            Cleaning (Normal/Deep)
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="Gender"
+              checked={serviceTypeSelection["Gender"]}
+              onChange={handleServiceTypeChange}
+            />
+            Gender (Male/Female)
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="Time"
+              checked={serviceTypeSelection["Time"]}
+              onChange={handleServiceTypeChange}
+            />
+            Time (Hour/Daily/Monthly)
+          </label>
+        </div>
+      </div>
       <button
+        type="submit"
         className="servermanager-submit-button"
-        onClick={handleAddCategory}
+        aria-label="Add Category"
       >
         Add
       </button>
-    </div>
+    </form>
   );
 };
 
-// Adding PropTypes
 CategoryForm.propTypes = {
   categoryName: PropTypes.string.isRequired,
   setCategoryName: PropTypes.func.isRequired,
   categoryError: PropTypes.string,
   handleCategoryIconChange: PropTypes.func.isRequired,
-  categoryIcon: PropTypes.instanceOf(File), // This assumes categoryIcon is a File object
+  categoryIcon: PropTypes.instanceOf(File),
   handleAddCategory: PropTypes.func.isRequired,
+  setServiceTypes: PropTypes.func.isRequired, // New prop type
 };
 
 export default CategoryForm;

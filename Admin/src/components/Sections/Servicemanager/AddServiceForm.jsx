@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./servicemanager.css"; // Ensure the CSS file is correctly linked
 
-const AddServiceForm = ({ onSubmit }) => {
+const AddServiceForm = ({ onSubmit, serviceTypes }) => {
   const [serviceName, setServiceName] = useState("");
   const [price, setPrice] = useState("");
   const [serviceTime, setServiceTime] = useState("");
@@ -15,7 +15,8 @@ const AddServiceForm = ({ onSubmit }) => {
   const [providerCommission, setProviderCommission] = useState("");
   const [isMostBooked, setIsMostBooked] = useState(false);
   const [tag, setTag] = useState(false);
-  const [isCash, setIsCash] = useState(false); // Changed from cashAfterService to isCash
+  const [isCash, setIsCash] = useState(false);
+  const [serviceVariant, setServiceVariant] = useState(""); // Add service variant state
 
   const handleAddLocation = () => {
     if (locationInput.trim() !== "") {
@@ -42,6 +43,7 @@ const AddServiceForm = ({ onSubmit }) => {
       isMostBooked,
       tag,
       isCash,
+      serviceVariant, // Include service variant in the service data
     };
     onSubmit(serviceData);
   };
@@ -115,23 +117,21 @@ const AddServiceForm = ({ onSubmit }) => {
       </div>
 
       <div className="form-group">
-        <label>TAX %:</label>
-        <input
-          type="text"
+        <label>Service Variant:</label>
+        <select
           className="bottom-borders-input"
-          value={taxPercentage}
-          onChange={(e) => setTaxPercentage(e.target.value)}
-        />
+          value={serviceVariant}
+          onChange={(e) => setServiceVariant(e.target.value)}
+        >
+          <option value="">None</option>
+          {serviceTypes.map((type, index) => (
+            <option key={index} value={type}>
+              {type}
+            </option>
+          ))}
+        </select>
       </div>
-      <div className="form-group">
-        <label>Provider commission:</label>
-        <input
-          type="text"
-          className="bottom-borders-input"
-          value={providerCommission}
-          onChange={(e) => setProviderCommission(e.target.value)}
-        />
-      </div>
+
       <div className="form-group toggle-group">
         <label>Add to most booked service</label>
         <input
@@ -168,6 +168,7 @@ const AddServiceForm = ({ onSubmit }) => {
 
 AddServiceForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  serviceTypes: PropTypes.array.isRequired, // Add prop type for service types
 };
 
 export default AddServiceForm;

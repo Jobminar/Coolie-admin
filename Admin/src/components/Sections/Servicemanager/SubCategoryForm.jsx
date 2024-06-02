@@ -9,8 +9,6 @@ const SubCategoryForm = ({
   subCategoryError,
   handleSubCategoryIconChange,
   subCategoryIcon,
-  serviceVariant,
-  setServiceVariant,
   handleAddSubCategory,
 }) => {
   return (
@@ -54,25 +52,6 @@ const SubCategoryForm = ({
           />
         )}
       </div>
-      <div className="servermanager-input-container">
-        <label htmlFor="serviceVariant">Service Variant:</label>
-        <select
-          id="serviceVariant"
-          className="servermanager-bottom-border-input"
-          value={serviceVariant}
-          onChange={(e) => setServiceVariant(e.target.value)}
-          aria-label="Service Variant"
-        >
-          <option value="">Select a variant</option>
-          <option value="Normal cleaning">Normal cleaning</option>
-          <option value="Deep cleaning">Deep cleaning</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Hour">Hour</option>
-          <option value="Daily">Daily</option>
-          <option value="Monthly">Monthly</option>
-        </select>
-      </div>
       <button
         className="servermanager-submit-button"
         onClick={handleAddSubCategory}
@@ -90,8 +69,6 @@ SubCategoryForm.propTypes = {
   subCategoryError: PropTypes.string,
   handleSubCategoryIconChange: PropTypes.func.isRequired,
   subCategoryIcon: PropTypes.instanceOf(File),
-  serviceVariant: PropTypes.string.isRequired,
-  setServiceVariant: PropTypes.func.isRequired,
   handleAddSubCategory: PropTypes.func.isRequired,
 };
 

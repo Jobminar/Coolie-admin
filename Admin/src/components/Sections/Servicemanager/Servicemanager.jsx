@@ -1,17 +1,17 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import AddServiceForm from "./AddServiceForm";
 import ServiceDetailCard from "./ServiceDetailCard";
 import SubCategoryForm from "./SubCategoryForm";
 import CategoryForm from "./CategoryForm";
-
 import "./servicemanager.css"; // Ensure the CSS file is correctly linked
 
 const Servermanager = () => {
-  const [showCategoryMenu, setShowCategoryMenu] = useState(false);
-  const [showSubCategoryMenu, setShowSubCategoryMenu] = useState(false);
+  const [showCategoryMenu, setShowCategoryMenu] = useState(true);
+  const [showSubCategoryMenu, setShowSubCategoryMenu] = useState(true);
   const [showServiceVariantsMenu, setShowServiceVariantsMenu] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedSubCategory, setSelectedSubCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
   const [showAddSubCategoryForm, setShowAddSubCategoryForm] = useState(false);
   const [showServiceForm, setShowServiceForm] = useState(false);
@@ -22,168 +22,82 @@ const Servermanager = () => {
   const [categoryError, setCategoryError] = useState("");
   const [subCategoryError, setSubCategoryError] = useState("");
   const [selectedService, setSelectedService] = useState(null);
-  const [serviceVariant, setServiceVariant] = useState("");
   const [categoryId, setCategoryId] = useState(null);
   const [subCategoryId, setSubCategoryId] = useState(null);
-  const [serviceVariantId, setServiceVariantId] = useState(null);
+  const [serviceTypes, setServiceTypes] = useState([]); // New state for service types
 
-  const categories = ["Cleaning service", "Salon At Home", "Add new category"];
-  const subCategories = [
-    "Kitchen cleaning",
-    "House cleaning",
-    "Swimming pool",
-    "Salon At Home",
-    "Add new sub-category",
-  ];
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [services, setServices] = useState([]);
 
-  const servicesMap = {
-    "Kitchen cleaning": [
-      {
-        name: "Sink cleaning",
-        type: "Normal cleaning",
-        price: "100",
-        time: "30 mins",
-        description: "Cleaning of sink area",
-        locations: "All",
-        city: "City A",
-        tax: "5",
-        commission: "10",
-        mostBooked: true,
-        tag: true,
-        cashAfterService: false,
-      },
-      {
-        name: "Platform cleaning",
-        type: "Deep cleaning",
-        price: "200",
-        time: "45 mins",
-        description: "Deep cleaning of kitchen platform",
-        locations: "All",
-        city: "City A",
-        tax: "5",
-        commission: "10",
-        mostBooked: false,
-        tag: false,
-        cashAfterService: true,
-      },
-      { name: "Add New Service" },
-    ],
-    "House cleaning": [
-      {
-        name: "Room cleaning",
-        type: "Normal cleaning",
-        price: "150",
-        time: "1 hour",
-        description: "Cleaning of room area",
-        locations: "All",
-        city: "City B",
-        tax: "5",
-        commission: "10",
-        mostBooked: true,
-        tag: true,
-        cashAfterService: false,
-      },
-      {
-        name: "Window cleaning",
-        type: "Deep cleaning",
-        price: "250",
-        time: "1 hour 30 mins",
-        description: "Deep cleaning of windows",
-        locations: "All",
-        city: "City B",
-        tax: "5",
-        commission: "10",
-        mostBooked: false,
-        tag: false,
-        cashAfterService: true,
-      },
-      { name: "Add New Service" },
-    ],
-    "Swimming pool": [
-      {
-        name: "Pool cleaning",
-        type: "Normal cleaning",
-        price: "300",
-        time: "2 hours",
-        description: "Cleaning of pool area",
-        locations: "All",
-        city: "City C",
-        tax: "5",
-        commission: "10",
-        mostBooked: true,
-        tag: true,
-        cashAfterService: false,
-      },
-      {
-        name: "Water testing",
-        type: "Deep cleaning",
-        price: "400",
-        time: "2 hours 30 mins",
-        description: "Testing of pool water",
-        locations: "All",
-        city: "City C",
-        tax: "5",
-        commission: "10",
-        mostBooked: false,
-        tag: false,
-        cashAfterService: true,
-      },
-      { name: "Add New Service" },
-    ],
-    "Salon At Home": [
-      {
-        name: "Haircut",
-        type: "Normal cleaning",
-        price: "50",
-        time: "30 mins",
-        description: "Basic haircut",
-        locations: "All",
-        city: "City D",
-        tax: "5",
-        commission: "10",
-        mostBooked: true,
-        tag: true,
-        cashAfterService: false,
-      },
-      {
-        name: "Facial",
-        type: "Deep cleaning",
-        price: "100",
-        time: "1 hour",
-        description: "Facial treatment",
-        locations: "All",
-        city: "City D",
-        tax: "5",
-        commission: "10",
-        mostBooked: false,
-        tag: false,
-        cashAfterService: true,
-      },
-      { name: "Add New Service" },
-    ],
+  useEffect(() => {
+    axios
+      .get("http://13.126.118.3:3000/v1.0/core/categories")
+      .then((response) => {
+        console.log("Categories fetched:", response.data);
+        setCategories(response.data);
+      })
+      .catch((error) => console.error("Error fetching categories:", error));
+  }, []);
+
+  const fetchSubcategories = (categoryId) => {
+    if (!categoryId) {
+      console.error("Category ID is undefined");
+      return;
+    }
+    axios
+      .get(
+        `http://13.126.118.3:3000/v1.0/core/sub-categories/category/${categoryId}`,
+      )
+      .then((response) => {
+        console.log("Subcategories fetched:", response.data);
+        setSubCategories(response.data);
+        setSelectedCategory(categoryId);
+        setServices([]);
+      })
+      .catch((error) => console.error("Error fetching subcategories:", error));
   };
 
-  const handleCategorySelect = (category) => {
-    if (category === "Add new category") {
+  const fetchServices = (subcategoryId) => {
+    if (!subcategoryId) {
+      console.error("Subcategory ID is undefined");
+      return;
+    }
+    axios
+      .get("http://13.126.118.3:3000/v1.0/core/services/filter", {
+        params: {
+          categoryId: selectedCategory,
+          subCategoryId: subcategoryId,
+        },
+      })
+      .then((response) => {
+        console.log("Services fetched:", response.data);
+        setServices(response.data);
+        setSelectedService(null);
+      })
+      .catch((error) => console.error("Error fetching services:", error));
+  };
+
+  const handleCategorySelect = (categoryId) => {
+    console.log("Category selected:", categoryId);
+    if (categoryId === "Add new category") {
       setShowAddCategoryForm(true);
     } else {
-      setSelectedCategory(category);
-      setShowCategoryMenu(false);
+      fetchSubcategories(categoryId);
       setShowAddCategoryForm(false);
-      setShowSubCategoryMenu(true);
       setShowServiceVariantsMenu(false);
       setShowServiceForm(false);
     }
   };
 
-  const handleSubCategorySelect = (subCategory) => {
-    if (subCategory === "Add new sub-category") {
+  const handleSubCategorySelect = (subCategoryId) => {
+    console.log("Subcategory selected:", subCategoryId);
+    if (subCategoryId === "Add new sub-category") {
       setShowAddSubCategoryForm(true);
       setShowServiceVariantsMenu(false);
       setShowServiceForm(false);
     } else {
-      setSelectedSubCategory(subCategory);
-      setShowSubCategoryMenu(false);
+      fetchServices(subCategoryId);
       setShowAddSubCategoryForm(false);
       setShowServiceVariantsMenu(true);
       setShowServiceForm(false);
@@ -191,6 +105,7 @@ const Servermanager = () => {
   };
 
   const handleServiceSelect = (service) => {
+    console.log("Service selected:", service);
     if (service.name === "Add New Service") {
       setShowServiceForm(true);
       setSelectedService(null); // Hide ServiceDetailCard
@@ -207,13 +122,15 @@ const Servermanager = () => {
 
   const handleCategoryIconChange = (e) => {
     if (e.target.files[0]) {
-      setCategoryIcon(e.target.files[0]); // Store the file object directly
+      setCategoryIcon(e.target.files[0]);
+      console.log("Category icon selected:", e.target.files[0]);
     }
   };
 
   const handleSubCategoryIconChange = (e) => {
     if (e.target.files[0]) {
-      setSubCategoryIcon(e.target.files[0]); // Store the file object directly
+      setSubCategoryIcon(e.target.files[0]);
+      console.log("Subcategory icon selected:", e.target.files[0]);
     }
   };
 
@@ -233,15 +150,6 @@ const Servermanager = () => {
       formData.append("image", categoryIcon);
     }
 
-    // Debugging: Log FormData entries
-    for (let pair of formData.entries()) {
-      console.log(
-        `${pair[0]}: ${
-          pair[1] instanceof Blob ? `File: ${pair[1].name}` : pair[1]
-        }`,
-      );
-    }
-
     try {
       const response = await fetch(
         "http://13.126.118.3:3000/v1.0/core/categories",
@@ -255,16 +163,13 @@ const Servermanager = () => {
         throw new Error("Failed to add category");
       }
 
-      const data = await response.json(); // Assuming server sends back JSON
-      console.log("Response data:", data); // Log response data for debugging
+      const data = await response.json();
+      console.log("Category added:", data);
       setShowAddSubCategoryForm(true);
-      // Store category ID in component state and localStorage
-      const categoryId = data._id; // Ensure your API returns _id
-      setCategoryId(categoryId); // This setter function should be defined in your component using useState
+      const categoryId = data._id;
+      setCategoryId(categoryId);
       localStorage.setItem("categoryId", categoryId);
-
       setShowAddCategoryForm(false);
-
       setCategoryName("");
       setCategoryIcon(null);
     } catch (error) {
@@ -276,79 +181,19 @@ const Servermanager = () => {
   const handleAddSubCategory = async () => {
     setSubCategoryError("");
 
-    if (
-      subCategoryName.trim() === "" ||
-      !subCategoryIcon ||
-      !categoryId ||
-      !serviceVariant
-    ) {
+    if (subCategoryName.trim() === "" || !subCategoryIcon || !categoryId) {
       setSubCategoryError("All fields are required.");
-      console.error("Validation failed: Missing inputs in subcategory form.");
       return;
     }
 
-    const serviceVariantData = {
-      name: serviceVariant,
-      description: "Add a description for the service variant",
-      isActive: true,
-      isDeleted: false,
-    };
-
-    console.log("Service Variant Data being sent:", serviceVariantData);
+    const formData = new FormData();
+    formData.append("name", subCategoryName);
+    formData.append("image", subCategoryIcon);
+    formData.append("categoryId", categoryId);
+    formData.append("isActive", true);
+    formData.append("isDeleted", false);
 
     try {
-      console.log("Posting service variant...");
-      const variantResponse = await fetch(
-        "http://13.126.118.3:3000/v1.0/core/service-variants",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(serviceVariantData),
-        },
-      );
-
-      if (!variantResponse.ok) {
-        const errorText = await variantResponse.text();
-        console.error(
-          "Failed to post service variant, server responded with:",
-          errorText,
-        );
-        throw new Error("Failed to add service variant");
-      }
-
-      const variantData = await variantResponse.json();
-      console.log(
-        "Service variant posted successfully, received data:",
-        variantData,
-      );
-
-      const serviceVariantId = variantData._id;
-      setServiceVariantId(serviceVariantId);
-      console.log("Service Variant ID:", serviceVariantId);
-
-      const formData = new FormData();
-      formData.append("name", subCategoryName);
-      formData.append("image", subCategoryIcon); // Assuming this is a File object
-      formData.append("categoryId", categoryId);
-      formData.append("isActive", true);
-      formData.append("isDeleted", false);
-      formData.append(
-        "serviceVariants",
-        JSON.stringify([{ serviceVariantId, isActive: true }]),
-      );
-
-      // Debugging: Log FormData entries
-      for (let pair of formData.entries()) {
-        console.log(
-          `${pair[0]}: ${
-            pair[1] instanceof Blob ? `File: ${pair[1].name}` : pair[1]
-          }`,
-        );
-      }
-
-      console.log("Posting subcategory...");
       const subCategoryResponse = await fetch(
         "http://13.126.118.3:3000/v1.0/core/sub-categories",
         {
@@ -358,29 +203,17 @@ const Servermanager = () => {
       );
 
       if (!subCategoryResponse.ok) {
-        const errorText = await subCategoryResponse.text();
-        console.error(
-          "Failed to post subcategory, server responded with:",
-          errorText,
-        );
         throw new Error("Failed to add sub-category");
       }
 
       const subCategoryDataResponse = await subCategoryResponse.json();
-      console.log(
-        "Subcategory created successfully, received data:",
-        subCategoryDataResponse,
-      );
-
+      console.log("Subcategory added:", subCategoryDataResponse);
       const subCategoryId = subCategoryDataResponse._id;
       setSubCategoryId(subCategoryId);
       setShowAddSubCategoryForm(false);
       setShowServiceForm(true);
     } catch (error) {
-      console.error(
-        "Error during the addition of service variant or sub-category:",
-        error,
-      );
+      console.error("Error during the addition of sub-category:", error);
       setSubCategoryError(error.message || "An error occurred");
     }
   };
@@ -396,7 +229,8 @@ const Servermanager = () => {
       providerCommission,
       isMostBooked,
       tag,
-      isCash, // Updated from iscash to isCash
+      isCash,
+      serviceVariant, // Include service variant in the service data
     } = serviceData;
 
     const payload = {
@@ -406,7 +240,7 @@ const Servermanager = () => {
       subCategoryId: subCategoryId,
       serviceVariants: [
         {
-          serviceVariantId: serviceVariantId,
+          name: serviceVariant, // Store the selected service variant
           price: price,
           serviceTime: serviceTime,
         },
@@ -421,24 +255,7 @@ const Servermanager = () => {
       isDeleted: false,
     };
 
-    // Console log each value to verify
-    console.log("Service Name:", serviceName);
-    console.log("Price:", price);
-    console.log("Service Time:", serviceTime);
-    console.log("Description:", description);
-    console.log("Locations:", locations);
-    console.log("Tax Percentage:", taxPercentage);
-    console.log("Provider Commission:", providerCommission);
-    console.log("Is Most Booked:", isMostBooked);
-    console.log("Tag:", tag);
-    console.log("Is Cash:", isCash);
-    console.log("Category ID:", categoryId);
-    console.log("Sub Category ID:", subCategoryId);
-    console.log("Service Variant ID:", serviceVariantId);
-    console.log("Payload:", payload);
-
     try {
-      console.log("Posting service...");
       const serviceResponse = await fetch(
         "http://13.126.118.3:3000/v1.0/core/services",
         {
@@ -451,21 +268,11 @@ const Servermanager = () => {
       );
 
       if (!serviceResponse.ok) {
-        const errorText = await serviceResponse.text();
-        console.error(
-          "Failed to post service, server responded with:",
-          errorText,
-        );
         throw new Error("Failed to add service");
       }
 
       const serviceDataResponse = await serviceResponse.json();
-      console.log(
-        "Service created successfully, received data:",
-        serviceDataResponse,
-      );
-
-      // Reset form fields and UI states upon successful completion
+      console.log("Service added:", serviceDataResponse);
       setShowServiceForm(false);
       setSelectedService(null);
     } catch (error) {
@@ -499,17 +306,21 @@ const Servermanager = () => {
 
           {showCategoryMenu && (
             <div className="servermanager-menu">
-              {categories.map((category, index) => (
-                <div
-                  key={index}
-                  className={`servermanager-menu-item ${
-                    selectedCategory === category ? "selected" : ""
-                  }`}
-                  onClick={() => handleCategorySelect(category)}
-                >
-                  {category}
-                </div>
-              ))}
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <div
+                    key={category._id}
+                    className={`servermanager-menu-item ${
+                      selectedCategory === category._id ? "selected" : ""
+                    }`}
+                    onClick={() => handleCategorySelect(category._id)}
+                  >
+                    {category.name}
+                  </div>
+                ))
+              ) : (
+                <div>No data</div>
+              )}
             </div>
           )}
         </div>
@@ -523,6 +334,7 @@ const Servermanager = () => {
               handleCategoryIconChange,
               categoryIcon,
               handleAddCategory,
+              setServiceTypes, // Pass setServiceTypes to CategoryForm
             }}
           />
         )}
@@ -551,17 +363,23 @@ const Servermanager = () => {
 
             {showSubCategoryMenu && (
               <div className="servermanager-menu">
-                {subCategories.map((subCategory, index) => (
-                  <div
-                    key={index}
-                    className={`servermanager-menu-item ${
-                      selectedSubCategory === subCategory ? "selected" : ""
-                    }`}
-                    onClick={() => handleSubCategorySelect(subCategory)}
-                  >
-                    {subCategory}
-                  </div>
-                ))}
+                {subCategories.length > 0 ? (
+                  subCategories.map((subCategory) => (
+                    <div
+                      key={subCategory._id}
+                      className={`servermanager-menu-item ${
+                        selectedSubCategory === subCategory._id
+                          ? "selected"
+                          : ""
+                      }`}
+                      onClick={() => handleSubCategorySelect(subCategory._id)}
+                    >
+                      {subCategory.name}
+                    </div>
+                  ))
+                ) : (
+                  <div>No subcategories</div>
+                )}
               </div>
             )}
           </div>
@@ -574,8 +392,6 @@ const Servermanager = () => {
             subCategoryError={subCategoryError}
             handleSubCategoryIconChange={handleSubCategoryIconChange}
             subCategoryIcon={subCategoryIcon}
-            serviceVariant={serviceVariant}
-            setServiceVariant={setServiceVariant}
             handleAddSubCategory={handleAddSubCategory}
           />
         )}
@@ -604,10 +420,10 @@ const Servermanager = () => {
 
             {showServiceVariantsMenu && (
               <div className="servermanager-menu">
-                {(servicesMap[selectedSubCategory] || []).map(
-                  (service, index) => (
+                {services.length > 0 ? (
+                  services.map((service) => (
                     <div
-                      key={index}
+                      key={service._id}
                       className={`servermanager-menu-item ${
                         selectedService === service ? "selected" : ""
                       }`}
@@ -615,7 +431,9 @@ const Servermanager = () => {
                     >
                       {service.name}
                     </div>
-                  ),
+                  ))
+                ) : (
+                  <div>No services</div>
                 )}
               </div>
             )}
@@ -623,7 +441,12 @@ const Servermanager = () => {
         )}
       </div>
 
-      {showServiceForm && <AddServiceForm onSubmit={handleAddService} />}
+      {showServiceForm && (
+        <AddServiceForm
+          onSubmit={handleAddService}
+          serviceTypes={serviceTypes} // Pass service types to AddServiceForm
+        />
+      )}
       {selectedService && (
         <>
           <hr style={{ borderTop: "2px solid #D70D09", height: "1px" }} />
@@ -631,7 +454,7 @@ const Servermanager = () => {
             service={selectedService}
             category={selectedCategory}
             subCategory={selectedSubCategory}
-            onClose={closeServiceDetailCard}
+            onClose={() => setSelectedService(null)}
           />
         </>
       )}
