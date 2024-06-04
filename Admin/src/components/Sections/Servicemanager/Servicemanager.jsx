@@ -4,9 +4,10 @@ import AddServiceForm from "./AddServiceForm";
 import ServiceDetailCard from "./ServiceDetailCard";
 import SubCategoryForm from "./SubCategoryForm";
 import CategoryForm from "./CategoryForm";
-import "./servicemanager.css"; // Ensure the CSS file is correctly linked
+import "./servicemanager.css";
 
 const Servermanager = () => {
+  const [showServiceList, setShowServiceList] = useState(false);
   const [showCategoryMenu, setShowCategoryMenu] = useState(true);
   const [showSubCategoryMenu, setShowSubCategoryMenu] = useState(true);
   const [showServiceVariantsMenu, setShowServiceVariantsMenu] = useState(false);
@@ -24,8 +25,7 @@ const Servermanager = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [categoryId, setCategoryId] = useState(null);
   const [subCategoryId, setSubCategoryId] = useState(null);
-  const [serviceTypes, setServiceTypes] = useState([]); // New state for service types
-
+  const [serviceTypes, setServiceTypes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [services, setServices] = useState([]);
@@ -58,24 +58,29 @@ const Servermanager = () => {
       .catch((error) => console.error("Error fetching subcategories:", error));
   };
 
-  const fetchServices = (subcategoryId) => {
-    if (!subcategoryId) {
-      console.error("Subcategory ID is undefined");
+  const fetchServices = (subCategoryId) => {
+    if (!selectedCategory || !subCategoryId) {
+      console.error("Category ID or Subcategory ID is undefined");
       return;
     }
+
+    const url = `http://13.126.118.3:3000/v1.0/core/services/filter/${selectedCategory}/${subCategoryId}`;
+
     axios
-      .get("http://13.126.118.3:3000/v1.0/core/services/filter", {
-        params: {
-          categoryId: selectedCategory,
-          subCategoryId: subcategoryId,
-        },
-      })
+      .get(url)
       .then((response) => {
         console.log("Services fetched:", response.data);
-        setServices(response.data);
+
+        const fetchedServices = response.data.data;
+        setServices(fetchedServices);
+
+        setShowServiceList(true);
         setSelectedService(null);
       })
-      .catch((error) => console.error("Error fetching services:", error));
+      .catch((error) => {
+        console.error("Error fetching services:", error);
+        setShowServiceList(false);
+      });
   };
 
   const handleCategorySelect = (categoryId) => {
@@ -98,6 +103,7 @@ const Servermanager = () => {
       setShowServiceForm(false);
     } else {
       fetchServices(subCategoryId);
+      setSelectedSubCategory(subCategoryId);
       setShowAddSubCategoryForm(false);
       setShowServiceVariantsMenu(true);
       setShowServiceForm(false);
@@ -105,19 +111,28 @@ const Servermanager = () => {
   };
 
   const handleServiceSelect = (service) => {
-    console.log("Service selected:", service);
+    console.log("Selected service:", service);
+
     if (service.name === "Add New Service") {
       setShowServiceForm(true);
-      setSelectedService(null); // Hide ServiceDetailCard
+      setSelectedService(null);
+      setSelectedCategory(null);
+      setSelectedSubCategory(null);
     } else {
       setSelectedService(service);
-      setShowServiceForm(false); // Hide AddServiceForm
+      setShowServiceForm(false);
+
+      const categoryId = service.categoryId._id;
+      const subCategoryId = service.subCategoryId._id;
+
+      setSelectedCategory(categoryId);
+      setSelectedSubCategory(subCategoryId);
     }
   };
 
   const toggleServiceForm = () => {
     setShowServiceForm((prev) => !prev);
-    setSelectedService(null); // Hide ServiceDetailCard
+    setSelectedService(null);
   };
 
   const handleCategoryIconChange = (e) => {
@@ -229,8 +244,7 @@ const Servermanager = () => {
       providerCommission,
       isMostBooked,
       tag,
-      isCash,
-      serviceVariant, // Include service variant in the service data
+      cashAfterService,
     } = serviceData;
 
     const payload = {
@@ -240,7 +254,6 @@ const Servermanager = () => {
       subCategoryId: subCategoryId,
       serviceVariants: [
         {
-          name: serviceVariant, // Store the selected service variant
           price: price,
           serviceTime: serviceTime,
         },
@@ -250,7 +263,7 @@ const Servermanager = () => {
       providerCommission: providerCommission,
       isMostBooked: isMostBooked,
       tag: tag,
-      isCash: isCash,
+      cashAfterService: cashAfterService,
       isActive: true,
       isDeleted: false,
     };
@@ -275,6 +288,7 @@ const Servermanager = () => {
       console.log("Service added:", serviceDataResponse);
       setShowServiceForm(false);
       setSelectedService(null);
+      fetchServices(subCategoryId);
     } catch (error) {
       console.error("Error during the addition of service:", error);
     }
@@ -327,6 +341,7 @@ const Servermanager = () => {
 
         {showAddCategoryForm && (
           <CategoryForm
+            setServiceTypes={setServiceTypes}
             {...{
               categoryName,
               setCategoryName,
@@ -334,7 +349,6 @@ const Servermanager = () => {
               handleCategoryIconChange,
               categoryIcon,
               handleAddCategory,
-              setServiceTypes, // Pass setServiceTypes to CategoryForm
             }}
           />
         )}
@@ -418,22 +432,28 @@ const Servermanager = () => {
               </div>
             </div>
 
-            {showServiceVariantsMenu && (
+            {showServiceList && (
               <div className="servermanager-menu">
                 {services.length > 0 ? (
                   services.map((service) => (
                     <div
                       key={service._id}
                       className={`servermanager-menu-item ${
-                        selectedService === service ? "selected" : ""
+                        selectedService && selectedService._id === service._id
+                          ? "selected"
+                          : ""
                       }`}
                       onClick={() => handleServiceSelect(service)}
                     >
                       {service.name}
+                      {service.serviceVariants &&
+                        service.serviceVariants.length > 0 && (
+                          <span> (₹{service.serviceVariants[0].price})</span>
+                        )}
                     </div>
                   ))
                 ) : (
-                  <div>No services</div>
+                  <div>No services found</div>
                 )}
               </div>
             )}
@@ -444,7 +464,8 @@ const Servermanager = () => {
       {showServiceForm && (
         <AddServiceForm
           onSubmit={handleAddService}
-          serviceTypes={serviceTypes} // Pass service types to AddServiceForm
+          categoryId={categoryId}
+          subCategoryId={subCategoryId}
         />
       )}
       {selectedService && (
@@ -452,8 +473,8 @@ const Servermanager = () => {
           <hr style={{ borderTop: "2px solid #D70D09", height: "1px" }} />
           <ServiceDetailCard
             service={selectedService}
-            category={selectedCategory}
-            subCategory={selectedSubCategory}
+            category={selectedService.categoryId._id}
+            subCategory={selectedService.subCategoryId._id}
             onClose={() => setSelectedService(null)}
           />
         </>

@@ -1,24 +1,82 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import PropTypes from "prop-types";
 import "./servicemanager.css"; // Ensure the CSS file is correctly linked
 
 const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
+  const [categoryName, setCategoryName] = useState("");
+  const [subCategoryName, setSubCategoryName] = useState("");
+  const [serviceData, setServiceData] = useState({
+    name: "",
+    type: "",
+    price: "",
+    time: "",
+    description: "",
+    locations: "",
+    city: "",
+    tax: "",
+    commission: "",
+    mostBooked: false,
+    tag: false,
+    cashAfterService: false,
+  });
+
+  useEffect(() => {
+    const fetchCategoryName = async () => {
+      try {
+        const response = await axios.get(
+          `http://13.126.118.3:3000/v1.0/core/categories/${category}`,
+        );
+        setCategoryName(response.data.name);
+      } catch (error) {
+        console.error("Error fetching category name:", error);
+      }
+    };
+
+    const fetchSubCategoryName = async () => {
+      try {
+        const response = await axios.get(
+          `http://13.126.118.3:3000/v1.0/core/sub-categories/${subCategory}`,
+        );
+        setSubCategoryName(response.data.name);
+      } catch (error) {
+        console.error("Error fetching sub-category name:", error);
+      }
+    };
+
+    const fetchServiceDetails = async () => {
+      try {
+        const response = await axios.get(
+          `http://13.126.118.3:3000/v1.0/core/services/${service._id}`,
+        );
+        setServiceData(response.data);
+      } catch (error) {
+        console.error("Error fetching service details:", error);
+      }
+    };
+
+    fetchCategoryName();
+    fetchSubCategoryName();
+    fetchServiceDetails();
+  }, [category, subCategory, service._id]);
+
   return (
     <div className="service-detail-card">
-      <h3>Category: {category}</h3>
-      <h3>Sub-Category: {subCategory}</h3>
-      <h3>Service: {service.name}</h3>
+      <h3>Category: {categoryName}</h3>
+      <h3>Sub-Category: {subCategoryName}</h3>
+      <h3>Service: {serviceData.name}</h3>
       <form className="add-service-form">
         <div className="form-group">
           <label>Service Name:</label>
           <input
             type="text"
             className="bottom-border-input"
-            value={service.name}
+            value={serviceData.name}
           />
         </div>
         <div className="form-group">
           <label>Service Type:</label>
-          <select className="bottom-border-input" value={service.type}>
+          <select className="bottom-border-input" value={serviceData.type}>
             <option>Normal</option>
             <option>Deep</option>
             <option>Male</option>
@@ -33,7 +91,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="text"
             className="bottom-border-input"
-            value={service.price}
+            value={serviceData.price}
           />
         </div>
         <div className="form-group">
@@ -41,14 +99,14 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="text"
             className="bottom-border-input"
-            value={service.time}
+            value={serviceData.time}
           />
         </div>
         <div className="form-group">
           <label>Description:</label>
           <textarea
             className="textarea-input"
-            value={service.description}
+            value={serviceData.description}
           ></textarea>
         </div>
         <div className="form-group">
@@ -56,7 +114,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="text"
             className="bottom-border-input"
-            value={service.locations}
+            value={serviceData.locations}
           />
         </div>
         <div className="form-group">
@@ -64,7 +122,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="text"
             className="bottom-border-input"
-            value={service.city}
+            value={serviceData.city}
           />
         </div>
         <div className="form-group">
@@ -72,7 +130,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="text"
             className="bottom-border-input"
-            value={service.tax}
+            value={serviceData.tax}
           />
         </div>
         <div className="form-group">
@@ -80,7 +138,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="text"
             className="bottom-border-input"
-            value={service.commission}
+            value={serviceData.commission}
           />
         </div>
         <div className="form-group toggle-group">
@@ -88,7 +146,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="checkbox"
             className="toggle-input"
-            checked={service.mostBooked}
+            checked={serviceData.mostBooked}
           />
         </div>
         <div className="form-group toggle-group">
@@ -96,7 +154,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="checkbox"
             className="toggle-input"
-            checked={service.tag}
+            checked={serviceData.tag}
           />
         </div>
         <div className="form-group toggle-group">
@@ -104,7 +162,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="checkbox"
             className="toggle-input"
-            checked={service.cashAfterService}
+            checked={serviceData.cashAfterService}
           />
         </div>
         <button type="button" className="submit-button" onClick={onClose}>
@@ -113,6 +171,13 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
       </form>
     </div>
   );
+};
+
+ServiceDetailCard.propTypes = {
+  service: PropTypes.object.isRequired,
+  category: PropTypes.string.isRequired,
+  subCategory: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default ServiceDetailCard;
