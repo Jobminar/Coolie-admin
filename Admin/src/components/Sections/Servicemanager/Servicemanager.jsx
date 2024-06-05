@@ -255,7 +255,7 @@ const Servermanager = () => {
       subCategoryId: subCategoryId,
       serviceVariants: [
         {
-          serviceVariantId: serviceVariant, // Use the service variant from form
+          variantName: serviceVariant, // Use the service variant from form
           price: price,
           serviceTime: serviceTime,
         },
