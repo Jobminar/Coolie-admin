@@ -62,21 +62,28 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
 
   return (
     <div className="service-detail-card">
-      <h3>Category: {categoryName}</h3>
-      <h3>Sub-Category: {subCategoryName}</h3>
-      <h3>Service: {serviceData.name}</h3>
+      <div className="service-detail-header">
+        <h6>Category: {categoryName}</h6>
+        <h6>Sub-Category: {subCategoryName}</h6>
+        <h6>Service: {serviceData.name}</h6>
+      </div>
       <form className="add-service-form">
         <div className="form-group">
           <label>Service Name:</label>
           <input
             type="text"
-            className="bottom-border-input"
+            className="bottom-borders-input"
             value={serviceData.name}
+            readOnly
           />
         </div>
         <div className="form-group">
           <label>Service Type:</label>
-          <select className="bottom-border-input" value={serviceData.type}>
+          <select
+            className="bottom-borders-input"
+            value={serviceData.type}
+            readOnly
+          >
             <option>Normal</option>
             <option>Deep</option>
             <option>Male</option>
@@ -90,16 +97,18 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <label>Service Price:</label>
           <input
             type="text"
-            className="bottom-border-input"
+            className="bottom-borders-input"
             value={serviceData.price}
+            readOnly
           />
         </div>
         <div className="form-group">
           <label>Total Service Time:</label>
           <input
             type="text"
-            className="bottom-border-input"
+            className="bottom-borders-input"
             value={serviceData.time}
+            readOnly
           />
         </div>
         <div className="form-group">
@@ -107,38 +116,43 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <textarea
             className="textarea-input"
             value={serviceData.description}
+            readOnly
           ></textarea>
         </div>
         <div className="form-group">
           <label>Locations:</label>
           <input
             type="text"
-            className="bottom-border-input"
+            className="bottom-borders-input"
             value={serviceData.locations}
+            readOnly
           />
         </div>
         <div className="form-group">
           <label>City:</label>
           <input
             type="text"
-            className="bottom-border-input"
+            className="bottom-borders-input"
             value={serviceData.city}
+            readOnly
           />
         </div>
         <div className="form-group">
           <label>TAX %:</label>
           <input
             type="text"
-            className="bottom-border-input"
+            className="bottom-borders-input"
             value={serviceData.tax}
+            readOnly
           />
         </div>
         <div className="form-group">
           <label>Provider commission:</label>
           <input
             type="text"
-            className="bottom-border-input"
+            className="bottom-borders-input"
             value={serviceData.commission}
+            readOnly
           />
         </div>
         <div className="form-group toggle-group">
@@ -147,6 +161,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
             type="checkbox"
             className="toggle-input"
             checked={serviceData.mostBooked}
+            readOnly
           />
         </div>
         <div className="form-group toggle-group">
@@ -155,6 +170,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
             type="checkbox"
             className="toggle-input"
             checked={serviceData.tag}
+            readOnly
           />
         </div>
         <div className="form-group toggle-group">
@@ -163,6 +179,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
             type="checkbox"
             className="toggle-input"
             checked={serviceData.cashAfterService}
+            readOnly
           />
         </div>
         <button type="button" className="submit-button" onClick={onClose}>

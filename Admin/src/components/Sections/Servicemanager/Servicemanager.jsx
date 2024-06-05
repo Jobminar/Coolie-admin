@@ -25,7 +25,7 @@ const Servermanager = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [categoryId, setCategoryId] = useState(null);
   const [subCategoryId, setSubCategoryId] = useState(null);
-  const [serviceTypes, setServiceTypes] = useState([]);
+  const [serviceTypes, setServiceTypes] = useState([]); // Ensure service types are managed
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [services, setServices] = useState([]);
@@ -226,7 +226,7 @@ const Servermanager = () => {
       const subCategoryId = subCategoryDataResponse._id;
       setSubCategoryId(subCategoryId);
       setShowAddSubCategoryForm(false);
-      setShowServiceForm(true); // Set showServiceForm to true here
+      setShowServiceForm(true); // Ensure the form is shown here
     } catch (error) {
       console.error("Error during the addition of sub-category:", error);
       setSubCategoryError(error.message || "An error occurred");
@@ -244,7 +244,8 @@ const Servermanager = () => {
       providerCommission,
       isMostBooked,
       tag,
-      cashAfterService,
+      isCash,
+      serviceVariant, // Include serviceVariant in the payload
     } = serviceData;
 
     const payload = {
@@ -254,6 +255,7 @@ const Servermanager = () => {
       subCategoryId: subCategoryId,
       serviceVariants: [
         {
+          serviceVariantId: serviceVariant, // Use the service variant from form
           price: price,
           serviceTime: serviceTime,
         },
@@ -263,7 +265,7 @@ const Servermanager = () => {
       providerCommission: providerCommission,
       isMostBooked: isMostBooked,
       tag: tag,
-      cashAfterService: cashAfterService,
+      isCash: isCash,
       isActive: true,
       isDeleted: false,
     };
@@ -464,8 +466,7 @@ const Servermanager = () => {
       {showServiceForm && (
         <AddServiceForm
           onSubmit={handleAddService}
-          categoryId={categoryId}
-          subCategoryId={subCategoryId}
+          serviceTypes={serviceTypes} // Pass service types to AddServiceForm
         />
       )}
       {selectedService && (

@@ -16,7 +16,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
   const [isMostBooked, setIsMostBooked] = useState(false);
   const [tag, setTag] = useState(false);
   const [isCash, setIsCash] = useState(false);
-  const [serviceVariant, setServiceVariant] = useState(""); // Add service variant state
+  const [serviceVariant, setServiceVariant] = useState("");
 
   const handleAddLocation = () => {
     if (locationInput.trim() !== "") {
@@ -43,7 +43,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
       isMostBooked,
       tag,
       isCash,
-      serviceVariant, // Include service variant in the service data
+      serviceVariant,
     };
     onSubmit(serviceData);
   };
@@ -168,7 +168,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
 
 AddServiceForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  serviceTypes: PropTypes.array.isRequired, // Add prop type for service types
+  serviceTypes: PropTypes.array.isRequired,
 };
 
 export default AddServiceForm;
