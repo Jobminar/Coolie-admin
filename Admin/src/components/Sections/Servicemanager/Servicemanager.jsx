@@ -226,7 +226,7 @@ const Servermanager = () => {
       const subCategoryId = subCategoryDataResponse._id;
       setSubCategoryId(subCategoryId);
       setShowAddSubCategoryForm(false);
-      setShowServiceForm(true);
+      setShowServiceForm(true); // Set showServiceForm to true here
     } catch (error) {
       console.error("Error during the addition of sub-category:", error);
       setSubCategoryError(error.message || "An error occurred");
