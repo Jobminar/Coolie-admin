@@ -103,8 +103,8 @@ const Sidebar = ({ children }) => {
           Induction
         </div>
         <div
-          className={activeItem === "/promotion" ? "active" : ""}
-          onClick={() => handleNavigation("/promotion")}
+          className={activeItem === "/userpromotion" ? "active" : ""}
+          onClick={() => handleNavigation("/userpromotion")}
         >
           Promotion
         </div>

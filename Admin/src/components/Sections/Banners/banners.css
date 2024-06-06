@@ -1,5 +1,9 @@
 .banners{
     border: 1px solid black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem;
  }
  .banners h1{
      font-family: Roboto;
@@ -19,7 +23,7 @@
  .delete-button{
      display: flex;
      gap: 1rem;
-     border: 1px solid black;
+     /* border: 1px solid black; */
      border-radius: 10px;
      align-items: center;
      padding: 0.5rem;
@@ -34,7 +38,7 @@
       cursor: pointer;
  }
  .edit-button{
-     border: 1px solid black;
+     /* border: 1px solid black; */
      border-radius: 10px;
      display: flex;
      align-items: center;
@@ -82,7 +86,7 @@
      position: absolute;
      top: 5%;
      right: 5%;
-     border: 1px solid black;
+     /* border: 1px solid black; */
      border-radius: 10px;
      padding: 5px;
  }
@@ -117,7 +121,59 @@
      position: absolute;
      top: 5%;
      right: 5%;
-     border: 1px solid black;
+     /* border: 1px solid black; */
      border-radius: 10px;
      padding: 5px;
  }
+ .banner-con{
+    /* border: 1px solid black; */
+ }
+ .main-banners{
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+
+ }
+ .main-banners h1{
+    font-family: Roboto;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 28.13px;
+    text-align: center;
+ }
+ .banner-con{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 2rem;
+ }
+
+ .banner-sub-con img{
+    width: 25rem;
+    height: 15rem;
+    border-radius: 10px;
+    /* border: 1px solid black; */
+ }
+ .banner-sub-con{
+    position: relative;
+}
+.title{
+    position: absolute;
+    top: 50%;
+    left: 40%;
+}
+.edit-button{
+    position: absolute;
+    top: 5% ;
+    left: 5%;
+}
+.delete-button{
+    position: absolute;
+    top: 5% ;
+    right: 5%;
+}
+.edit-banners{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
