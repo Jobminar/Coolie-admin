@@ -1,4 +1,4 @@
-.mainContainer{
+.mainContainer {
     display: grid;
     grid-template-columns: 22% 78%;
     height: auto;
@@ -6,11 +6,11 @@
 }
 
 .sidebar {
-    padding: 2rem 0rem;
+    padding: 2rem 1rem;
     border-right: 1px solid #030B33;
     border-bottom: 1px solid #030B33;
     height: 1300px;
-    width: 280px;
+    width: 250px;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -23,9 +23,9 @@
     /* Set width and height */
     width: 100%;
     /* Adjust to your desired width */
-    height:50px ;
+    height: 50px;
     /* Adjust to your desired height */
-   /* border: 1px solid black; */
+    /* border: 1px solid black; */
     border-radius: 50px;
     font-family: Roboto, sans-serif;
     font-size: 18px;

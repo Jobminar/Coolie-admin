@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUpFromBracket,
@@ -13,8 +14,8 @@ const ManageService = () => {
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const [showSubCategoryMenu, setShowSubCategoryMenu] = useState(false);
   const [showServiceVariantsMenu, setShowServiceVariantsMenu] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedSubCategory, setSelectedSubCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [showEditCategoryForm, setShowEditCategoryForm] = useState(false);
   const [showEditSubCategoryForm, setShowEditSubCategoryForm] = useState(false);
   const [categoryIcon, setCategoryIcon] = useState(null);
@@ -25,141 +26,49 @@ const ManageService = () => {
   const [subCategoryError, setSubCategoryError] = useState("");
   const [selectedService, setSelectedService] = useState(null);
   const [serviceVariant, setServiceVariant] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [services, setServices] = useState([]);
 
-  const categories = ["Cleaning service", "Salon At Home"];
-  const subCategories = [
-    "Kitchen cleaning",
-    "House cleaning",
-    "Swimming pool",
-    "Salon At Home",
-  ];
+  const API_BASE_URL = "http://13.126.118.3:3000"; // Store the base URL for clarity
 
-  const servicesMap = {
-    "Kitchen cleaning": [
-      {
-        name: "Sink cleaning",
-        type: "Normal cleaning",
-        price: "100",
-        time: "30 mins",
-        description: "Cleaning of sink area",
-        locations: "All",
-        city: "City A",
-        tax: "5",
-        commission: "10",
-        mostBooked: true,
-        tag: true,
-        cashAfterService: false,
-      },
-      {
-        name: "Platform cleaning",
-        type: "Deep cleaning",
-        price: "200",
-        time: "45 mins",
-        description: "Deep cleaning of kitchen platform",
-        locations: "All",
-        city: "City A",
-        tax: "5",
-        commission: "10",
-        mostBooked: false,
-        tag: false,
-        cashAfterService: true,
-      },
-    ],
-    "House cleaning": [
-      {
-        name: "Room cleaning",
-        type: "Normal cleaning",
-        price: "150",
-        time: "1 hour",
-        description: "Cleaning of room area",
-        locations: "All",
-        city: "City B",
-        tax: "5",
-        commission: "10",
-        mostBooked: true,
-        tag: true,
-        cashAfterService: false,
-      },
-      {
-        name: "Window cleaning",
-        type: "Deep cleaning",
-        price: "250",
-        time: "1 hour 30 mins",
-        description: "Deep cleaning of windows",
-        locations: "All",
-        city: "City B",
-        tax: "5",
-        commission: "10",
-        mostBooked: false,
-        tag: false,
-        cashAfterService: true,
-      },
-    ],
-    "Swimming pool": [
-      {
-        name: "Pool cleaning",
-        type: "Normal cleaning",
-        price: "300",
-        time: "2 hours",
-        description: "Cleaning of pool area",
-        locations: "All",
-        city: "City C",
-        tax: "5",
-        commission: "10",
-        mostBooked: true,
-        tag: true,
-        cashAfterService: false,
-      },
-      {
-        name: "Water testing",
-        type: "Deep cleaning",
-        price: "400",
-        time: "2 hours 30 mins",
-        description: "Testing of pool water",
-        locations: "All",
-        city: "City C",
-        tax: "5",
-        commission: "10",
-        mostBooked: false,
-        tag: false,
-        cashAfterService: true,
-      },
-    ],
-    "Salon At Home": [
-      {
-        name: "Haircut",
-        type: "Normal cleaning",
-        price: "50",
-        time: "30 mins",
-        description: "Basic haircut",
-        locations: "All",
-        city: "City D",
-        tax: "5",
-        commission: "10",
-        mostBooked: true,
-        tag: true,
-        cashAfterService: false,
-      },
-      {
-        name: "Facial",
-        type: "Deep cleaning",
-        price: "100",
-        time: "1 hour",
-        description: "Facial treatment",
-        locations: "All",
-        city: "City D",
-        tax: "5",
-        commission: "10",
-        mostBooked: false,
-        tag: false,
-        cashAfterService: true,
-      },
-    ],
+  useEffect(() => {
+    axios
+      .get(`${API_BASE_URL}/v1.0/core/categories`)
+      .then((response) => {
+        console.log("Categories fetched:", response.data);
+        setCategories(response.data);
+      })
+      .catch((error) => console.error("Error fetching categories:", error));
+  }, []);
+
+  const fetchSubcategories = (categoryId) => {
+    axios
+      .get(`${API_BASE_URL}/v1.0/core/sub-categories/category/${categoryId}`)
+      .then((response) => {
+        console.log("Subcategories fetched:", response.data);
+        setSubCategories(response.data);
+      })
+      .catch((error) => console.error("Error fetching subcategories:", error));
+  };
+
+  const fetchServices = (categoryId, subCategoryId) => {
+    axios
+      .get(
+        `${API_BASE_URL}/v1.0/core/services/filter/${categoryId}/${subCategoryId}`,
+      )
+      .then((response) => {
+        console.log("Services fetched:", response.data);
+        setServices(response.data.data);
+      })
+      .catch((error) => console.error("Error fetching services:", error));
   };
 
   const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
-    setCategoryName(category); // Set the initial value of the category name
+    setSelectedCategory(category._id);
+    setCategoryName(category.name); // Set the initial value of the category name
+    setCategoryIcon(`${API_BASE_URL}/${category.imageKey}`);
+    fetchSubcategories(category._id);
     setShowCategoryMenu(false);
     setShowEditCategoryForm(true);
     setShowEditSubCategoryForm(false);
@@ -167,8 +76,10 @@ const ManageService = () => {
   };
 
   const handleSubCategorySelect = (subCategory) => {
-    setSelectedSubCategory(subCategory);
-    setSubCategoryName(subCategory); // Set the initial value of the sub-category name
+    setSelectedSubCategory(subCategory._id);
+    setSubCategoryName(subCategory.name); // Set the initial value of the sub-category name
+    setSubCategoryIcon(`${API_BASE_URL}/${subCategory.imageKey}`);
+    fetchServices(selectedCategory, subCategory._id);
     setShowSubCategoryMenu(false);
     setShowEditSubCategoryForm(true);
     setShowServiceVariantsMenu(false);
@@ -200,23 +111,8 @@ const ManageService = () => {
       setSubCategoryError("Sub-category name is required.");
       return;
     }
-    // Logic to edit sub-category
     setShowEditSubCategoryForm(false);
     setShowServiceVariantsMenu(false);
-    setSelectedService({
-      name: "Example Service",
-      type: "Normal cleaning",
-      price: "100",
-      time: "1 hour",
-      description: "Example service description",
-      locations: "All",
-      city: "Example City",
-      tax: "5",
-      commission: "10",
-      mostBooked: true,
-      tag: true,
-      cashAfterService: false,
-    });
   };
 
   const handleEditServiceVariant = () => {
@@ -273,22 +169,23 @@ const ManageService = () => {
 
           {showCategoryMenu && (
             <div className="manageservice-menu">
-              {categories.map((category, index) => (
+              {categories.map((category) => (
                 <div
-                  key={index}
+                  key={category._id}
                   className={`manageservice-menu-item ${
-                    selectedCategory === category ? "selected" : ""
+                    selectedCategory === category._id ? "selected" : ""
                   }`}
                 >
                   <span onClick={() => handleCategorySelect(category)}>
-                    {category}
+                    {category.name}
                   </span>
                   <FontAwesomeIcon
                     icon={faEdit}
                     className="manageservice-edit-icon"
                     onClick={() => {
                       setShowEditCategoryForm(true);
-                      setCategoryName(category); // Set the initial value for the category name input
+                      setCategoryName(category.name); // Set the initial value for the category name input
+                      setCategoryIcon(`${API_BASE_URL}/${category.imageKey}`);
                     }}
                   />
                 </div>
@@ -334,12 +231,22 @@ const ManageService = () => {
                   className="manageservice-upload-icon"
                 />
               </label>
-              {categoryIcon && (
+              {categoryIcon ? (
                 <img
-                  src={categoryIcon}
+                  src={
+                    categoryIcon.startsWith("blob:")
+                      ? categoryIcon
+                      : `${API_BASE_URL}/${categoryIcon}`
+                  }
                   alt="Category Icon"
                   className="manageservice-upload-preview"
+                  onError={(e) => {
+                    e.target.onerror = null; // Prevent infinite loop if image fails to load
+                    e.target.src = "/path/to/default-image.jpg"; // Set a default image
+                  }}
                 />
+              ) : (
+                <div>Loading Icon...</div> // Show a loading message while fetching
               )}
             </div>
 
@@ -352,6 +259,51 @@ const ManageService = () => {
             </button>
           </div>
         )}
+
+        {selectedCategory && (
+          <div className="manageservice-card" id="subcategory-card">
+            <div className="manageservice-form-group">
+              <div className="manageservice-category-header">
+                <span>Select Sub-Category</span>
+                <button
+                  className="manageservice-hamburger-icon"
+                  onClick={() => setShowSubCategoryMenu(!showSubCategoryMenu)}
+                >
+                  &#9776;
+                </button>
+              </div>
+            </div>
+
+            {showSubCategoryMenu && (
+              <div className="manageservice-menu">
+                {subCategories.map((subCategory) => (
+                  <div
+                    key={subCategory._id}
+                    className={`manageservice-menu-item ${
+                      selectedSubCategory === subCategory._id ? "selected" : ""
+                    }`}
+                  >
+                    <span onClick={() => handleSubCategorySelect(subCategory)}>
+                      {subCategory.name}
+                    </span>
+                    <FontAwesomeIcon
+                      icon={faEdit}
+                      className="manageservice-edit-icon"
+                      onClick={() => {
+                        setShowEditSubCategoryForm(true);
+                        setSubCategoryName(subCategory.name); // Set the initial value for the sub-category name input
+                        setSubCategoryIcon(
+                          `${API_BASE_URL}/${subCategory.imageKey}`,
+                        );
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {showEditSubCategoryForm && (
           <div className="manageservice-card manageservice-edit-sub-category-form">
             <h3>
@@ -391,12 +343,22 @@ const ManageService = () => {
                   className="manageservice-upload-icon"
                 />
               </label>
-              {subCategoryIcon && (
+              {subCategoryIcon ? (
                 <img
-                  src={subCategoryIcon}
+                  src={
+                    subCategoryIcon.startsWith("blob:")
+                      ? subCategoryIcon
+                      : `${API_BASE_URL}/${subCategoryIcon}`
+                  }
                   alt="Sub-Category Icon"
                   className="manageservice-upload-preview"
+                  onError={(e) => {
+                    e.target.onerror = null; // Prevent infinite loop if image fails to load
+                    e.target.src = "/path/to/default-image.jpg"; // Set a default image
+                  }}
                 />
+              ) : (
+                <div>Loading Icon...</div> // Show a loading message while fetching
               )}
             </div>
             <div className="manageservice-input-container">
@@ -425,7 +387,7 @@ const ManageService = () => {
           </div>
         )}
 
-        {showServiceVariantsMenu && (
+        {selectedSubCategory && (
           <div className="manageservice-card" id="service-card">
             <div className="manageservice-form-group">
               <div className="manageservice-category-header">
@@ -443,34 +405,27 @@ const ManageService = () => {
 
             {showServiceVariantsMenu && (
               <div className="manageservice-menu">
-                {(servicesMap[selectedSubCategory] || []).map(
-                  (service, index) => (
-                    <div
-                      key={index}
-                      className={`manageservice-menu-item ${
-                        selectedService === service ? "selected" : ""
-                      }`}
-                    >
-                      <span onClick={() => handleServiceSelect(service)}>
-                        {service.name}
-                      </span>
-                      <FontAwesomeIcon
-                        icon={faEdit}
-                        className="manageservice-edit-icon"
-                        onClick={() => setSelectedService(service)}
-                      />
-                    </div>
-                  ),
-                )}
+                {services.map((service) => (
+                  <div
+                    key={service._id}
+                    className={`manageservice-menu-item ${
+                      selectedService && selectedService._id === service._id
+                        ? "selected"
+                        : ""
+                    }`}
+                  >
+                    <span onClick={() => handleServiceSelect(service)}>
+                      {service.name}
+                    </span>
+                    <FontAwesomeIcon
+                      icon={faEdit}
+                      className="manageservice-edit-icon"
+                      onClick={() => setSelectedService(service)}
+                    />
+                  </div>
+                ))}
               </div>
             )}
-            <button
-              id="manageservice-update-service-variant-button"
-              className="manageservice-submit-button"
-              onClick={handleEditServiceVariant}
-            >
-              Update
-            </button>
           </div>
         )}
       </div>

@@ -30,7 +30,6 @@
     display: flex;
     align-items: center;
     border-radius: 2.5px;
-
     border-left: none;
     border-right: none;
     padding: 5px;
@@ -76,6 +75,10 @@
     border-radius: 5px;
     margin-top: 10px;
     padding: 5px;
+    max-height: 200px;
+    /* Maximum height */
+    overflow-y: auto;
+    /* Scrollbar for overflow */
 }
 
 .manageservice-menu-item {
@@ -126,12 +129,10 @@
     display: flex;
     align-items: center;
     padding: 10px;
-
     border-top: none;
     border-right: none;
     border-left: none;
     border-radius: 2.5px 2.5px 2.5px 2.5px;
-
 }
 
 .manageservice-input-container {
@@ -204,7 +205,6 @@
 .manageservice-edit-category-form select,
 .manageservice-edit-sub-category-form select {
     border: none;
-
     padding: 10px;
     outline: none;
     font-size: 14px;
@@ -252,7 +252,6 @@
 
 .manageservice-bottom-border-input {
     border: none;
-
     padding: 5px;
     outline: none;
     transition: border-bottom-color 0.3s;
