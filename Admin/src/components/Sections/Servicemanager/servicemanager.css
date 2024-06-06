@@ -76,9 +76,7 @@
     margin-top: 10px;
     padding: 5px;
     max-height: 200px;
-    /* Added maximum height */
     overflow-y: auto;
-    /* Added scrollbar */
 }
 
 .servermanager-menu-item {
@@ -323,7 +321,7 @@
 }
 
 .servermanager-toggle-input:checked::before,
-.toggle-input::checked::before {
+.toggle-input:checked::before {
     transform: translateX(20px);
 }
 
@@ -338,7 +336,6 @@
     margin-top: 20px;
     width: 70%;
     align-self: center;
-    /* Center the button */
 }
 
 .servermanager-submit-button:hover,
@@ -379,13 +376,11 @@
     align-items: center;
 }
 
-.checkbox-group {
+.radio-group {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    /* Add some space between checkboxes */
     padding: 10px;
-    /* Optional: Add padding for better alignment */
 }
 
 .service-detail-header {
@@ -394,5 +389,5 @@
     justify-content: flex-start;
     align-items: center;
     max-height: 2px;
-    margin-top: 1px
+    margin-top: 1px;
 }

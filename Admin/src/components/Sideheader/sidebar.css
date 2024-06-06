@@ -1,6 +1,6 @@
 .mainContainer {
     display: grid;
-    grid-template-columns: 22% 78%;
+    grid-template-columns: 21.9% 75%;
     height: auto;
     border: 1px solid black;
 }
@@ -10,7 +10,7 @@
     border-right: 1px solid #030B33;
     border-bottom: 1px solid #030B33;
     height: 1300px;
-    width: 250px;
+    width: 220px;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -19,18 +19,15 @@
 }
 
 .sidebar div {
-    padding: 2px;
-    /* Set width and height */
+    padding: 1px;
+    padding-bottom: 1px;
     width: 100%;
-    /* Adjust to your desired width */
-    height: 50px;
-    /* Adjust to your desired height */
-    /* border: 1px solid black; */
+    height: 52px;
     border-radius: 50px;
     font-family: Roboto, sans-serif;
     font-size: 18px;
     font-weight: 400;
-    line-height: 30px;
+    line-height: 25px;
     text-align: center;
     cursor: pointer;
     display: flex;
@@ -76,7 +73,6 @@
     line-height: 1;
     z-index: 1;
     border: none;
-    /* Ensure it stays on top */
 }
 
 .dropdown-header:hover,
@@ -91,9 +87,7 @@
     display: flex;
     flex-direction: column;
     margin-top: 25px;
-    /* Adjust this value to reduce the gap */
     z-index: 0;
-    /* Ensure it stays below the header */
     border: none;
 }
 
@@ -120,7 +114,6 @@
 
 .dropdown-menu div:not(:last-child) {
     border-bottom: 1px solid #030B33;
-    /* Remove the gap between dropdown items */
 }
 
 .dropdown.active {
@@ -131,7 +124,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 180px;
-    /* Adjust this value to expand the height */
     border: none;
+}
+
+.dropdown.serviceManagerDropdown.active,
+.dropdown.promotionsDropdown.active,
+.dropdown.marketingDropdown.active,
+.dropdown.packagesDropdown.active {
+    /* Added packages dropdown */
+    height: 210px;
+    /* Adjusted height for potentially multiple items */
 }

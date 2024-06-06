@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  Link,
+  Navigate,
   BrowserRouter,
 } from "react-router-dom";
 import Header from "./components/Header/header";
@@ -24,7 +24,6 @@ import EditBanner from "./components/Sections/Banners/Editbanner";
 import Editloyalitycards from "./components/Sections/Loyalitycards/editloyalitycards";
 import Userpromotions from "./components/Sections/Promotions/userpromotions";
 
-
 const Routing = () => {
   return (
     <>
@@ -35,7 +34,6 @@ const Routing = () => {
             <Route path="/" element={<Jobsarea />} />
             <Route path="/addservice" element={<Servicemanager />} />
             <Route path="/manageservice" element={<ManageService />} />{" "}
-            {/* Add ManageService route */}
             <Route path="/usercorner" element={<UserManager />} />
             <Route path="/providersrcorner" element={<Providerscorner />} />
             <Route path="/loyalitycards" element={<Loyalitycards />} />
@@ -45,10 +43,11 @@ const Routing = () => {
             <Route path="/subadmin" element={<Subadmin />} />
             <Route path="/inductionmain" element={<Inductionmain />} />
             <Route path="/addsubadmin" element={<Addsubadmin />} />
-            <Route path="/editbanner" element={<EditBanner/>} />
-            <Route path="/editloyality" element={<Editloyalitycards/>} />
-            <Route path="/userpromotion" element={<Userpromotions/>} />
-
+            <Route path="/editbanner" element={<EditBanner />} />
+            <Route path="/editloyality" element={<Editloyalitycards />} />
+            <Route path="/userpromotion" element={<Userpromotions />} />
+            <Route path="*" element={<Navigate to="/" />} />{" "}
+            {/* Default redirect */}
           </Routes>
         </Sidebar>
       </BrowserRouter>

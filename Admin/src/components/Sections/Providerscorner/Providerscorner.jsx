@@ -27,8 +27,10 @@ const ProvidersCorner = () => {
                   <th>Provider name</th>
                   <th>Email Address</th>
                   <th>Phone</th>
+                  <th>Location</th>
                   <th>Join date</th>
                   <th>Loyalty Points</th>
+                  <th>Package</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -37,10 +39,12 @@ const ProvidersCorner = () => {
                   <tr key={index}>
                     <td>401</td>
                     <td>Varma</td>
-                    <td>Example@gmail.com</td>
+                    <td>example@gmail.com</td>
                     <td>123456789</td>
+                    <td>City XYZ</td>
                     <td>Jan 29, 2021</td>
                     <td>0</td>
+                    <td>Basic</td>
                     <td>
                       <div
                         className={`status-toggle ${

@@ -1,0 +1,37 @@
+.filter-bar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+
+    font-family: "Roboto", sans-serif;
+    gap: 20px;
+    max-width: 986px;
+    /* Set a maximum width for the filter bar */
+    width: 100%;
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100px;
+    /* Set a fixed width for the filter items */
+}
+
+.filter-item label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.filter-item input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    font-family: "Roboto", sans-serif;
+    box-sizing: border-box;
+    /* Ensure padding is included in the width */
+}

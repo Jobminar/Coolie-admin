@@ -2,6 +2,12 @@
 .providers-container {
     display: flex;
     height: 100vh;
+    justify-content: flex-start;
+    /* Align to the left */
+    padding-left: 0;
+    /* Ensure no left padding */
+    margin-left: 0;
+    /* Ensure no left margin */
 }
 
 /* Main content styling */
@@ -9,11 +15,20 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    /* Align content to the left */
+    padding-left: 0;
+    /* Ensure no left padding */
+    margin-left: 0;
+    /* Ensure no left margin */
 }
 
 /* Content padding */
 .providers-content {
-    padding: 20px;
+    padding: 10px 0 10px 10px;
+    /* Adjust padding as needed */
+    width: 100%;
+    /* Ensure content takes full width */
 }
 
 /* Toolbar button styling */
@@ -34,8 +49,8 @@
     cursor: pointer;
     border-radius: 4px;
     font-weight: bold;
-    font-size: 15px;
-    /* Reduced font size */
+    font-size: 16px;
+    /* Increased font size */
     min-width: 80px;
     /* Set minimum width */
     text-align: center;
@@ -69,8 +84,8 @@
     color: black;
     cursor: pointer;
     font-weight: bold;
-    font-size: 12px;
-    /* Reduced font size */
+    font-size: 14px;
+    /* Increased font size */
     min-width: 50px;
     width: 100px;
     /* Set minimum width */
@@ -94,22 +109,24 @@
 }
 
 .providers-table {
-    width: 95%;
-    /* Set the width of the table */
+    width: auto;
+    /* Allow the table to shrink to fit content */
     border-collapse: collapse;
     margin-top: 20px;
-    font-size: 12px;
-    /* Reduced font size */
+    font-size: 16px;
+    /* Increased font size */
     margin-left: 0;
     /* Align table to the left */
 }
 
 .providers-table th,
 .providers-table td {
-    padding: 6px;
-    /* Reduced padding */
+    padding: 8px;
+    /* Increased padding */
     border: 1px solid #ddd;
     text-align: center;
+    white-space: nowrap;
+    /* Prevent text wrapping */
 }
 
 .providers-table th {

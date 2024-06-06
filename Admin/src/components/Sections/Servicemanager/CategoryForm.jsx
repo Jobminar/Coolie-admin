@@ -12,30 +12,23 @@ const CategoryForm = ({
   handleAddCategory,
   setServiceTypes, // New prop to set service types
 }) => {
-  const [serviceTypeSelection, setServiceTypeSelection] = useState({
-    Cleaning: false,
-    Gender: false,
-    Time: false,
-  });
+  const [serviceTypeSelection, setServiceTypeSelection] = useState("");
 
   const handleServiceTypeChange = (e) => {
-    const { name, checked } = e.target;
-    setServiceTypeSelection((prev) => ({
-      ...prev,
-      [name]: checked,
-    }));
+    const { value } = e.target;
+    setServiceTypeSelection(value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const selectedServiceTypes = [];
-    if (serviceTypeSelection["Cleaning"]) {
+    if (serviceTypeSelection === "Cleaning") {
       selectedServiceTypes.push("Normal cleaning", "Deep cleaning");
     }
-    if (serviceTypeSelection["Gender"]) {
+    if (serviceTypeSelection === "Gender") {
       selectedServiceTypes.push("Male", "Female");
     }
-    if (serviceTypeSelection["Time"]) {
+    if (serviceTypeSelection === "Time") {
       selectedServiceTypes.push("Hour", "Daily", "Monthly");
     }
     setServiceTypes(selectedServiceTypes); // Pass selected service types to parent
@@ -88,30 +81,33 @@ const CategoryForm = ({
       </div>
       <div className="servermanager-input-container">
         <label>Service Types:</label>
-        <div className="checkbox-group">
+        <div className="radio-group">
           <label>
             <input
-              type="checkbox"
-              name="Cleaning"
-              checked={serviceTypeSelection["Cleaning"]}
+              type="radio"
+              name="serviceType"
+              value="Cleaning"
+              checked={serviceTypeSelection === "Cleaning"}
               onChange={handleServiceTypeChange}
             />
             Cleaning (Normal/Deep)
           </label>
           <label>
             <input
-              type="checkbox"
-              name="Gender"
-              checked={serviceTypeSelection["Gender"]}
+              type="radio"
+              name="serviceType"
+              value="Gender"
+              checked={serviceTypeSelection === "Gender"}
               onChange={handleServiceTypeChange}
             />
             Gender (Male/Female)
           </label>
           <label>
             <input
-              type="checkbox"
-              name="Time"
-              checked={serviceTypeSelection["Time"]}
+              type="radio"
+              name="serviceType"
+              value="Time"
+              checked={serviceTypeSelection === "Time"}
               onChange={handleServiceTypeChange}
             />
             Time (Hour/Daily/Monthly)
