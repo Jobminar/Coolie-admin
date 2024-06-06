@@ -1,0 +1,17 @@
+.promotions-con{
+    border: 1px solid black;
+    padding: 2rem;
+}
+.promotions-con h1{
+    font-family: Roboto;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 42.19px;
+    text-align: left;
+
+}
+.promotion-buttons{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}

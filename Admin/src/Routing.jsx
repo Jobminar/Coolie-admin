@@ -20,6 +20,10 @@ import Subadmin from "./components/Sections/Subadmin/Subadmin";
 import UserManager from "./components/Sections/Usercorner/Usercorner";
 import Inductionmain from "./components/Sections/Induction/inductionmain";
 import Addsubadmin from "./components/Sections/Subadmin/Addsubadmin";
+import EditBanner from "./components/Sections/Banners/Editbanner";
+import Editloyalitycards from "./components/Sections/Loyalitycards/editloyalitycards";
+import Userpromotions from "./components/Sections/Promotions/userpromotions";
+
 
 const Routing = () => {
   return (
@@ -41,6 +45,10 @@ const Routing = () => {
             <Route path="/subadmin" element={<Subadmin />} />
             <Route path="/inductionmain" element={<Inductionmain />} />
             <Route path="/addsubadmin" element={<Addsubadmin />} />
+            <Route path="/editbanner" element={<EditBanner/>} />
+            <Route path="/editloyality" element={<Editloyalitycards/>} />
+            <Route path="/userpromotion" element={<Userpromotions/>} />
+
           </Routes>
         </Sidebar>
       </BrowserRouter>

@@ -43,6 +43,8 @@ button:hover{
     justify-content: space-evenly;
     width: 100%;
     padding: 1rem;
+    flex-wrap: wrap;
+    gap: 2rem;
 }
 .loyality-sub-con{
     border: 1px solid black;
@@ -95,4 +97,21 @@ button:hover{
 }
 .buttons:hover{
     cursor: pointer;
+}
+/* loyality form */
+.loyality-form {
+    /* border: 1px solid black; */
+    width: 20rem;
+    height: 25rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add box shadow here */
+    margin: auto;
+}
+.loyality-form form{
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    row-gap: 2rem;
 }
