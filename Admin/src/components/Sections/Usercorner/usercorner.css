@@ -1,0 +1,110 @@
+.user-manager-container {
+    padding: 20px;
+    font-family: Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    padding-right: 40px;
+}
+
+.searching {
+    position: absolute;
+    right: 20px;
+    margin-top: 12px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    z-index: 10;
+    color: black;
+    cursor: pointer
+}
+
+.tabs-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px;
+    position: relative;
+    color: black
+}
+
+.tab-button.active {
+    font-weight: bold;
+}
+
+.tab-button.active::after {
+    content: "";
+    display: block;
+    margin: auto;
+    height: 2px;
+    width: 100%;
+    background: black;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.user-table-container {
+    flex: 1;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.status-dot.active {
+    background-color: green;
+}
+
+.status-dot.inactive {
+    background-color: red;
+}
+
+.search-group {
+    position: relative;
+}

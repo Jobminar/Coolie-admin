@@ -191,11 +191,7 @@ const ManageService = () => {
       setCategoryError("Category name is required.");
       return;
     }
-    if (serviceVariant.trim() === "") {
-      setCategoryError("Service variant is required.");
-      return;
-    }
-    // Logic to edit category
+    setShowEditCategoryForm(false);
     setShowEditSubCategoryForm(true);
   };
 
@@ -346,23 +342,7 @@ const ManageService = () => {
                 />
               )}
             </div>
-            <div className="manageservice-input-container">
-              <label>Service Variant:</label>
-              <select
-                className="manageservice-bottom-border-input"
-                value={serviceVariant}
-                onChange={(e) => setServiceVariant(e.target.value)}
-              >
-                <option value="">Select a variant</option>
-                <option value="Normal cleaning">Normal cleaning</option>
-                <option value="Deep cleaning">Deep cleaning</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Hour">Hour</option>
-                <option value="Daily">Daily</option>
-                <option value="Monthly">Monthly</option>
-              </select>
-            </div>
+
             <button
               id="manageservice-update-category-button"
               className="manageservice-submit-button"
@@ -372,7 +352,6 @@ const ManageService = () => {
             </button>
           </div>
         )}
-
         {showEditSubCategoryForm && (
           <div className="manageservice-card manageservice-edit-sub-category-form">
             <h3>
@@ -420,8 +399,24 @@ const ManageService = () => {
                 />
               )}
             </div>
+            <div className="manageservice-input-container">
+              <label>Service Variant:</label>
+              <select
+                className="manageservice-bottom-border-input"
+                value={serviceVariant}
+                onChange={(e) => setServiceVariant(e.target.value)}
+              >
+                <option value="">Select a variant</option>
+                <option value="Normal cleaning">Normal cleaning</option>
+                <option value="Deep cleaning">Deep cleaning</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Hour">Hour</option>
+                <option value="Daily">Daily</option>
+                <option value="Monthly">Monthly</option>
+              </select>
+            </div>
             <button
-              id="manageservice-update-subcategory-button"
               className="manageservice-submit-button"
               onClick={handleEditSubCategory}
             >
