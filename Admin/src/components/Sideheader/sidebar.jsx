@@ -12,6 +12,7 @@ const Sidebar = ({ children }) => {
   const [promotionsDropdown, setPromotionsDropdown] = useState(false);
   const [packagesDropdown, setPackagesDropdown] = useState(false);
   const [marketingDropdown, setMarketingDropdown] = useState(false);
+  const [bannersDropdown, setBannersDropdown] = useState(false);
 
   useEffect(() => {
     setActiveItem(location.pathname);
@@ -28,6 +29,7 @@ const Sidebar = ({ children }) => {
     setPromotionsDropdown(false);
     setPackagesDropdown(false);
     setMarketingDropdown(false);
+    setBannersDropdown(false);
   };
 
   const toggleServiceManagerDropdown = () => {
@@ -50,11 +52,17 @@ const Sidebar = ({ children }) => {
     closeOtherDropdowns("marketing");
   };
 
+  const toggleBannersDropdown = () => {
+    setBannersDropdown((prev) => !prev);
+    closeOtherDropdowns("banners");
+  };
+
   const closeOtherDropdowns = (activeDropdown) => {
     if (activeDropdown !== "serviceManager") setServiceManagerDropdown(false);
     if (activeDropdown !== "promotions") setPromotionsDropdown(false);
     if (activeDropdown !== "packages") setPackagesDropdown(false);
     if (activeDropdown !== "marketing") setMarketingDropdown(false);
+    if (activeDropdown !== "banners") setBannersDropdown(false);
   };
 
   const renderFilterBar = () => {
@@ -117,16 +125,26 @@ const Sidebar = ({ children }) => {
           Providers Corner
         </div>
         <div
-          className={activeItem === "/loyalitycards" ? "active" : ""}
-          onClick={() => handleNavigation("/loyalitycards")}
+          className={`dropdown bannersDropdown ${
+            bannersDropdown ? "active" : ""
+          }`}
         >
-          Loyalty Cards
-        </div>
-        <div
-          className={activeItem === "/banners" ? "active" : ""}
-          onClick={() => handleNavigation("/banners")}
-        >
-          Banners
+          <div onClick={toggleBannersDropdown}>
+            Banners <FaCaretDown />
+          </div>
+          {bannersDropdown && (
+            <div className="dropdown-menu">
+              <div onClick={() => handleNavigation("/userbanners")}>
+                User Banners
+              </div>
+              <div onClick={() => handleNavigation("/providerbanners")}>
+                Provider Banners
+              </div>
+              <div onClick={() => handleNavigation("/popupbanners")}>
+                Popup Banner
+              </div>
+            </div>
+          )}
         </div>
         <div
           className={`dropdown promotionsDropdown ${

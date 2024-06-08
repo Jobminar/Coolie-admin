@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useNavigate } from "react-router-dom";
+
 
 const Userbanners = () => {
   const [name, setBannername] = useState("");
@@ -14,16 +14,12 @@ const Userbanners = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios
-      .get("http://13.126.118.3:3000/v1.0/admin/banners")
-      .then((response) => setData(response.data))
-      .catch((error) => setError(error));
-  }, []);
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  // useEffect(() => {
+  //   axios
+  //     .get("http://13.126.118.3:3000/v1.0/admin/banners")
+  //     .then((response) => setData(response.data))
+  //     .catch((error) => setError(error));
+  // }, []);
 
   const handleChange = (e) => {
     setBannername(e.target.value);
@@ -35,21 +31,22 @@ const Userbanners = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(name,'name',image,'image')
     try {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("image", image);
-      const response = await fetch(
-        "http://13.126.118.3:3000/v1.0/admin/banners",
-        {
-          method: "POST",
-          body: formData,
-        },
-      );
+      const response = await fetch("http://13.126.118.3:3000/v1.0/admin/user-banners", {
+        method: "POST",
+        body: formData,
+      });
       if (response.ok) {
         alert("Banner added successfully");
         const newBanner = await response.json();
         setData((prevData) => [...prevData, newBanner]);
+        // Clear form after submission
+        setBannername("");
+        setBannerimg(null);
       } else {
         alert("Error: Failed to add data.");
       }
@@ -65,13 +62,11 @@ const Userbanners = () => {
     }
 
     try {
-      const response = await axios.delete(
-        `http://13.126.118.3:3000/v1.0/admin/banners/banners/${id}`,
-      );
+      const response = await axios.delete(`http://13.126.118.3:3000/v1.0/admin/banners/${id}`);
 
       if (response.status === 200) {
         alert("Deleted successfully");
-        setData((prevData) => prevData.filter((banner) => banner._id !== id)); // Update state to remove deleted banner
+        setData((prevData) => prevData.filter((banner) => banner._id !== id));
       } else {
         alert("Error occurred while deleting");
       }
@@ -85,19 +80,13 @@ const Userbanners = () => {
     setShowForm((prevShowForm) => !prevShowForm);
   };
 
-  // const handleEdit = useCallback((banner) => {
-  //   navigate('/editbanner', { state: { banner } });
-  // }, [navigate]);
-
-  const [editdata, seteditdata] = useState([]);
   const handleEdit = (item) => {
-    seteditdata(item);
-    navigate("/editbanner", { state: { editdata: item } });
-    console.log(item, "data");
+    navigate("/editbanner", { state: { banner: item } });
   };
 
   return (
     <>
+      {error && <div>Error: {error.message}</div>}
       <div className="banners">
         <h1>Banners</h1>
         <button onClick={toggleFormVisibility}>Add banners</button>
@@ -126,7 +115,6 @@ const Userbanners = () => {
       )}
 
       <div className="main-banners">
-       
         <div className="banner-con">
           {data.map((banner) => (
             <div className="banner-sub-con" key={banner._id}>

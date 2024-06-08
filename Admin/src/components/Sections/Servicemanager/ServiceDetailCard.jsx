@@ -18,6 +18,12 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
     locations: "", // Service locations
     tax: "", // TAX percentage
     commission: "", // Provider commission
+    platformCommissionGoldCr: "", // Platform Commission Gold (Cr)
+    platformCommissionGoldRs: "", // Platform Commission Gold (Rs)
+    platformCommissionPlatinumCr: "", // Platform Commission Platinum (Cr)
+    platformCommissionPlatinumRs: "", // Platform Commission Platinum (Rs)
+    platformCommissionDiamondCr: "", // Platform Commission Diamond (Cr)
+    platformCommissionDiamondRs: "", // Platform Commission Diamond (Rs)
     mostBooked: false, // Flag for most booked service
     tag: false, // Flag for tagged service
     cashAfterService: false, // Flag for cash after service
@@ -185,14 +191,69 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
             readOnly
           />
         </div>
+        {/* New fields for platform commissions */}
+        <div className="form-group">
+          <label>Platform Commission Gold (Cr):</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.platformCommissionGoldCr}
+            readOnly
+          />
+        </div>
+        <div className="form-group">
+          <label>Platform Commission Gold (Rs):</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.platformCommissionGoldRs}
+            readOnly
+          />
+        </div>
+        <div className="form-group">
+          <label>Platform Commission Platinum (Cr):</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.platformCommissionPlatinumCr}
+            readOnly
+          />
+        </div>
+        <div className="form-group">
+          <label>Platform Commission Platinum (Rs):</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.platformCommissionPlatinumRs}
+            readOnly
+          />
+        </div>
+        <div className="form-group">
+          <label>Platform Commission Diamond (Cr):</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.platformCommissionDiamondCr}
+            readOnly
+          />
+        </div>
+        <div className="form-group">
+          <label>Platform Commission Diamond (Rs):</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.platformCommissionDiamondRs}
+            readOnly
+          />
+        </div>
         {/* Add to most booked service */}
         <div className="form-group toggle-group">
           <label>Add to most booked service</label>
           <input
             type="checkbox"
             className="toggle-input"
-            checked={serviceData.isMostBooked}
-            readOnly={!serviceData.isMostBooked}
+            checked={serviceData.mostBooked}
+            readOnly={!serviceData.mostBooked}
           />
         </div>
         {/* TAG */}
@@ -211,8 +272,8 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="checkbox"
             className="toggle-input"
-            checked={serviceData.isCash}
-            readOnly={!serviceData.isCash}
+            checked={serviceData.cashAfterService}
+            readOnly={!serviceData.cashAfterService}
           />
         </div>
         {/* Active status */}
@@ -246,7 +307,28 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
 
 // PropTypes for type checking and prop validation
 ServiceDetailCard.propTypes = {
-  service: PropTypes.object.isRequired, // Required prop: service object
+  service: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    type: PropTypes.string,
+    price: PropTypes.string,
+    time: PropTypes.string,
+    description: PropTypes.string,
+    locations: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+    tax: PropTypes.string,
+    commission: PropTypes.string,
+    platformCommissionGoldCr: PropTypes.string,
+    platformCommissionGoldRs: PropTypes.string,
+    platformCommissionPlatinumCr: PropTypes.string,
+    platformCommissionPlatinumRs: PropTypes.string,
+    platformCommissionDiamondCr: PropTypes.string,
+    platformCommissionDiamondRs: PropTypes.string,
+    mostBooked: PropTypes.bool,
+    tag: PropTypes.bool,
+    cashAfterService: PropTypes.bool,
+    isActive: PropTypes.bool,
+    isDeleted: PropTypes.bool,
+  }).isRequired, // Required prop: service object
   category: PropTypes.string.isRequired, // Required prop: category ID
   subCategory: PropTypes.string.isRequired, // Required prop: sub-category ID
   onClose: PropTypes.func.isRequired, // Required prop: onClose function

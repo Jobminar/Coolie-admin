@@ -1,0 +1,103 @@
+.notification-list {
+    width: 100%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+.notification-tabs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.tabs-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    /* Add space between tabs */
+}
+
+.notification-tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 18px;
+    color: black;
+}
+
+.notification-tab.active {
+    color: red;
+    border-bottom: 2px solid red;
+    border-radius: 0;
+}
+
+.notification-items {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+.notification-item {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #ddd;
+}
+
+.notification-item>div {
+    margin-bottom: 5px;
+}
+
+.react-datepicker-wrapper {
+    display: block;
+    width: auto;
+}
+
+.react-datepicker__input-container {
+    display: flex;
+}
+
+.notification-date-picker {
+    width: auto;
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.react-datepicker__input-container input {
+    width: 50%;
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+}
+
+.react-datepicker__input-container input:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom styles for smaller calendar */
+.react-datepicker {
+    font-size: 14px;
+}
+
+.react-datepicker__header {
+    padding-top: 0.5rem;
+}
+
+.react-datepicker__month {
+    margin: 0.4rem;
+}
+
+.react-datepicker__day {
+    width: 1.8rem;
+    line-height: 1.8rem;
+}

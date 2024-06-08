@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import "./filterbar.css";
 
 const FilterBar = ({
@@ -7,31 +9,47 @@ const FilterBar = ({
   showPackageFilter,
   showServiceFilter,
 }) => {
+  const [selectedDate, setSelectedDate] = useState(null);
+
   return (
     <div className="filter-bar">
       <div className="filter-item">
         <label htmlFor="location">Location:</label>
-        <input
-          type="text"
-          id="location"
-          name="location"
-          placeholder="Enter location"
-        />
+        <select id="location" name="location">
+          <option value="">Select Location</option>
+          <option value="mumbai">Mumbai</option>
+          <option value="delhi">Delhi</option>
+          <option value="bangalore">Bangalore</option>
+          <option value="hyderabad">Hyderabad</option>
+          <option value="ahmedabad">Ahmedabad</option>
+          <option value="chennai">Chennai</option>
+          <option value="kolkata">Kolkata</option>
+          <option value="pune">Pune</option>
+          <option value="jaipur">Jaipur</option>
+          <option value="surat">Surat</option>
+        </select>
       </div>
       {showServiceFilter && (
         <div className="filter-item">
           <label htmlFor="service">Service:</label>
-          <input
-            type="text"
-            id="service"
-            name="service"
-            placeholder="Enter service"
-          />
+          <select id="service" name="service">
+            <option value="">Select Service</option>
+            <option value="plumbing">Plumbing</option>
+            <option value="electrical">Electrical</option>
+            <option value="cleaning">Cleaning</option>
+            <option value="gardening">Gardening</option>
+          </select>
         </div>
       )}
       <div className="filter-item">
         <label htmlFor="date">Date:</label>
-        <input type="date" id="date" name="date" />
+        <DatePicker
+          selected={selectedDate}
+          onChange={(date) => setSelectedDate(date)}
+          className="date-picker"
+          placeholderText="Select Date"
+          dateFormat="dd/MM/yyyy" // Specify the date format here
+        />
       </div>
       {showGenderFilter && (
         <div className="filter-item">

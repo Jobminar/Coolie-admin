@@ -14,12 +14,12 @@ const Providerbanners = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios
-      .get("http://13.126.118.3:3000/v1.0/admin/banners")
-      .then((response) => setData(response.data))
-      .catch((error) => setError(error));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://13.126.118.3:3000/v1.0/admin/banners")
+  //     .then((response) => setData(response.data))
+  //     .catch((error) => setError(error));
+  // }, []);
 
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -35,27 +35,28 @@ const Providerbanners = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // try {
-    //   const formData = new FormData();
-    //   formData.append("name", name);
-    //   formData.append("image", image);
-    //   const response = await fetch(
-    //     "http://13.126.118.3:3000/v1.0/admin/banners",
-    //     {
-    //       method: "POST",
-    //       body: formData,
-    //     },
-    //   );
-    //   if (response.ok) {
-    //     alert("Banner added successfully");
-    //     const newBanner = await response.json();
-    //     setData((prevData) => [...prevData, newBanner]);
-    //   } else {
-    //     alert("Error: Failed to add data.");
-    //   }
-    // } catch (err) {
-    //   console.log("error", err);
-    // }
+    console.log(name,'name' ,image,'image')
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("image", image);
+      const response = await fetch(
+        "http://13.126.118.3:3000/v1.0/admin/provider-banners",
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+      if (response.ok) {
+        alert("Banner added successfully");
+        const newBanner = await response.json();
+        setData((prevData) => [...prevData, newBanner]);
+      } else {
+        alert("Error: Failed to add data.");
+      }
+    } catch (err) {
+      console.log("error", err);
+    }
   };
 
   const handleDelete = async (id) => {

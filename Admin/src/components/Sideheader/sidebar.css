@@ -9,7 +9,7 @@
     padding: 2rem 1rem;
     border-right: 1px solid #030B33;
     border-bottom: 1px solid #030B33;
-    height: 1300px;
+    height: 1650px;
     width: 220px;
     display: flex;
     flex-direction: column;
@@ -130,8 +130,9 @@
 .dropdown.serviceManagerDropdown.active,
 .dropdown.promotionsDropdown.active,
 .dropdown.marketingDropdown.active,
-.dropdown.packagesDropdown.active {
-    /* Added packages dropdown */
+.dropdown.packagesDropdown.active,
+.dropdown.bannersDropdown.active {
+    /* Added banners dropdown */
     height: 210px;
     /* Adjusted height for potentially multiple items */
 }

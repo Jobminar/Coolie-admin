@@ -10,7 +10,7 @@ import Header from "./components/Header/header";
 import Sidebar from "./components/Sideheader/sidebar";
 import Jobsarea from "./components/Sections/Jobsarea/jobsarea";
 import Servicemanager from "./components/Sections/Servicemanager/Servicemanager";
-import ManageService from "./components/Sections/Servicemanager/ManageService"; // Import ManageService
+import ManageService from "./components/Sections/Servicemanager/Manageservices/ManageService";
 import Providerscorner from "./components/Sections/Providerscorner/Providerscorner";
 import Loyalitycards from "./components/Sections/Loyalitycards/Loyalitycards";
 import Accounting from "./components/Sections/Accounting/Accounting";
@@ -54,7 +54,7 @@ const Routing = () => {
             <Route path="/providerpackage" element={<Providerpackage />} />
             <Route path="/userpackage" element={<Userpackage />} />
             <Route path="/userbanners" element={<Userbanners />} />
-            \<Route path="/providerbanners" element={<Providerbanners />} />
+            <Route path="/providerbanners" element={<Providerbanners />} />
             <Route path="*" element={<Navigate to="/" />} />{" "}
             {/* Default redirect */}
           </Routes>
