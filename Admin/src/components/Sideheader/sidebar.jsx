@@ -159,7 +159,7 @@ const Sidebar = ({ children }) => {
               <div onClick={() => handleNavigation("/userpromotion")}>
                 User Promotions
               </div>
-              <div onClick={() => handleNavigation("/providerpromotion")}>
+              <div onClick={() => handleNavigation("/providerpromitions")}>
                 Provider Promotions
               </div>
             </div>
@@ -175,10 +175,10 @@ const Sidebar = ({ children }) => {
           </div>
           {packagesDropdown && (
             <div className="dropdown-menu">
-              <div onClick={() => handleNavigation("/userpackages")}>
+              <div onClick={() => handleNavigation("/userpackage")}>
                 User Packages
               </div>
-              <div onClick={() => handleNavigation("/providerpackages")}>
+              <div onClick={() => handleNavigation("/providerpackage")}>
                 Provider Packages
               </div>
             </div>
