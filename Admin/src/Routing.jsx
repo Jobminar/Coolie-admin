@@ -26,6 +26,7 @@ import Userpromotions from "./components/Sections/Promotions/userpromotions";
 import Providerpackage from "./components/Sections/Packages/providerpackage";
 import Userpackage from "./components/Sections/Packages/userpackage";
 import Providerpromotions from "./components/Sections/Promotions/providerpromotions";
+import USerbanners from "./components/Sections/Banners/userBanners";
 
 const Routing = () => {
   return (
@@ -52,6 +53,7 @@ const Routing = () => {
             <Route path="/providerpromitions" element={<Providerpromotions/>} />
             <Route path="/providerpackage" element={<Providerpackage />} />
             <Route path="/userpackage" element={<Userpackage />} />
+            <Route path="/userbanners" element={<USerbanners />} />
             <Route path="*" element={<Navigate to="/" />} />{" "}
             {/* Default redirect */}
           </Routes>
