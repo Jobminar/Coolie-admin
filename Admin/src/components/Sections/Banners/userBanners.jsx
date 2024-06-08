@@ -152,4 +152,4 @@ const Userbanners = () => {
   );
 };
 
-export default USerbanners;
+export default Userbanners;

@@ -13,7 +13,6 @@ import Servicemanager from "./components/Sections/Servicemanager/Servicemanager"
 import ManageService from "./components/Sections/Servicemanager/ManageService"; // Import ManageService
 import Providerscorner from "./components/Sections/Providerscorner/Providerscorner";
 import Loyalitycards from "./components/Sections/Loyalitycards/Loyalitycards";
-import Banners from "./components/Sections/Banners/Banners";
 import Accounting from "./components/Sections/Accounting/Accounting";
 import Marketing from "./components/Sections/Marketing/Marketing";
 import Subadmin from "./components/Sections/Subadmin/Subadmin";
@@ -27,6 +26,8 @@ import Providerpackage from "./components/Sections/Packages/providerpackage";
 import Userpackage from "./components/Sections/Packages/userpackage";
 import Providerpromotions from "./components/Sections/Promotions/providerpromotions";
 import USerbanners from "./components/Sections/Banners/userBanners";
+import Providerbanners from "./components/Sections/Banners/Providerbanners";
+import Userbanners from "./components/Sections/Banners/userBanners";
 
 const Routing = () => {
   return (
@@ -41,7 +42,6 @@ const Routing = () => {
             <Route path="/usercorner" element={<UserManager />} />
             <Route path="/providersrcorner" element={<Providerscorner />} />
             <Route path="/loyalitycards" element={<Loyalitycards />} />
-            <Route path="/banners" element={<Banners />} />
             <Route path="/accounting" element={<Accounting />} />
             <Route path="/marketing" element={<Marketing />} />
             <Route path="/subadmin" element={<Subadmin />} />
@@ -53,7 +53,8 @@ const Routing = () => {
             <Route path="/providerpromitions" element={<Providerpromotions/>} />
             <Route path="/providerpackage" element={<Providerpackage />} />
             <Route path="/userpackage" element={<Userpackage />} />
-            <Route path="/userbanners" element={<USerbanners />} />
+            <Route path="/userbanners" element={<Userbanners />} />
+            \<Route path="/providerbanners" element={<Providerbanners />} />
             <Route path="*" element={<Navigate to="/" />} />{" "}
             {/* Default redirect */}
           </Routes>
