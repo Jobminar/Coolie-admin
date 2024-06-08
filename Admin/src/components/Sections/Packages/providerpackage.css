@@ -1,0 +1,19 @@
+.form-con{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+.form-con input{
+    width: 20rem;
+    height: 3rem; 
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 37.5px;
+    text-align: left;
+    margin-left: 2rem;
+}
+

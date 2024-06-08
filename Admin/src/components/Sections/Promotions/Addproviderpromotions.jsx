@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 
-const Addpromotions = () => {
+const Addpropromotions = () => {
   const [addPromo, setAddPromo] = useState({
     promoName: '',
     serviceType:'',
-    userType: '',
-    offerPercentage:'',
+    cities:'',
+    noOfJobs:'',
+    offerAmount:'',
     validFrom: '',
     validTill: '',
-    notifyUsers: true
+    notifyProviders: true
   });
 
 
-  const { promoName, userType, offerPercentage, validFrom, validTill,serviceType, notifyUsers } = addPromo;
+  const { promoName, serviceType,cities, noOfJobs,offerAmount, validFrom, validTill, notifyProviders } = addPromo;
   const handleChange = (e) => {
       setAddPromo({...addPromo,[e.target.name]:e.target.value})
   };
@@ -21,7 +22,7 @@ const Addpromotions = () => {
     e.preventDefault();
     console.log(addPromo)
     try {
-      const response = await fetch('http://13.126.118.3:3000/v1.0/admin/user-promotions', {
+      const response = await fetch('http://13.126.118.3:3000/v1.0/admin/provider-promotions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -30,6 +31,8 @@ const Addpromotions = () => {
       });
       if (response.ok) {
         alert('Form data submitted successfully');
+      } else {
+        alert('Error while submitting');
       }
     } catch (err) {
       console.log('Error:', err);
@@ -47,7 +50,7 @@ const Addpromotions = () => {
           onChange={handleChange}
           required
         />
-             <select 
+        <select 
         className='dropdown'
           type='text' 
           name='serviceType' 
@@ -63,19 +66,27 @@ const Addpromotions = () => {
                 <option>Plumber</option>
                 <option>Laundry services</option>
           </select>
-        <input
+          <input
           type='text'
-          name='userType'
-          value={userType}
-          placeholder='User Type'
+          name='cities'
+          value={cities}
+          placeholder='Cities'
           onChange={handleChange}
           required
         />
         <input
           type='number'
-          name='offerPercentage'
-          value={offerPercentage}
-          placeholder='Offer Percentage'
+          name='noOfJobs'
+          value={noOfJobs}
+          placeholder='Number of Jobs'
+          onChange={handleChange}
+          required
+        />
+        <input
+          type='number'
+          name='offerAmount'
+          value={offerAmount}
+          placeholder='Offer Amount'
           onChange={handleChange}
           required
         />
@@ -101,4 +112,4 @@ const Addpromotions = () => {
   );
 };
 
-export default Addpromotions;
+export default Addpropromotions;

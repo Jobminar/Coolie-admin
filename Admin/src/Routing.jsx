@@ -23,6 +23,9 @@ import Addsubadmin from "./components/Sections/Subadmin/Addsubadmin";
 import EditBanner from "./components/Sections/Banners/Editbanner";
 import Editloyalitycards from "./components/Sections/Loyalitycards/editloyalitycards";
 import Userpromotions from "./components/Sections/Promotions/userpromotions";
+import Providerpackage from "./components/Sections/Packages/providerpackage";
+import Userpackage from "./components/Sections/Packages/userpackage";
+import Providerpromotions from "./components/Sections/Promotions/providerpromotions";
 
 const Routing = () => {
   return (
@@ -46,6 +49,9 @@ const Routing = () => {
             <Route path="/editbanner" element={<EditBanner />} />
             <Route path="/editloyality" element={<Editloyalitycards />} />
             <Route path="/userpromotion" element={<Userpromotions />} />
+            <Route path="/providerpromitions" element={<Providerpromotions/>} />
+            <Route path="/providerpackage" element={<Providerpackage />} />
+            <Route path="/userpackage" element={<Userpackage />} />
             <Route path="*" element={<Navigate to="/" />} />{" "}
             {/* Default redirect */}
           </Routes>
