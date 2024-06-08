@@ -241,11 +241,16 @@ const Servermanager = () => {
       description,
       locations,
       taxPercentage,
-      providerCommission,
+      platformCommissionGoldCr,
+      platformCommissionGoldRs,
+      platformCommissionPlatinumCr,
+      platformCommissionPlatinumRs,
+      platformCommissionDiamondCr,
+      platformCommissionDiamondRs,
       isMostBooked,
       tag,
       isCash,
-      serviceVariant, // Include serviceVariant in the payload
+      serviceVariant,
     } = serviceData;
 
     const payload = {
@@ -255,14 +260,27 @@ const Servermanager = () => {
       subCategoryId: subCategoryId,
       serviceVariants: [
         {
-          variantName: serviceVariant, // Use the service variant from form
+          variantName: serviceVariant,
           price: price,
           serviceTime: serviceTime,
         },
       ],
       locations: locations,
       taxPercentage: taxPercentage,
-      providerCommission: providerCommission,
+      platformCommissions: {
+        gold: {
+          cr: platformCommissionGoldCr,
+          rs: platformCommissionGoldRs,
+        },
+        platinum: {
+          cr: platformCommissionPlatinumCr,
+          rs: platformCommissionPlatinumRs,
+        },
+        diamond: {
+          cr: platformCommissionDiamondCr,
+          rs: platformCommissionDiamondRs,
+        },
+      },
       isMostBooked: isMostBooked,
       tag: tag,
       isCash: isCash,

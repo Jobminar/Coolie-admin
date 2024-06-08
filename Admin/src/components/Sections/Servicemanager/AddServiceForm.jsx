@@ -12,7 +12,16 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
   const [locations, setLocations] = useState([]);
   const [locationInput, setLocationInput] = useState("");
   const [taxPercentage, setTaxPercentage] = useState("");
-  const [providerCommission, setProviderCommission] = useState("");
+  const [platformCommissionGoldCr, setPlatformCommissionGoldCr] = useState("");
+  const [platformCommissionGoldRs, setPlatformCommissionGoldRs] = useState("");
+  const [platformCommissionPlatinumCr, setPlatformCommissionPlatinumCr] =
+    useState("");
+  const [platformCommissionPlatinumRs, setPlatformCommissionPlatinumRs] =
+    useState("");
+  const [platformCommissionDiamondCr, setPlatformCommissionDiamondCr] =
+    useState("");
+  const [platformCommissionDiamondRs, setPlatformCommissionDiamondRs] =
+    useState("");
   const [isMostBooked, setIsMostBooked] = useState(false);
   const [tag, setTag] = useState(false);
   const [isCash, setIsCash] = useState(false);
@@ -39,7 +48,12 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
       description,
       locations,
       taxPercentage,
-      providerCommission,
+      platformCommissionGoldCr,
+      platformCommissionGoldRs,
+      platformCommissionPlatinumCr,
+      platformCommissionPlatinumRs,
+      platformCommissionDiamondCr,
+      platformCommissionDiamondRs,
       isMostBooked,
       tag,
       isCash,
@@ -130,6 +144,72 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
             </option>
           ))}
         </select>
+      </div>
+
+      <div className="form-group">
+        <label>Tax Percentage:</label>
+        <input
+          type="text"
+          className="bottom-borders-input"
+          value={taxPercentage}
+          onChange={(e) => setTaxPercentage(e.target.value)}
+        />
+      </div>
+
+      {/* New fields for platform commissions */}
+      <div className="form-group">
+        <label>Platform Commission Gold (Cr):</label>
+        <input
+          type="text"
+          className="bottom-borders-input"
+          value={platformCommissionGoldCr}
+          onChange={(e) => setPlatformCommissionGoldCr(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label>Platform Commission Gold (Rs):</label>
+        <input
+          type="text"
+          className="bottom-borders-input"
+          value={platformCommissionGoldRs}
+          onChange={(e) => setPlatformCommissionGoldRs(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label>Platform Commission Platinum (Cr):</label>
+        <input
+          type="text"
+          className="bottom-borders-input"
+          value={platformCommissionPlatinumCr}
+          onChange={(e) => setPlatformCommissionPlatinumCr(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label>Platform Commission Platinum (Rs):</label>
+        <input
+          type="text"
+          className="bottom-borders-input"
+          value={platformCommissionPlatinumRs}
+          onChange={(e) => setPlatformCommissionPlatinumRs(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label>Platform Commission Diamond (Cr):</label>
+        <input
+          type="text"
+          className="bottom-borders-input"
+          value={platformCommissionDiamondCr}
+          onChange={(e) => setPlatformCommissionDiamondCr(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label>Platform Commission Diamond (Rs):</label>
+        <input
+          type="text"
+          className="bottom-borders-input"
+          value={platformCommissionDiamondRs}
+          onChange={(e) => setPlatformCommissionDiamondRs(e.target.value)}
+        />
       </div>
 
       <div className="form-group toggle-group">
