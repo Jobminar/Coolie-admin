@@ -3,6 +3,7 @@ import { FaCaretDown } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./sidebar.css";
 import FilterBar from "../FilterBar/FilterBar"; // Import the FilterBar component
+import PropTypes from "prop-types";
 
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
@@ -266,6 +267,10 @@ const Sidebar = ({ children }) => {
       </main>
     </div>
   );
+};
+
+Sidebar.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default Sidebar;

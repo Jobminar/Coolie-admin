@@ -5,7 +5,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useNavigate } from "react-router-dom";
 
-const Banners = () => {
+const Providerbanners = () => {
   const [name, setBannername] = useState("");
   const [image, setBannerimg] = useState(null);
   const [data, setData] = useState([]);
@@ -35,27 +35,27 @@ const Banners = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("image", image);
-      const response = await fetch(
-        "http://13.126.118.3:3000/v1.0/admin/banners",
-        {
-          method: "POST",
-          body: formData,
-        },
-      );
-      if (response.ok) {
-        alert("Banner added successfully");
-        const newBanner = await response.json();
-        setData((prevData) => [...prevData, newBanner]);
-      } else {
-        alert("Error: Failed to add data.");
-      }
-    } catch (err) {
-      console.log("error", err);
-    }
+    // try {
+    //   const formData = new FormData();
+    //   formData.append("name", name);
+    //   formData.append("image", image);
+    //   const response = await fetch(
+    //     "http://13.126.118.3:3000/v1.0/admin/banners",
+    //     {
+    //       method: "POST",
+    //       body: formData,
+    //     },
+    //   );
+    //   if (response.ok) {
+    //     alert("Banner added successfully");
+    //     const newBanner = await response.json();
+    //     setData((prevData) => [...prevData, newBanner]);
+    //   } else {
+    //     alert("Error: Failed to add data.");
+    //   }
+    // } catch (err) {
+    //   console.log("error", err);
+    // }
   };
 
   const handleDelete = async (id) => {
@@ -83,17 +83,6 @@ const Banners = () => {
 
   const toggleFormVisibility = () => {
     setShowForm((prevShowForm) => !prevShowForm);
-  };
-
-  // const handleEdit = useCallback((banner) => {
-  //   navigate('/editbanner', { state: { banner } });
-  // }, [navigate]);
-
-  const [editdata, seteditdata] = useState([]);
-  const handleEdit = (item) => {
-    seteditdata(item);
-    navigate("/editbanner", { state: { editdata: item } });
-    console.log(item, "data");
   };
 
   return (
@@ -126,7 +115,7 @@ const Banners = () => {
       )}
 
       <div className="main-banners">
-        <h1>Banners</h1>
+       
         <div className="banner-con">
           {data.map((banner) => (
             <div className="banner-sub-con" key={banner._id}>
@@ -152,4 +141,4 @@ const Banners = () => {
   );
 };
 
-export default Banners;
+export default Providerbanners;
