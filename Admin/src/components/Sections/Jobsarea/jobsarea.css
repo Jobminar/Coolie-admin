@@ -20,7 +20,7 @@
 .add-job-button {
     position: absolute;
     top: 0;
-    left: 50%;
+    right: -1%;
     transform: translateX(-50%);
     font-family: Roboto;
     font-size: 18px;

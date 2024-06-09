@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, InputGroup, Button } from "react-bootstrap";
+import { Form, InputGroup } from "react-bootstrap";
 import { Search } from "react-bootstrap-icons";
 import "./usercorner.css";
 
@@ -18,7 +18,6 @@ const UserManager = () => {
         points: 0,
         status: "active",
       },
-      // Add more booked users data here
     ],
     "New Users": [
       {
@@ -31,7 +30,6 @@ const UserManager = () => {
         points: 0,
         status: "active",
       },
-      // Add more new users data here
     ],
     Bronze: [
       {
@@ -44,7 +42,6 @@ const UserManager = () => {
         points: 0,
         status: "inactive",
       },
-      // Add more bronze users data here
     ],
     Silver: [
       {
@@ -57,7 +54,6 @@ const UserManager = () => {
         points: 0,
         status: "active",
       },
-      // Add more silver users data here
     ],
     Gold: [
       {
@@ -70,7 +66,6 @@ const UserManager = () => {
         points: 0,
         status: "inactive",
       },
-      // Add more gold users data here
     ],
   };
 
@@ -81,7 +76,6 @@ const UserManager = () => {
         <div className="user-search-bar">
           <InputGroup>
             <Form.Control placeholder="Search" className="search-input" />
-
             <Search variant="outline-secondary" className="searching" />
           </InputGroup>
         </div>

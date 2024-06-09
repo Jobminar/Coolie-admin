@@ -10,15 +10,24 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    /* Existing bottom margin */
+    margin-top: 10px;
+    /* Added top margin for consistency */
 }
 
 .header h1 {
     margin: 0;
 }
 
-.search-bar {
+.user-search-bar {
     display: flex;
     align-items: center;
+    position: relative;
+    top: 0;
+    right: 5%;
+    margin-bottom: 20px;
+    /* Provides space below the search bar */
+    /* Added for absolute positioning of search icon */
 }
 
 .search-input {
@@ -27,23 +36,27 @@
     border-radius: 5px;
     width: 200px;
     padding-right: 40px;
+    /* Adjusted padding to not overlap with search icon */
 }
 
 .searching {
     position: absolute;
-    right: 20px;
-    margin-top: 12px;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    right: 10px;
+    /* Adjusted position */
+    top: 5px;
+    /* Adjusted vertical alignment */
     z-index: 10;
     color: black;
-    cursor: pointer
+    cursor: pointer;
 }
 
 .tabs-container {
     display: flex;
     justify-content: space-around;
     margin-bottom: 20px;
+    /* Ensures space below tabs */
+    margin-top: 10px;
+    /* Added top margin for separation from search bar */
     border-bottom: 1px solid #f3f3f3;
 }
 
@@ -52,13 +65,15 @@
     border: none;
     cursor: pointer;
     font-size: 16px;
-    padding: 10px;
+    padding: 1px;
     position: relative;
-    color: black
+    color: black;
 }
 
 .tab-button.active {
     font-weight: bold;
+    color: #000;
+    /* Ensured active tab is clearly indicated */
 }
 
 .tab-button.active::after {
@@ -67,7 +82,8 @@
     margin: auto;
     height: 2px;
     width: 100%;
-    background: black;
+    background: rgb(255, 0, 0);
+    /* Underline for active tab */
     position: absolute;
     bottom: 0;
     left: 0;
@@ -76,18 +92,35 @@
 .user-table-container {
     flex: 1;
     overflow-y: auto;
+    margin-bottom: 20px;
+    /* Maintained bottom margin */
+    margin-top: 40px;
+    /* Added top margin for separation from tabs */
 }
 
 table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    /* Rounded corners for the table */
 }
 
 th,
 td {
-    padding: 10px;
+    padding: 8px;
     text-align: left;
-    border: 1px solid #ccc;
+    border: 1px solid black;
+    white-space: nowrap;
+    /* Prevents text wrapping */
+}
+
+th {
+    background-color: #f8f8f8;
+    color: black;
+    font-weight: bold;
 }
 
 .status-dot {
@@ -103,8 +136,4 @@ td {
 
 .status-dot.inactive {
     background-color: red;
-}
-
-.search-group {
-    position: relative;
 }
