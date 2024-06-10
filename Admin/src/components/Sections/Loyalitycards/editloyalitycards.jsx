@@ -1,55 +1,56 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const Editloyalitycards = () => {
-  // Use useLocation hook to access location state
+const EditLoyaltyCards = () => {
   const location = useLocation();
-  const { editdata } = location.state || {};
+  const navigate = useNavigate();
+  const { editdata, apiEndpoint } = location.state || {};
 
-  // Define state to hold form data
-  const [formData, setFormData] = useState(editdata || {});
-  const { name, image } = formData;
+  const [formData, setFormData] = useState({
+    name: editdata.name || '',
+    points: editdata.points || '',
+    amount: editdata.amount || '',
+    minimumSpentValue: editdata.minimumSpentValue || '',
+    discount: editdata.discount || '',
+    image: null,
+  });
 
-  // Handle changes in text input fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle changes in file input fields
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    // You may want to handle file upload or manipulation here
-    console.log('File uploaded:', file);
+    setFormData({ ...formData, image: e.target.files[0] });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('image', image);
+      const formDataToSend = new FormData();
+      for (const key in formData) {
+        formDataToSend.append(key, formData[key]);
+      }
 
-      const response = await fetch('your-api-endpoint', {
-        method: 'PATCH', // Or 'PUT' depending on your API endpoint
-        body: formData,
+      const response = await fetch(`http://13.126.118.3:3000/v1.0/admin/loyalty/${editdata._id}`, {
+        method: 'PATCH',
+        body: formDataToSend,
       });
 
       if (response.ok) {
-        alert('Loyalty Cards Edited');
-        console.log('Loyalty Cards Edited');
+        alert('Loyalty Card updated successfully');
+        navigate(-1); // Navigate back to the previous page
       } else {
-        console.log('Error occurred');
+        alert('Error: Failed to update Loyalty Card');
       }
     } catch (err) {
       console.log('Error:', err);
+      alert('An error occurred while updating Loyalty Card');
     }
   };
 
   return (
-    <>
-      {/* Display the received data */}
+    <div className="edit-loyalty-cards-form">
       <h1>Edit Loyalty Cards</h1>
       <form onSubmit={handleSubmit}>
         <div>
@@ -58,35 +59,63 @@ const Editloyalitycards = () => {
             type="text"
             id="name"
             name="name"
-            value={name || ''}
+            value={formData.name}
             onChange={handleChange}
           />
         </div>
         <div>
-          <label htmlFor="image">Image URL:</label>
+          <label htmlFor="points">Points:</label>
           <input
             type="text"
-            id="image"
-            name="image"
-            value={image || ''}
+            id="points"
+            name="points"
+            value={formData.points}
             onChange={handleChange}
           />
         </div>
         <div>
-          <label>Image Preview:</label>
-          {image && (
-            <img
-              src={`https://coolie1-dev.s3.ap-south-1.amazonaws.com/${image}`}
-              alt="Loyalty Card"
-              style={{ maxWidth: '200px' }}
-            />
-          )}
+          <label htmlFor="amount">Amount:</label>
+          <input
+            type="text"
+            id="amount"
+            name="amount"
+            value={formData.amount}
+            onChange={handleChange}
+          />
         </div>
-        {/* Add more fields as needed */}
-        <button type="submit">Submit</button>
+        <div>
+          <label htmlFor="minimumSpentValue">Minimum Spent Value:</label>
+          <input
+            type="text"
+            id="minimumSpentValue"
+            name="minimumSpentValue"
+            value={formData.minimumSpentValue}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="discount">Discount:</label>
+          <input
+            type="text"
+            id="discount"
+            name="discount"
+            value={formData.discount}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="image">Image:</label>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            onChange={handleFileChange}
+          />
+        </div>
+        <button type="submit">Update</button>
       </form>
-    </>
+    </div>
   );
 };
 
-export default Editloyalitycards;
+export default EditLoyaltyCards;

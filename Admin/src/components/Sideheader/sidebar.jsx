@@ -137,6 +137,12 @@ const Sidebar = ({ children }) => {
           Providers Corner
         </div>
         <div
+          className={activeItem === "/loyalitycards" ? "active" : ""}
+          onClick={() => handleNavigation("/loyalitycards")}
+        >
+          Loyality cards
+        </div>
+        <div
           className={`dropdown bannersDropdown ${
             bannersDropdown ? "active" : ""
           }`}
@@ -184,8 +190,8 @@ const Sidebar = ({ children }) => {
                 User Promotions
               </div>
               <div
-                className={activeItem === "/providerpromotion" ? "active" : ""}
-                onClick={() => handleNavigation("/providerpromotion")}
+                className={activeItem === "/providerpromitions" ? "active" : ""}
+                onClick={() => handleNavigation("/providerpromitions")}
               >
                 Provider Promotions
               </div>
