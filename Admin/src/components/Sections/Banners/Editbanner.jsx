@@ -1,72 +1,71 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+// EditBanner.js
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const EditBanner = () => {
   const location = useLocation();
-  const { editdata } = location.state || {};
+  const navigate = useNavigate();
+  const { banner, apiEndpoint } = location.state;
 
-  const [name, setName] = useState('');
-  const [image, setImage] = useState(null);
+  const [name, setBannername] = useState(banner.name);
+  const [image, setBannerimg] = useState(null);
 
-  // Handle changes in text input fields
   const handleChange = (e) => {
-    setName(e.target.value);
+    setBannername(e.target.value);
   };
 
-  // Handle changes in file input fields
   const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
+    setBannerimg(e.target.files[0]);
   };
 
-  const handleUpdate = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const formData = new FormData();
-      formData.append('name', name);
-      formData.append('image', image);
-
-      const response = await fetch(`http://13.126.118.3:3000/v1.0/admin/banners/${editdata._id}`, {
-        method: 'PATCH',
-        body: formData,
-      });
-
+      formData.append("name", name);
+      if (image) {
+        formData.append("image", image);
+      }
+      const response = await fetch(
+        `http://13.126.118.3:3000/v1.0/admin/${apiEndpoint}/${banner._id}`,
+        {
+          method: "PATCH",
+          body: formData,
+        }
+      );
       if (response.ok) {
-        alert('Banner edited successfully');
-        console.log('Banner edited successfully');
+        alert("Banner updated successfully");
+        navigate(-1); // Navigate back to the previous page
       } else {
-        console.error('Error occurred');
+        alert("Error: Failed to update data.");
       }
     } catch (err) {
-      console.error('Error:', err);
+      console.log("error", err);
+      alert("An error occurred while updating");
     }
   };
 
   return (
-    <div>
+    <div className="edit-banner-form">
       <h1>Edit Banner</h1>
-      <div>
-        <label htmlFor="name">Name:</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={editdata.name}
-          onChange={handleChange}
-        />
-      </div>
-      <div>
-        <label htmlFor="image">Image:</label>
+      <form onSubmit={handleSubmit}>
         <input
           type="file"
-          id="image"
           name="image"
-          accept="image/*"
+          className="bannerimg"
+          placeholder="Upload your banner"
           onChange={handleFileChange}
         />
-        {editdata.image && (
-          <img src={`https://coolie1-dev.s3.ap-south-1.amazonaws.com/${editdata.image}`} alt="Uploaded" style={{ maxWidth: '100px' }} />
-        )}
-      </div>
-      <button onClick={handleUpdate}>Submit</button>
+        <input
+          type="text"
+          name="name"
+          value={name}
+          className="bannername"
+          placeholder="Enter your Service Name"
+          onChange={handleChange}
+        />
+        <button type="submit">Update</button>
+      </form>
     </div>
   );
 };
