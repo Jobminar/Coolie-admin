@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+// Providerbanners.js
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useNavigate } from "react-router-dom";
@@ -14,12 +14,12 @@ const Providerbanners = () => {
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   axios
-  //     .get("http://13.126.118.3:3000/v1.0/admin/banners")
-  //     .then((response) => setData(response.data))
-  //     .catch((error) => setError(error));
-  // }, []);
+  useEffect(() => {
+    axios
+      .get("http://13.126.118.3:3000/v1.0/admin/provider-banners")
+      .then((response) => setData(response.data))
+      .catch((error) => setError(error));
+  }, []);
 
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -35,7 +35,7 @@ const Providerbanners = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(name,'name' ,image,'image')
+    console.log(name, 'name', image, 'image');
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -45,7 +45,7 @@ const Providerbanners = () => {
         {
           method: "POST",
           body: formData,
-        },
+        }
       );
       if (response.ok) {
         alert("Banner added successfully");
@@ -66,20 +66,24 @@ const Providerbanners = () => {
     }
 
     try {
-      const response = await axios.delete(
-        `http://13.126.118.3:3000/v1.0/admin/banners/banners/${id}`,
-      );
+      const response = await fetch(`http://13.126.118.3:3000/v1.0/admin/provider-banners/banners/${id}`, {
+        method: "DELETE",
+      });
 
-      if (response.status === 200) {
+      if (response.ok) {
         alert("Deleted successfully");
-        setData((prevData) => prevData.filter((banner) => banner._id !== id)); // Update state to remove deleted banner
+        setData((prevData) => prevData.filter((banner) => banner._id !== id));
       } else {
-        alert("Error occurred while deleting");
+        alert("Error: Failed to delete banner.");
       }
     } catch (err) {
       console.error("Error", err);
       alert("An error occurred while deleting");
     }
+  };
+
+  const handleEdit = (banner) => {
+    navigate("/editbanner", { state: { banner, apiEndpoint: 'provider-banners' } });
   };
 
   const toggleFormVisibility = () => {
@@ -89,7 +93,7 @@ const Providerbanners = () => {
   return (
     <>
       <div className="banners">
-        <h1>Banners</h1>
+        <h1>Provider Banners</h1>
         <button onClick={toggleFormVisibility}>Add banners</button>
       </div>
       {showForm && (
@@ -116,7 +120,6 @@ const Providerbanners = () => {
       )}
 
       <div className="main-banners">
-       
         <div className="banner-con">
           {data.map((banner) => (
             <div className="banner-sub-con" key={banner._id}>

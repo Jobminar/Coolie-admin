@@ -6,7 +6,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useNavigate } from "react-router-dom";
 
-const Userbanners = () => {
+const Popupbanners = () => {
   const [name, setBannername] = useState("");
   const [image, setBannerimg] = useState(null);
   const [data, setData] = useState([]);
@@ -146,4 +146,4 @@ const Userbanners = () => {
   );
 };
 
-export default Userbanners;
+export default Popupbanners;

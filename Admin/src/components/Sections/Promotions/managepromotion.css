@@ -1,0 +1,52 @@
+.manage-promotion-main-con {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .manage-promotion-con {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    width: calc(33% - 20px);
+    box-sizing: border-box;
+    position: relative;
+  }
+  
+  .promotion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .promotion-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .promotion-actions svg {
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s;
+  }
+  
+  .promotion-actions svg:hover {
+    color: #000;
+  }
+  
+  .manage-promotion-con h1 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .manage-promotion-con p {
+    margin: 5px 0;
+  }
+  
+  .error-message {
+    color: red;
+    font-weight: bold;
+  }
+  

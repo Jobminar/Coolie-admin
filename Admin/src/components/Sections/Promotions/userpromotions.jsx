@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './promotion.css';
-import Addpromotions from './addpromotions';
-import Managepromotions from './managepromotions';
+import Addpromotions from './Adduserpromotions';
+import Manageuserpromotions from './manageuserpromotions';
 
 const Userpromotions = () => {
   const [activeTab, setActiveTab] = useState("addpromotions");
@@ -15,7 +15,7 @@ const Userpromotions = () => {
       case "addpromotions":
         return <Addpromotions />;
       case "managepromotions":
-        return <Managepromotions />;
+        return <Manageuserpromotions />;
       default:
         return null;
     }

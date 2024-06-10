@@ -28,6 +28,11 @@ import Providerpromotions from "./components/Sections/Promotions/providerpromoti
 import USerbanners from "./components/Sections/Banners/userBanners";
 import Providerbanners from "./components/Sections/Banners/Providerbanners";
 import Userbanners from "./components/Sections/Banners/userBanners";
+import EditPromotion from "./components/Sections/Promotions/Editproviderpromotions";
+import EditUserPromotion from "./components/Sections/Promotions/Edituserpromotions";
+import EditproviderPromotion from "./components/Sections/Promotions/Editproviderpromotions";
+import EditUserPackage from "./components/Sections/Packages/Edit-user-packages";
+import EditProviderPackage from "./components/Sections/Packages/Edit-provider-package";
 
 const Routing = () => {
   return (
@@ -51,8 +56,12 @@ const Routing = () => {
             <Route path="/editloyality" element={<Editloyalitycards />} />
             <Route path="/userpromotion" element={<Userpromotions />} />
             <Route path="/providerpromitions" element={<Providerpromotions/>} />
+            <Route path="/editproviderpromotion" element={<EditproviderPromotion/>} />
+            <Route path="/edituserpromotion" element={<EditUserPromotion/>} />
             <Route path="/providerpackage" element={<Providerpackage />} />
             <Route path="/userpackage" element={<Userpackage />} />
+            <Route path="/editproviderpackage" element={<EditProviderPackage />} />
+            <Route path="/edituserpackage" element={<EditUserPackage />} />
             <Route path="/userbanners" element={<Userbanners />} />
             <Route path="/providerbanners" element={<Providerbanners />} />
             <Route path="*" element={<Navigate to="/" />} />{" "}
