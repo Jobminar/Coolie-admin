@@ -50,7 +50,10 @@ const Routing = () => {
             <Route path="/editbanner" element={<EditBanner />} />
             <Route path="/editloyality" element={<Editloyalitycards />} />
             <Route path="/userpromotion" element={<Userpromotions />} />
-            <Route path="/providerpromitions" element={<Providerpromotions/>} />
+            <Route
+              path="/providerpromitions"
+              element={<Providerpromotions />}
+            />
             <Route path="/providerpackage" element={<Providerpackage />} />
             <Route path="/userpackage" element={<Userpackage />} />
             <Route path="*" element={<Navigate to="/" />} />{" "}

@@ -131,8 +131,8 @@
 .dropdown.promotionsDropdown.active,
 .dropdown.marketingDropdown.active,
 .dropdown.packagesDropdown.active,
-.dropdown.bannersDropdown.active {
-    /* Added banners dropdown */
+.dropdown.bannersDropdown.active,
+.dropdown.inductionDropdown.active {
     height: 210px;
     /* Adjusted height for potentially multiple items */
 }

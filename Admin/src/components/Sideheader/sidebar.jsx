@@ -14,6 +14,7 @@ const Sidebar = ({ children }) => {
   const [packagesDropdown, setPackagesDropdown] = useState(false);
   const [marketingDropdown, setMarketingDropdown] = useState(false);
   const [bannersDropdown, setBannersDropdown] = useState(false);
+  const [inductionDropdown, setInductionDropdown] = useState(false); // Add state for Induction dropdown
 
   useEffect(() => {
     setActiveItem(location.pathname);
@@ -31,6 +32,7 @@ const Sidebar = ({ children }) => {
     setPackagesDropdown(false);
     setMarketingDropdown(false);
     setBannersDropdown(false);
+    setInductionDropdown(false); // Close Induction dropdown
   };
 
   const toggleServiceManagerDropdown = () => {
@@ -63,12 +65,19 @@ const Sidebar = ({ children }) => {
     setActiveItem("/bannersDropdown");
   };
 
+  const toggleInductionDropdown = () => {
+    setInductionDropdown((prev) => !prev);
+    closeOtherDropdowns("induction");
+    setActiveItem("/inductionDropdown");
+  };
+
   const closeOtherDropdowns = (activeDropdown) => {
     if (activeDropdown !== "serviceManager") setServiceManagerDropdown(false);
     if (activeDropdown !== "promotions") setPromotionsDropdown(false);
     if (activeDropdown !== "packages") setPackagesDropdown(false);
     if (activeDropdown !== "marketing") setMarketingDropdown(false);
     if (activeDropdown !== "banners") setBannersDropdown(false);
+    if (activeDropdown !== "induction") setInductionDropdown(false);
   };
 
   const renderFilterBar = () => {
@@ -218,6 +227,31 @@ const Sidebar = ({ children }) => {
           )}
         </div>
         <div
+          className={`dropdown inductionDropdown ${
+            inductionDropdown ? "active" : ""
+          }`}
+        >
+          <div onClick={toggleInductionDropdown}>
+            Induction & Training <FaCaretDown />
+          </div>
+          {inductionDropdown && (
+            <div className="dropdown-menu">
+              <div
+                className={activeItem === "/induction" ? "active" : ""}
+                onClick={() => handleNavigation("/induction")}
+              >
+                Induction
+              </div>
+              <div
+                className={activeItem === "/training" ? "active" : ""}
+                onClick={() => handleNavigation("/training")}
+              >
+                Training
+              </div>
+            </div>
+          )}
+        </div>
+        <div
           className={activeItem === "/subadmin" ? "active" : ""}
           onClick={() => handleNavigation("/subadmin")}
         >
@@ -227,7 +261,7 @@ const Sidebar = ({ children }) => {
           className={activeItem === "/inductionmain" ? "active" : ""}
           onClick={() => handleNavigation("/inductionmain")}
         >
-          Induction
+          Induction Main
         </div>
         <div
           className={`dropdown marketingDropdown ${

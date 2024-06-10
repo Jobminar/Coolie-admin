@@ -41,16 +41,6 @@ const FilterBar = ({
           </select>
         </div>
       )}
-      <div className="filter-item">
-        <label htmlFor="date">Date:</label>
-        <DatePicker
-          selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
-          className="date-picker"
-          placeholderText="Select Date"
-          dateFormat="dd/MM/yyyy" // Specify the date format here
-        />
-      </div>
       {showGenderFilter && (
         <div className="filter-item">
           <label htmlFor="gender">Gender:</label>
@@ -72,6 +62,16 @@ const FilterBar = ({
           </select>
         </div>
       )}
+      <div className="filter-item">
+        <label htmlFor="date">Date:</label>
+        <DatePicker
+          selected={selectedDate}
+          onChange={(date) => setSelectedDate(date)}
+          className="date-picker"
+          placeholderText="Select Date"
+          dateFormat="dd/MM/yyyy" // Specify the date format here
+        />
+      </div>
     </div>
   );
 };
