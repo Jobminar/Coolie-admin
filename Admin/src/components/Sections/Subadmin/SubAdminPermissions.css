@@ -1,0 +1,53 @@
+.permissions-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+h3 {
+    margin-bottom: 20px;
+}
+
+.permissions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+
+.permissions-category {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.permissions-category h4 {
+    margin-bottom: 10px;
+}
+
+.permissions-category label {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.permissions-submit-button {
+    padding: 10px 20px;
+    background-color: #3a436e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.permissions-submit-button:hover {
+    background-color: #2c3250;
+}
