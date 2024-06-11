@@ -14,7 +14,6 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    /* Align children to the left */
     padding: 10px;
     width: 100%;
     margin-bottom: 20px;
@@ -31,7 +30,8 @@
 .providers-toolbar {
     display: flex;
     gap: 3px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    margin-top: 10px;
     margin-left: -10px;
     max-width: 1000px;
 }
@@ -87,7 +87,7 @@
     width: 170px;
     text-align: center;
     transition: color 0.3s, border-bottom 0.3s;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .providers-category.active {
@@ -104,13 +104,15 @@
     font-size: 16px;
     font-weight: bold;
     border-radius: 50%;
-    width: 25px;
-    height: 23px;
+    width: 30px;
+    height: 20.5px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s, transform 0.3s;
     margin: 1px 1px;
+    margin-top: 10px;
+    /* Added margin to lower the arrows */
 }
 
 .providers-arrow:hover {
@@ -171,7 +173,7 @@
     justify-content: space-evenly;
     gap: 1px;
     width: 50%;
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 /* Additional adjustments for ProviderForm alignment */

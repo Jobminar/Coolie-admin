@@ -1,0 +1,149 @@
+.authenticate-provider {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-left: 20px;
+    position: relative;
+}
+
+.sticky-header {
+    position: -webkit-sticky;
+    /* For Safari */
+    position: sticky;
+    top: 0;
+    background-color: white;
+    padding: 10px;
+    width: calc(100% - 40px);
+    /* Adjust width to account for container padding */
+    border-bottom: 1px solid #ccc;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0;
+}
+
+.document-heading-button {
+    background-color: white;
+    color: red;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.document-heading-button:hover {
+    background-color: #f8f8f8;
+}
+
+.document-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 10px;
+    /* Add margin to separate from sticky header */
+}
+
+.document-item {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-height: 1000px;
+    overflow-y: scroll;
+}
+
+.document-image {
+    width: 900px;
+    height: 300px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transform: scale(1);
+    opacity: 1;
+}
+
+.document-image.small {
+    transform: scale(0.5);
+    opacity: 0.5;
+}
+
+.document-preview {
+    width: 100%;
+    height: 1200px;
+    /* Increase the height of the document preview */
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.action-button-unique {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.action-button-unique:hover {
+    background-color: darkred;
+}
+
+.comment-section {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-bottom: 60px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.comment-section textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.submit-button-unique {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 12px;
+    width: 100px;
+    height: 40px;
+}
+
+.submit-button-unique:hover {
+    background-color: darkred;
+}
+
+.comment-footer {
+    text-align: right;
+    width: 100%;
+    padding: 5px;
+}

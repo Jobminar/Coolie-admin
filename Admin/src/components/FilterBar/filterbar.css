@@ -23,8 +23,7 @@ body {
     /* Medium font size */
 }
 
-.filter-item select,
-.filter-item .date-picker {
+.filter-item select {
     width: 75%;
     padding: 4px;
     /* Reduce padding for smaller dropdowns */
@@ -35,4 +34,17 @@ body {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     font-family: 'Roboto', sans-serif;
     /* Apply Roboto font */
+}
+
+
+.filter-item .date-picker {
+    width: 210px;
+    padding: 4px;
+    /* Reduce padding for smaller dropdowns */
+    font-size: 12px;
+    /* Reduce font size for smaller dropdowns */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
 }

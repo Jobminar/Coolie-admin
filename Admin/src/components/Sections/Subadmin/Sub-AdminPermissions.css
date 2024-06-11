@@ -1,0 +1,25 @@
+/* PermissionsForm.css */
+.permissions-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px;
+}
+
+.permissions-form label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.permissions-form button {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.permissions-form button:hover {
+    background-color: #45a049;
+}
