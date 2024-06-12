@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./ProvidersCorner.css";
 import ProviderForm from "./ProviderForm";
 import AddProvider from "./AddProviderForm";
+import AuthenticateProvider from "./AuthenticateProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -260,6 +261,7 @@ const ProvidersCorner = () => {
       )}
       {activeComponent === "add" && <AddProvider />}
       {activeComponent === "manage" && <ProviderForm />}
+      {activeComponent === "authenticate" && <AuthenticateProvider />}
     </div>
   );
 };

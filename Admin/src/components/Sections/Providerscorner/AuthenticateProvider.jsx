@@ -1,145 +1,81 @@
 import React, { useState } from "react";
-import "./ProvidersCorner.css";
-import ProviderForm from "./ProviderForm";
-import AddProvider from "./AddProviderForm";
-import AuthenticateProvider from "./AuthenticateProvider";
+import "./AuthenticateProvider.css";
+import { FaEdit, FaTrash, FaArrowLeft } from "react-icons/fa";
+import ProviderProfile from "./ProviderProfile";
+import Document1 from "../../../assets/Documents/ProviderReport1.pdf";
+import Document2 from "../../../assets/Documents/ProviderReport2.pdf";
+import fileImage from "../../../assets/images/Documents.png";
 
-const ProvidersCorner = () => {
-  const [visibleCategories, setVisibleCategories] = useState([
-    "Cleaning",
-    "Plumbing",
-    "Electrical",
-    "Carpentry",
-  ]);
-  const [activeCategory, setActiveCategory] = useState(0);
-  const [activeComponent, setActiveComponent] = useState("view");
-  const [showProviders, setShowProviders] = useState(false);
+const AuthenticateProvider = () => {
+  const [activeComponent, setActiveComponent] = useState("ProviderList");
+  const [selectedProvider, setSelectedProvider] = useState(null);
+  const [documentStatus, setDocumentStatus] = useState("Pending");
 
-  const allCategories = [
-    "Cleaning",
-    "Plumbing",
-    "Electrical",
-    "Carpentry",
-    "Beauty & salon",
-    "Labour supply",
-    "Painting",
-    "Gardening",
-    "HVAC",
-    "Pest Control",
-    "Moving",
-    "General Maintenance",
+  const handleVerify = (provider) => {
+    setSelectedProvider(provider);
+    setActiveComponent("ProviderProfile");
+  };
+
+  const handleDocumentsClick = () => {
+    setActiveComponent("DocumentVerification");
+  };
+
+  const providers = [
+    {
+      id: 1,
+      name: "Varma",
+      email: "provider1@example.com",
+      phone: "1234567890",
+      location: "Location 1",
+      joinDate: "2021-01-01",
+      loyaltyPoints: 100,
+      package: "Basic",
+      status: "active",
+    },
+    // Add more sample providers as needed
   ];
 
-  const handlePrev = () => {
-    setActiveCategory((prev) =>
-      prev > 0 ? prev - 1 : allCategories.length - 1,
-    );
-    setVisibleCategories((prev) => [
-      ...prev.slice(1),
-      allCategories[
-        (activeCategory + allCategories.length - 1) % allCategories.length
-      ],
-    ]);
+  const fakeData = {
+    documents: [
+      { id: 1, name: "Document 1", file: Document1 },
+      { id: 2, name: "Document 2", file: Document2 },
+    ],
+    providerName: selectedProvider?.name || "Varma",
   };
 
-  const handleNext = () => {
-    setActiveCategory((prev) => (prev + 1) % allCategories.length);
-    setVisibleCategories((prev) => [
-      allCategories[(activeCategory + 1) % allCategories.length],
-      ...prev.slice(0, -1),
-    ]);
+  const [selectedDocument, setSelectedDocument] = useState(null);
+  const [showDocuments, setShowDocuments] = useState(false);
+
+  const handleDocumentSelect = (documentId) => {
+    setSelectedDocument(selectedDocument === documentId ? null : documentId);
   };
 
-  const toggleProviders = () => {
-    setShowProviders(!showProviders);
+  const handleDocumentApprove = (documentId) => {
+    console.log("Document approved:", documentId);
+    setDocumentStatus("Approved");
+  };
+
+  const handleDocumentReupload = (documentId) => {
+    console.log("Reupload requested for document:", documentId);
+    setDocumentStatus("Pending");
+  };
+
+  const handleDocumentDecline = (documentId) => {
+    console.log("Document declined:", documentId);
+    setDocumentStatus("Declined");
+  };
+
+  const toggleDocumentSection = () => {
+    setShowDocuments(!showDocuments);
+  };
+
+  const handleBackClick = () => {
+    setActiveComponent("ProviderProfile");
   };
 
   return (
-    <div className="providers-container">
-      <h3>Service Providers Corner</h3>
-      <div className="providers-toolbar">
-        <button
-          className={`providers-btn ${
-            activeComponent === "view" ? "active" : ""
-          }`}
-          onClick={() => setActiveComponent("view")}
-        >
-          Bird Eye View
-        </button>
-        <button
-          className={`providers-btn ${
-            activeComponent === "add" ? "active" : ""
-          }`}
-          onClick={() => setActiveComponent("add")}
-        >
-          Add a Provider
-        </button>
-        <button
-          className={`providers-btn ${
-            activeComponent === "authenticate" ? "active" : ""
-          }`}
-          onClick={() => setActiveComponent("authenticate")}
-        >
-          Authenticate
-        </button>
-        <button
-          className={`providers-btn ${
-            activeComponent === "manage" ? "active" : ""
-          }`}
-          onClick={() => setActiveComponent("manage")}
-        >
-          Manage Providers
-        </button>
-        <button
-          className={`providers-btn ${
-            showProviders ? "active" : ""
-          }`}
-          onClick={toggleProviders}
-        >
-          All Providers
-        </button>
-      </div>
-      {activeComponent === "view" && (
-        <>
-          <div className="providers-sidebar">
-            <button className="providers-arrow" onClick={handlePrev}>
-              <
-            </button>
-            <div className="providers-categories">
-              {visibleCategories.map((category, index) => (
-                <button
-                  key={index}
-                  className={`providers-category ${
-                    index === activeCategory ? "active" : ""
-                  }`}
-                  onClick={() => setActiveCategory(index)}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-            <button className="providers-arrow" onClick={handleNext}>
-              >
-            </button>
-          </div>
-          <div className="providers-main-content">
-            {/* Google Maps integration */}
-            <iframe
-              title="Google Maps"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.8354345094493!2d-122.41941538468188!3d37.77492917975861!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c5e1e6c3b%3A0x1c3abf24c9452b09!2sSan%20Francisco%2C%20CA%2C%20USA!5e0!3m2!1sen!2sin!4v1614892339630!5m2!1sen!2sin"
-              width="100%"
-              height="450"
-              style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
-            ></iframe>
-          </div>
-        </>
-      )}
-      {activeComponent === "add" && <AddProvider />}
-      {activeComponent === "manage" && <ProviderForm />}
-      {activeComponent === "authenticate" && <AuthenticateProvider />}
-      {showProviders && (
+    <div className="authenticate-provider">
+      {activeComponent === "ProviderList" && (
         <div className="providers-table-container">
           <table className="providers-table">
             <thead>
@@ -196,8 +132,99 @@ const ProvidersCorner = () => {
           </table>
         </div>
       )}
+      {activeComponent === "ProviderProfile" && (
+        <ProviderProfile onDocumentsClick={handleDocumentsClick} />
+      )}
+      {activeComponent === "DocumentVerification" && (
+        <div className="document-verification">
+          <div className="sticky-header">
+            <button
+              className="document-heading-button"
+              onClick={toggleDocumentSection}
+            >
+              Documents
+            </button>
+            <span>{fakeData.providerName}</span>
+            <span className="status-Bar">Status: {documentStatus}</span>
+            <button className="Back-Button" onClick={handleBackClick}>
+              <FaArrowLeft /> Back
+            </button>
+          </div>
+          {showDocuments && (
+            <div className="document-section">
+              {fakeData.documents.map((document) => (
+                <div key={document.id} className="document-item">
+                  <img
+                    src={fileImage}
+                    alt={document.name}
+                    className={`document-image ${
+                      selectedDocument === document.id ? "small" : ""
+                    }`}
+                    onClick={() => handleDocumentSelect(document.id)}
+                  />
+                  {selectedDocument === document.id && (
+                    <>
+                      <embed
+                        src={document.file}
+                        type="application/pdf"
+                        className="document-preview"
+                      />
+                      <div className="button-group">
+                        <button
+                          className="action-button-unique approve"
+                          onClick={() => handleDocumentApprove(document.id)}
+                        >
+                          Approve
+                        </button>
+                        <button
+                          className="action-button-unique reupload"
+                          onClick={() => handleDocumentReupload(document.id)}
+                        >
+                          Reupload
+                        </button>
+                        <button
+                          className="action-button-unique decline"
+                          onClick={() => handleDocumentDecline(document.id)}
+                        >
+                          Decline
+                        </button>
+                      </div>
+                      <div className="comment-section">
+                        <textarea placeholder="Comment"></textarea>
+                        <div className="comment-footer">
+                          <button className="submit-button-unique">
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="status-toggle-container">
+            <button
+              className={`status-toggle-button ${
+                documentStatus === "Approved" ? "active" : ""
+              }`}
+              onClick={() => setDocumentStatus("Approved")}
+            >
+              Approve
+            </button>
+            <button
+              className={`status-toggle-button ${
+                documentStatus === "Pending" ? "active" : ""
+              }`}
+              onClick={() => setDocumentStatus("Pending")}
+            >
+              Pending
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ProvidersCorner;
+export default AuthenticateProvider;

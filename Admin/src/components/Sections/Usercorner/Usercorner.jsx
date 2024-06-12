@@ -73,6 +73,7 @@ const UserManager = () => {
     <div className="user-manager-container">
       <div className="header">
         <h1>Add User</h1>
+        <button>Add User</button>
         <div className="user-search-bar">
           <InputGroup>
             <Form.Control placeholder="Search" className="search-input" />
