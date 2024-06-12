@@ -3,9 +3,9 @@ import "./ProvidersCorner.css";
 import ProviderForm from "./ProviderForm";
 import AddProvider from "./AddProviderForm";
 import AuthenticateProvider from "./AuthenticateProvider";
+import ProviderList from "./ProviderList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { FaEdit, FaTrash } from "react-icons/fa";
 
 const ProvidersCorner = () => {
   const [visibleCategories, setVisibleCategories] = useState([
@@ -124,11 +124,11 @@ const ProvidersCorner = () => {
   };
 
   return (
-    <div className="providers-container">
+    <div className="providersContainer">
       <h3>Service Providers Corner</h3>
-      <div className="providers-toolbar">
+      <div className="providersToolbar">
         <button
-          className={`providers-btn ${
+          className={`providersBtn ${
             activeComponent === "view" ? "active" : ""
           }`}
           onClick={() => setActiveComponent("view")}
@@ -136,7 +136,7 @@ const ProvidersCorner = () => {
           Bird Eye View
         </button>
         <button
-          className={`providers-btn ${
+          className={`providersBtn ${
             activeComponent === "add" ? "active" : ""
           }`}
           onClick={() => setActiveComponent("add")}
@@ -144,7 +144,7 @@ const ProvidersCorner = () => {
           Add a Provider
         </button>
         <button
-          className={`providers-btn ${
+          className={`providersBtn ${
             activeComponent === "authenticate" ? "active" : ""
           }`}
           onClick={() => setActiveComponent("authenticate")}
@@ -152,25 +152,36 @@ const ProvidersCorner = () => {
           Authenticate
         </button>
         <button
-          className={`providers-btn ${
+          className={`providersBtn ${
             activeComponent === "manage" ? "active" : ""
           }`}
           onClick={() => setActiveComponent("manage")}
         >
           Manage Providers
         </button>
+        <button
+          className={`providersBtn ${
+            activeComponent === "list" ? "active" : ""
+          }`}
+          onClick={() => setActiveComponent("list")}
+        >
+          {activeComponent === "list"
+            ? "Hide Provider List"
+            : "Show Provider List"}
+        </button>
       </div>
+
       {activeComponent === "view" && (
         <>
-          <div className="providers-sidebar">
-            <button className="providers-arrow" onClick={handlePrev}>
+          <div className="providersSidebar">
+            <button className="providersArrow" onClick={handlePrev}>
               <FontAwesomeIcon icon={faArrowLeft} />
             </button>
-            <div className="providers-categories">
+            <div className="providersCategories">
               {visibleCategories.map((category, index) => (
                 <button
                   key={index}
-                  className={`providers-category ${
+                  className={`providersCategory ${
                     index === activeCategory ? "active" : ""
                   }`}
                   onClick={() => setActiveCategory(index)}
@@ -179,86 +190,32 @@ const ProvidersCorner = () => {
                 </button>
               ))}
             </div>
-            <button className="providers-arrow" onClick={handleNext}>
+            <button className="providersArrow" onClick={handleNext}>
               <FontAwesomeIcon icon={faArrowRight} />
             </button>
           </div>
-          <button
-            id="showproviders-btn"
-            className="custom-show-providers-btn"
-            onClick={toggleProviders}
-          >
-            {showProviders ? "Hide All Providers" : "Show All Providers"}
-          </button>
-          <div className="providers-table-container">
-            {showProviders && (
-              <table className="providers-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Provider name</th>
-                    <th>Email Address</th>
-                    <th>Phone</th>
-                    <th>Location</th>
-                    <th>Join date</th>
-                    <th>Loyalty Points</th>
-                    <th>Package</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {providers.map((provider) => (
-                    <tr key={provider.id}>
-                      <td>{provider.id}</td>
-                      <td>{provider.name}</td>
-                      <td>{provider.email}</td>
-                      <td>{provider.phone}</td>
-                      <td>{provider.location}</td>
-                      <td>{provider.joinDate}</td>
-                      <td>{provider.loyaltyPoints}</td>
-                      <td>{provider.package}</td>
-                      <td>
-                        <div
-                          className={`status-toggle ${
-                            provider.status === "active" ? "active" : "inactive"
-                          }`}
-                        ></div>
-                      </td>
-                      <td>
-                        <button
-                          className="action-button edit"
-                          onClick={() => handleEdit(provider)}
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          className="action-button delete"
-                          onClick={() => handleDelete(provider.id)}
-                        >
-                          <FaTrash />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-            <div className="providers-main-content">
-              {/* Google Maps integration */}
-              <iframe
-                title="Google Maps"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.8354345094493!2d-122.41941538468188!3d37.77492917975861!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c5e1e6c3b%3A0x1c3abf24c9452b09!2sSan%20Francisco%2C%20CA%2C%20USA!5e0!3m2!1sen!2sin!4v1614892339630!5m2!1sen!2sin"
-                width="100%"
-                height="450"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-              ></iframe>
-            </div>
+          <div className="providersMainContent">
+            <iframe
+              title="Google Maps"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7613426.778745689!2d75.27071929097744!3d17.469591203347576!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93b7ab12627d%3A0xbc6f7e1d7d72e727!2sHyderabad%2C%20Telangana%2C%20India!5e0!3m2!1sen!2sus!4v1625244827741!5m2!1sen!2sus"
+              width="100%"
+              height="450"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+            ></iframe>
           </div>
         </>
       )}
+
+      {activeComponent === "list" && (
+        <ProviderList
+          providers={providers}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+        />
+      )}
+
       {activeComponent === "add" && <AddProvider />}
       {activeComponent === "manage" && <ProviderForm />}
       {activeComponent === "authenticate" && <AuthenticateProvider />}

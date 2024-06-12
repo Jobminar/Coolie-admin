@@ -22,6 +22,16 @@ const AddProvider = () => {
     branchAddress: "",
     documents: null,
   });
+  const [additionalData, setAdditionalData] = useState({
+    providerName: "",
+    image: null,
+    age: "",
+    phone: "",
+    pincode: "",
+    radius: "",
+    work: "",
+    userId: "",
+  });
   const [mobileOtp, setMobileOtp] = useState("");
   const [otpEntered, setOtpEntered] = useState("");
   const [isMobileVerified, setIsMobileVerified] = useState(false);
@@ -34,8 +44,17 @@ const AddProvider = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleAdditionalInputChange = (e) => {
+    const { name, value } = e.target;
+    setAdditionalData({ ...additionalData, [name]: value });
+  };
+
   const handleFileChange = (e) => {
     setFormData({ ...formData, documents: e.target.files[0] });
+  };
+
+  const handleImageChange = (e) => {
+    setAdditionalData({ ...additionalData, image: e.target.files[0] });
   };
 
   const handleGenerateOtp = async () => {
@@ -91,6 +110,31 @@ const AddProvider = () => {
           "There was an error submitting the form. Please try again.",
         );
       }
+    }
+  };
+
+  const handleAddDetails = async () => {
+    const formData = new FormData();
+    formData.append("providerName", additionalData.providerName);
+    formData.append("image", additionalData.image);
+    formData.append("age", additionalData.age);
+    formData.append("phone", additionalData.phone);
+    formData.append("pincode", additionalData.pincode);
+    formData.append("radius", additionalData.radius);
+    formData.append("work", additionalData.work);
+    formData.append("userId", providerId);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/v1.0/providers/provider-details",
+        formData,
+      );
+      console.log("Additional details submitted successfully:", response.data);
+    } catch (error) {
+      console.error("Error submitting additional details:", error);
+      setSubmissionError(
+        "There was an error submitting the additional details. Please try again.",
+      );
     }
   };
 
@@ -291,6 +335,86 @@ const AddProvider = () => {
             </button>
             {submissionError && <p className="error">{submissionError}</p>}
           </form>
+        )}
+
+        {isMobileVerified && (
+          <div className="additional-details-form">
+            <h3>Additional Provider Details</h3>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <div>
+                <label>Provider Name:</label>
+                <input
+                  type="text"
+                  name="providerName"
+                  value={additionalData.providerName}
+                  onChange={handleAdditionalInputChange}
+                  placeholder="Provider Name"
+                />
+              </div>
+              <div>
+                <label>Image:</label>
+                <input type="file" onChange={handleImageChange} />
+              </div>
+              <div>
+                <label>Age:</label>
+                <input
+                  type="text"
+                  name="age"
+                  value={additionalData.age}
+                  onChange={handleAdditionalInputChange}
+                  placeholder="Age"
+                />
+              </div>
+              <div>
+                <label>Phone:</label>
+                <input
+                  type="text"
+                  name="phone"
+                  value={additionalData.phone}
+                  onChange={handleAdditionalInputChange}
+                  placeholder="Phone"
+                />
+              </div>
+              <div>
+                <label>Pincode:</label>
+                <input
+                  type="text"
+                  name="pincode"
+                  value={additionalData.pincode}
+                  onChange={handleAdditionalInputChange}
+                  placeholder="Pincode"
+                />
+              </div>
+              <div>
+                <label>Radius:</label>
+                <input
+                  type="text"
+                  name="radius"
+                  value={additionalData.radius}
+                  onChange={handleAdditionalInputChange}
+                  placeholder="Radius"
+                />
+              </div>
+              <div>
+                <label>Work:</label>
+                <input
+                  type="text"
+                  name="work"
+                  value={additionalData.work}
+                  onChange={handleAdditionalInputChange}
+                  placeholder="Work"
+                />
+              </div>
+              <button
+                type="button"
+                className="add-details-button"
+                onClick={handleAddDetails}
+              >
+                Add Details
+              </button>
+              {submissionError && <p className="error">{submissionError}</p>}
+            </form>
+          </div>
         )}
       </div>
     </div>

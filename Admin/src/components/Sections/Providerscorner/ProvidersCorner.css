@@ -1,5 +1,5 @@
 /* Container styling */
-.providers-container {
+.providersContainer {
     display: flex;
     flex-direction: column;
     height: 1500px;
@@ -9,7 +9,7 @@
 }
 
 /* Main content styling */
-.providers-main-content {
+.providersMainContent {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -21,63 +21,74 @@
 }
 
 /* Content padding */
-.providers-content {
+.providersContent {
     width: 100%;
     margin-bottom: 20px;
 }
 
 /* Toolbar button styling */
-.providers-toolbar {
+.providersToolbar {
     display: flex;
-    gap: 3px;
-    margin-bottom: 5px;
+    gap: 40px;
+    margin-bottom: 20px;
     margin-top: 10px;
-    margin-left: -10px;
-    max-width: 1000px;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    align-items: center;
 }
 
 /* Toolbar button styling */
-.providers-toolbar .providers-btn {
-    padding: 6px 1px;
+.providersToolbar .providersBtn {
+    padding: 14px 18px;
+    /* Increased padding */
     border: 1px solid #ccc;
     background-color: #f8f8f8;
     color: black;
     cursor: pointer;
     border-radius: 4px;
     font-weight: bold;
-    font-size: 14px;
-    min-width: 100px;
+    font-size: 16px;
+    /* Increased font size */
+    min-width: 140px;
+    /* Increased min-width */
     text-align: center;
     position: relative;
     transition: background-color 0.3s, color 0.3s;
 }
 
-.providers-toolbar .providers-btn.active {
+.providersToolbar .providersBtn.add,
+.providersToolbar .providersBtn.manage {
+    padding: 12px 16px;
+    /* Increased padding */
+    font-size: 14px;
+    /* Increased font size */
+}
+
+.providersToolbar .providersBtn.active {
     background-color: #ccc;
     color: black;
 }
 
-.providers-toolbar .providers-btn::after {
+.providersToolbar .providersBtn::after {
     content: '';
     position: absolute;
     bottom: -2px;
     left: 0;
     height: 2px;
     width: 0;
-
     transition: width 0.3s ease-in-out;
 }
 
-.providers-toolbar .providers-btn.active::after {
+.providersToolbar .providersBtn.active::after {
     width: 100%;
 }
 
-.providers-toolbar .providers-btn:hover {
+.providersToolbar .providersBtn:hover {
     background-color: #ddd;
 }
 
 /* Category button styling */
-.providers-categories-container {
+.providersCategoriesContainer {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
@@ -86,28 +97,30 @@
     width: 100%;
 }
 
-.providers-categories {
+.providersCategories {
     display: flex;
     gap: 1px;
+    width: 90%;
 }
 
-.providers-category {
-    padding: 3px 5px;
+.providersCategory {
+    padding: 6px 10px;
+    /* Increased padding */
     border: none;
     background-color: transparent;
     color: black;
     cursor: pointer;
     font-weight: bold;
-    font-size: 12px;
-    max-width: 180px;
-    width: 170px;
+    font-size: 14px;
+    /* Increased font size */
+    flex: 1;
     text-align: center;
     transition: color 0.3s;
     margin-top: 10px;
     position: relative;
 }
 
-.providers-category::after {
+.providersCategory::after {
     content: '';
     position: absolute;
     bottom: -2px;
@@ -118,24 +131,27 @@
     transition: width 0.3s ease-in-out;
 }
 
-.providers-category.active {
+.providersCategory.active {
     color: red;
 }
 
-.providers-category.active::after {
+.providersCategory.active::after {
     width: 100%;
 }
 
-.providers-arrow {
+.providersArrow {
     border: none;
     background: black;
     color: white;
     cursor: pointer;
     font-size: 16px;
+    /* Increased font size */
     font-weight: bold;
     border-radius: 50%;
-    width: 30px;
-    height: 26px;
+    width: 32px;
+    /* Increased width */
+    height: 28px;
+    /* Increased height */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -144,110 +160,143 @@
     margin-top: 10px;
 }
 
-.providers-arrow:hover {
+.providersArrow:hover {
     background-color: red;
     transform: scale(1.1);
 }
 
 /* Providers table styling */
-.providers-table-container {
+.providersTableContainer {
     width: 100%;
     overflow-x: auto;
     margin-bottom: 20px;
     margin-top: 20px;
-
 }
 
-.providers-table {
+.providersTable {
     width: 100%;
+    max-width: 100%;
     border-collapse: separate;
     border-spacing: 0;
     margin-top: 10px;
-    font-size: 16px;
+    font-size: 14px;
     border: 1px solid black;
     border-radius: 5px;
+    overflow-x: auto;
 }
 
-.providers-table th,
-.providers-table td {
-    padding: 8px;
+.providersTable th,
+.providersTable td {
+    padding: 6px;
     text-align: center;
     white-space: nowrap;
     border: 1px solid black;
 }
 
-.providers-table th {
+.providersTable th {
     background-color: #f8f8f8;
     color: black;
     font-weight: bold;
 }
 
-.providers-table .status-toggle {
+.providersTable .statusToggle {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     display: inline-block;
 }
 
-.providers-table .status-toggle.active {
+.providersTable .statusToggle.active {
     background-color: green;
 }
 
-.providers-table .status-toggle.inactive {
+.providersTable .statusToggle.inactive {
     background-color: red;
 }
 
+.actionButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.actionButton.edit {
+    color: #007bff;
+}
+
+.actionButton.delete {
+    color: #dc3545;
+}
+
 /* Adjustments for the sidebar component */
-.providers-sidebar {
+.providersSidebar {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     gap: 1px;
-    width: 50%;
+    width: 100%;
     margin-top: 40px;
 }
 
 /* Additional adjustments for ProviderForm alignment */
-.providers-container .provider-form-unique {
+.providersContainer .providerFormUnique {
     align-self: flex-start;
     /* Align form to the left */
 }
 
-
-.providers-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.providers-table th,
-.providers-table td {
-    border: 1px solid black;
-    padding: 8px;
-    text-align: left;
-}
-
-.providers-table th {
-    background-color: #f2f2f2;
-}
-
-.custom-show-providers-btn {
-    padding: 6px 0.5px;
+.customShowProvidersBtn {
+    padding: 14px 18px;
+    /* Increased padding */
     border: 1px solid #ccc;
     background-color: #f8f8f8;
     color: black;
     cursor: pointer;
     border-radius: 4px;
     font-weight: bold;
-    font-size: 14px;
-    min-width: 100px;
+    font-size: 16px;
+    /* Increased font size */
+    min-width: 140px;
+    /* Increased min-width */
     text-align: center;
     position: relative;
     transition: background-color 0.3s, color 0.3s;
-    margin-top: 60px;
-    margin-left: 22px
 }
 
-.custom-show-providers-btn.active {
+.customShowProvidersBtn.active {
     background-color: #ccc;
     color: black;
+}
+
+/* Map container styling */
+.mapContainer {
+    width: 100%;
+    height: 450px;
+    border: 0;
+}
+
+/* Responsive styling */
+@media screen and (max-width: 768px) {
+    .providersToolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .providersToolbar .providersBtn {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .providersCategoriesContainer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .providersCategories {
+        width: 100%;
+    }
+
+    .providersTableContainer {
+        overflow-x: auto;
+    }
 }
