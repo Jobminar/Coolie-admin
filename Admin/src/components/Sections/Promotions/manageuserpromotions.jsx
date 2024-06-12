@@ -61,14 +61,13 @@
           <div className="error-message">Error: {error}</div>
         ) : (
           data.map((ele) => (
-            <div className="manage-promotion-con" key={ele._id}>
-              <div className="promotion-header">
-                <h1>{ele.promoName}</h1>
-                <div className="promotion-actions">
-                  <EditOutlinedIcon onClick={() => handleEdit(ele)} />
-                  <DeleteOutlineOutlinedIcon onClick={() => handleDelete(ele._id)} />
-                </div>
-              </div>
+            <div className="u-manage-sub-con" key={ele._id}>
+              <div className="u-manage-buttons">
+                         <h3>{ele.promoName}</h3>
+                         <EditOutlinedIcon style={{ fontSize: '30px' }}  onClick={() => {handleEdit(ele)}} />
+                         <DeleteOutlineOutlinedIcon onClick={() =>handleDelete(ele._id)} style={{ fontSize: '30px' }} />
+                        </div>
+              
               <p><strong>Service Type:</strong> {ele.serviceType}</p>
               {/* <p><strong>Cities:</strong> {ele.cities.join(', ')}</p> */}
               <p><strong>Number of Jobs:</strong> {ele.noOfJobs}</p>

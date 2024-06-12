@@ -25,6 +25,9 @@ import EditUserPromotion from "./components/Sections/Promotions/Edituserpromotio
 import EditproviderPromotion from "./components/Sections/Promotions/Editproviderpromotions";
 import EditUserPackage from "./components/Sections/Packages/Edit-user-packages";
 import EditProviderPackage from "./components/Sections/Packages/Edit-provider-package";
+import Viewadmin from "./components/Sections/Subadmin/view-admin";
+import Addadmin from "./components/Sections/Subadmin/Addsubadmin";
+import PermissionsForm from "./components/Sections/Subadmin/SubAdminPermissions";
 
 const Routing = () => {
   return (
@@ -65,6 +68,9 @@ const Routing = () => {
             <Route path="/edituserpackage" element={<EditUserPackage />} />
             <Route path="/userbanners" element={<Userbanners />} />
             <Route path="/providerbanners" element={<Providerbanners />} />
+            <Route path="/viewadmin" element={<Viewadmin />} />
+            <Route path="/addsubadmin" element={<Addadmin />} />
+            <Route path="/permissionform" element={<PermissionsForm/>} />
             <Route path="*" element={<Navigate to="/" />} />{" "}
             {/* Default redirect */}
           </Routes>

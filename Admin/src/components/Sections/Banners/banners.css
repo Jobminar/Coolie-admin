@@ -1,0 +1,110 @@
+.banners{
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+.banners h1{
+    font-family: Roboto;
+font-size: 32px;
+font-weight: 500;
+line-height: 37.5px;
+text-align: left;
+
+}
+.banners button{
+    width: 10rem;
+    height: 2.5rem;
+    background-color: #FFC107;
+    border: none;
+    font-family: Roboto;
+font-size: 20px;
+font-weight: 500;
+line-height: 37.5px;
+text-align: center;
+color: white;
+    
+}
+.banner-con{
+    /* border: 1px solid black; */
+    display: grid;
+    grid-template-columns: 48% 48%;
+    justify-content: space-between;
+    gap: 2rem;
+}
+.banner-sub-con{
+    /* border: 1px solid black; */
+    /* width: 20rem; */
+    height: 15rem;
+    position: relative;
+}
+.banner-sub-con img{
+    width: 100%;
+    height: 100%;
+}
+.title{
+    position: absolute;
+    left: 35%;
+    top: 40%;
+    color: white;
+}
+.edit-button{
+    position: absolute;
+    top: 1%;
+    left: 2%;
+}
+.edit-button:hover{
+    cursor: pointer;
+}
+.delete-button{
+    position: absolute;
+    top: 1%;
+    right: 2%;
+}
+.delete-button:hover{
+    cursor: pointer;
+}
+.edit-banner-form{
+    padding: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.edit-banner-form h1{
+    font-family: Roboto;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 37.5px;
+    text-align: center;
+    
+}
+.edit-banner-form form{
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-direction: column;
+}
+.edit-banner-form form input{
+    width: 14rem;
+    height: 2rem;
+}
+.add-banner-form form{
+    display: flex;
+    flex-direction: column;
+    width: 30rem;
+   /* border: 1px solid black; */
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    gap: 1rem;
+   padding: 1rem;
+
+}
+.add-banner-form form input{
+    width: 15rem;
+    height: 2rem;
+}

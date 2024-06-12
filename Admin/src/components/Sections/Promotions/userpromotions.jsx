@@ -23,9 +23,9 @@ const Userpromotions = () => {
 
   return (
     <>
-      <div className='promotions-con'>
+      <div className='universal-con'>
         <h1>User Promotions</h1>
-        <div className='promotion-buttons'>
+        <div className='universal-buttons'>
           <div
             className={`tab ${activeTab === "addpromotions" ? "active" : ""}`}
             onClick={() => handleTabClick("addpromotions")}

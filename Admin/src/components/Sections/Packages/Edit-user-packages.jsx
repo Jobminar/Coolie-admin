@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import './providerpackage.css'
 
 const EditUserPackage = () => {
     const location = useLocation();
@@ -49,29 +50,32 @@ const EditUserPackage = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className='universal-edit-con'>
             <h1>Edit user package</h1>
-            <label>
-                Package Name:
+            <div className='universal-edit'>
+            
+                <p>Package Name:</p>
                 <input type="text" name="packageName" value={packageData.packageName} onChange={handleChange} required />
-            </label>
-            <label>
-                Price in RS:
-                <input type="number" name="priceRs" value={packageData.priceRs} onChange={handleChange} required />
-            </label>
-            <label>
-                Price in Cr:
-                <input type="number" name="priceCr" value={packageData.priceCr} onChange={handleChange} required />
-            </label>
-            <label>
-                Discount:
-                <input type="number" name="discountPlatformCom" value={packageData.discountPlatformCom} onChange={handleChange} required />
-            </label>
-            <label>
-                Comments:
-                <textarea name="comments" value={packageData.comments} onChange={handleChange} required />
-            </label>
-            <button type="submit">Update Package</button>
+               
+            </div>
+            
+            <div class="universal-edit">
+            <p>Price in RS:</p>
+            <input type="number" name="priceRs" value={packageData.priceRs} onChange={handleChange} required />
+        </div>
+        <div class="universal-edit">
+            <p>Price in Cr:</p>
+            <input type="number" name="priceCr" value={packageData.priceCr} onChange={handleChange} required />
+        </div>
+        <div class="universal-edit">
+            <p>Discount:</p>
+            <input type="number" name="discountPlatformCom" value={packageData.discountPlatformCom} onChange={handleChange} required />
+        </div>
+        <div class="universal-edit">
+            <p>Comments:</p>
+            <textarea name="comments" value={packageData.comments} onChange={handleChange} required></textarea>
+        </div>
+            <button type="submit" className='submit-button'>Update Package</button>
         </form>
     );
 };

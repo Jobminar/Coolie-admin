@@ -25,9 +25,9 @@ const Providerpromotions = () => {
 
   return (
     <>
-      <div className='promotions-con'>
+      <div className='universal-con'>
         <h1>Provider Promotions</h1>
-        <div className='promotion-buttons'>
+        <div className='universal-buttons'>
           <div
             className={`tab ${activeTab === "addpropromotions" ? "active" : ""}`}
             onClick={() => handleTabClick("addpropromotions")}

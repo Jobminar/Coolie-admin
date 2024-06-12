@@ -51,68 +51,89 @@ const EditproviderPromotion = () => {
   };
 
   return (
-    <div className="edit-promotion-form">
+    <div className="universal-edit-con">
       <h1>Edit provider Promotion</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="promoName"
-          value={editedPromotion.promoName}
-          placeholder="Enter Promotion Name"
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="serviceType"
-          value={editedPromotion.serviceType}
-          placeholder="Enter Service Type"
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="cities"
-          value={editedPromotion.cities}
-          placeholder="Enter Cities"
-          onChange={handleChange}
-        />
-        <input
-          type="number"
-          name="noOfJobs"
-          value={editedPromotion.noOfJobs}
-          placeholder="Enter Number of Jobs"
-          onChange={handleChange}
-        />
-        <input
-          type="number"
-          name="offerAmount"
-          value={editedPromotion.offerAmount}
-          placeholder="Enter Offer Amount"
-          onChange={handleChange}
-        />
-        <input
-          type="date"
-          name="validFrom"
-          value={editedPromotion.validFrom}
-          placeholder="Valid From"
-          onChange={handleChange}
-        />
-        <input
-          type="date"
-          name="validTill"
-          value={editedPromotion.validTill}
-          placeholder="Valid Till"
-          onChange={handleChange}
-        />
-        <label>
-          Notify Providers:
+        <div className="universal-edit">
+          <p>Promotion Name:</p>
+          <input
+            type="text"
+            name="promoName"
+            value={editedPromotion.promoName}
+            placeholder="Enter Promotion Name"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="universal-edit">
+          <p>Service Type:</p>
+          <input
+            type="text"
+            name="serviceType"
+            value={editedPromotion.serviceType}
+            placeholder="Enter Service Type"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="universal-edit">
+          <p>Cities:</p>
+          <input
+            type="text"
+            name="cities"
+            value={editedPromotion.cities}
+            placeholder="Enter Cities"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="universal-edit">
+          <p>Number of Jobs:</p>
+          <input
+            type="number"
+            name="noOfJobs"
+            value={editedPromotion.noOfJobs}
+            placeholder="Enter Number of Jobs"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="universal-edit">
+          <p>Offer Amount:</p>
+          <input
+            type="number"
+            name="offerAmount"
+            value={editedPromotion.offerAmount}
+            placeholder="Enter Offer Amount"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="universal-edit">
+          <p>Valid From:</p>
+          <input
+            type="date"
+            name="validFrom"
+            value={editedPromotion.validFrom}
+            placeholder="Valid From"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="universal-edit">
+          <p>Valid Till:</p>
+          <input
+            type="date"
+            name="validTill"
+            value={editedPromotion.validTill}
+            placeholder="Valid Till"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="universal-edit">
+          <p>Notify Providers:</p>
           <input
             type="checkbox"
             name="notifyProviders"
             checked={editedPromotion.notifyProviders}
             onChange={handleChange}
           />
-        </label>
-        <button type="submit">Update</button>
+        </div>
+        <button type="submit" className="submit-button">Update</button>
       </form>
     </div>
   );

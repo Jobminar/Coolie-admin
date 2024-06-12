@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import '../Packages/providerpackage.css'
 
 const EditLoyaltyCards = () => {
   const location = useLocation();
@@ -50,9 +51,9 @@ const EditLoyaltyCards = () => {
   };
 
   return (
-    <div className="edit-loyalty-cards-form">
+    <div className="universal-edit-con">
       <h1>Edit Loyalty Cards</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='loyality-edit-form'>
         <div>
           <label htmlFor="name">Name:</label>
           <input

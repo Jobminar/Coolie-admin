@@ -37,8 +37,8 @@ const Addpromotions = () => {
   };
 
   return (
-    <div className='addpromotion-form'>
-      <form onSubmit={handleSubmit}>
+    <div className='add-package-con'>
+      <form  className='form-con' onSubmit={handleSubmit}>
         <input
           type='text'
           name='promoName'
@@ -48,7 +48,6 @@ const Addpromotions = () => {
           required
         />
              <select 
-        className='dropdown'
           type='text' 
           name='serviceType' 
           value={serviceType} 
@@ -95,7 +94,7 @@ const Addpromotions = () => {
           onChange={handleChange}
           required
         />
-        <button type='submit'>Submit</button>
+        <button type='submit' className='submit-button'>Submit</button>
       </form>
     </div>
   );

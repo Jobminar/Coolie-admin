@@ -26,9 +26,9 @@ const  Userpackage = () => {
 
   return (
     <>
-      <div className='promotions-con'>
+      <div className='universal-con'>
         <h1>User Packages</h1>
-        <div className='promotion-buttons'>
+        <div className='universal-buttons'>
           <div
             className={`tab ${activeTab === "adduserpackage" ? "active" : ""}`}
             onClick={() => handleTabClick("adduserpackage")}

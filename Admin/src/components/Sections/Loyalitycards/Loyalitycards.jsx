@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from "react";
-import "./loyalitycards.css";
-import Bronzee from "../../../assets/images/Bronze.png";
-import gold from "../../../assets/images/gold.png";
-import silver from "../../../assets/images/silver.png";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import './loyalitycards.css';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Loyalitycards = () => {
-  const navigate = useNavigate();
-  const [data, setData] = useState({
-    name: "",
-    points: "",
-    amount: "",
-    minimumSpentValue: "",
-    discount: "",
-  });
-  const [image, setImage] = useState(null);
-  const [getData, setGetData] = useState([]);
-  const [error, setError] = useState("");
+   const navigate = useNavigate();
+   const [data, setData] = useState({
+      name: '',
+      points: '',
+      amount: '',
+      minimumSpentValue: '',
+      discount: '',
+   });
+   const [image, setImage] = useState(null);
+   const [getData, setGetData] = useState([]);
+   const [error, setError] = useState('');
 
   const { name, points, amount, minimumSpentValue, discount } = data;
 
@@ -95,101 +92,106 @@ const Loyalitycards = () => {
     }
   };
 
-  //  EDIT
-  const [editdata, seteditdata] = useState([]);
-  const handleEdit = (item) => {
-    seteditdata(item);
-    navigate("/editloyality", { state: { editdata: item } });
-    console.log(item, "data");
-  };
+    const [editdata,seteditdata] = useState([])
+    const handleEdit = (item) => {
+      seteditdata(item);
+      navigate('/editloyality', { state: { editdata: item } });
+      console.log(item, 'data');
+    };
 
-  return (
-    <>
-      <div className="loyality">
-        <h1 className="loyality-title">Loyalty Cards</h1>
-        <div className="buttonloyality">
-          <button onClick={visibleform}>+Add Loyalty</button>
-        </div>
-        {visible && (
-          <div className="loyality-form">
-            <form onSubmit={handlesubmit}>
-              <input
-                type="text"
-                name="name"
-                value={name}
-                className="name"
-                onChange={handlechange}
-                placeholder="Loyalty card name"
-              />
-              <input
-                type="tel"
-                name="points"
-                value={points}
-                className="points"
-                onChange={handlechange}
-                placeholder="Loyalty points"
-              />
-              <input
-                type="text"
-                name="amount"
-                value={amount}
-                className="amount"
-                onChange={handlechange}
-                placeholder="Amount per points"
-              />
-              <input
-                type="text"
-                name="minimumSpentValue"
-                value={minimumSpentValue}
-                className="minimumSpentValue"
-                onChange={handlechange}
-                placeholder="Minimum Spent Value"
-              />
-              <input
-                type="text"
-                name="discount"
-                value={discount}
-                className="discount"
-                onChange={handlechange}
-                placeholder="Discount"
-              />
-              <input type="file" className="file" onChange={handleFileChange} />
-              <button type="submit">Submit</button>
-            </form>
-          </div>
-        )}
+   const handleButtonClick = (e) => {
+      e.preventDefault(); // Prevent default form submission
+      document.getElementById('hiddenFileInput').click();
+   };
 
-        <div className="loyality-main">
-          {Array.isArray(getData) &&
-            getData.map((item) => (
-              <div className="loyality-sub-con" key={item.id}>
-                <img
-                  src={`https://coolie1-dev.s3.ap-south-1.amazonaws.com/${item.image}`}
-                  alt={item.name}
-                />
-                <div className="medal-brief">
-                  <h3>{item.title}</h3>
-                  <p>Amount per points : {item.amount}</p>
-                  <p>Loyalty points : {item.points}</p>
-                </div>
-                <div className="buttons-loyality">
-                  <EditOutlinedIcon
-                    style={{ fontSize: "30px" }}
-                    onClick={() => {
-                      handleEdit(item);
-                    }}
-                  />
-                  <DeleteOutlineOutlinedIcon
-                    onClick={() => handleDelete(item._id)}
-                    style={{ fontSize: "30px" }}
-                  />
-                </div>
-              </div>
-            ))}
-        </div>
-      </div>
-    </>
-  );
-};
+   return (
+      <>
+         <div className='loyality'>
+            <div className='loyality-head'>
+               <h1>Loyality Cards</h1>
+               <div className='button'>
+                  <button onClick={visibleform}>+Add Loyalty</button>
+               </div>
+            </div>
+            {visible && (
+               <div className='loyality-form'>
+                  <form onSubmit={handlesubmit}>
+                     <input
+                        type='text'
+                        name='name'
+                        value={name}
+                        className='name'
+                        onChange={handlechange}
+                        placeholder='Loyalty card name'
+                     />
+                     <input
+                        type='tel'
+                        name='points'
+                        value={points}
+                        className='points'
+                        onChange={handlechange}
+                        placeholder='Loyalty points'
+                     />
+                     <input
+                        type='text'
+                        name='amount'
+                        value={amount}
+                        className='amount'
+                        onChange={handlechange}
+                        placeholder='Amount per points'
+                     />
+                     <input
+                        type='text'
+                        name='minimumSpentValue'
+                        value={minimumSpentValue}
+                        className='minimumSpentValue'
+                        onChange={handlechange}
+                        placeholder='Minimum Spent Value'
+                     />
+                     <input
+                        type='text'
+                        name='discount'
+                        value={discount}
+                        className='discount'
+                        onChange={handlechange}
+                        placeholder='Discount'
+                     />
+                     <div>
+                        <input
+                        type='file'
+                        id='hiddenFileInput'
+                        className='file-input'
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                        />
+                        <button type='button' className='custom-button' onClick={handleButtonClick}>
+                        Upload Loyalty card image
+                        </button>
+                        {image && <p>Selected file: {image.name}</p>}
+                     </div>
+                     <button className='submit' type='submit'>Submit</button>
+                  </form>
+               </div>
+            )}
+            <div className='loyality-main'>
+            {Array.isArray(getData) && getData.map(item => (
+                  <div className='loyality-sub-con' key={item._id}>
+                     <img src={`https://coolie1-dev.s3.ap-south-1.amazonaws.com/${item.image}`} alt={item.name} />
+                     <div className='medal-brief'>
+                        <h3>{item.name}</h3>
+                        <p>Amount per points : {item.amount}</p>
+                        <p>Loyalty points : {item.points}</p>
+                     </div>
+                     <div className='buttons'>
+                        <EditOutlinedIcon style={{ fontSize: '30px' }}  onClick={() => {handleEdit(item)}} />
+                        <DeleteOutlineOutlinedIcon onClick={() => handleDelete(item._id)} style={{ fontSize: '30px' }} />
+                     </div>
+                  </div>
+               ))}
+            </div>
+         </div>
+      </>
+   );
+}
 
 export default Loyalitycards;
