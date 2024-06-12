@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import "./AddProvider.css";
-import {
-  generateOtp,
-  sendOtpEmail,
-  sendFormDataToApis,
-  validateForm,
-} from "../../../utils/api";
+import axios from "axios";
 
 const AddProvider = () => {
   const [formData, setFormData] = useState({
@@ -30,6 +25,7 @@ const AddProvider = () => {
   const [mobileOtp, setMobileOtp] = useState("");
   const [otpEntered, setOtpEntered] = useState("");
   const [isMobileVerified, setIsMobileVerified] = useState(false);
+  const [providerId, setProviderId] = useState(null);
   const [errors, setErrors] = useState({});
   const [submissionError, setSubmissionError] = useState("");
 
@@ -42,30 +38,52 @@ const AddProvider = () => {
     setFormData({ ...formData, documents: e.target.files[0] });
   };
 
-  const handleGenerateOtp = () => {
-    const otp = generateOtp();
-    setMobileOtp(otp);
-    sendOtpEmail(otp, formData.mobile);
+  const handleGenerateOtp = async () => {
+    try {
+      const response = await axios.post(
+        "http://13.126.118.3:3000/v1.0/providers/provider-auth/signUp",
+        { phone: Number(formData.mobile) },
+      );
+      console.log("OTP sent:", response.data.otp);
+      setMobileOtp(response.data.otp);
+    } catch (error) {
+      console.error("Error generating OTP:", error);
+      setErrors({
+        ...errors,
+        mobile: "Error generating OTP. Please try again.",
+      });
+    }
   };
 
-  const handleVerifyOtp = () => {
-    if (mobileOtp === otpEntered) {
-      setIsMobileVerified(true);
-      setErrors({ ...errors, otp: "" });
-    } else {
-      setErrors({ ...errors, otp: "Invalid OTP" });
+  const handleVerifyOtp = async () => {
+    try {
+      const response = await axios.post(
+        "http://13.126.118.3:3000/v1.0/providers/provider-auth/verify-otp",
+        { otp: Number(otpEntered) },
+      );
+      if (response.data.providerId) {
+        console.log("Provider ID:", response.data.providerId);
+        setProviderId(response.data.providerId);
+        setIsMobileVerified(true);
+        setErrors({ ...errors, otp: "" });
+      } else {
+        setErrors({ ...errors, otp: "Invalid OTP" });
+      }
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      setErrors({ ...errors, otp: "Error verifying OTP. Please try again." });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmissionError("");
-    const validationErrors = validateForm(formData);
+    const validationErrors = validateForm(formData); // Assume this is defined elsewhere
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
       try {
-        const responses = await sendFormDataToApis(formData);
+        const responses = await sendFormDataToApis(formData); // Assume this is defined elsewhere
         console.log("Form submitted successfully:", responses);
       } catch (error) {
         console.error("Error submitting form:", error);
@@ -163,17 +181,6 @@ const AddProvider = () => {
                 placeholder="Aadhar Number"
               />
               {errors.aadhar && <p className="error">{errors.aadhar}</p>}
-            </div>
-            <button
-              type="button"
-              className="generate-otp-button"
-              onClick={() => handleGenerateOtp(setAadharOtp, formData.email)}
-            >
-              Generate OTP
-            </button>
-            <div>
-              <label>OTP:</label>
-              <input type="text" value={aadharOtp} placeholder="OTP" readOnly />
             </div>
             <div>
               <label>PAN:</label>

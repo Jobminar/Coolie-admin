@@ -1,10 +1,10 @@
-// Userbanners.js
-// Similar to Providerbanners, but with the appropriate API endpoint
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useNavigate } from "react-router-dom";
+import './banners.css'
 
 const Userbanners = () => {
   const [name, setBannername] = useState("");
@@ -91,6 +91,11 @@ const Userbanners = () => {
     setShowForm((prevShowForm) => !prevShowForm);
   };
 
+  const handleButtonClick = (e) => {
+    e.preventDefault(); // Prevent default form submission
+    document.getElementById('hiddenFileInput').click();
+ };
+
   return (
     <>
       <div className="banners">
@@ -100,13 +105,19 @@ const Userbanners = () => {
       {showForm && (
         <div className="add-banner-form">
           <form onSubmit={handleSubmit}>
-            <input
-              type="file"
-              name="image"
-              className="bannerimg"
-              placeholder="Upload your banner"
-              onChange={handleFileChange}
-            />
+             <div>
+                        <input
+                        type='file'
+                        id='hiddenFileInput'
+                        className='file-input'
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                        />
+                        <button type='button' className='custom-button' onClick={handleButtonClick}>
+                        Upload Banner image
+                        </button>
+                        {image && <p>Selected file: {image.name}</p>}
+                     </div>
             <input
               type="text"
               name="name"
@@ -115,7 +126,7 @@ const Userbanners = () => {
               placeholder="Enter your Service Name"
               onChange={handleChange}
             />
-            <button type="submit">Submit</button>
+            <button type="submit" className="submit-button">Submit</button>
           </form>
         </div>
       )}
@@ -130,13 +141,13 @@ const Userbanners = () => {
               />
               <p className="title">{banner.name}</p>
               <div className="edit-button" onClick={() => handleEdit(banner)}>
-                <EditOutlinedIcon />
+                <EditOutlinedIcon style={{fontSize:'30px'}}/>
               </div>
               <div
                 className="delete-button"
                 onClick={() => handleDelete(banner._id)}
               >
-                <DeleteOutlineOutlinedIcon />
+                <DeleteOutlineOutlinedIcon style={{fontSize:'30px'}}/>
               </div>
             </div>
           ))}

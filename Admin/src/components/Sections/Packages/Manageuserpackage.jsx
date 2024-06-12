@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './providerpackage.css';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 const Manageuserpackage = () => {
     const [packages, setPackages] = useState([]);
@@ -53,18 +55,20 @@ const Manageuserpackage = () => {
 
     return (
         <>
-            <div className='add-package-con'>
+            <div className='u-manage-con'>
                 {packages.map((packageItem, index) => (
-                    <div key={index} className='package-item'>
-                        <h3>{packageItem.packageName}</h3>
+                    <div key={index} className='u-manage-sub-con'>
+                        
+                        <div className="u-manage-buttons">
+                         <h3>{packageItem.packageName}</h3>
+                         <EditOutlinedIcon style={{ fontSize: '30px' }}  onClick={() => {handleEdit(packageItem)}} />
+                         <DeleteOutlineOutlinedIcon onClick={() =>handleDelete(packageItem._id)} style={{ fontSize: '30px' }} />
+                        </div>
                         <p>Price in RS: {packageItem.priceRs}</p>
                         <p>Price in Cr: {packageItem.priceCr}</p>
                         <p>Discount in Platform commission: {packageItem.discountPlatformCom}%</p>
                         <p>Comments: {packageItem.comments}</p>
-                        <div className="buttons-container">
-                            <button onClick={() => handleEdit(packageItem)}>Edit</button>
-                            <button onClick={() => handleDelete(packageItem._id)}>Delete</button>
-                        </div>
+                        
                     </div>
                 ))}
             </div>
