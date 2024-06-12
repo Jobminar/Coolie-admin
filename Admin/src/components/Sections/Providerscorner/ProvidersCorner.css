@@ -2,7 +2,7 @@
 .providers-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 1500px;
     justify-content: flex-start;
     padding: 0;
     margin: 0;
@@ -48,12 +48,28 @@
     font-size: 14px;
     min-width: 100px;
     text-align: center;
+    position: relative;
     transition: background-color 0.3s, color 0.3s;
 }
 
 .providers-toolbar .providers-btn.active {
     background-color: #ccc;
     color: black;
+}
+
+.providers-toolbar .providers-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    height: 2px;
+    width: 0;
+
+    transition: width 0.3s ease-in-out;
+}
+
+.providers-toolbar .providers-btn.active::after {
+    width: 100%;
 }
 
 .providers-toolbar .providers-btn:hover {
@@ -86,14 +102,28 @@
     max-width: 180px;
     width: 170px;
     text-align: center;
-    transition: color 0.3s, border-bottom 0.3s;
+    transition: color 0.3s;
     margin-top: 10px;
+    position: relative;
+}
+
+.providers-category::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    height: 2px;
+    width: 0;
+    background: red;
+    transition: width 0.3s ease-in-out;
 }
 
 .providers-category.active {
     color: red;
-    border-bottom: 2px solid red;
-    border-radius: 0%;
+}
+
+.providers-category.active::after {
+    width: 100%;
 }
 
 .providers-arrow {
@@ -105,14 +135,13 @@
     font-weight: bold;
     border-radius: 50%;
     width: 30px;
-    height: 20.5px;
+    height: 26px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s, transform 0.3s;
     margin: 1px 1px;
     margin-top: 10px;
-    /* Added margin to lower the arrows */
 }
 
 .providers-arrow:hover {
@@ -125,6 +154,8 @@
     width: 100%;
     overflow-x: auto;
     margin-bottom: 20px;
+    margin-top: 20px;
+
 }
 
 .providers-table {
@@ -180,4 +211,43 @@
 .providers-container .provider-form-unique {
     align-self: flex-start;
     /* Align form to the left */
+}
+
+
+.providers-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.providers-table th,
+.providers-table td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+.providers-table th {
+    background-color: #f2f2f2;
+}
+
+.custom-show-providers-btn {
+    padding: 6px 0.5px;
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+    color: black;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
+    min-width: 100px;
+    text-align: center;
+    position: relative;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 60px;
+    margin-left: 22px
+}
+
+.custom-show-providers-btn.active {
+    background-color: #ccc;
+    color: black;
 }

@@ -7,6 +7,7 @@
     border-radius: 10px;
     margin-left: 20px;
     position: relative;
+    width: 95%
 }
 
 .sticky-header {
@@ -16,7 +17,7 @@
     top: 0;
     background-color: white;
     padding: 10px;
-    width: calc(100% - 40px);
+    width: 55rem;
     /* Adjust width to account for container padding */
     border-bottom: 1px solid #ccc;
     z-index: 10;
@@ -146,4 +147,56 @@
     text-align: right;
     width: 100%;
     padding: 5px;
+}
+
+/* ...existing styles... */
+
+/* Add this for the Back button */
+.Back-Button {
+    background-color: #f0f0f0;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.Back-Button:hover {
+    background-color: #e0e0e0;
+}
+
+/* Add this for the status bar */
+.status-Bar {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+/* ...existing styles... */
+
+.status-toggle-container {
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+    margin-top: 20px;
+}
+
+.status-toggle-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    background-color: #ccc;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.status-toggle-button.active {
+    background-color: #3B6115;
+    color: #f0f0f0
 }

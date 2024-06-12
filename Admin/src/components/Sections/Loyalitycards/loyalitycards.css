@@ -1,4 +1,4 @@
-.loyality-title{
+.loyality-title {
     font-family: Roboto;
     font-size: 32px;
     font-weight: 500;
@@ -6,16 +6,18 @@
     text-align: left;
 
 }
-.loyality{
+
+.loyality {
     /* border: 1px solid black; */
     width: 20% 78%;
 }
-button{
+
+button {
     background-color: yellow;
     width: 12rem;
     height: 3rem;
     border-radius: 10px;
-    margin:0rem 2rem;
+    margin: 0rem 2rem;
     font-family: Roboto;
     font-size: 20px;
     font-weight: 500;
@@ -25,19 +27,22 @@ button{
     border: none;
 
 }
-button:hover{
+
+button:hover {
     cursor: pointer;
 }
-.loyality-title{
+
+.loyality-title {
     font-family: Roboto;
     font-size: 32px;
     font-weight: 500;
     line-height: 37.5px;
     text-align: left;
     padding: 2rem;
-    
+
 }
-.loyality-main{
+
+.loyality-main {
     /* border: 1px solid black; */
     display: flex;
     justify-content: space-evenly;
@@ -46,7 +51,8 @@ button:hover{
     flex-wrap: wrap;
     gap: 2rem;
 }
-.loyality-sub-con{
+
+.loyality-sub-con {
     border: 1px solid black;
     border-radius: 10px;
     width: 15rem;
@@ -57,17 +63,20 @@ button:hover{
     align-items: center;
 
 }
-.button{
+
+.button {
     display: flex;
     justify-content: right;
 }
-.loyality-sub-con img{
+
+.loyality-sub-con img {
     width: 10rem;
     height: 10rem;
     padding: 1rem 0rem;
     /* border-bottom: 1px solid gray; */
 }
-.medal-brief h3{
+
+.medal-brief h3 {
     font-family: Roboto;
     font-size: 25px;
     font-weight: 500;
@@ -77,7 +86,8 @@ button:hover{
     padding: 5px;
 
 }
-.medal-brief p{
+
+.medal-brief p {
     font-family: Roboto;
     font-size: 16px;
     font-weight: 400;
@@ -85,9 +95,10 @@ button:hover{
     text-align: left;
     margin: 10px;
     padding: 5px;
-       
+
 }
-.buttons{
+
+.buttons {
     display: flex;
     gap: 2rem;
     justify-content: space-evenly;
@@ -95,18 +106,22 @@ button:hover{
     /* border: 1px solid gray; */
 
 }
-.buttons:hover{
+
+.buttons:hover {
     cursor: pointer;
 }
+
 /* loyality form */
 .loyality-form {
     /* border: 1px solid black; */
     width: 20rem;
     height: 25rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add box shadow here */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    /* Add box shadow here */
     margin: auto;
 }
-.loyality-form form{
+
+.loyality-form form {
     padding: 2rem;
     display: flex;
     flex-direction: column;
