@@ -1,12 +1,11 @@
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import '../Packages/providerpackage.css'; // Ensure you import your CSS file
 
 const EditUserPromotion = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { promotion, apiEndpoint } = location.state;
+    const { promotion } = location.state;
   
     const [editedPromotion, setEditedPromotion] = useState({
         promoName: promotion.promoName,
@@ -54,64 +53,88 @@ const EditUserPromotion = () => {
     };
   
     return (
-      <div className="edit-promotion-form">
-        <h1>Edit user Promotion</h1>
+      <div className="universal-edit-con">
+        <h1>Edit User Promotion</h1>
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="promoName"
-            value={editedPromotion.promoName}
-            placeholder="Enter Promotion Name"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="serviceType"
-            value={editedPromotion.serviceType}
-            placeholder="Enter Service Type"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="userType"
-            value={editedPromotion.userType}
-            placeholder="Enter User Type"
-            onChange={handleChange}
-          />
-          <input
-            type="number"
-            name="offerPercentage"
-            value={editedPromotion.offerPercentage}
-            placeholder="Enter Offer Percentage"
-            onChange={handleChange}
-          />
-          <input
-            type="date"
-            name="validFrom"
-            value={editedPromotion.validFrom}
-            placeholder="Valid From"
-            onChange={handleChange}
-          />
-          <input
-            type="date"
-            name="validTill"
-            value={editedPromotion.validTill}
-            placeholder="Valid Till"
-            onChange={handleChange}
-          />
-          <label>
-            Notify Users:
+          <div className="universal-edit">
+            <p>Promotion Name:</p>
+            <input
+              type="text"
+              name="promoName"
+              value={editedPromotion.promoName}
+              placeholder="Enter Promotion Name"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="universal-edit">
+            <p>Service Type:</p>
+            <input
+              type="text"
+              name="serviceType"
+              value={editedPromotion.serviceType}
+              placeholder="Enter Service Type"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="universal-edit">
+            <p>User Type:</p>
+            <input
+              type="text"
+              name="userType"
+              value={editedPromotion.userType}
+              placeholder="Enter User Type"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="universal-edit">
+            <p>Offer Percentage:</p>
+            <input
+              type="number"
+              name="offerPercentage"
+              value={editedPromotion.offerPercentage}
+              placeholder="Enter Offer Percentage"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="universal-edit">
+            <p>Valid From:</p>
+            <input
+              type="date"
+              name="validFrom"
+              value={editedPromotion.validFrom}
+              placeholder="Valid From"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="universal-edit">
+            <p>Valid Till:</p>
+            <input
+              type="date"
+              name="validTill"
+              value={editedPromotion.validTill}
+              placeholder="Valid Till"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="universal-edit">
+            <p>Notify Users:</p>
             <input
               type="checkbox"
               name="notifyUsers"
               checked={editedPromotion.notifyUsers}
               onChange={handleChange}
             />
-          </label>
-          <button type="submit">Update</button>
+          </div>
+          <button type="submit" className="submit-button">Update</button>
         </form>
       </div>
     );
-  };
-  
-  export default EditUserPromotion;
+};
+
+export default EditUserPromotion;

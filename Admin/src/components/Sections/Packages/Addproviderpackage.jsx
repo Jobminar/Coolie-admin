@@ -87,7 +87,7 @@ const Addproviderpackage = () => {
                     placeholder='Comments'
                     onChange={handleChange}
                 />
-                <button type='submit'>Submit</button>
+                <button type='submit' className='submit-button'>Submit</button>
             </form>
         </div>
     );

@@ -90,6 +90,11 @@ const Providerbanners = () => {
     setShowForm((prevShowForm) => !prevShowForm);
   };
 
+  const handleButtonClick = (e) => {
+    e.preventDefault(); // Prevent default form submission
+    document.getElementById('hiddenFileInput').click();
+ };
+
   return (
     <>
       <div className="banners">
@@ -97,26 +102,32 @@ const Providerbanners = () => {
         <button onClick={toggleFormVisibility}>Add banners</button>
       </div>
       {showForm && (
-        <div className="add-banner-form">
-          <form onSubmit={handleSubmit}>
-            <input
-              type="file"
-              name="image"
-              className="bannerimg"
-              placeholder="Upload your banner"
-              onChange={handleFileChange}
-            />
-            <input
-              type="text"
-              name="name"
-              value={name}
-              className="bannername"
-              placeholder="Enter your Service Name"
-              onChange={handleChange}
-            />
-            <button type="submit">Submit</button>
-          </form>
-        </div>
+         <div className="add-banner-form">
+         <form onSubmit={handleSubmit}>
+            <div>
+                       <input
+                       type='file'
+                       id='hiddenFileInput'
+                       className='file-input'
+                       onChange={handleFileChange}
+                       style={{ display: 'none' }}
+                       />
+                       <button type='button' className='custom-button' onClick={handleButtonClick}>
+                       Upload Loyalty card image
+                       </button>
+                       {image && <p>Selected file: {image.name}</p>}
+                    </div>
+           <input
+             type="text"
+             name="name"
+             value={name}
+             className="bannername"
+             placeholder="Enter your Service Name"
+             onChange={handleChange}
+           />
+           <button type="submit" className="submit-button">Submit</button>
+         </form>
+       </div>
       )}
 
       <div className="main-banners">
