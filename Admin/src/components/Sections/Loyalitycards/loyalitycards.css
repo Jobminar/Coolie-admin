@@ -42,27 +42,7 @@ button:hover {
     flex-wrap: wrap;
     gap: 2rem;
 }
-@keyframes borderAnimation {
-    0% {
-        border-color: transparent;
-        border-top-color: #FFC107;
-    }
-    20%{
-        border-bottom-color: #FFC107;
-    }
-    40% {
-        border-left-color: #FFC107;
-    }
-    60% {
-        border-top-color: #FFC107;
-    }
-    80% {
-        border-right-color: #FFC107;
-    }
-    100% {
-        border-color: #FFC107;
-    }
-}
+
 
 .loyality-sub-con {
     border-radius: 10px;
