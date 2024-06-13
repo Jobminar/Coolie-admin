@@ -71,7 +71,7 @@ const UserManager = () => {
 
   return (
     <div className="user-manager-container">
-      <div className="header">
+      {/* <div className="header">
         <h1>Add User</h1>
         <button>Add User</button>
         <div className="user-search-bar">
@@ -80,7 +80,7 @@ const UserManager = () => {
             <Search variant="outline-secondary" className="searching" />
           </InputGroup>
         </div>
-      </div>
+      </div> */}
       <div className="tabs-container">
         {Object.keys(data).map((tab) => (
           <button

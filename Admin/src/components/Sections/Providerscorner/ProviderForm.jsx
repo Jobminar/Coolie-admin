@@ -6,7 +6,7 @@ import {
   sendFormDataToApis,
   validateForm,
 } from "../../../utils/api";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaSearch } from "react-icons/fa"; // Add FaSearch to the imports
 
 const ProviderForm = () => {
   const [activeTab, setActiveTab] = useState("verified");
@@ -92,7 +92,6 @@ const ProviderForm = () => {
       phone: "1234567890",
       location: "Location 1",
       joinDate: "2021-01-01",
-      loyaltyPoints: 100,
       package: "Basic",
       status: "active",
     },
@@ -121,6 +120,15 @@ const ProviderForm = () => {
             Providers Under Verification
           </button>
         </div>
+        <div className="searchBar">
+          <FaSearch className="searchIcon" />
+          <input
+            type="text"
+            placeholder="Search..."
+            onChange={handleSearch}
+            value={searchTerm}
+          />
+        </div>
       </div>
       <div className="provider-form-content">
         {activeTab === "verified" && !editMode && (
@@ -134,7 +142,6 @@ const ProviderForm = () => {
                   <th>Phone</th>
                   <th>Location</th>
                   <th>Join date</th>
-                  <th>Loyalty Points</th>
                   <th>Package</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -149,7 +156,6 @@ const ProviderForm = () => {
                     <td>{provider.phone}</td>
                     <td>{provider.location}</td>
                     <td>{provider.joinDate}</td>
-                    <td>{provider.loyaltyPoints}</td>
                     <td>{provider.package}</td>
                     <td>
                       <div
@@ -158,19 +164,15 @@ const ProviderForm = () => {
                         }`}
                       ></div>
                     </td>
-                    <td>
-                      <button
-                        className="action-button edit"
+                    <td className="actions">
+                      <FaEdit
+                        className="action-icon edit"
                         onClick={() => handleEdit(provider)}
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        className="action-button delete"
+                      />
+                      <FaTrash
+                        className="action-icon delete"
                         onClick={() => handleDelete(provider.id)}
-                      >
-                        <FaTrash />
-                      </button>
+                      />
                     </td>
                   </tr>
                 ))}

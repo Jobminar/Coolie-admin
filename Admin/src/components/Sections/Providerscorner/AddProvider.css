@@ -10,7 +10,7 @@
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
-    font-family: "Roboto";
+    font-family: "Roboto", sans-serif;
 }
 
 /* Scrollbar styling */
@@ -76,6 +76,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
+    font-family: "Roboto", sans-serif;
 }
 
 .add-provider-form .generate-otp-button {
@@ -91,7 +92,8 @@
     display: inline-block;
     margin-left: 1px;
     max-width: 80px;
-    height: 30px
+    height: 30px;
+    font-family: "Roboto", sans-serif;
 }
 
 .add-provider-form .generate-otp-button:hover {
@@ -108,6 +110,7 @@
     font-size: 16px;
     margin-top: 20px;
     border-radius: 4px;
+    font-family: "Roboto", sans-serif;
 }
 
 .add-provider-form button:hover {
@@ -126,6 +129,7 @@
     border-radius: 4px;
     width: 80%;
     align-self: center;
+    font-family: "Roboto", sans-serif;
 }
 
 .add-provider-form .submit-button:hover {
@@ -135,4 +139,70 @@
 .error {
     color: red;
     font-size: 12px;
+    font-family: "Roboto", sans-serif;
+}
+
+/* Providers table styling (applies to all tables) */
+.providersTableContainer {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.providersTable {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 10px;
+    font-size: 14px;
+    border: 1px solid black;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-family: "Roboto", sans-serif;
+}
+
+.providersTable th,
+.providersTable td {
+    padding: 6px;
+    text-align: center;
+    white-space: nowrap;
+    border: 1px solid black;
+    font-family: "Roboto", sans-serif;
+}
+
+.providersTable th {
+    background-color: #f8f8f8;
+    color: black;
+    font-weight: bold;
+}
+
+.providersTable .statusToggle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.providersTable .statusToggle.active {
+    background-color: green;
+}
+
+.providersTable .statusToggle.inactive {
+    background-color: red;
+}
+
+.actionButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.actionButton.edit {
+    color: #007bff;
+}
+
+.actionButton.delete {
+    color: #dc3545;
 }

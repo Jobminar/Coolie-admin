@@ -28,17 +28,18 @@ import EditProviderPackage from "./components/Sections/Packages/Edit-provider-pa
 import Viewadmin from "./components/Sections/Subadmin/view-admin";
 import Addadmin from "./components/Sections/Subadmin/Addsubadmin";
 import PermissionsForm from "./components/Sections/Subadmin/SubAdminPermissions";
+import { FilterBarProvider } from "./FilterBarContext";
 
 const Routing = () => {
   return (
-    <>
+    <FilterBarProvider>
       <BrowserRouter>
         <Header />
         <Sidebar>
           <Routes>
             <Route path="/" element={<Jobsarea />} />
             <Route path="/addservice" element={<Servicemanager />} />
-            <Route path="/manageservice" element={<ManageService />} />{" "}
+            <Route path="/manageservice" element={<ManageService />} />
             <Route path="/usercorner" element={<UserManager />} />
             <Route path="/providersrcorner" element={<Providerscorner />} />
             <Route path="/loyalitycards" element={<Loyalitycards />} />
@@ -70,13 +71,13 @@ const Routing = () => {
             <Route path="/providerbanners" element={<Providerbanners />} />
             <Route path="/viewadmin" element={<Viewadmin />} />
             <Route path="/addsubadmin" element={<Addadmin />} />
-            <Route path="/permissionform" element={<PermissionsForm/>} />
+            <Route path="/permissionform" element={<PermissionsForm />} />
             <Route path="*" element={<Navigate to="/" />} />{" "}
             {/* Default redirect */}
           </Routes>
         </Sidebar>
       </BrowserRouter>
-    </>
+    </FilterBarProvider>
   );
 };
 

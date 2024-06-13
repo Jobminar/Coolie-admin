@@ -1,60 +1,71 @@
-import React from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 
 const ProviderList = ({ providers, handleEdit, handleDelete }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredProviders = providers.filter((provider) =>
+    provider.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   return (
-    <div className="providersTableContainer">
-      <table className="providersTable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Provider Name</th>
-            <th>Email Address</th>
-            <th>Phone</th>
-            <th>Location</th>
-            <th>Join Date</th>
-            <th>Loyalty Points</th>
-            <th>Package</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {providers.map((provider) => (
-            <tr key={provider.id}>
-              <td>{provider.id}</td>
-              <td>{provider.name}</td>
-              <td>{provider.email}</td>
-              <td>{provider.phone}</td>
-              <td>{provider.location}</td>
-              <td>{provider.joinDate}</td>
-              <td>{provider.loyaltyPoints}</td>
-              <td>{provider.package}</td>
-              <td>
-                <div
-                  className={`statusToggle ${
-                    provider.status === "active" ? "active" : "inactive"
-                  }`}
-                ></div>
-              </td>
-              <td>
-                <button
-                  className="actionButton edit"
-                  onClick={() => handleEdit(provider)}
-                >
-                  <FaEdit />
-                </button>
-                <button
-                  className="actionButton delete"
-                  onClick={() => handleDelete(provider.id)}
-                >
-                  <FaTrash />
-                </button>
-              </td>
+    <div className="uniqueProvidersTableContainer">
+      <div className="uniqueTableWrapper">
+        <div className="uniqueSearchBar">
+          <FaSearch className="uniqueSearchIcon" />
+          <input
+            type="text"
+            placeholder="Search by provider name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <table className="uniqueProvidersTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Provider Name</th>
+              <th>Email Address</th>
+              <th>Phone</th>
+              <th>Location</th>
+              <th>Join Date</th>
+              <th>Package</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredProviders.map((provider) => (
+              <tr key={provider.id}>
+                <td>{provider.id}</td>
+                <td>{provider.name}</td>
+                <td>{provider.email}</td>
+                <td>{provider.phone}</td>
+                <td>{provider.location}</td>
+                <td>{provider.joinDate}</td>
+                <td>{provider.package}</td>
+                <td>
+                  <div
+                    className={`uniqueStatusToggle ${
+                      provider.status === "active" ? "active" : "inactive"
+                    }`}
+                  ></div>
+                </td>
+                <td className="uniqueActions">
+                  <FaEdit
+                    className="uniqueActionIcon uniqueEdit"
+                    onClick={() => handleEdit(provider)}
+                  />
+                  <FaTrash
+                    className="uniqueActionIcon uniqueDelete"
+                    onClick={() => handleDelete(provider.id)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

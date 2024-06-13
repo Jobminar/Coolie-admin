@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./AuthenticateProvider.css";
-import { FaEdit, FaTrash, FaArrowLeft } from "react-icons/fa";
+import { FaEdit, FaTrash, FaArrowLeft, FaSearch } from "react-icons/fa";
 import ProviderProfile from "./ProviderProfile";
 import Document1 from "../../../assets/Documents/ProviderReport1.pdf";
 import Document2 from "../../../assets/Documents/ProviderReport2.pdf";
@@ -10,6 +10,7 @@ const AuthenticateProvider = () => {
   const [activeComponent, setActiveComponent] = useState("ProviderList");
   const [selectedProvider, setSelectedProvider] = useState(null);
   const [documentStatus, setDocumentStatus] = useState("Pending");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleVerify = (provider) => {
     setSelectedProvider(provider);
@@ -28,7 +29,6 @@ const AuthenticateProvider = () => {
       phone: "1234567890",
       location: "Location 1",
       joinDate: "2021-01-01",
-      loyaltyPoints: 100,
       package: "Basic",
       status: "active",
     },
@@ -73,64 +73,73 @@ const AuthenticateProvider = () => {
     setActiveComponent("ProviderProfile");
   };
 
+  const filteredProviders = providers.filter((provider) =>
+    provider.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   return (
     <div className="authenticate-provider">
       {activeComponent === "ProviderList" && (
-        <div className="providers-table-container">
-          <table className="providers-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Provider name</th>
-                <th>Email Address</th>
-                <th>Phone</th>
-                <th>Location</th>
-                <th>Join date</th>
-                <th>Loyalty Points</th>
-                <th>Package</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {providers.map((provider) => (
-                <tr key={provider.id}>
-                  <td>{provider.id}</td>
-                  <td>{provider.name}</td>
-                  <td>{provider.email}</td>
-                  <td>{provider.phone}</td>
-                  <td>{provider.location}</td>
-                  <td>{provider.joinDate}</td>
-                  <td>{provider.loyaltyPoints}</td>
-                  <td>{provider.package}</td>
-                  <td>
-                    <div
-                      className={`status-toggle ${
-                        provider.status === "active" ? "active" : "inactive"
-                      }`}
-                    ></div>
-                  </td>
-                  <td>
-                    <button
-                      className="action-button edit"
-                      onClick={() => handleVerify(provider)}
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      className="action-button delete"
-                      onClick={() =>
-                        console.log("Provider deleted:", provider.id)
-                      }
-                    >
-                      <FaTrash />
-                    </button>
-                  </td>
+        <>
+          <div className="searchBar">
+            <FaSearch className="searchIcon" />
+            <input
+              type="text"
+              placeholder="Search by provider name"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="providers-table-container">
+            <table className="providers-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Provider name</th>
+                  <th>Email Address</th>
+                  <th>Phone</th>
+                  <th>Location</th>
+                  <th>Join date</th>
+                  <th>Package</th>
+                  <th>Status</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {filteredProviders.map((provider) => (
+                  <tr key={provider.id}>
+                    <td>{provider.id}</td>
+                    <td>{provider.name}</td>
+                    <td>{provider.email}</td>
+                    <td>{provider.phone}</td>
+                    <td>{provider.location}</td>
+                    <td>{provider.joinDate}</td>
+                    <td>{provider.package}</td>
+                    <td>
+                      <div
+                        className={`status-toggle ${
+                          provider.status === "active" ? "active" : "inactive"
+                        }`}
+                      ></div>
+                    </td>
+                    <td className="actions">
+                      <FaEdit
+                        className="actionIcon edit"
+                        onClick={() => handleVerify(provider)}
+                      />
+                      <FaTrash
+                        className="actionIcon delete"
+                        onClick={() =>
+                          console.log("Provider deleted:", provider.id)
+                        }
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
       {activeComponent === "ProviderProfile" && (
         <ProviderProfile onDocumentsClick={handleDocumentsClick} />

@@ -6,6 +6,7 @@
     justify-content: flex-start;
     padding: 0;
     margin: 0;
+    font-family: "Roboto", sans-serif;
 }
 
 /* Main content styling */
@@ -40,7 +41,6 @@
 /* Toolbar button styling */
 .providersToolbar .providersBtn {
     padding: 14px 18px;
-    /* Increased padding */
     border: 1px solid #ccc;
     background-color: #f8f8f8;
     color: black;
@@ -48,9 +48,7 @@
     border-radius: 4px;
     font-weight: bold;
     font-size: 16px;
-    /* Increased font size */
     min-width: 140px;
-    /* Increased min-width */
     text-align: center;
     position: relative;
     transition: background-color 0.3s, color 0.3s;
@@ -59,9 +57,7 @@
 .providersToolbar .providersBtn.add,
 .providersToolbar .providersBtn.manage {
     padding: 12px 16px;
-    /* Increased padding */
     font-size: 14px;
-    /* Increased font size */
 }
 
 .providersToolbar .providersBtn.active {
@@ -73,7 +69,8 @@
     content: '';
     position: absolute;
     bottom: -2px;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     height: 2px;
     width: 0;
     transition: width 0.3s ease-in-out;
@@ -105,14 +102,12 @@
 
 .providersCategory {
     padding: 6px 10px;
-    /* Increased padding */
     border: none;
     background-color: transparent;
     color: black;
     cursor: pointer;
     font-weight: bold;
     font-size: 14px;
-    /* Increased font size */
     flex: 1;
     text-align: center;
     transition: color 0.3s;
@@ -124,7 +119,8 @@
     content: '';
     position: absolute;
     bottom: -2px;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     height: 2px;
     width: 0;
     background: red;
@@ -136,7 +132,7 @@
 }
 
 .providersCategory.active::after {
-    width: 100%;
+    width: 60%;
 }
 
 .providersArrow {
@@ -145,13 +141,10 @@
     color: white;
     cursor: pointer;
     font-size: 16px;
-    /* Increased font size */
     font-weight: bold;
     border-radius: 50%;
-    width: 32px;
-    /* Increased width */
+    width: 28px;
     height: 28px;
-    /* Increased height */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -169,11 +162,56 @@
 .providersTableContainer {
     width: 100%;
     overflow-x: auto;
-    margin-bottom: 20px;
-    margin-top: 20px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
 }
 
-.providersTable {
+/* Unique styles for ProviderList component */
+
+/* Providers table container styling */
+.uniqueProvidersTableContainer {
+    width: 99%;
+    overflow-x: auto;
+    margin-bottom: 30px;
+    margin-top: 0px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.uniqueTableWrapper {
+    width: 100%;
+}
+
+/* Search bar styling */
+.uniqueSearchBar {
+    position: relative;
+    margin-bottom: 40px;
+    width: 20%;
+}
+
+.uniqueSearchIcon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #ccc;
+    font-size: 16px;
+}
+
+.uniqueSearchBar input {
+    width: 100%;
+    padding: 10px 10px 10px 30px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Providers table styling */
+.uniqueProvidersTable {
     width: 100%;
     max-width: 100%;
     border-collapse: separate;
@@ -185,46 +223,52 @@
     overflow-x: auto;
 }
 
-.providersTable th,
-.providersTable td {
+.uniqueProvidersTable th,
+.uniqueProvidersTable td {
     padding: 6px;
     text-align: center;
     white-space: nowrap;
     border: 1px solid black;
 }
 
-.providersTable th {
+.uniqueProvidersTable th {
     background-color: #f8f8f8;
     color: black;
     font-weight: bold;
 }
 
-.providersTable .statusToggle {
+.uniqueStatusToggle {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     display: inline-block;
 }
 
-.providersTable .statusToggle.active {
+.uniqueStatusToggle.active {
     background-color: green;
 }
 
-.providersTable .statusToggle.inactive {
+.uniqueStatusToggle.inactive {
     background-color: red;
 }
 
-.actionButton {
-    background: none;
-    border: none;
-    cursor: pointer;
+/* Adjustments for table actions */
+.uniqueActions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
-.actionButton.edit {
+.uniqueActionIcon {
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.uniqueActionIcon.uniqueEdit {
     color: #007bff;
 }
 
-.actionButton.delete {
+.uniqueActionIcon.uniqueDelete {
     color: #dc3545;
 }
 
@@ -241,12 +285,10 @@
 /* Additional adjustments for ProviderForm alignment */
 .providersContainer .providerFormUnique {
     align-self: flex-start;
-    /* Align form to the left */
 }
 
 .customShowProvidersBtn {
     padding: 14px 18px;
-    /* Increased padding */
     border: 1px solid #ccc;
     background-color: #f8f8f8;
     color: black;
@@ -254,9 +296,7 @@
     border-radius: 4px;
     font-weight: bold;
     font-size: 16px;
-    /* Increased font size */
     min-width: 140px;
-    /* Increased min-width */
     text-align: center;
     position: relative;
     transition: background-color 0.3s, color 0.3s;
@@ -299,4 +339,48 @@
     .providersTableContainer {
         overflow-x: auto;
     }
+}
+
+/* Search bar styling */
+.searchBar {
+    position: relative;
+    margin-bottom: 35px;
+    width: 20%;
+}
+
+.searchIcon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #ccc;
+    font-size: 16px;
+}
+
+.searchBar input {
+    width: 100%;
+    padding: 10px 10px 10px 30px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Adjustments for table actions */
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.actionIcon {
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.actionIcon.edit {
+    color: #007bff;
+}
+
+.actionIcon.delete {
+    color: #dc3545;
 }

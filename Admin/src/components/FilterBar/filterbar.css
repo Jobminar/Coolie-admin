@@ -1,50 +1,173 @@
-body {
+.filter-bar {
+    max-width: 100vw;
+    width: 100%;
     font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    /* 20px */
+    margin-bottom: 1.25rem;
+    /* 20px */
+    margin-top: 1.25rem;
+    /* 20px */
+    padding: 0 1rem;
+    /* Add padding to ensure it doesn't touch the edges */
+    box-sizing: border-box;
+    /* Ensure padding is included in the total width */
 }
 
-.filter-bar {
+.filter-bar h2 {
+    font-size: 1.5rem;
+    /* 24px */
+    font-weight: bold;
+}
+
+.filter-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.6rem;
+    /* 10px */
+    margin-bottom: 1.25rem;
+    /* 20px */
+}
+
+.filter-btn {
+    padding: 1.1rem 2.1rem;
+    /* 15px 30px */
+    font-size: 0.9rem;
+    /* 14px */
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 0.3125rem;
+    /* 5px */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filter-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.filter-btn.active {
+    background-color: #d0d0d0;
+}
+
+.filter-items {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    margin-bottom: 20px;
-    margin-top: 20px;
+    justify-content: space-between;
+    /* Ensures items are spaced evenly */
+    align-items: center;
+    /* Ensure items are vertically aligned */
+    gap: 1.5rem;
+    /* 25px */
 }
 
 .filter-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    /* 10px */
     flex: 1;
-    min-width: 150px;
-    /* Reduce the minimum width */
 }
 
 .filter-item label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 16px;
-    /* Medium font size */
-}
-
-.filter-item select {
-    width: 75%;
-    padding: 4px;
-    /* Reduce padding for smaller dropdowns */
-    font-size: 12px;
-    /* Reduce font size for smaller dropdowns */
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    /* 14px */
     font-family: 'Roboto', sans-serif;
-    /* Apply Roboto font */
+    font-weight: bold;
 }
 
-
+.filter-item select,
 .filter-item .date-picker {
-    width: 210px;
-    padding: 4px;
-    /* Reduce padding for smaller dropdowns */
-    font-size: 12px;
-    /* Reduce font size for smaller dropdowns */
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    padding: 0.625rem;
+    /* 10px */
+    font-size: 0.8rem;
+    /* 12px */
     font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 0.3125rem;
+    /* 5px */
+    width: 100%;
+    /* Full width */
+    max-width: 180px;
+    /* Maximum width */
+}
+
+.filter-item select::placeholder,
+.filter-item .date-picker::placeholder {
+    color: grey;
+    font-size: 0.75rem;
+    /* 12px */
+}
+
+.filter-item select option {
+    font-size: 0.75rem;
+    /* 12px */
+    /* Decreased font size for dropdown items */
+}
+
+.date-picker {
+    width: 100%;
+    /* Full width */
+    max-width: 300px;
+    /* Maximum width */
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* To push the button to the right */
+}
+
+
+@media (max-width: 768px) {
+    .filter-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .filter-items {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-item {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-bar h2 {
+        font-size: 1.25rem;
+        /* 20px */
+    }
+
+    .filter-btn {
+        padding: 0.8rem 1.5rem;
+        /* 12px 24px */
+        font-size: 0.8rem;
+        /* 13px */
+    }
+
+    .filter-item label {
+        font-size: 0.9rem;
+        /* 13px */
+    }
+
+    .filter-item select,
+    .filter-item .date-picker {
+        font-size: 0.75rem;
+        /* 12px */
+    }
 }

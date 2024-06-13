@@ -47,10 +47,6 @@ const Jobsarea = () => {
 
   return (
     <div className="jobcontainer">
-      <div className="jobsheader">
-        <p className="jobsarea">Jobs Area</p>
-        <button className="add-job-button">Add Job</button>
-      </div>
       <div className="jobstabs">
         <div
           className={`tab ${activeTab === "pendingjobs" && "active"}`}

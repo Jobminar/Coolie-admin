@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaCaretDown } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./sidebar.css";
-import FilterBar from "../FilterBar/FilterBar"; // Import the FilterBar component
+import FilterBar from "../FilterBar/FilterBar";
 import PropTypes from "prop-types";
+import { FilterBarContext } from "../../FilterBarContext";
 
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { filterBarProps, setFilterBarProps } = useContext(FilterBarContext);
   const [activeItem, setActiveItem] = useState(location.pathname);
   const [serviceManagerDropdown, setServiceManagerDropdown] = useState(false);
   const [promotionsDropdown, setPromotionsDropdown] = useState(false);
   const [packagesDropdown, setPackagesDropdown] = useState(false);
   const [marketingDropdown, setMarketingDropdown] = useState(false);
   const [bannersDropdown, setBannersDropdown] = useState(false);
-  const [inductionDropdown, setInductionDropdown] = useState(false); // Add state for Induction dropdown
+  const [inductionDropdown, setInductionDropdown] = useState(false);
 
   useEffect(() => {
     setActiveItem(location.pathname);
@@ -32,7 +34,7 @@ const Sidebar = ({ children }) => {
     setPackagesDropdown(false);
     setMarketingDropdown(false);
     setBannersDropdown(false);
-    setInductionDropdown(false); // Close Induction dropdown
+    setInductionDropdown(false);
   };
 
   const toggleServiceManagerDropdown = () => {
@@ -81,22 +83,73 @@ const Sidebar = ({ children }) => {
   };
 
   const renderFilterBar = () => {
-    if (
-      activeItem === "/" ||
-      activeItem === "/providersrcorner" ||
-      activeItem === "/usercorner"
-    ) {
-      return (
-        <FilterBar
-          showServiceFilter={
-            activeItem !== "/usercorner" && activeItem !== "/providersrcorner"
-          }
-          showGenderFilter={activeItem === "/usercorner"}
-          showPackageFilter={activeItem === "/providersrcorner"}
-        />
-      );
+    let activeComponentName = "";
+
+    if (activeItem === "/") {
+      activeComponentName = "Jobs Area";
+    } else if (activeItem === "/providersrcorner") {
+      activeComponentName = "Providers Corner";
+    } else if (activeItem === "/usercorner") {
+      activeComponentName = "User Corner";
+    } else if (activeItem === "/serviceManagerDropdown") {
+      activeComponentName = "Service Manager";
+    } else if (activeItem === "/addservice") {
+      activeComponentName = "Add Service";
+    } else if (activeItem === "/manageservice") {
+      activeComponentName = "Manage Service";
+    } else if (activeItem === "/loyalitycards") {
+      activeComponentName = "Loyalty Cards";
+    } else if (activeItem === "/userbanners") {
+      activeComponentName = "User Banners";
+    } else if (activeItem === "/providerbanners") {
+      activeComponentName = "Provider Banners";
+    } else if (activeItem === "/popupbanners") {
+      activeComponentName = "Popup Banners";
+    } else if (activeItem === "/promotionsDropdown") {
+      activeComponentName = "Promotions";
+    } else if (activeItem === "/userpromotion") {
+      activeComponentName = "User Promotions";
+    } else if (activeItem === "/providerpromotions") {
+      activeComponentName = "Provider Promotions";
+    } else if (activeItem === "/packagesDropdown") {
+      activeComponentName = "Packages";
+    } else if (activeItem === "/userpackages") {
+      activeComponentName = "User Packages";
+    } else if (activeItem === "/providerpackages") {
+      activeComponentName = "Provider Packages";
+    } else if (activeItem === "/inductionDropdown") {
+      activeComponentName = "Induction & Training";
+    } else if (activeItem === "/induction") {
+      activeComponentName = "Induction";
+    } else if (activeItem === "/training") {
+      activeComponentName = "Training";
+    } else if (activeItem === "/subadmin") {
+      activeComponentName = "Sub-Admin";
+    } else if (activeItem === "/inductionmain") {
+      activeComponentName = "Induction Main";
+    } else if (activeItem === "/marketingDropdown") {
+      activeComponentName = "Marketing";
+    } else if (activeItem === "/user") {
+      activeComponentName = "User Marketing";
+    } else if (activeItem === "/provider") {
+      activeComponentName = "Provider Marketing";
+    } else if (activeItem === "/non-user") {
+      activeComponentName = "Non-User Marketing";
     }
-    return null;
+
+    return (
+      <FilterBar
+        {...filterBarProps}
+        showServiceFilter={
+          activeItem !== "/usercorner" && activeItem !== "/providersrcorner"
+        }
+        showGenderFilter={activeItem === "/usercorner"}
+        showPackageFilter={activeItem === "/providersrcorner"}
+        activeComponent={activeComponentName}
+        activeComponentState={filterBarProps.activeComponentState}
+        setActiveComponentState={filterBarProps.setActiveComponentState}
+      />
+    );
   };
 
   return (
@@ -149,7 +202,7 @@ const Sidebar = ({ children }) => {
           className={activeItem === "/loyalitycards" ? "active" : ""}
           onClick={() => handleNavigation("/loyalitycards")}
         >
-          Loyality cards
+          Loyalty Cards
         </div>
         <div
           className={`dropdown bannersDropdown ${
@@ -199,8 +252,8 @@ const Sidebar = ({ children }) => {
                 User Promotions
               </div>
               <div
-                className={activeItem === "/providerpromitions" ? "active" : ""}
-                onClick={() => handleNavigation("/providerpromitions")}
+                className={activeItem === "/providerpromotions" ? "active" : ""}
+                onClick={() => handleNavigation("/providerpromotions")}
               >
                 Provider Promotions
               </div>

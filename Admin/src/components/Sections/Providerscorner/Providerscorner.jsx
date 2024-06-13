@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import PropTypes from "prop-types";
 import "./ProvidersCorner.css";
 import ProviderForm from "./ProviderForm";
 import AddProvider from "./AddProviderForm";
@@ -6,8 +7,10 @@ import AuthenticateProvider from "./AuthenticateProvider";
 import ProviderList from "./ProviderList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FilterBarContext } from "../../../FilterBarContext";
 
 const ProvidersCorner = () => {
+  const { setFilterBarProps } = useContext(FilterBarContext);
   const [visibleCategories, setVisibleCategories] = useState([
     "Cleaning",
     "Plumbing",
@@ -16,7 +19,6 @@ const ProvidersCorner = () => {
   ]);
   const [activeCategory, setActiveCategory] = useState(0);
   const [activeComponent, setActiveComponent] = useState("view");
-  const [showProviders, setShowProviders] = useState(false);
 
   const allCategories = [
     "Cleaning",
@@ -53,9 +55,14 @@ const ProvidersCorner = () => {
     ]);
   };
 
-  const toggleProviders = () => {
-    setShowProviders(!showProviders);
-  };
+  useEffect(() => {
+    // Set filter bar props for Providers Corner
+    setFilterBarProps({
+      activeComponent: "Providers Corner",
+      activeComponentState: activeComponent,
+      setActiveComponentState: setActiveComponent,
+    });
+  }, [activeComponent, setFilterBarProps]);
 
   const providers = [
     {
@@ -69,50 +76,7 @@ const ProvidersCorner = () => {
       package: "Basic",
       status: "active",
     },
-    {
-      id: 2,
-      name: "Provider 2",
-      email: "provider2@example.com",
-      phone: "1234567891",
-      location: "Location 2",
-      joinDate: "2021-02-01",
-      loyaltyPoints: 200,
-      package: "Premium",
-      status: "inactive",
-    },
-    {
-      id: 3,
-      name: "Provider 3",
-      email: "provider3@example.com",
-      phone: "1234567892",
-      location: "Location 3",
-      joinDate: "2021-03-01",
-      loyaltyPoints: 300,
-      package: "Basic",
-      status: "active",
-    },
-    {
-      id: 4,
-      name: "Provider 4",
-      email: "provider4@example.com",
-      phone: "1234567893",
-      location: "Location 4",
-      joinDate: "2021-04-01",
-      loyaltyPoints: 400,
-      package: "Premium",
-      status: "inactive",
-    },
-    {
-      id: 5,
-      name: "Provider 5",
-      email: "provider5@example.com",
-      phone: "1234567894",
-      location: "Location 5",
-      joinDate: "2021-05-01",
-      loyaltyPoints: 500,
-      package: "Basic",
-      status: "active",
-    },
+    // ... other providers
   ];
 
   const handleEdit = (provider) => {
@@ -125,52 +89,6 @@ const ProvidersCorner = () => {
 
   return (
     <div className="providersContainer">
-      <h3>Service Providers Corner</h3>
-      <div className="providersToolbar">
-        <button
-          className={`providersBtn ${
-            activeComponent === "view" ? "active" : ""
-          }`}
-          onClick={() => setActiveComponent("view")}
-        >
-          Bird Eye View
-        </button>
-        <button
-          className={`providersBtn ${
-            activeComponent === "add" ? "active" : ""
-          }`}
-          onClick={() => setActiveComponent("add")}
-        >
-          Add a Provider
-        </button>
-        <button
-          className={`providersBtn ${
-            activeComponent === "authenticate" ? "active" : ""
-          }`}
-          onClick={() => setActiveComponent("authenticate")}
-        >
-          Authenticate
-        </button>
-        <button
-          className={`providersBtn ${
-            activeComponent === "manage" ? "active" : ""
-          }`}
-          onClick={() => setActiveComponent("manage")}
-        >
-          Manage Providers
-        </button>
-        <button
-          className={`providersBtn ${
-            activeComponent === "list" ? "active" : ""
-          }`}
-          onClick={() => setActiveComponent("list")}
-        >
-          {activeComponent === "list"
-            ? "Hide Provider List"
-            : "Show Provider List"}
-        </button>
-      </div>
-
       {activeComponent === "view" && (
         <>
           <div className="providersSidebar">
@@ -221,6 +139,10 @@ const ProvidersCorner = () => {
       {activeComponent === "authenticate" && <AuthenticateProvider />}
     </div>
   );
+};
+
+ProvidersCorner.propTypes = {
+  setFilterBarProps: PropTypes.func.isRequired,
 };
 
 export default ProvidersCorner;
