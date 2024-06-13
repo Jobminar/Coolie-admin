@@ -94,7 +94,7 @@ const Popupbanners = () => {
   return (
     <>
       <div className="banners">
-        <h1>User Banners</h1>
+        <h1>Pop-up Banners</h1>
         <button onClick={toggleFormVisibility}>Add banners</button>
       </div>
       {showForm && (

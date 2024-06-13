@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
+import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import FormGroup from '@mui/material/FormGroup';
+import '../Packages/providerpackage.css';
 
 const Addpromotions = () => {
   const [addPromo, setAddPromo] = useState({
     promoName: '',
-    serviceType:'',
+    serviceType: '',
     userType: '',
-    offerPercentage:'',
+    offerPercentage: '',
     validFrom: '',
     validTill: '',
     notifyUsers: true
   });
 
+  const { promoName, userType, offerPercentage, validFrom, validTill, serviceType } = addPromo;
 
-  const { promoName, userType, offerPercentage, validFrom, validTill,serviceType, notifyUsers } = addPromo;
   const handleChange = (e) => {
-      setAddPromo({...addPromo,[e.target.name]:e.target.value})
+    setAddPromo({ ...addPromo, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -38,62 +42,101 @@ const Addpromotions = () => {
 
   return (
     <div className='add-package-con'>
-      <form  className='form-con' onSubmit={handleSubmit}>
-        <input
-          type='text'
-          name='promoName'
-          value={promoName}
-          placeholder='Promotion Name'
-          onChange={handleChange}
-          required
-        />
-             <select 
-          type='text' 
-          name='serviceType' 
-          value={serviceType} 
-          onChange={handleChange} 
-          placeholder='select service' >
-                <option>Beautician</option>
-                <option>Professional cleaning</option>
-                <option>Bathroom cleaning</option>
-                <option>Washing</option>
-                <option>AC Repair & service</option>
-                <option>Electrician</option>
-                <option>Plumber</option>
-                <option>Laundry services</option>
-          </select>
-        <input
-          type='text'
-          name='userType'
-          value={userType}
-          placeholder='User Type'
-          onChange={handleChange}
-          required
-        />
-        <input
-          type='number'
-          name='offerPercentage'
-          value={offerPercentage}
-          placeholder='Offer Percentage'
-          onChange={handleChange}
-          required
-        />
-        <input
-          type='date'
-          name='validFrom'
-          value={validFrom}
-          placeholder='Valid From'
-          onChange={handleChange}
-          required
-        />
-        <input
-          type='date'
-          name='validTill'
-          value={validTill}
-          placeholder='Valid Till'
-          onChange={handleChange}
-          required
-        />
+      <form className='form-con' onSubmit={handleSubmit}>
+        <FormControl component='fieldset' fullWidth>
+          <FormGroup>
+            <TextField
+              type='text'
+              name='promoName'
+              value={promoName}
+              onChange={handleChange}
+              label='Promotion Name'
+              variant='outlined'
+              margin='normal'
+              fullWidth
+              className='textFieldCustom'
+              required
+            />
+            <TextField
+              select
+              name='serviceType'
+              value={serviceType}
+              onChange={handleChange}
+              // label='Service Type'
+              variant='outlined'
+              margin='normal'
+              fullWidth
+              className='textFieldCustom'
+              SelectProps={{
+                native: true,
+              }}
+              required
+            >
+              <option>Beautician</option>
+              <option>Professional cleaning</option>
+              <option>Bathroom cleaning</option>
+              <option>Washing</option>
+              <option>AC Repair & service</option>
+              <option>Electrician</option>
+              <option>Plumber</option>
+              <option>Laundry services</option>
+            </TextField>
+            <TextField
+              type='text'
+              name='userType'
+              value={userType}
+              onChange={handleChange}
+              label='User Type'
+              variant='outlined'
+              margin='normal'
+              fullWidth
+              className='textFieldCustom'
+              required
+            />
+            <TextField
+              type='number'
+              name='offerPercentage'
+              value={offerPercentage}
+              onChange={handleChange}
+              label='Offer Percentage'
+              variant='outlined'
+              margin='normal'
+              fullWidth
+              className='textFieldCustom'
+              required
+            />
+            <TextField
+              type='date'
+              name='validFrom'
+              value={validFrom}
+              onChange={handleChange}
+              label='Valid From'
+              variant='outlined'
+              margin='normal'
+              fullWidth
+              className='textFieldCustom'
+              required
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <TextField
+              type='date'
+              name='validTill'
+              value={validTill}
+              onChange={handleChange}
+              label='Valid Till'
+              variant='outlined'
+              margin='normal'
+              fullWidth
+              className='textFieldCustom' // Ensure all TextField use this class
+              required
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </FormGroup>
+        </FormControl>
         <button type='submit' className='submit-button'>Submit</button>
       </form>
     </div>

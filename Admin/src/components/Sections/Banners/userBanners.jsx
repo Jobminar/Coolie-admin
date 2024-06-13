@@ -5,6 +5,8 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useNavigate } from "react-router-dom";
 import './banners.css'
+import TextField from '@mui/material/TextField';
+
 
 const Userbanners = () => {
   const [name, setBannername] = useState("");
@@ -105,6 +107,16 @@ const Userbanners = () => {
       {showForm && (
         <div className="add-banner-form">
           <form onSubmit={handleSubmit}>
+          <TextField
+              type="text"
+              name="name"
+              value={name}
+              onChange={handleChange}
+              label="Enter your Banner Name"
+              variant="outlined"
+              fullWidth
+             
+            />
              <div>
                         <input
                         type='file'
@@ -117,16 +129,9 @@ const Userbanners = () => {
                         Upload Banner image
                         </button>
                         {image && <p>Selected file: {image.name}</p>}
-                     </div>
-            <input
-              type="text"
-              name="name"
-              value={name}
-              className="bannername"
-              placeholder="Enter your Service Name"
-              onChange={handleChange}
-            />
-            <button type="submit" className="submit-button">Submit</button>
+              </div>
+           
+            <button type="submit" className="banner-button">Submit</button>
           </form>
         </div>
       )}
