@@ -1,8 +1,9 @@
 import React from "react";
 import "./ProviderProfile.css";
+import { FaArrowLeft } from "react-icons/fa";
 import ProfileImage from "../../../assets/images/profile-image.jpeg";
 
-const ProviderProfile = ({ onDocumentsClick }) => {
+const ProviderProfile = ({ onDocumentsClick, onBackClick }) => {
   const providerData = {
     name: "John Doe",
     mobile: "123-456-7890",
@@ -20,6 +21,9 @@ const ProviderProfile = ({ onDocumentsClick }) => {
 
   return (
     <div className="provider-profile-container">
+      <button className="back-button" onClick={onBackClick}>
+        <FaArrowLeft className="back-icon" /> Back
+      </button>
       <div className="profile-section">
         <div className="profile-image-container">
           <img src={ProfileImage} alt="Profile" className="profile-image" />

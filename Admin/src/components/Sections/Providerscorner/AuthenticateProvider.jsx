@@ -44,7 +44,6 @@ const AuthenticateProvider = () => {
   };
 
   const [selectedDocument, setSelectedDocument] = useState(null);
-  const [showDocuments, setShowDocuments] = useState(false);
 
   const handleDocumentSelect = (documentId) => {
     setSelectedDocument(selectedDocument === documentId ? null : documentId);
@@ -65,12 +64,8 @@ const AuthenticateProvider = () => {
     setDocumentStatus("Declined");
   };
 
-  const toggleDocumentSection = () => {
-    setShowDocuments(!showDocuments);
-  };
-
   const handleBackClick = () => {
-    setActiveComponent("ProviderProfile");
+    setActiveComponent("ProviderList");
   };
 
   const filteredProviders = providers.filter((provider) =>
@@ -142,76 +137,70 @@ const AuthenticateProvider = () => {
         </>
       )}
       {activeComponent === "ProviderProfile" && (
-        <ProviderProfile onDocumentsClick={handleDocumentsClick} />
+        <ProviderProfile
+          onDocumentsClick={handleDocumentsClick}
+          onBackClick={handleBackClick}
+        />
       )}
       {activeComponent === "DocumentVerification" && (
         <div className="document-verification">
           <div className="sticky-header">
-            <button
-              className="document-heading-button"
-              onClick={toggleDocumentSection}
-            >
-              Documents
-            </button>
-            <span>{fakeData.providerName}</span>
-            <span className="status-Bar">Status: {documentStatus}</span>
             <button className="Back-Button" onClick={handleBackClick}>
               <FaArrowLeft /> Back
             </button>
+            <span>{fakeData.providerName}</span>
+            <span className="status-Bar">Status: {documentStatus}</span>
+            <span className="document-heading">Documents</span>
           </div>
-          {showDocuments && (
-            <div className="document-section">
-              {fakeData.documents.map((document) => (
-                <div key={document.id} className="document-item">
-                  <img
-                    src={fileImage}
-                    alt={document.name}
-                    className={`document-image ${
-                      selectedDocument === document.id ? "small" : ""
-                    }`}
-                    onClick={() => handleDocumentSelect(document.id)}
-                  />
-                  {selectedDocument === document.id && (
-                    <>
-                      <embed
-                        src={document.file}
-                        type="application/pdf"
-                        className="document-preview"
-                      />
-                      <div className="button-group">
-                        <button
-                          className="action-button-unique approve"
-                          onClick={() => handleDocumentApprove(document.id)}
-                        >
-                          Approve
-                        </button>
-                        <button
-                          className="action-button-unique reupload"
-                          onClick={() => handleDocumentReupload(document.id)}
-                        >
-                          Reupload
-                        </button>
-                        <button
-                          className="action-button-unique decline"
-                          onClick={() => handleDocumentDecline(document.id)}
-                        >
-                          Decline
-                        </button>
+          <div className="document-section">
+            {fakeData.documents.map((document) => (
+              <div key={document.id} className="document-item">
+                <img
+                  src={fileImage}
+                  alt={document.name}
+                  className={`document-image ${
+                    selectedDocument === document.id ? "small" : ""
+                  }`}
+                  onClick={() => handleDocumentSelect(document.id)}
+                />
+                {selectedDocument === document.id && (
+                  <>
+                    <embed
+                      src={document.file}
+                      type="application/pdf"
+                      className="document-preview"
+                    />
+                    <div className="button-group">
+                      <button
+                        className="action-button-unique approve"
+                        onClick={() => handleDocumentApprove(document.id)}
+                      >
+                        Approve
+                      </button>
+                      <button
+                        className="action-button-unique reupload"
+                        onClick={() => handleDocumentReupload(document.id)}
+                      >
+                        Reupload
+                      </button>
+                      <button
+                        className="action-button-unique decline"
+                        onClick={() => handleDocumentDecline(document.id)}
+                      >
+                        Decline
+                      </button>
+                    </div>
+                    <div className="comment-section">
+                      <textarea placeholder="Comment"></textarea>
+                      <div className="comment-footer">
+                        <button className="submit-button-unique">Submit</button>
                       </div>
-                      <div className="comment-section">
-                        <textarea placeholder="Comment"></textarea>
-                        <div className="comment-footer">
-                          <button className="submit-button-unique">
-                            Submit
-                          </button>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
           <div className="status-toggle-container">
             <button
               className={`status-toggle-button ${

@@ -4,11 +4,9 @@
     padding: 20px;
     background-color: #ffffff;
     border-radius: 10px;
-
     width: 90%;
     height: 100vh;
-    /* Increase the height of the whole component */
-    margin: 1 auto;
+    margin: 0 auto;
 }
 
 .profile-section {
@@ -22,12 +20,10 @@
     justify-content: center;
     align-items: center;
     width: 200px;
-    /* Increase the image width */
     height: 200px;
-    /* Increase the image height */
     border-radius: 10px;
     overflow: hidden;
-    margin-top: 30px
+    margin-top: 30px;
 }
 
 .profile-image {
@@ -40,16 +36,13 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    width: calc(100% - 170px);
+    width: calc(100% - 220px);
     height: 300px;
-    /* Increase the height to create more space between items */
 }
-
 
 .user-info {
     display: flex;
     flex-direction: column;
-    /* Display details in a single column */
     justify-content: space-between;
     width: 100%;
 }
@@ -59,16 +52,13 @@
     align-items: center;
     width: 100%;
     margin-bottom: 28px;
-    margin-left: 35px
-        /* Increase the bottom margin to create more space between items */
+    margin-left: 35px;
 }
-
 
 .info-item label {
     font-weight: bold;
     margin-right: 10px;
     width: 100px;
-    /* Set a fixed width for labels to align the details in a proper column line */
 }
 
 .services-container {
@@ -77,7 +67,7 @@
     padding: 15px;
     border-radius: 5px;
     margin-bottom: 20px;
-    margin-right: 3px
+    margin-right: 3px;
 }
 
 .services {
@@ -91,7 +81,6 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    /* Increase the services width */
     padding: 10px 0;
 }
 
@@ -100,7 +89,6 @@
     align-items: center;
     margin-right: 10px;
     width: calc(33.33% - 10px);
-    /* Set a fixed width for checkboxes to align them properly */
 }
 
 .service-checkbox input[type="checkbox"] {
@@ -122,4 +110,27 @@
 
 .documentsButton:hover {
     background-color: #9c7500;
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+}
+
+.backButton:hover {
+    background-color: #ccc;
+}
+
+.backButton .back-icon {
+    margin-right: 5px;
 }
