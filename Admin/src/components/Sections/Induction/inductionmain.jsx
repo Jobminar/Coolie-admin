@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import Induction from './induction';
 import Training from './training';
 import './induction.css'
+import Addinduction from './addinduction';
+import Manageinduction from './Manageinduction';
 
 const Inductionmain = () => {
-  const [activeTab, setActiveTab] = useState('induction');
+  const [activeTab, setActiveTab] = useState('addinduction');
 
   const renderSelectedComponent = () => {
     switch (activeTab) {
-      case 'induction':
-        return <Induction/>
-      case 'training':
-        return <Training />;
+      case 'addinduction':
+        return <Addinduction/>
+      case 'manageinduction':
+        return <Manageinduction/>;
       default:
         return null;
     }
@@ -26,18 +28,18 @@ const Inductionmain = () => {
   
       <div className="induction-con">
         <div
-          className={`tab ${activeTab === 'induction' && 'active'}`}
-          onClick={() => handleTabClick('induction')}
+          className={`tab ${activeTab === 'addinduction' && 'active'}`}
+          onClick={() => handleTabClick('addinduction')}
         >
           {/* <img src={general} alt="" width={30}/> */}
-          Induction
+         Add Induction
         </div>
         <div
           className={`tab ${activeTab === 'training' && 'active'}`}
           onClick={() => handleTabClick('training')}
         >
           {/* <img src={denting} alt="" width={30}/> */}
-          Training
+          Manage Induction
         </div>
       </div>
       {renderSelectedComponent()}

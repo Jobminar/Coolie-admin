@@ -252,8 +252,8 @@ const Sidebar = ({ children }) => {
                 User Promotions
               </div>
               <div
-                className={activeItem === "/providerpromotions" ? "active" : ""}
-                onClick={() => handleNavigation("/providerpromotions")}
+                className={activeItem === "/providerpromotion" ? "active" : ""}
+                onClick={() => handleNavigation("/providerpromition")}
               >
                 Provider Promotions
               </div>
@@ -295,9 +295,9 @@ const Sidebar = ({ children }) => {
           </div>
           {inductionDropdown && (
             <div className="dropdown-menu">
-              <div
+              {/* <div
                 className={activeItem === "/induction" ? "active" : ""}
-                onClick={() => handleNavigation("/induction")}
+                onClick={() => handleNavigation("/inductionmain")}
               >
                 Induction
               </div>
@@ -306,7 +306,7 @@ const Sidebar = ({ children }) => {
                 onClick={() => handleNavigation("/training")}
               >
                 Training
-              </div>
+              </div> */}
             </div>
           )}
         </div>
@@ -316,12 +316,12 @@ const Sidebar = ({ children }) => {
         >
           Sub-Admin
         </div>
-        <div
+        {/* <div
           className={activeItem === "/inductionmain" ? "active" : ""}
           onClick={() => handleNavigation("/inductionmain")}
         >
           Induction Main
-        </div>
+        </div> */}
         <div
           className={`dropdown marketingDropdown ${
             marketingDropdown ? "active" : ""

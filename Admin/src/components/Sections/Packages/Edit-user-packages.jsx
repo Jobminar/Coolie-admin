@@ -56,7 +56,7 @@ const EditUserPackage = () => {
             
                 <p>Package Name:</p>
                 <input type="text" name="packageName" value={packageData.packageName} onChange={handleChange} required />
-               
+
             </div>
             
             <div class="universal-edit">
@@ -75,7 +75,7 @@ const EditUserPackage = () => {
             <p>Comments:</p>
             <textarea name="comments" value={packageData.comments} onChange={handleChange} required></textarea>
         </div>
-            <button type="submit" className='submit-button'>Update Package</button>
+            <button type="submit" className='update-button'>Update Package</button>
         </form>
     );
 };

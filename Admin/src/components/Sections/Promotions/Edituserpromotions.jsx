@@ -53,9 +53,9 @@ const EditUserPromotion = () => {
     };
   
     return (
-      <div className="universal-edit-con">
+      <div className="u-main-con">
         <h1>Edit User Promotion</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="universal-edit-con">
           <div className="universal-edit">
             <p>Promotion Name:</p>
             <input
@@ -122,8 +122,8 @@ const EditUserPromotion = () => {
               required
             />
           </div>
-          <div className="universal-edit">
-            <p>Notify Users:</p>
+          <div className="universal-edit-notify">
+            <p>Notify Users</p>
             <input
               type="checkbox"
               name="notifyUsers"
@@ -131,7 +131,7 @@ const EditUserPromotion = () => {
               onChange={handleChange}
             />
           </div>
-          <button type="submit" className="submit-button">Update</button>
+          <button type="submit" className="update-button">Update Promotion</button>
         </form>
       </div>
     );

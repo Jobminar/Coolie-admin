@@ -51,34 +51,40 @@ const EditProviderPackage = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className='universal-edit-con'>
-            <h1>Edit Provider Package</h1>
-            <div className='universal-edit'>
-                <p>Package Name:</p>
-                <input type="text" name="packageName" value={packageData.packageName} onChange={handleChange} required />
-            </div>
-            <div className='universal-edit'>
-                <p>Number of Job Offers:</p>
-                <input type="number" name="noOfJobOffers" value={packageData.noOfJobOffers} onChange={handleChange} required />
-            </div>
-            <div className='universal-edit'>
-                <p>Price in RS:</p>
-                <input type="number" name="priceRs" value={packageData.priceRs} onChange={handleChange} required />
-            </div>
-            <div className='universal-edit'>
-                <p>Price in Cr:</p>
-                <input type="number" name="priceCr" value={packageData.priceCr} onChange={handleChange} required />
-            </div>
-            <div className='universal-edit'>
-                <p>Discount:</p>
-                <input type="number" name="discountPlatformCom" value={packageData.discountPlatformCom} onChange={handleChange} required />
-            </div>
-            <div className='universal-edit'>
-                <p>Comments:</p>
-                <textarea name="comments" value={packageData.comments} onChange={handleChange} required></textarea>
-            </div>
-            <button type="submit" className='submit-button'>Update Package</button>
-        </form>
+        <>
+               <div className='u-main-con'>
+               <h1>Edit Provider Package</h1>
+               <form onSubmit={handleSubmit} className='universal-edit-con'>
+           
+           <div className='universal-edit'>
+               <p>Package Name:</p>
+               <input type="text" name="packageName" value={packageData.packageName} onChange={handleChange} required />
+           </div>
+           <div className='universal-edit'>
+               <p>Number of Job Offers:</p>
+               <input type="number" name="noOfJobOffers" value={packageData.noOfJobOffers} onChange={handleChange} required />
+           </div>
+           <div className='universal-edit'>
+               <p>Price in RS:</p>
+               <input type="number" name="priceRs" value={packageData.priceRs} onChange={handleChange} required />
+           </div>
+           <div className='universal-edit'>
+               <p>Price in Cr:</p>
+               <input type="number" name="priceCr" value={packageData.priceCr} onChange={handleChange} required />
+           </div>
+           <div className='universal-edit'>
+               <p>Discount:</p>
+               <input type="number" name="discountPlatformCom" value={packageData.discountPlatformCom} onChange={handleChange} required />
+           </div>
+           <div className='universal-edit'>
+               <p>Comments:</p>
+               <textarea name="comments" value={packageData.comments} onChange={handleChange} required></textarea>
+           </div>
+           <button type="submit" className='update-button'>Update Package</button>
+       </form>
+               </div>
+        </>
+       
     );
 };
 

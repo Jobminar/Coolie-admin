@@ -51,9 +51,9 @@ const EditproviderPromotion = () => {
   };
 
   return (
-    <div className="universal-edit-con">
+    <div className="u-mian-con">
       <h1>Edit provider Promotion</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="universal-edit-con">
         <div className="universal-edit">
           <p>Promotion Name:</p>
           <input
@@ -124,16 +124,16 @@ const EditproviderPromotion = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="universal-edit">
-          <p>Notify Providers:</p>
-          <input
-            type="checkbox"
-            name="notifyProviders"
-            checked={editedPromotion.notifyProviders}
-            onChange={handleChange}
-          />
-        </div>
-        <button type="submit" className="submit-button">Update</button>
+        <div className="universal-edit-notify">
+            <p>Notify Users</p>
+            <input
+              type="checkbox"
+              name="notifyUsers"
+              checked={editedPromotion.notifyUsers}
+              onChange={handleChange}
+            />
+          </div>
+        <button type="submit" className="update-button">Update promotion</button>
       </form>
     </div>
   );
