@@ -38,7 +38,6 @@ const Induction = () => {
       alert("Error: An error occurred.");
     }
     console.log(profession , title , video)
-
   }
 
   return (
@@ -57,7 +56,7 @@ const Induction = () => {
                 <option>Washing</option>
                 <option>AC Repair & service</option>
                 <option>Electrician</option>
-                <option>Plumber</option>
+                <option>Plumber</option>/
                 <option>Laundry services</option>
           </select>
                  

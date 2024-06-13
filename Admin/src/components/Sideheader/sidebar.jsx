@@ -244,7 +244,7 @@ const Sidebar = ({ children }) => {
             <div className="dropdown-menu">
               <div
                 className={activeItem === "/induction" ? "active" : ""}
-                onClick={() => handleNavigation("/induction")}
+                onClick={() => handleNavigation("/inductionmain")}
               >
                 Induction
               </div>
@@ -263,12 +263,12 @@ const Sidebar = ({ children }) => {
         >
           Sub-Admin
         </div>
-        <div
+        {/* <div
           className={activeItem === "/inductionmain" ? "active" : ""}
           onClick={() => handleNavigation("/inductionmain")}
         >
           Induction Main
-        </div>
+        </div> */}
         <div
           className={`dropdown marketingDropdown ${
             marketingDropdown ? "active" : ""

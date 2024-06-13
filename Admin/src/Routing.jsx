@@ -28,6 +28,9 @@ import EditProviderPackage from "./components/Sections/Packages/Edit-provider-pa
 import Viewadmin from "./components/Sections/Subadmin/view-admin";
 import Addadmin from "./components/Sections/Subadmin/Addsubadmin";
 import PermissionsForm from "./components/Sections/Subadmin/SubAdminPermissions";
+import Induction from "./components/Sections/Induction/induction";
+import Training from "./components/Sections/Induction/training";
+import Popupbanners from "./components/Sections/Banners/Popupbanners";
 
 const Routing = () => {
   return (
@@ -68,9 +71,12 @@ const Routing = () => {
             <Route path="/edituserpackage" element={<EditUserPackage />} />
             <Route path="/userbanners" element={<Userbanners />} />
             <Route path="/providerbanners" element={<Providerbanners />} />
+            <Route path="/popupbanners" element={<Popupbanners />} />
             <Route path="/viewadmin" element={<Viewadmin />} />
             <Route path="/addsubadmin" element={<Addadmin />} />
             <Route path="/permissionform" element={<PermissionsForm/>} />
+            <Route path="/induction" element={<Induction/>}/>
+            <Route path="/training" element={<Training/>}/>
             <Route path="*" element={<Navigate to="/" />} />{" "}
             {/* Default redirect */}
           </Routes>
