@@ -34,6 +34,16 @@ const ProviderForm = () => {
   const [errors, setErrors] = useState({});
   const [submissionError, setSubmissionError] = useState("");
   const [editMode, setEditMode] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredProviders, setFilteredProviders] = useState([]);
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    const filtered = providers.filter((provider) =>
+      provider.name.toLowerCase().includes(e.target.value.toLowerCase()),
+    );
+    setFilteredProviders(filtered);
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -120,15 +130,15 @@ const ProviderForm = () => {
             Providers Under Verification
           </button>
         </div>
-        <div className="searchBar">
-          <FaSearch className="searchIcon" />
-          <input
-            type="text"
-            placeholder="Search..."
-            onChange={handleSearch}
-            value={searchTerm}
-          />
-        </div>
+      </div>
+      <div className="searchBars">
+        <FaSearch className="searchIcon" />
+        <input
+          type="text"
+          placeholder="Search..."
+          onChange={handleSearch}
+          value={searchTerm}
+        />
       </div>
       <div className="provider-form-content">
         {activeTab === "verified" && !editMode && (

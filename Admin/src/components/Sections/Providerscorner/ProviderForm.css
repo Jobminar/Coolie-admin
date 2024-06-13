@@ -251,9 +251,9 @@
 
 
 /* Search bar styling */
-.searchBar {
+.searchBars {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     width: 30%;
 }
 
@@ -265,7 +265,7 @@
     color: #ccc;
 }
 
-.searchBar input {
+.searchBars input {
     width: 100%;
     padding: 10px 10px 10px 30px;
     font-size: 16px;
