@@ -4,13 +4,14 @@ import { FaEdit, FaTrash, FaArrowLeft, FaSearch } from "react-icons/fa";
 import ProviderProfile from "./ProviderProfile";
 import Document1 from "../../../assets/Documents/ProviderReport1.pdf";
 import Document2 from "../../../assets/Documents/ProviderReport2.pdf";
-import fileImage from "../../../assets/images/Documents.png";
 
 const AuthenticateProvider = () => {
   const [activeComponent, setActiveComponent] = useState("ProviderList");
   const [selectedProvider, setSelectedProvider] = useState(null);
-  const [documentStatus, setDocumentStatus] = useState("Pending");
   const [searchTerm, setSearchTerm] = useState("");
+  const [documentStatuses, setDocumentStatuses] = useState({});
+  const [comments, setComments] = useState({});
+  const [overallStatus, setOverallStatus] = useState("Pending");
 
   const handleVerify = (provider) => {
     setSelectedProvider(provider);
@@ -44,29 +45,71 @@ const AuthenticateProvider = () => {
     providerName: selectedProvider?.name || "Varma",
   };
 
-  const [selectedDocument, setSelectedDocument] = useState(null);
-
-  const handleDocumentSelect = (documentId) => {
-    setSelectedDocument(selectedDocument === documentId ? null : documentId);
-  };
-
   const handleDocumentApprove = (documentId) => {
+    setDocumentStatuses((prevStatuses) => ({
+      ...prevStatuses,
+      [documentId]: "Approved",
+    }));
     console.log("Document approved:", documentId);
-    setDocumentStatus("Approved");
   };
 
   const handleDocumentReupload = (documentId) => {
+    setDocumentStatuses((prevStatuses) => ({
+      ...prevStatuses,
+      [documentId]: "Reupload",
+    }));
     console.log("Reupload requested for document:", documentId);
-    setDocumentStatus("Pending");
   };
 
   const handleDocumentDecline = (documentId) => {
+    setDocumentStatuses((prevStatuses) => ({
+      ...prevStatuses,
+      [documentId]: "Declined",
+    }));
     console.log("Document declined:", documentId);
-    setDocumentStatus("Declined");
   };
 
   const handleBackClick = () => {
     setActiveComponent("ProviderList");
+  };
+
+  const handleCommentChange = (documentId, value) => {
+    setComments((prevComments) => ({
+      ...prevComments,
+      [documentId]: value,
+    }));
+  };
+
+  const handleCommentSubmit = (documentId) => {
+    alert("Comment sent successfully");
+    console.log(
+      "Comment submitted for document",
+      documentId,
+      ":",
+      comments[documentId],
+    );
+    setComments((prevComments) => ({
+      ...prevComments,
+      [documentId]: "",
+    }));
+  };
+
+  const handleApproveAll = () => {
+    const newStatuses = {};
+    fakeData.documents.forEach((doc) => {
+      newStatuses[doc.id] = "Approved";
+    });
+    setDocumentStatuses(newStatuses);
+    setOverallStatus("Approved");
+  };
+
+  const handlePendingAll = () => {
+    const newStatuses = {};
+    fakeData.documents.forEach((doc) => {
+      newStatuses[doc.id] = "Pending";
+    });
+    setDocumentStatuses(newStatuses);
+    setOverallStatus("Pending");
   };
 
   const filteredProviders = providers.filter((provider) =>
@@ -151,8 +194,8 @@ const AuthenticateProvider = () => {
             <button className="Back-Button" onClick={handleBackClick}>
               <FaArrowLeft /> Back
             </button>
-            <span>{fakeData.providerName}</span>
-            <span className="status-Bar">Status: {documentStatus}</span>
+            <span>Provider Name: {fakeData.providerName}</span>
+            <span className="status-Bar">Status: {overallStatus}</span>
             <span className="document-heading">Documents</span>
           </div>
           <div className="document-section">
@@ -163,53 +206,59 @@ const AuthenticateProvider = () => {
                   type="application/pdf"
                   className="document-preview"
                 />
-                {selectedDocument === document.id && (
-                  <>
-                    <div className="button-group">
-                      <button
-                        className="action-button-unique approve"
-                        onClick={() => handleDocumentApprove(document.id)}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        className="action-button-unique reupload"
-                        onClick={() => handleDocumentReupload(document.id)}
-                      >
-                        Reupload
-                      </button>
-                      <button
-                        className="action-button-unique decline"
-                        onClick={() => handleDocumentDecline(document.id)}
-                      >
-                        Decline
-                      </button>
-                    </div>
-                    <div className="comment-section">
-                      <textarea placeholder="Comment"></textarea>
-                      <div className="comment-footer">
-                        <button className="submit-button-unique">Submit</button>
-                      </div>
-                    </div>
-                  </>
-                )}
+                <label>
+                  Status: {documentStatuses[document.id] || "Pending"}
+                </label>
+                <div className="button-group">
+                  <button
+                    className="action-button-unique approve"
+                    onClick={() => handleDocumentApprove(document.id)}
+                  >
+                    Approve Doc
+                  </button>
+                  <button
+                    className="action-button-unique reupload"
+                    onClick={() => handleDocumentReupload(document.id)}
+                  >
+                    Reupload Doc
+                  </button>
+                  <button
+                    className="action-button-unique decline"
+                    onClick={() => handleDocumentDecline(document.id)}
+                  >
+                    Decline Doc
+                  </button>
+                </div>
+                <div className="comment-section">
+                  <textarea
+                    placeholder="Comment"
+                    value={comments[document.id] || ""}
+                    onChange={(e) =>
+                      handleCommentChange(document.id, e.target.value)
+                    }
+                  ></textarea>
+                  <div className="comment-footer">
+                    <button
+                      className="submit-button-unique"
+                      onClick={() => handleCommentSubmit(document.id)}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
           <div className="status-toggle-container">
             <button
-              className={`status-toggle-button ${
-                documentStatus === "Approved" ? "active" : ""
-              }`}
-              onClick={() => setDocumentStatus("Approved")}
+              className="status-toggle-button approve-all"
+              onClick={handleApproveAll}
             >
-              Approve
+              Approve All Docs
             </button>
             <button
-              className={`status-toggle-button ${
-                documentStatus === "Pending" ? "active" : ""
-              }`}
-              onClick={() => setDocumentStatus("Pending")}
+              className="status-toggle-button pending-all"
+              onClick={handlePendingAll}
             >
               Pending
             </button>
