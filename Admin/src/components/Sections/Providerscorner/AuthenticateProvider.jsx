@@ -158,21 +158,13 @@ const AuthenticateProvider = () => {
           <div className="document-section">
             {fakeData.documents.map((document) => (
               <div key={document.id} className="document-item">
-                <img
-                  src={fileImage}
-                  alt={document.name}
-                  className={`document-image ${
-                    selectedDocument === document.id ? "small" : ""
-                  }`}
-                  onClick={() => handleDocumentSelect(document.id)}
+                <embed
+                  src={document.file}
+                  type="application/pdf"
+                  className="document-preview"
                 />
                 {selectedDocument === document.id && (
                   <>
-                    <embed
-                      src={document.file}
-                      type="application/pdf"
-                      className="document-preview"
-                    />
                     <div className="button-group">
                       <button
                         className="action-button-unique approve"

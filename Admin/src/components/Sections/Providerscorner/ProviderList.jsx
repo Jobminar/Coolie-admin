@@ -9,18 +9,18 @@ const ProviderList = ({ providers, handleEdit, handleDelete }) => {
   );
 
   return (
-    <div className="uniqueProvidersTableContainer">
-      <div className="uniqueSearchBar">
-        <FaSearch className="uniqueSearchIcon" />
+    <div className="birdviewProvidersTableContainer">
+      <div className="birdviewSearchBar">
+        <FaSearch className="birdviewSearchIcon" />
         <input
           type="text"
-          placeholder="Search by provider name"
+          placeholder="Search by provider phone number"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      <div className="uniqueTableWrapper">
-        <table className="uniqueProvidersTable">
+      <div className="birdviewTableWrapper">
+        <table className="birdviewProvidersTable">
           <thead>
             <tr>
               <th>ID</th>
@@ -48,18 +48,18 @@ const ProviderList = ({ providers, handleEdit, handleDelete }) => {
                 <td>{provider.category}</td>
                 <td>
                   <div
-                    className={`uniqueStatusToggle ${
+                    className={`birdviewStatusToggle ${
                       provider.status === "active" ? "active" : "inactive"
                     }`}
                   ></div>
                 </td>
-                <td className="uniqueActions">
+                <td className="birdviewActions">
                   <FaEdit
-                    className="uniqueActionIcon uniqueEdit"
+                    className="birdviewActionIcon birdviewEdit"
                     onClick={() => handleEdit(provider)}
                   />
                   <FaTrash
-                    className="uniqueActionIcon uniqueDelete"
+                    className="birdviewActionIcon birdviewDelete"
                     onClick={() => handleDelete(provider.id)}
                   />
                 </td>

@@ -11,12 +11,6 @@ import { FilterBarContext } from "../../../FilterBarContext";
 
 const ProvidersCorner = () => {
   const { setFilterBarProps } = useContext(FilterBarContext);
-  const [visibleCategories, setVisibleCategories] = useState([
-    "Cleaning",
-    "Plumbing",
-    "Electrical",
-    "Carpentry",
-  ]);
   const [activeCategory, setActiveCategory] = useState(0);
   const [activeComponent, setActiveComponent] = useState("view");
 
@@ -35,24 +29,29 @@ const ProvidersCorner = () => {
     "General Maintenance",
   ];
 
+  const getVisibleCategories = () => {
+    const startIndex = activeCategory;
+    const endIndex = (startIndex + 6) % allCategories.length;
+    if (endIndex > startIndex) {
+      return allCategories.slice(startIndex, endIndex);
+    } else {
+      return [
+        ...allCategories.slice(startIndex),
+        ...allCategories.slice(0, endIndex),
+      ];
+    }
+  };
+
+  const visibleCategories = getVisibleCategories();
+
   const handlePrev = () => {
-    setActiveCategory((prev) =>
-      prev > 0 ? prev - 1 : allCategories.length - 1,
+    setActiveCategory(
+      (prev) => (prev - 1 + allCategories.length) % allCategories.length,
     );
-    setVisibleCategories((prev) => [
-      ...prev.slice(1),
-      allCategories[
-        (activeCategory + allCategories.length - 1) % allCategories.length
-      ],
-    ]);
   };
 
   const handleNext = () => {
     setActiveCategory((prev) => (prev + 1) % allCategories.length);
-    setVisibleCategories((prev) => [
-      allCategories[(activeCategory + 1) % allCategories.length],
-      ...prev.slice(0, -1),
-    ]);
   };
 
   useEffect(() => {
@@ -88,36 +87,41 @@ const ProvidersCorner = () => {
   };
 
   return (
-    <div className="providersContainer">
+    <div className="birdviewProvidersContainer">
       {activeComponent === "view" && (
         <>
-          <div className="providersSidebar">
-            <button className="providersArrow" onClick={handlePrev}>
+          <div className="birdviewProvidersSidebar">
+            <button className="birdviewProvidersArrow" onClick={handlePrev}>
               <FontAwesomeIcon icon={faArrowLeft} />
             </button>
-            <div className="providersCategories">
+            <div className="birdviewProvidersCategories">
               {visibleCategories.map((category, index) => (
                 <button
                   key={index}
-                  className={`providersCategory ${
-                    index === activeCategory ? "active" : ""
+                  className={`birdviewProvidersCategory ${
+                    category === allCategories[activeCategory]
+                      ? "birdviewActive"
+                      : ""
                   }`}
-                  onClick={() => setActiveCategory(index)}
+                  onClick={() =>
+                    setActiveCategory(allCategories.indexOf(category))
+                  }
                 >
                   {category}
                 </button>
               ))}
             </div>
-            <button className="providersArrow" onClick={handleNext}>
+            <button className="birdviewProvidersArrow" onClick={handleNext}>
               <FontAwesomeIcon icon={faArrowRight} />
             </button>
           </div>
-          <div className="providersMainContent">
+
+          <div className="providersMainContent" style={{ width: "100%" }}>
             <iframe
-              title="Google Maps"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7613426.778745689!2d75.27071929097744!3d17.469591203347576!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93b7ab12627d%3A0xbc6f7e1d7d72e727!2sHyderabad%2C%20Telangana%2C%20India!5e0!3m2!1sen!2sus!4v1625244827741!5m2!1sen!2sus"
+              title="Map of India"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31151829.295752527!2d69.65351685000001!3d22.3511148!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38e3738d7d283579%3A0x7b847d6e0c7aaf28!2sIndia!5e0!3m2!1sen!2sus!4v1687062079313!5m2!1sen!2sus"
               width="100%"
-              height="450"
+              height="600"
               style={{ border: 0 }}
               allowFullScreen=""
               loading="lazy"

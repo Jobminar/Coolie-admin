@@ -136,7 +136,7 @@ const ProviderForm = () => {
         <FaSearch className="searchIcon-unique" />
         <input
           type="text"
-          placeholder="Search..."
+          placeholder="Search with phone no"
           onChange={handleSearch}
           value={searchTerm}
         />

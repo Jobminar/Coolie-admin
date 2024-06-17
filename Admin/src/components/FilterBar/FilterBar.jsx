@@ -21,6 +21,7 @@ const FilterBar = ({
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedPackage, setSelectedPackage] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [showCategoryFilter, setShowCategoryFilter] = useState(false);
 
   useEffect(() => {
     console.log("Filters:", {
@@ -42,6 +43,12 @@ const FilterBar = ({
 
   const shouldShowFilters =
     activeComponent === "Providers Corner" && activeComponentState === "list";
+
+  useEffect(() => {
+    setShowCategoryFilter(
+      activeComponent === "Providers Corner" && activeComponentState === "list",
+    );
+  }, [activeComponent, activeComponentState]);
 
   return (
     <div className="filter-bar">
@@ -176,16 +183,20 @@ const FilterBar = ({
               </select>
             </div>
           )}
-          {showDateFilter && (
+          {showCategoryFilter && (
             <div className="filter-item">
-              <label htmlFor="date">Date:</label>
-              <DatePicker
-                selected={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
-                className="date-picker"
-                placeholderText="Select Date"
-                dateFormat="dd/MM/yyyy"
-              />
+              <label htmlFor="category">Category:</label>
+              <select
+                id="category"
+                name="category"
+                value={selectedPackage}
+                onChange={(e) => setSelectedPackage(e.target.value)}
+              >
+                <option value="">Select Category</option>
+                <option value="category1">Category 1</option>
+                <option value="category2">Category 2</option>
+                <option value="category3">Category 3</option>
+              </select>
             </div>
           )}
           {showStatusFilter && (

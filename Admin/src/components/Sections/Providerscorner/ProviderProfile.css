@@ -112,10 +112,11 @@
     background-color: #9c7500;
 }
 
-.backButton {
+.back-button {
     display: flex;
     align-items: center;
     padding: 5px 10px;
+    /* Adjusted padding for a smaller button */
     background-color: #e0e0e0;
     color: #333;
     border: none;
@@ -125,12 +126,14 @@
     cursor: pointer;
     transition: background-color 0.3s;
     margin-bottom: 20px;
+    margin-right: auto;
+    /* Pushes the button to the left */
 }
 
-.backButton:hover {
+.back-button:hover {
     background-color: #ccc;
 }
 
-.backButton .back-icon {
+.back-button .back-icon {
     margin-right: 5px;
 }
