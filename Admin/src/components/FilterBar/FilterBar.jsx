@@ -11,12 +11,16 @@ const FilterBar = ({
   showGenderFilter,
   showPackageFilter,
   showServiceFilter,
+  showLocationFilter = true,
+  showDateFilter = true,
+  showStatusFilter = false,
 }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedService, setSelectedService] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedPackage, setSelectedPackage] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   useEffect(() => {
     console.log("Filters:", {
@@ -25,6 +29,7 @@ const FilterBar = ({
       gender: selectedGender,
       package: selectedPackage,
       date: selectedDate,
+      status: selectedStatus,
     });
   }, [
     selectedLocation,
@@ -32,7 +37,11 @@ const FilterBar = ({
     selectedGender,
     selectedPackage,
     selectedDate,
+    selectedStatus,
   ]);
+
+  const shouldShowFilters =
+    activeComponent === "Providers Corner" && activeComponentState === "list";
 
   return (
     <div className="filter-bar">
@@ -94,87 +103,108 @@ const FilterBar = ({
         </div>
       )}
 
-      <div className="filter-items">
-        <div className="filter-item">
-          <label htmlFor="location">Location:</label>
-          <select
-            id="location"
-            name="location"
-            value={selectedLocation}
-            onChange={(e) => setSelectedLocation(e.target.value)}
-          >
-            <option value="">Select Location</option>
-            <option value="mumbai">Mumbai</option>
-            <option value="delhi">Delhi</option>
-            <option value="bangalore">Bangalore</option>
-            <option value="hyderabad">Hyderabad</option>
-            <option value="ahmedabad">Ahmedabad</option>
-            <option value="chennai">Chennai</option>
-            <option value="kolkata">Kolkata</option>
-            <option value="pune">Pune</option>
-            <option value="jaipur">Jaipur</option>
-            <option value="surat">Surat</option>
-          </select>
+      {shouldShowFilters && (
+        <div className="filter-items">
+          {showLocationFilter && (
+            <div className="filter-item">
+              <label htmlFor="location">Location:</label>
+              <select
+                id="location"
+                name="location"
+                value={selectedLocation}
+                onChange={(e) => setSelectedLocation(e.target.value)}
+              >
+                <option value="">Select Location</option>
+                <option value="mumbai">Mumbai</option>
+                <option value="delhi">Delhi</option>
+                <option value="bangalore">Bangalore</option>
+                <option value="hyderabad">Hyderabad</option>
+                <option value="ahmedabad">Ahmedabad</option>
+                <option value="chennai">Chennai</option>
+                <option value="kolkata">Kolkata</option>
+                <option value="pune">Pune</option>
+                <option value="jaipur">Jaipur</option>
+                <option value="surat">Surat</option>
+              </select>
+            </div>
+          )}
+          {showServiceFilter && (
+            <div className="filter-item">
+              <label htmlFor="service">Service:</label>
+              <select
+                id="service"
+                name="service"
+                value={selectedService}
+                onChange={(e) => setSelectedService(e.target.value)}
+              >
+                <option value="">Select Service</option>
+                <option value="plumbing">Plumbing</option>
+                <option value="electrical">Electrical</option>
+                <option value="cleaning">Cleaning</option>
+                <option value="gardening">Gardening</option>
+              </select>
+            </div>
+          )}
+          {showGenderFilter && (
+            <div className="filter-item">
+              <label htmlFor="gender">Gender:</label>
+              <select
+                id="gender"
+                name="gender"
+                value={selectedGender}
+                onChange={(e) => setSelectedGender(e.target.value)}
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+          )}
+          {showPackageFilter && (
+            <div className="filter-item">
+              <label htmlFor="package">Package:</label>
+              <select
+                id="package"
+                name="package"
+                value={selectedPackage}
+                onChange={(e) => setSelectedPackage(e.target.value)}
+              >
+                <option value="">Select Package</option>
+                <option value="basic">Basic</option>
+                <option value="premium">Premium</option>
+                <option value="vip">VIP</option>
+              </select>
+            </div>
+          )}
+          {showDateFilter && (
+            <div className="filter-item">
+              <label htmlFor="date">Date:</label>
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                className="date-picker"
+                placeholderText="Select Date"
+                dateFormat="dd/MM/yyyy"
+              />
+            </div>
+          )}
+          {showStatusFilter && (
+            <div className="filter-item">
+              <label htmlFor="status">Status:</label>
+              <select
+                id="status"
+                name="status"
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+              >
+                <option value="">Select Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          )}
         </div>
-        {showServiceFilter && (
-          <div className="filter-item">
-            <label htmlFor="service">Service:</label>
-            <select
-              id="service"
-              name="service"
-              value={selectedService}
-              onChange={(e) => setSelectedService(e.target.value)}
-            >
-              <option value="">Select Service</option>
-              <option value="plumbing">Plumbing</option>
-              <option value="electrical">Electrical</option>
-              <option value="cleaning">Cleaning</option>
-              <option value="gardening">Gardening</option>
-            </select>
-          </div>
-        )}
-        {showGenderFilter && (
-          <div className="filter-item">
-            <label htmlFor="gender">Gender:</label>
-            <select
-              id="gender"
-              name="gender"
-              value={selectedGender}
-              onChange={(e) => setSelectedGender(e.target.value)}
-            >
-              <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          </div>
-        )}
-        {showPackageFilter && (
-          <div className="filter-item">
-            <label htmlFor="package">Package:</label>
-            <select
-              id="package"
-              name="package"
-              value={selectedPackage}
-              onChange={(e) => setSelectedPackage(e.target.value)}
-            >
-              <option value="">Select Package</option>
-              <option value="basic">Basic</option>
-              <option value="premium">Premium</option>
-              <option value="vip">VIP</option>
-            </select>
-          </div>
-        )}
-        <div className="filter-item">
-          <label htmlFor="date">Date:</label>
-          <DatePicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-            className="date-picker"
-            placeholderText="Select Date"
-            dateFormat="dd/MM/yyyy"
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 };
@@ -186,6 +216,9 @@ FilterBar.propTypes = {
   showGenderFilter: PropTypes.bool,
   showPackageFilter: PropTypes.bool,
   showServiceFilter: PropTypes.bool,
+  showLocationFilter: PropTypes.bool,
+  showDateFilter: PropTypes.bool,
+  showStatusFilter: PropTypes.bool,
 };
 
 export default FilterBar;

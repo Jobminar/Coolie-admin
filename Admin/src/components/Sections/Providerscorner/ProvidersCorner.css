@@ -1,185 +1,16 @@
-/* Container styling */
-.providersContainer {
-    display: flex;
-    flex-direction: column;
-    height: 1500px;
-    justify-content: flex-start;
-    padding: 0;
-    margin: 0;
-    font-family: "Roboto", sans-serif;
-}
-
-/* Main content styling */
-.providersMainContent {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px;
-    width: 100%;
-    margin-bottom: 20px;
-    margin-top: 50px;
-}
-
-/* Content padding */
-.providersContent {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-/* Toolbar button styling */
-.providersToolbar {
-    display: flex;
-    gap: 40px;
-    margin-bottom: 20px;
-    margin-top: 10px;
-    flex-wrap: nowrap;
-    max-width: 100%;
-    align-items: center;
-}
-
-/* Toolbar button styling */
-.providersToolbar .providersBtn {
-    padding: 14px 18px;
-    border: 1px solid #ccc;
-    background-color: #f8f8f8;
-    color: black;
-    cursor: pointer;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: 16px;
-    min-width: 140px;
-    text-align: center;
-    position: relative;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.providersToolbar .providersBtn.add,
-.providersToolbar .providersBtn.manage {
-    padding: 12px 16px;
-    font-size: 14px;
-}
-
-.providersToolbar .providersBtn.active {
-    background-color: #ccc;
-    color: black;
-}
-
-.providersToolbar .providersBtn::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 2px;
-    width: 0;
-    transition: width 0.3s ease-in-out;
-}
-
-.providersToolbar .providersBtn.active::after {
-    width: 100%;
-}
-
-.providersToolbar .providersBtn:hover {
-    background-color: #ddd;
-}
-
-/* Category button styling */
-.providersCategoriesContainer {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    justify-content: flex-start;
-    padding-left: 5px;
-    width: 100%;
-}
-
-.providersCategories {
-    display: flex;
-    gap: 1px;
-    width: 90%;
-}
-
-.providersCategory {
-    padding: 6px 10px;
-    border: none;
-    background-color: transparent;
-    color: black;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 14px;
-    flex: 1;
-    text-align: center;
-    transition: color 0.3s;
-    margin-top: 10px;
-    position: relative;
-}
-
-.providersCategory::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 2px;
-    width: 0;
-    background: red;
-    transition: width 0.3s ease-in-out;
-}
-
-.providersCategory.active {
-    color: red;
-}
-
-.providersCategory.active::after {
-    width: 60%;
-}
-
-.providersArrow {
-    border: none;
-    background: black;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 50%;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s, transform 0.3s;
-    margin: 1px 1px;
-    margin-top: 10px;
-}
-
-.providersArrow:hover {
-    background-color: red;
-    transform: scale(1.1);
-}
-
-/* Providers table styling */
-.providersTableContainer {
-    width: 100%;
-    overflow-x: auto;
-    margin-bottom: 30px;
-    margin-top: 30px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-}
-
-/* Unique styles for ProviderList component */
-
 /* Providers table container styling */
 .uniqueProvidersTableContainer {
     width: 99%;
     overflow-x: auto;
     margin-bottom: 30px;
-    margin-top: 0px;
+    margin-top: 15px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* Added for positioning search bar */
 }
 
 .uniqueTableWrapper {
@@ -188,9 +19,13 @@
 
 /* Search bar styling */
 .uniqueSearchBar {
-    position: relative;
-    margin-bottom: 40px;
-    width: 20%;
+    position: absolute;
+    top: 10px;
+    /* Adjust as needed */
+    right: 20px;
+    /* Adjust as needed */
+    display: flex;
+    align-items: center;
 }
 
 .uniqueSearchIcon {
@@ -198,13 +33,16 @@
     top: 50%;
     left: 10px;
     transform: translateY(-50%);
-    color: #ccc;
-    font-size: 16px;
+    color: #888;
+    font-size: 18px;
+    pointer-events: none;
 }
 
 .uniqueSearchBar input {
-    width: 100%;
-    padding: 10px 10px 10px 30px;
+    width: 200px;
+    /* Adjust as needed */
+    padding: 10px 10px 10px 35px;
+    /* Increased left padding to accommodate icon */
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -214,12 +52,13 @@
 .uniqueProvidersTable {
     width: 100%;
     max-width: 100%;
-    border-collapse: separate;
+    border-collapse: collapse;
     border-spacing: 0;
-    margin-top: 10px;
+    margin-top: 65px;
+    /* Added margin to avoid overlap with search bar */
     font-size: 14px;
-    border: 1px solid black;
-    border-radius: 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
     overflow-x: auto;
 }
 
@@ -228,13 +67,46 @@
     padding: 6px;
     text-align: center;
     white-space: nowrap;
-    border: 1px solid black;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
 }
 
 .uniqueProvidersTable th {
     background-color: #f8f8f8;
     color: black;
     font-weight: bold;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.uniqueProvidersTable td {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Remove borders for unique actions */
+.uniqueProvidersTable td.uniqueActions {
+    border: none;
+}
+
+.uniqueProvidersTable tr:first-child th:first-child,
+.uniqueProvidersTable tr:first-child td:first-child {
+    border-top-left-radius: 10px;
+}
+
+.uniqueProvidersTable tr:first-child th:last-child,
+.uniqueProvidersTable tr:first-child td:last-child {
+    border-top-right-radius: 10px;
+}
+
+.uniqueProvidersTable tr:last-child th:first-child,
+.uniqueProvidersTable tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+.uniqueProvidersTable tr:last-child th:last-child,
+.uniqueProvidersTable tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
 }
 
 .uniqueStatusToggle {
@@ -257,6 +129,7 @@
     display: flex;
     justify-content: center;
     gap: 10px;
+    border: none;
 }
 
 .uniqueActionIcon {
@@ -265,122 +138,81 @@
 }
 
 .uniqueActionIcon.uniqueEdit {
-    color: #007bff;
+    color: black;
 }
 
 .uniqueActionIcon.uniqueDelete {
-    color: #dc3545;
+    color: black;
 }
 
-/* Adjustments for the sidebar component */
-.providersSidebar {
+/* Category tabs styling */
+.uniqueCategoryTabs {
+    display: flex;
+    margin: 0;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.uniqueCategoryTab {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+}
+
+.uniqueCategoryTab.active {
+    background-color: white;
+    color: red;
+}
+
+.uniqueCategoryTab:hover {
+    background-color: #ddd;
+}
+
+/* Arrow buttons styling */
+.uniqueArrowButton {
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: black;
+    background: none;
+    border: none;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    gap: 1px;
-    width: 100%;
-    margin-top: 40px;
+    justify-content: center;
 }
 
-/* Additional adjustments for ProviderForm alignment */
-.providersContainer .providerFormUnique {
-    align-self: flex-start;
-}
-
-.customShowProvidersBtn {
-    padding: 14px 18px;
-    border: 1px solid #ccc;
-    background-color: #f8f8f8;
-    color: black;
-    cursor: pointer;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: 16px;
-    min-width: 140px;
-    text-align: center;
-    position: relative;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.customShowProvidersBtn.active {
-    background-color: #ccc;
-    color: black;
-}
-
-/* Map container styling */
-.mapContainer {
-    width: 100%;
-    height: 450px;
-    border: 0;
+.uniqueArrowButton:hover {
+    color: red;
 }
 
 /* Responsive styling */
 @media screen and (max-width: 768px) {
-    .providersToolbar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
+    .uniqueProvidersTableContainer {
+        padding: 10px;
+        margin: 10px 0;
     }
 
-    .providersToolbar .providersBtn {
-        min-width: auto;
+    .uniqueSearchBar input {
         width: 100%;
     }
 
-    .providersCategoriesContainer {
+    .uniqueProvidersTable th,
+    .uniqueProvidersTable td {
+        padding: 4px;
+        font-size: 12px;
+    }
+
+    .uniqueCategoryTabs {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
     }
 
-    .providersCategories {
-        width: 100%;
+    .uniqueCategoryTab {
+        margin-bottom: 5px;
     }
-
-    .providersTableContainer {
-        overflow-x: auto;
-    }
-}
-
-/* Search bar styling */
-.searchBar {
-    position: relative;
-    margin-bottom: 35px;
-    width: 20%;
-}
-
-.searchIcon {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-    color: #ccc;
-    font-size: 16px;
-}
-
-.searchBar input {
-    width: 100%;
-    padding: 10px 10px 10px 30px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-/* Adjustments for table actions */
-.actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.actionIcon {
-    cursor: pointer;
-    margin: 0 5px;
-}
-
-.actionIcon.edit {
-    color: #007bff;
-}
-
-.actionIcon.delete {
-    color: #dc3545;
 }

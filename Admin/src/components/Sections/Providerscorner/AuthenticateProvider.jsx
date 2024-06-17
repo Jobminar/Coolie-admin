@@ -30,7 +30,8 @@ const AuthenticateProvider = () => {
       location: "Location 1",
       joinDate: "2021-01-01",
       package: "Basic",
-      status: "active",
+      status: "online",
+      category: "Plumbing",
     },
     // Add more sample providers as needed
   ];
@@ -76,16 +77,16 @@ const AuthenticateProvider = () => {
     <div className="authenticate-provider">
       {activeComponent === "ProviderList" && (
         <>
-          <div className="searchBar">
-            <FaSearch className="searchIcon" />
-            <input
-              type="text"
-              placeholder="Search by provider name"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
           <div className="providers-table-container">
+            <div className="authSearchBar">
+              <FaSearch className="authSearchIcon" />
+              <input
+                type="text"
+                placeholder="Search by provider phone number"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
             <table className="providers-table">
               <thead>
                 <tr>
@@ -97,7 +98,8 @@ const AuthenticateProvider = () => {
                   <th>Join date</th>
                   <th>Package</th>
                   <th>Status</th>
-                  <th>Actions</th>
+                  <th>Category</th>
+                  <th className="actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -112,11 +114,12 @@ const AuthenticateProvider = () => {
                     <td>{provider.package}</td>
                     <td>
                       <div
-                        className={`status-toggle ${
-                          provider.status === "active" ? "active" : "inactive"
+                        className={`status-indicator ${
+                          provider.status === "online" ? "online" : "offline"
                         }`}
                       ></div>
                     </td>
+                    <td>{provider.category}</td>
                     <td className="actions">
                       <FaEdit
                         className="actionIcon edit"

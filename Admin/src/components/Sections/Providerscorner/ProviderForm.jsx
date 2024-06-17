@@ -6,7 +6,7 @@ import {
   sendFormDataToApis,
   validateForm,
 } from "../../../utils/api";
-import { FaEdit, FaTrash, FaSearch } from "react-icons/fa"; // Add FaSearch to the imports
+import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 
 const ProviderForm = () => {
   const [activeTab, setActiveTab] = useState("verified");
@@ -103,6 +103,7 @@ const ProviderForm = () => {
       location: "Location 1",
       joinDate: "2021-01-01",
       package: "Basic",
+      category: "Category 1",
       status: "active",
     },
     // Add more sample providers as needed
@@ -131,8 +132,8 @@ const ProviderForm = () => {
           </button>
         </div>
       </div>
-      <div className="searchBars">
-        <FaSearch className="searchIcon" />
+      <div className="searchBar-unique">
+        <FaSearch className="searchIcon-unique" />
         <input
           type="text"
           placeholder="Search..."
@@ -142,8 +143,8 @@ const ProviderForm = () => {
       </div>
       <div className="provider-form-content">
         {activeTab === "verified" && !editMode && (
-          <div className="providers-table-container">
-            <table className="providers-table">
+          <div className="providers-table-container-unique">
+            <table className="providers-table-unique">
               <thead>
                 <tr>
                   <th>ID</th>
@@ -153,8 +154,9 @@ const ProviderForm = () => {
                   <th>Location</th>
                   <th>Join date</th>
                   <th>Package</th>
+                  <th>Category</th>
                   <th>Status</th>
-                  <th>Actions</th>
+                  <th className="actions-unique">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -167,20 +169,21 @@ const ProviderForm = () => {
                     <td>{provider.location}</td>
                     <td>{provider.joinDate}</td>
                     <td>{provider.package}</td>
+                    <td>{provider.category}</td>
                     <td>
                       <div
-                        className={`status-toggle ${
-                          provider.status === "active" ? "active" : "inactive"
+                        className={`status-indicator-unique ${
+                          provider.status === "active" ? "online" : "offline"
                         }`}
                       ></div>
                     </td>
-                    <td className="actions">
+                    <td className="actions-unique">
                       <FaEdit
-                        className="action-icon edit"
+                        className="actionIcon-unique edit"
                         onClick={() => handleEdit(provider)}
                       />
                       <FaTrash
-                        className="action-icon delete"
+                        className="actionIcon-unique delete"
                         onClick={() => handleDelete(provider.id)}
                       />
                     </td>

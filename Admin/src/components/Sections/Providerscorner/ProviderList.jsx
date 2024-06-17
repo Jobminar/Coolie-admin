@@ -10,16 +10,16 @@ const ProviderList = ({ providers, handleEdit, handleDelete }) => {
 
   return (
     <div className="uniqueProvidersTableContainer">
+      <div className="uniqueSearchBar">
+        <FaSearch className="uniqueSearchIcon" />
+        <input
+          type="text"
+          placeholder="Search by provider name"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
       <div className="uniqueTableWrapper">
-        <div className="uniqueSearchBar">
-          <FaSearch className="uniqueSearchIcon" />
-          <input
-            type="text"
-            placeholder="Search by provider name"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
         <table className="uniqueProvidersTable">
           <thead>
             <tr>
@@ -30,6 +30,7 @@ const ProviderList = ({ providers, handleEdit, handleDelete }) => {
               <th>Location</th>
               <th>Join Date</th>
               <th>Package</th>
+              <th>Category</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -44,6 +45,7 @@ const ProviderList = ({ providers, handleEdit, handleDelete }) => {
                 <td>{provider.location}</td>
                 <td>{provider.joinDate}</td>
                 <td>{provider.package}</td>
+                <td>{provider.category}</td>
                 <td>
                   <div
                     className={`uniqueStatusToggle ${
