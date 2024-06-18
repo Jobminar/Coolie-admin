@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -12,20 +12,16 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
   const [locations, setLocations] = useState([]);
   const [locationInput, setLocationInput] = useState("");
   const [taxPercentage, setTaxPercentage] = useState("");
-  const [platformCommissionGoldCr, setPlatformCommissionGoldCr] = useState("");
-  const [platformCommissionGoldRs, setPlatformCommissionGoldRs] = useState("");
-  const [platformCommissionPlatinumCr, setPlatformCommissionPlatinumCr] =
-    useState("");
-  const [platformCommissionPlatinumRs, setPlatformCommissionPlatinumRs] =
-    useState("");
-  const [platformCommissionDiamondCr, setPlatformCommissionDiamondCr] =
-    useState("");
-  const [platformCommissionDiamondRs, setPlatformCommissionDiamondRs] =
-    useState("");
   const [isMostBooked, setIsMostBooked] = useState(false);
   const [tag, setTag] = useState(false);
   const [isCash, setIsCash] = useState(false);
   const [serviceVariant, setServiceVariant] = useState("");
+  const [creditEligibility, setCreditEligibility] = useState(false); // Toggle for credit eligibility
+  const [selectedUserPackage, setSelectedUserPackage] = useState(""); // State for selected user package
+  const [selectedProviderPackage, setSelectedProviderPackage] = useState(""); // State for selected provider package
+  const [userPackages, setUserPackages] = useState([]); // State for user packages
+  const [providerPackages, setProviderPackages] = useState([]); // State for provider packages
+  const [platformCommission, setPlatformCommission] = useState(""); // State for platform commission
 
   const handleAddLocation = () => {
     if (locationInput.trim() !== "") {
@@ -48,19 +44,37 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
       description,
       locations,
       taxPercentage,
-      platformCommissionGoldCr,
-      platformCommissionGoldRs,
-      platformCommissionPlatinumCr,
-      platformCommissionPlatinumRs,
-      platformCommissionDiamondCr,
-      platformCommissionDiamondRs,
       isMostBooked,
       tag,
       isCash,
       serviceVariant,
+      creditEligibility,
+      selectedUserPackage,
+      selectedProviderPackage,
+      platformCommission, // Include platform commission in service data
     };
     onSubmit(serviceData);
   };
+
+  // Function to fetch user and provider packages from APIs
+  const fetchPackages = async () => {
+    try {
+      // Example API fetch
+      const userPackagesResponse = await fetch("/api/user-packages");
+      const providerPackagesResponse = await fetch("/api/provider-packages");
+      const userPackagesData = await userPackagesResponse.json();
+      const providerPackagesData = await providerPackagesResponse.json();
+      setUserPackages(userPackagesData.packages);
+      setProviderPackages(providerPackagesData.packages);
+    } catch (error) {
+      console.error("Error fetching packages:", error);
+    }
+  };
+
+  // Fetch packages on component mount
+  useEffect(() => {
+    fetchPackages();
+  }, []);
 
   return (
     <form className="add-service-form" onSubmit={handleSubmit}>
@@ -156,90 +170,92 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
         />
       </div>
 
-      {/* New fields for platform commissions */}
+      {/* User Packages dropdown */}
       <div className="form-group">
-        <label>Platform Commission Gold (Cr):</label>
-        <input
-          type="text"
+        <label>User Packages:</label>
+        <select
           className="bottom-borders-input"
-          value={platformCommissionGoldCr}
-          onChange={(e) => setPlatformCommissionGoldCr(e.target.value)}
-        />
+          value={selectedUserPackage}
+          onChange={(e) => setSelectedUserPackage(e.target.value)}
+        >
+          <option value="">Select User Package</option>
+          {userPackages.map((pkg, index) => (
+            <option key={index} value={pkg.id}>
+              {pkg.name}
+            </option>
+          ))}
+        </select>
       </div>
+
+      {/* Provider Packages dropdown */}
       <div className="form-group">
-        <label>Platform Commission Gold (Rs):</label>
-        <input
-          type="text"
+        <label>Provider Packages:</label>
+        <select
           className="bottom-borders-input"
-          value={platformCommissionGoldRs}
-          onChange={(e) => setPlatformCommissionGoldRs(e.target.value)}
-        />
+          value={selectedProviderPackage}
+          onChange={(e) => setSelectedProviderPackage(e.target.value)}
+        >
+          <option value="">Select Provider Package</option>
+          {providerPackages.map((pkg, index) => (
+            <option key={index} value={pkg.id}>
+              {pkg.name}
+            </option>
+          ))}
+        </select>
       </div>
+
+      {/* Platform Commission */}
       <div className="form-group">
-        <label>Platform Commission Platinum (Cr):</label>
+        <label>Platform Commission (%):</label>
         <input
           type="text"
           className="bottom-borders-input"
-          value={platformCommissionPlatinumCr}
-          onChange={(e) => setPlatformCommissionPlatinumCr(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Platform Commission Platinum (Rs):</label>
-        <input
-          type="text"
-          className="bottom-borders-input"
-          value={platformCommissionPlatinumRs}
-          onChange={(e) => setPlatformCommissionPlatinumRs(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Platform Commission Diamond (Cr):</label>
-        <input
-          type="text"
-          className="bottom-borders-input"
-          value={platformCommissionDiamondCr}
-          onChange={(e) => setPlatformCommissionDiamondCr(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Platform Commission Diamond (Rs):</label>
-        <input
-          type="text"
-          className="bottom-borders-input"
-          value={platformCommissionDiamondRs}
-          onChange={(e) => setPlatformCommissionDiamondRs(e.target.value)}
+          value={platformCommission}
+          onChange={(e) => setPlatformCommission(e.target.value)}
         />
       </div>
 
-      <div className="form-group toggle-group">
-        <label>Add to most booked service</label>
-        <input
-          type="checkbox"
-          className="toggle-input"
-          checked={isMostBooked}
-          onChange={(e) => setIsMostBooked(e.target.checked)}
-        />
+      {/* Toggle buttons */}
+      <div className="toggle-buttons">
+        <div className="form-group toggle-group">
+          <label>Add to most booked service</label>
+          <input
+            type="checkbox"
+            className="toggle-input"
+            checked={isMostBooked}
+            onChange={(e) => setIsMostBooked(e.target.checked)}
+          />
+        </div>
+        <div className="form-group toggle-group">
+          <label>TAG</label>
+          <input
+            type="checkbox"
+            className="toggle-input"
+            checked={tag}
+            onChange={(e) => setTag(e.target.checked)}
+          />
+        </div>
+        <div className="form-group toggle-group">
+          <label>Cash After Service</label>
+          <input
+            type="checkbox"
+            className="toggle-input"
+            checked={isCash}
+            onChange={(e) => setIsCash(e.target.checked)}
+          />
+        </div>
+        <div className="form-group toggle-group">
+          <label>Credit Eligibility:</label>
+          <input
+            type="checkbox"
+            className="toggle-input"
+            checked={creditEligibility}
+            onChange={(e) => setCreditEligibility(e.target.checked)}
+          />
+        </div>
       </div>
-      <div className="form-group toggle-group">
-        <label>TAG</label>
-        <input
-          type="checkbox"
-          className="toggle-input"
-          checked={tag}
-          onChange={(e) => setTag(e.target.checked)}
-        />
-      </div>
-      <div className="form-group toggle-group">
-        <label>Cash After Service</label>
-        <input
-          type="checkbox"
-          className="toggle-input"
-          checked={isCash}
-          onChange={(e) => setIsCash(e.target.checked)}
-        />
-      </div>
-      <button type="submit" className="submit-button">
+
+      <button type="submit" className="submissionbutton">
         Add Service
       </button>
     </form>

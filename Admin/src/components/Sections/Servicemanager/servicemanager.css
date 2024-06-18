@@ -216,8 +216,8 @@
     border-bottom-color: #039F54;
 }
 
-.servermanager-add-category-form .servermanager-submit-button,
-.servermanager-add-sub-category-form .servermanager-submit-button {
+.servermanager-add-category-form .servermanager-submissionbutton,
+.servermanager-add-sub-category-form .servermanager-submissionbutton {
     background-color: #030B33;
     color: #fff;
     border: none;
@@ -231,8 +231,8 @@
     text-align: center;
 }
 
-.servermanager-add-category-form .servermanager-submit-button:hover,
-.servermanager-add-sub-category-form .servermanager-submit-button:hover {
+.servermanager-add-category-form .servermanager-submissionbutton:hover,
+.servermanager-add-sub-category-form .servermanager-submissionbutton:hover {
     background-color: #444;
 }
 
@@ -325,8 +325,8 @@
     transform: translateX(20px);
 }
 
-.servermanager-submit-button,
-.submit-button {
+.servermanager-submissionbutton,
+.submissionbutton {
     background-color: #030B33;
     color: #fff;
     border: none;
@@ -338,8 +338,8 @@
     align-self: center;
 }
 
-.servermanager-submit-button:hover,
-.submit-button:hover {
+.servermanager-submissionbutton:hover,
+.submissionbutton:hover {
     background-color: #444;
 }
 

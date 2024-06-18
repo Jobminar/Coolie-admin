@@ -8,25 +8,27 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
   // Define state variables using the useState hook
   const [categoryName, setCategoryName] = useState(""); // State variable for the category name
   const [subCategoryName, setSubCategoryName] = useState(""); // State variable for the sub-category name
+  const [userPackages, setUserPackages] = useState([]); // State variable for user packages
+  const [providerPackages, setProviderPackages] = useState([]); // State variable for provider packages
   const [serviceData, setServiceData] = useState({
     // State variable for service details
-    name: "", // Service name
-    type: "", // Service type
+    serviceName: "", // Service name
+    serviceType: "", // Service type
     price: "", // Service price
-    time: "", // Total service time
+    serviceTime: "", // Total service time
     description: "", // Service description
-    locations: "", // Service locations
-    tax: "", // TAX percentage
-    commission: "", // Provider commission
-    platformCommissionGoldCr: "", // Platform Commission Gold (Cr)
-    platformCommissionGoldRs: "", // Platform Commission Gold (Rs)
-    platformCommissionPlatinumCr: "", // Platform Commission Platinum (Cr)
-    platformCommissionPlatinumRs: "", // Platform Commission Platinum (Rs)
-    platformCommissionDiamondCr: "", // Platform Commission Diamond (Cr)
-    platformCommissionDiamondRs: "", // Platform Commission Diamond (Rs)
-    mostBooked: false, // Flag for most booked service
+    locations: [], // Service locations
+    taxPercentage: "", // TAX percentage
+    isMostBooked: false, // Flag for most booked service
     tag: false, // Flag for tagged service
-    cashAfterService: false, // Flag for cash after service
+    isCash: false, // Flag for cash after service
+    serviceVariant: "", // Service variant
+    creditEligibility: false, // Credit eligibility
+    selectedUserPackage: "", // Selected user package
+    selectedProviderPackage: "", // Selected provider package
+    platformCommission: "", // Platform commission
+    isActive: false, // Service active status
+    isDeleted: false, // Service deleted status
   });
 
   // useEffect hook to fetch data when component mounts or props change
@@ -67,10 +69,27 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
       }
     };
 
+    // Function to fetch user and provider packages from APIs
+    const fetchPackages = async () => {
+      try {
+        const userPackagesResponse = await axios.get(
+          "http://13.126.118.3:3000/v1.0/core/user-packages",
+        );
+        const providerPackagesResponse = await axios.get(
+          "http://13.126.118.3:3000/v1.0/core/provider-packages",
+        );
+        setUserPackages(userPackagesResponse.data.packages);
+        setProviderPackages(providerPackagesResponse.data.packages);
+      } catch (error) {
+        console.error("Error fetching packages:", error);
+      }
+    };
+
     // Call the fetch functions
     fetchCategoryName();
     fetchSubCategoryName();
     fetchServiceDetails();
+    fetchPackages();
   }, [category, subCategory, service._id]); // Run useEffect when category, subCategory, or service ID changes
 
   // Render the component UI
@@ -86,7 +105,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
         {/* Display sub-category name */}
         <h6>Sub-Category: {subCategoryName}</h6>
         {/* Display service name */}
-        <h6>Service: {serviceData.name}</h6>
+        <h6>Service: {serviceData.serviceName}</h6>
       </div>
       <form className="add-service-form">
         {" "}
@@ -98,23 +117,17 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="text"
             className="bottom-borders-input"
-            value={serviceData.name}
+            value={serviceData.serviceName}
             readOnly
           />
         </div>
-        {/* Similar form groups for other service details */}
         {/* Service Type */}
         <div className="form-group">
           <label>Service Type:</label>
           <input
             type="text"
             className="bottom-borders-input"
-            value={
-              serviceData.serviceVariants &&
-              serviceData.serviceVariants.length > 0
-                ? serviceData.serviceVariants[0].variantName
-                : ""
-            }
+            value={serviceData.serviceType}
             readOnly
           />
         </div>
@@ -124,12 +137,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="text"
             className="bottom-borders-input"
-            value={
-              serviceData.serviceVariants &&
-              serviceData.serviceVariants.length > 0
-                ? serviceData.serviceVariants[0].price
-                : ""
-            }
+            value={serviceData.price}
             readOnly
           />
         </div>
@@ -139,12 +147,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="text"
             className="bottom-borders-input"
-            value={
-              serviceData.serviceVariants &&
-              serviceData.serviceVariants.length > 0
-                ? serviceData.serviceVariants[0].serviceTime
-                : ""
-            }
+            value={serviceData.serviceTime}
             readOnly
           />
         </div>
@@ -163,86 +166,57 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="text"
             className="bottom-borders-input"
-            value={
-              Array.isArray(serviceData.locations)
-                ? serviceData.locations.join(", ")
-                : ""
-            }
+            value={serviceData.locations.join(", ")}
             readOnly
           />
         </div>
         {/* TAX Percentage */}
         <div className="form-group">
-          <label>TAX %:</label>
+          <label>Tax Percentage:</label>
           <input
             type="text"
             className="bottom-borders-input"
-            value={serviceData.tax}
+            value={serviceData.taxPercentage}
             readOnly
           />
         </div>
-        {/* Provider Commission */}
+        {/* User Packages */}
         <div className="form-group">
-          <label>Provider commission:</label>
-          <input
-            type="text"
+          <label>User Package:</label>
+          <select
             className="bottom-borders-input"
-            value={serviceData.commission}
+            value={serviceData.selectedUserPackage}
             readOnly
-          />
+          >
+            {userPackages.map((pkg) => (
+              <option key={pkg.id} value={pkg.id}>
+                {pkg.name}
+              </option>
+            ))}
+          </select>
         </div>
-        {/* New fields for platform commissions */}
+        {/* Provider Packages */}
         <div className="form-group">
-          <label>Platform Commission Gold (Cr):</label>
-          <input
-            type="text"
+          <label>Provider Package:</label>
+          <select
             className="bottom-borders-input"
-            value={serviceData.platformCommissionGoldCr}
+            value={serviceData.selectedProviderPackage}
             readOnly
-          />
+          >
+            {providerPackages.map((pkg) => (
+              <option key={pkg.id} value={pkg.id}>
+                {pkg.name}
+              </option>
+            ))}
+          </select>
         </div>
+        {/* Platform Commission */}
         <div className="form-group">
-          <label>Platform Commission Gold (Rs):</label>
+          <label>Platform Commission:</label>
           <input
             type="text"
             className="bottom-borders-input"
-            value={serviceData.platformCommissionGoldRs}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label>Platform Commission Platinum (Cr):</label>
-          <input
-            type="text"
-            className="bottom-borders-input"
-            value={serviceData.platformCommissionPlatinumCr}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label>Platform Commission Platinum (Rs):</label>
-          <input
-            type="text"
-            className="bottom-borders-input"
-            value={serviceData.platformCommissionPlatinumRs}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label>Platform Commission Diamond (Cr):</label>
-          <input
-            type="text"
-            className="bottom-borders-input"
-            value={serviceData.platformCommissionDiamondCr}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label>Platform Commission Diamond (Rs):</label>
-          <input
-            type="text"
-            className="bottom-borders-input"
-            value={serviceData.platformCommissionDiamondRs}
+            value={serviceData.platformCommission}
             readOnly
           />
         </div>
@@ -252,8 +226,8 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="checkbox"
             className="toggle-input"
-            checked={serviceData.mostBooked}
-            readOnly={!serviceData.mostBooked}
+            checked={serviceData.isMostBooked}
+            readOnly
           />
         </div>
         {/* TAG */}
@@ -263,7 +237,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
             type="checkbox"
             className="toggle-input"
             checked={serviceData.tag}
-            readOnly={!serviceData.tag}
+            readOnly
           />
         </div>
         {/* Cash After Service */}
@@ -272,8 +246,18 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="checkbox"
             className="toggle-input"
-            checked={serviceData.cashAfterService}
-            readOnly={!serviceData.cashAfterService}
+            checked={serviceData.isCash}
+            readOnly
+          />
+        </div>
+        {/* Credit Eligibility */}
+        <div className="form-group toggle-group">
+          <label>Credit Eligibility</label>
+          <input
+            type="checkbox"
+            className="toggle-input"
+            checked={serviceData.creditEligibility}
+            readOnly
           />
         </div>
         {/* Active status */}
@@ -297,7 +281,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           />
         </div>
         {/* Close button */}
-        <button type="button" className="submit-button" onClick={onClose}>
+        <button type="button" className="submissionbutton" onClick={onClose}>
           Close
         </button>
       </form>
@@ -309,23 +293,21 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
 ServiceDetailCard.propTypes = {
   service: PropTypes.shape({
     _id: PropTypes.string.isRequired,
-    name: PropTypes.string,
-    type: PropTypes.string,
+    serviceName: PropTypes.string,
+    serviceType: PropTypes.string,
     price: PropTypes.string,
-    time: PropTypes.string,
+    serviceTime: PropTypes.string,
     description: PropTypes.string,
-    locations: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-    tax: PropTypes.string,
-    commission: PropTypes.string,
-    platformCommissionGoldCr: PropTypes.string,
-    platformCommissionGoldRs: PropTypes.string,
-    platformCommissionPlatinumCr: PropTypes.string,
-    platformCommissionPlatinumRs: PropTypes.string,
-    platformCommissionDiamondCr: PropTypes.string,
-    platformCommissionDiamondRs: PropTypes.string,
-    mostBooked: PropTypes.bool,
+    locations: PropTypes.array,
+    taxPercentage: PropTypes.string,
+    isMostBooked: PropTypes.bool,
     tag: PropTypes.bool,
-    cashAfterService: PropTypes.bool,
+    isCash: PropTypes.bool,
+    serviceVariant: PropTypes.string,
+    creditEligibility: PropTypes.bool,
+    selectedUserPackage: PropTypes.string,
+    selectedProviderPackage: PropTypes.string,
+    platformCommission: PropTypes.string,
     isActive: PropTypes.bool,
     isDeleted: PropTypes.bool,
   }).isRequired, // Required prop: service object
