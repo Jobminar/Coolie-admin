@@ -8,6 +8,7 @@ export const FilterBarProvider = ({ children }) => {
     activeComponent: "",
     activeComponentState: "",
     setActiveComponentState: () => {},
+    showProviderButtons: true,
   });
 
   return (

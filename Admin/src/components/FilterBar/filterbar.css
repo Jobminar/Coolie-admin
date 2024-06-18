@@ -20,6 +20,83 @@
     font-size: 1.5rem;
     /* 24px */
     font-weight: bold;
+    flex: 1;
+    /* Ensure equal spacing */
+}
+
+.filter-bar .small-header {
+    font-size: 1rem;
+    /* 20px */
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* To push the button to the right */
+    gap: 1.25rem;
+    /* Add gap between items */
+    flex-wrap: nowrap;
+    /* Prevent wrapping */
+}
+
+.inline-filters {
+    display: flex;
+    gap: 1.25rem;
+    /* 20px */
+    align-items: center;
+    flex: 1;
+    /* Ensure equal spacing */
+    justify-content: space-around;
+    /* Distribute filters evenly */
+}
+
+.filter-item-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    /* 10px */
+}
+
+.filter-item-inline label {
+    font-size: 1rem;
+    /* 14px */
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+}
+
+.filter-item-inline select,
+.filter-item-inline .react-datepicker-wrapper .date-picker {
+    padding: 0.625rem;
+    /* 10px */
+    font-size: 0.8rem;
+    /* 12px */
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 0.3125rem;
+    /* 5px */
+    width: 180px;
+    /* Fixed width */
+    box-sizing: border-box;
+}
+
+.filter-item-inline .react-datepicker-wrapper {
+    border: none;
+    /* Remove border */
+}
+
+.filter-item-inline select::placeholder,
+.filter-item-inline .date-picker::placeholder {
+    color: grey;
+    font-size: 0.75rem;
+    /* 12px */
+}
+
+.filter-item-inline select option {
+    font-size: 0.75rem;
+    /* 12px */
+    /* Decreased font size for dropdown items */
 }
 
 .filter-buttons {
@@ -45,6 +122,13 @@
     /* 5px */
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+.filter-btn.small-btn {
+    padding: 0.2rem 1.5rem;
+    /* Smaller padding */
+    font-size: 0.8rem;
+    /* Smaller font size */
 }
 
 .filter-btn:hover {
@@ -82,7 +166,7 @@
 }
 
 .filter-item select,
-.filter-item .date-picker {
+.filter-item .react-datepicker-wrapper .date-picker {
     padding: 0.625rem;
     /* 10px */
     font-size: 0.8rem;
@@ -92,10 +176,14 @@
     border: 1px solid #ccc;
     border-radius: 0.3125rem;
     /* 5px */
-    width: 100%;
-    /* Full width */
-    max-width: 180px;
-    /* Maximum width */
+    width: 180px;
+    /* Fixed width */
+    box-sizing: border-box;
+}
+
+.filter-item .react-datepicker-wrapper {
+    border: none;
+    /* Remove border */
 }
 
 .filter-item select::placeholder,
@@ -112,21 +200,26 @@
 }
 
 .date-picker {
-    width: 100%;
-    /* Full width */
-    max-width: 300px;
-    /* Maximum width */
+    width: 180px;
+    /* Fixed width */
+    padding: 0.625rem;
+    /* 10px */
+    font-size: 0.8rem;
+    /* 12px */
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 0.3125rem;
+    /* 5px */
+    box-sizing: border-box;
 }
-
-.header-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* To push the button to the right */
-}
-
 
 @media (max-width: 768px) {
+    .header-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
     .filter-buttons {
         flex-direction: column;
         align-items: stretch;
@@ -143,6 +236,15 @@
     }
 
     .filter-item {
+        width: 100%;
+    }
+
+    .inline-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-item-inline {
         width: 100%;
     }
 }
@@ -166,7 +268,7 @@
     }
 
     .filter-item select,
-    .filter-item .date-picker {
+    .filter-item .react-datepicker-wrapper .date-picker {
         font-size: 0.75rem;
         /* 12px */
     }

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./AuthenticateProvider.css";
 import { FaEdit, FaTrash, FaArrowLeft, FaSearch } from "react-icons/fa";
 import ProviderProfile from "./ProviderProfile";
 import Document1 from "../../../assets/Documents/ProviderReport1.pdf";
 import Document2 from "../../../assets/Documents/ProviderReport2.pdf";
+import { FilterBarContext } from "../../../FilterBarContext";
 
 const AuthenticateProvider = () => {
   const [activeComponent, setActiveComponent] = useState("ProviderList");
@@ -12,10 +13,23 @@ const AuthenticateProvider = () => {
   const [documentStatuses, setDocumentStatuses] = useState({});
   const [comments, setComments] = useState({});
   const [overallStatus, setOverallStatus] = useState("Pending");
+  const { setFilterBarProps } = useContext(FilterBarContext);
 
   const handleVerify = (provider) => {
     setSelectedProvider(provider);
     setActiveComponent("ProviderProfile");
+    setFilterBarProps((prev) => ({
+      ...prev,
+      showProviderButtons: false,
+    }));
+  };
+
+  const handleBackClick = () => {
+    setActiveComponent("ProviderList");
+    setFilterBarProps((prev) => ({
+      ...prev,
+      showProviderButtons: true,
+    }));
   };
 
   const handleDocumentsClick = () => {
@@ -67,10 +81,6 @@ const AuthenticateProvider = () => {
       [documentId]: "Declined",
     }));
     console.log("Document declined:", documentId);
-  };
-
-  const handleBackClick = () => {
-    setActiveComponent("ProviderList");
   };
 
   const handleCommentChange = (documentId, value) => {

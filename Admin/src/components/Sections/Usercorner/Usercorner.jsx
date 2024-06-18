@@ -4,9 +4,61 @@ import { Search } from "react-bootstrap-icons";
 import "./usercorner.css";
 
 const UserManager = () => {
-  const [selectedTab, setSelectedTab] = useState("Booked Users");
+  const [selectedTab, setSelectedTab] = useState("All Users");
 
   const data = {
+    "All Users": [
+      {
+        id: 401,
+        name: "Varma",
+        email: "example@gmail.com",
+        phone: "123456789",
+        joinDate: "Jan 29, 2021",
+        level: "Bronze",
+        points: 0,
+        status: "active",
+      },
+      {
+        id: 402,
+        name: "Ravi",
+        email: "example2@gmail.com",
+        phone: "987654321",
+        joinDate: "Feb 10, 2021",
+        level: "Silver",
+        points: 0,
+        status: "active",
+      },
+      {
+        id: 403,
+        name: "Sita",
+        email: "example3@gmail.com",
+        phone: "1122334455",
+        joinDate: "Mar 5, 2021",
+        level: "Bronze",
+        points: 0,
+        status: "inactive",
+      },
+      {
+        id: 404,
+        name: "Geeta",
+        email: "example4@gmail.com",
+        phone: "4455667788",
+        joinDate: "Apr 2, 2021",
+        level: "Silver",
+        points: 0,
+        status: "active",
+      },
+      {
+        id: 405,
+        name: "Ram",
+        email: "example5@gmail.com",
+        phone: "9988776655",
+        joinDate: "May 1, 2021",
+        level: "Gold",
+        points: 0,
+        status: "inactive",
+      },
+    ],
     "Booked Users": [
       {
         id: 401,
@@ -71,16 +123,6 @@ const UserManager = () => {
 
   return (
     <div className="user-manager-container">
-      {/* <div className="header">
-        <h1>Add User</h1>
-        <button>Add User</button>
-        <div className="user-search-bar">
-          <InputGroup>
-            <Form.Control placeholder="Search" className="search-input" />
-            <Search variant="outline-secondary" className="searching" />
-          </InputGroup>
-        </div>
-      </div> */}
       <div className="tabs-container">
         {Object.keys(data).map((tab) => (
           <button

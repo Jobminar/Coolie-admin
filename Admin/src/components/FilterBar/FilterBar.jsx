@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./filterbar.css";
+import { FilterBarContext } from "../../FilterBarContext";
 
 const FilterBar = ({
   activeComponent,
@@ -15,13 +16,15 @@ const FilterBar = ({
   showDateFilter = true,
   showStatusFilter = false,
 }) => {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedService, setSelectedService] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedPackage, setSelectedPackage] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [showCategoryFilter, setShowCategoryFilter] = useState(false);
+
+  const { filterBarProps } = useContext(FilterBarContext);
 
   useEffect(() => {
     console.log("Filters:", {
@@ -53,20 +56,98 @@ const FilterBar = ({
   return (
     <div className="filter-bar">
       <div className="header-row">
-        <h2>{activeComponent}</h2>
-        {activeComponent === "Jobs Area" && (
-          <button
-            className={`filter-btn ${
-              activeComponentState === "add" ? "active" : ""
-            }`}
-            onClick={() => setActiveComponentState("add")}
-          >
-            Add Job
-          </button>
+        <h2 className={activeComponent === "Jobs Area" ? "small-header" : ""}>
+          {activeComponent}
+        </h2>
+        {(activeComponent === "Jobs Area" ||
+          activeComponent === "User Corner") && (
+          <div className="inline-filters">
+            {showGenderFilter && activeComponent === "User Corner" && (
+              <div className="filter-item-inline">
+                <label htmlFor="gender-inline">Gender:</label>
+                <select
+                  id="gender-inline"
+                  name="gender"
+                  value={selectedGender}
+                  onChange={(e) => setSelectedGender(e.target.value)}
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+            )}
+            {showLocationFilter && (
+              <div className="filter-item-inline">
+                <label htmlFor="location-inline">Location:</label>
+                <select
+                  id="location-inline"
+                  name="location"
+                  value={selectedLocation}
+                  onChange={(e) => setSelectedLocation(e.target.value)}
+                >
+                  <option value="">Select Location</option>
+                  <option value="mumbai">Mumbai</option>
+                  <option value="delhi">Delhi</option>
+                  <option value="bangalore">Bangalore</option>
+                  <option value="hyderabad">Hyderabad</option>
+                  <option value="ahmedabad">Ahmedabad</option>
+                  <option value="chennai">Chennai</option>
+                  <option value="kolkata">Kolkata</option>
+                  <option value="pune">Pune</option>
+                  <option value="jaipur">Jaipur</option>
+                  <option value="surat">Surat</option>
+                </select>
+              </div>
+            )}
+            {showServiceFilter && activeComponent === "Jobs Area" && (
+              <div className="filter-item-inline">
+                <label htmlFor="service-inline">Service:</label>
+                <select
+                  id="service-inline"
+                  name="service"
+                  value={selectedService}
+                  onChange={(e) => setSelectedService(e.target.value)}
+                >
+                  <option value="">Select Service</option>
+                  <option value="plumbing">Plumbing</option>
+                  <option value="electrical">Electrical</option>
+                  <option value="cleaning">Cleaning</option>
+                  <option value="gardening">Gardening</option>
+                </select>
+              </div>
+            )}
+            {showDateFilter && (
+              <div className="filter-item-inline">
+                <label htmlFor="date-inline">Date:</label>
+                <DatePicker
+                  id="date-inline"
+                  selected={selectedDate}
+                  onChange={(date) => setSelectedDate(date)}
+                  dateFormat="MMMM d, yyyy"
+                  className="date-picker"
+                />
+              </div>
+            )}
+            {activeComponent === "Jobs Area" && (
+              <button
+                className={`filter-btn small-btn ${
+                  activeComponentState === "add" ? "active" : ""
+                }`}
+                onClick={() => setActiveComponentState("add")}
+              >
+                Add Job
+              </button>
+            )}
+          </div>
         )}
       </div>
       {activeComponent === "Providers Corner" && (
-        <div className="filter-buttons">
+        <div
+          className={`filter-buttons ${
+            filterBarProps.showProviderButtons ? "" : "hidden"
+          }`}
+        >
           <button
             className={`filter-btn ${
               activeComponentState === "view" ? "active" : ""
@@ -152,7 +233,7 @@ const FilterBar = ({
               </select>
             </div>
           )}
-          {showGenderFilter && (
+          {showGenderFilter && activeComponent === "User Corner" && (
             <div className="filter-item">
               <label htmlFor="gender">Gender:</label>
               <select

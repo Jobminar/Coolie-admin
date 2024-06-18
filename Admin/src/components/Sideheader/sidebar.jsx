@@ -30,7 +30,10 @@ const Sidebar = ({ children }) => {
     } else {
       setActiveDropdownItem("");
     }
-    closeAllDropdowns();
+    // Only close dropdowns if navigating to a non-dropdown item
+    if (!dropdownItem) {
+      closeAllDropdowns();
+    }
     navigate(path);
   };
 
@@ -46,37 +49,37 @@ const Sidebar = ({ children }) => {
   const toggleServiceManagerDropdown = () => {
     setServiceManagerDropdown((prev) => !prev);
     closeOtherDropdowns("serviceManager");
-    setActiveItem("/serviceManagerDropdown");
+    // Do not set activeItem to the dropdown path
   };
 
   const togglePromotionsDropdown = () => {
     setPromotionsDropdown((prev) => !prev);
     closeOtherDropdowns("promotions");
-    setActiveItem("/promotionsDropdown");
+    // Do not set activeItem to the dropdown path
   };
 
   const togglePackagesDropdown = () => {
     setPackagesDropdown((prev) => !prev);
     closeOtherDropdowns("packages");
-    setActiveItem("/packagesDropdown");
+    // Do not set activeItem to the dropdown path
   };
 
   const toggleMarketingDropdown = () => {
     setMarketingDropdown((prev) => !prev);
     closeOtherDropdowns("marketing");
-    setActiveItem("/marketingDropdown");
+    // Do not set activeItem to the dropdown path
   };
 
   const toggleBannersDropdown = () => {
     setBannersDropdown((prev) => !prev);
     closeOtherDropdowns("banners");
-    setActiveItem("/bannersDropdown");
+    // Do not set activeItem to the dropdown path
   };
 
   const toggleInductionDropdown = () => {
     setInductionDropdown((prev) => !prev);
     closeOtherDropdowns("induction");
-    setActiveItem("/inductionDropdown");
+    // Do not set activeItem to the dropdown path
   };
 
   const closeOtherDropdowns = (activeDropdown) => {
