@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,21 +12,29 @@ const EditSubCategoryForm = ({
   setShowEditSubCategoryForm,
   API_BASE_URL,
   AWS_BASE_URL,
+  updateSubCategoryInParent,
+  fetchServices,
+  selectedCategory,
 }) => {
-  const [subCategoryName, setSubCategoryName] = useState(
-    selectedSubCategory.name,
-  );
-  const [subCategoryIcon, setSubCategoryIcon] = useState(
-    selectedSubCategory.imageKey,
-  );
+  const [subCategoryName, setSubCategoryName] = useState("");
+  const [subCategoryIcon, setSubCategoryIcon] = useState("");
   const [subCategoryError, setSubCategoryError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    // Pre-fill the form with the current subcategory details
+    if (selectedSubCategory) {
+      setSubCategoryName(selectedSubCategory.name || "");
+      setSubCategoryIcon(selectedSubCategory.imageKey || "");
+    }
+  }, [selectedSubCategory]);
+
   const handleSubCategoryIconChange = (e) => {
-    if (e.target.files[0]) {
-      setSubCategoryIcon(URL.createObjectURL(e.target.files[0]));
+    const file = e.target.files[0];
+    if (file) {
+      setSubCategoryIcon(URL.createObjectURL(file));
     }
   };
 
@@ -46,6 +54,8 @@ const EditSubCategoryForm = ({
     formData.append("name", subCategoryName);
     formData.append("isActive", true);
     formData.append("isDeleted", false);
+
+    // Only append image if it's a new one
     if (subCategoryIcon.startsWith("blob:")) {
       formData.append("image", subCategoryIcon);
     }
@@ -56,9 +66,12 @@ const EditSubCategoryForm = ({
         formData,
       )
       .then((response) => {
+        const updatedSubCategory = response.data;
         setSuccessMessage("Sub-category updated successfully");
         setErrorMessage("");
+        updateSubCategoryInParent(updatedSubCategory); // Update the parent component's state
         setShowEditSubCategoryForm(false);
+        fetchServices(selectedCategory, selectedSubCategory._id); // Fetch services after update
       })
       .catch((error) => {
         const errorResponse = error.response
@@ -73,31 +86,29 @@ const EditSubCategoryForm = ({
   };
 
   return (
-    <div className="manageservice-card manageservice-edit-sub-category-form">
+    <div className="manageServiceCard manageServiceEditSubCategoryForm">
       <h3>
         Edit Sub-Category
         <FontAwesomeIcon
           icon={faTimes}
-          className="manageservice-cancel-icon"
+          className="manageServiceCancelIcon"
           onClick={() => setShowEditSubCategoryForm(false)}
         />
       </h3>
-      {successMessage && (
-        <div className="success-message">{successMessage}</div>
-      )}
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
-      <div className="manageservice-input-container">
+      {successMessage && <div className="successMessage">{successMessage}</div>}
+      {errorMessage && <div className="errorMessage">{errorMessage}</div>}
+      <div className="manageServiceInputContainer">
         <label>Sub-Category Name:</label>
         <input
           type="text"
-          className="manageservice-bottom-border-input"
+          className="manageServiceBottomBorderInput"
           value={subCategoryName}
           onChange={(e) => setSubCategoryName(e.target.value)}
         />
         {subCategoryError && <span className="error">{subCategoryError}</span>}
       </div>
       {subCategoryIcon && (
-        <div className="manageservice-preview-container">
+        <div className="manageServicePreviewContainer">
           <img
             src={
               subCategoryIcon.startsWith("blob:")
@@ -105,31 +116,31 @@ const EditSubCategoryForm = ({
                 : `${AWS_BASE_URL}/${subCategoryIcon}`
             }
             alt="Sub-Category Icon"
-            className="manageservice-preview-image"
+            className="manageServicePreviewImage"
           />
         </div>
       )}
-      <div className="manageservice-upload-container">
+      <div className="manageServiceUploadContainer">
         <input
           type="file"
           id="subCategoryIcon"
           onChange={handleSubCategoryIconChange}
-          className="manageservice-file-upload"
+          className="manageServiceFileUpload"
         />
         <label
           htmlFor="subCategoryIcon"
-          className="manageservice-upload-icon-label"
+          className="manageServiceUploadIconLabel"
         >
           Choose Icon
           <FontAwesomeIcon
             icon={faArrowUpFromBracket}
-            className="manageservice-upload-icon"
+            className="manageServiceUploadIcon"
           />
         </label>
       </div>
       <button
-        id="manageservice-update-subcategory-button"
-        className="manageservice-submit-button"
+        id="manageServiceUpdateSubCategoryButton"
+        className="manageServiceSubmitButton"
         onClick={handleEditSubCategory}
         disabled={loading}
       >
@@ -140,10 +151,17 @@ const EditSubCategoryForm = ({
 };
 
 EditSubCategoryForm.propTypes = {
-  selectedSubCategory: PropTypes.object.isRequired,
+  selectedSubCategory: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    imageKey: PropTypes.string,
+  }).isRequired,
   setShowEditSubCategoryForm: PropTypes.func.isRequired,
   API_BASE_URL: PropTypes.string.isRequired,
   AWS_BASE_URL: PropTypes.string.isRequired,
+  updateSubCategoryInParent: PropTypes.func.isRequired,
+  fetchServices: PropTypes.func.isRequired,
+  selectedCategory: PropTypes.string.isRequired,
 };
 
 export default EditSubCategoryForm;

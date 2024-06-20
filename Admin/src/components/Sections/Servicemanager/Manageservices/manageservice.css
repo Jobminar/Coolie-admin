@@ -1,16 +1,16 @@
-.manageservice-container {
+.manageServiceContainer {
     font-family: Roboto, sans-serif;
     padding: 20px;
 }
 
-.manageservice-card-container {
+.manageServiceCardContainer {
     display: flex;
-    gap: 20px;
     flex-wrap: wrap;
+    gap: 20px;
     align-items: flex-start;
 }
 
-.manageservice-card {
+.manageServiceCard {
     border: 1px solid #000000;
     padding: 10px;
     border-radius: 5px;
@@ -19,14 +19,14 @@
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
-    flex: 0 1 auto;
+
 }
 
-.manageservice-form-group {
+.manageServiceFormGroup {
     margin-bottom: 10px;
 }
 
-.manageservice-category-header {
+.manageServiceCategoryHeader {
     display: flex;
     align-items: center;
     border-radius: 2.5px;
@@ -36,15 +36,15 @@
     margin: -10px -10px 10px -10px;
 }
 
-.manageservice-category-header span {
+.manageServiceCategoryHeader span {
     flex-grow: 1;
     text-align: center;
     font-size: 16px;
     font-weight: bold;
 }
 
-.manageservice-add-button,
-.manageservice-hamburger-icon {
+.manageServiceAddButton,
+.manageServiceHamburgerIcon {
     background: none;
     border: 1px solid #000000;
     border-radius: 5px;
@@ -59,18 +59,18 @@
     color: #000;
 }
 
-.manageservice-add-button {
+.manageServiceAddButton {
     margin-left: auto;
     margin-right: 10px;
 }
 
-.manageservice-hamburger-icon {
+.manageServiceHamburgerIcon {
     margin-left: 10px;
     border: 1px solid #000000;
     border-radius: 5px;
 }
 
-.manageservice-menu {
+.manageServiceMenu {
     border: 1px solid #000000;
     border-radius: 5px;
     margin-top: 10px;
@@ -79,7 +79,7 @@
     overflow-y: auto;
 }
 
-.manageservice-menu-item {
+.manageServiceMenuItem {
     display: flex;
     justify-content: space-between;
     padding: 10px;
@@ -88,30 +88,30 @@
     font-size: 14px;
 }
 
-.manageservice-menu-item.selected {
+.manageServiceMenuItem.selected {
     background-color: #f0f0f0;
 }
 
-.manageservice-menu-item:last-child {
+.manageServiceMenuItem:last-child {
     border-bottom: none;
 }
 
-.manageservice-menu-item:hover {
+.manageServiceMenuItem:hover {
     background-color: #e0e0e0;
 }
 
-.manageservice-icon-group {
+.manageServiceIconGroup {
     display: flex;
     gap: 10px;
 }
 
-.manageservice-edit-icon,
-.manageservice-delete-icon {
+.manageServiceEditIcon,
+.manageServiceDeleteIcon {
     cursor: pointer;
 }
 
-.manageservice-edit-category-form,
-.manageservice-edit-sub-category-form {
+.manageServiceEditCategoryForm,
+.manageServiceEditSubCategoryForm {
     margin-top: 10px;
     border: 1px solid #000000;
     border-radius: 5px;
@@ -120,8 +120,8 @@
     padding: 0;
 }
 
-.manageservice-edit-category-form h3,
-.manageservice-edit-sub-category-form h3 {
+.manageServiceEditCategoryForm h3,
+.manageServiceEditSubCategoryForm h3 {
     margin: 0 0 10px 0;
     font-size: 16px;
     font-weight: bold;
@@ -134,7 +134,7 @@
     border-radius: 2.5px 2.5px 2.5px 2.5px;
 }
 
-.manageservice-input-container {
+.manageServiceInputContainer {
     border-top: 1px solid #000000;
     border-bottom: 1px solid #000000;
     border-left: none;
@@ -145,7 +145,7 @@
     width: 92.9%;
 }
 
-.manageservice-upload-container {
+.manageServiceUploadContainer {
     border-top: 1px solid #000000;
     border-bottom: 1px solid #000000;
     border-left: none;
@@ -159,7 +159,7 @@
     width: 92.9%;
 }
 
-.manageservice-upload-icon-label {
+.manageServiceUploadIconLabel {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -167,12 +167,12 @@
     justify-content: space-between;
 }
 
-.manageservice-upload-icon {
+.manageServiceUploadIcon {
     font-size: 1.2em;
     margin-left: 10px;
 }
 
-.manageservice-upload-preview {
+.manageServiceUploadPreview {
     margin-top: 10px;
     max-width: 100px;
     max-height: 100px;
@@ -180,29 +180,29 @@
     border-radius: 2.5px;
 }
 
-.manageservice-bottom-border-input {
+.manageServiceBottomBorderInput {
     border: none;
     border-bottom: 1px solid #000;
     padding: 10px;
     outline: none;
     transition: border-bottom-color 0.3s;
     font-size: 14px;
-    width: 100%;
+    width: 95%;
 }
 
-.manageservice-bottom-border-input:focus {
+.manageServiceBottomBorderInput:focus {
     border-bottom-color: #039F54;
 }
 
-.manageservice-edit-category-form label,
-.manageservice-edit-sub-category-form label {
+.manageServiceEditCategoryForm label,
+.manageServiceEditSubCategoryForm label {
     margin-bottom: 5px;
     font-size: 14px;
     font-weight: bold;
 }
 
-.manageservice-edit-category-form select,
-.manageservice-edit-sub-category-form select {
+.manageServiceEditCategoryForm select,
+.manageServiceEditSubCategoryForm select {
     border: none;
     padding: 10px;
     outline: none;
@@ -211,13 +211,13 @@
     width: 100%;
 }
 
-.manageservice-edit-category-form select:focus,
-.manageservice-edit-sub-category-form select:focus {
+.manageServiceEditCategoryForm select:focus,
+.manageServiceEditSubCategoryForm select:focus {
     border-bottom-color: #039F54;
 }
 
-.manageservice-edit-category-form .submit-button,
-.manageservice-edit-sub-category-form .submit-button {
+.manageServiceEditCategoryForm .submitButton,
+.manageServiceEditSubCategoryForm .submitButton {
     background-color: #030B33;
     color: #fff;
     border: none;
@@ -231,12 +231,12 @@
     text-align: center;
 }
 
-.manageservice-edit-category-form .submit-button:hover,
-.manageservice-edit-sub-category-form .submit-button:hover {
+.manageServiceEditCategoryForm .submitButton:hover,
+.manageServiceEditSubCategoryForm .submitButton:hover {
     background-color: #444;
 }
 
-.manageservice-edit-service-form {
+.manageServiceEditServiceForm {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -249,18 +249,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.manageservice-bottom-border-input {
-    border: none;
-    padding: 5px;
-    outline: none;
-    transition: border-bottom-color 0.3s;
-}
-
-.manageservice-bottom-border-input:focus {
-    border-bottom-color: #039F54;
-}
-
-.manageservice-textarea-input {
+.manageServiceTextareaInput {
     border: 1px solid #000;
     padding: 10px;
     outline: none;
@@ -271,17 +260,17 @@
     border-radius: 5px;
 }
 
-.manageservice-textarea-input:focus {
+.manageServiceTextareaInput:focus {
     border-color: #039F54;
 }
 
-.manageservice-toggle-group {
+.manageServiceToggleGroup {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.manageservice-toggle-input {
+.manageServiceToggleInput {
     appearance: none;
     width: 40px;
     height: 20px;
@@ -293,11 +282,11 @@
     transition: background-color 0.3s;
 }
 
-.manageservice-toggle-input:checked {
+.manageServiceToggleInput:checked {
     background-color: green;
 }
 
-.manageservice-toggle-input::before {
+.manageServiceToggleInput::before {
     content: "";
     position: absolute;
     top: 3px;
@@ -309,11 +298,11 @@
     transition: transform 0.3s;
 }
 
-.manageservice-toggle-input:checked::before {
+.manageServiceToggleInput:checked::before {
     transform: translateX(20px);
 }
 
-.manageservice-submit-button {
+.manageServiceSubmitButton {
     background-color: #030B33;
     color: #fff;
     border: none;
@@ -325,17 +314,17 @@
     align-self: flex-end;
 }
 
-.manageservice-submit-button:hover {
+.manageServiceSubmitButton:hover {
     background-color: #444;
 }
 
-.manageservice-file-upload {
+.manageServiceFileUpload {
     display: none;
 }
 
-#manageservice-update-category-button,
-#manageservice-update-subcategory-button,
-#manageservice-update-service-variant-button {
+#manageServiceUpdateCategoryButton,
+#manageServiceUpdateSubCategoryButton,
+#manageServiceUpdateServiceVariantButton {
     background-color: #030B33;
     color: #fff;
     border: none;
@@ -349,27 +338,38 @@
     text-align: center;
 }
 
-#manageservice-update-category-button:hover,
-#manageservice-update-subcategory-button:hover,
-#manageservice-update-service-variant-button:hover {
+#manageServiceUpdateCategoryButton:hover,
+#manageServiceUpdateSubCategoryButton:hover,
+#manageServiceUpdateServiceVariantButton:hover {
     background-color: #444;
 }
 
-.manageservice-edit-category-form,
-.manageservice-edit-sub-category-form {
+.manageServiceEditCategoryForm,
+.manageServiceEditSubCategoryForm {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.manageservice-preview-container {
+.manageServicePreviewContainer {
     text-align: center;
     margin-top: 10px;
 }
 
-.manageservice-preview-image {
+.manageServicePreviewImage {
     max-width: 150px;
     max-height: 150px;
     border: 1px solid #000;
     border-radius: 5px;
+}
+
+.loadingMessage {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
 }

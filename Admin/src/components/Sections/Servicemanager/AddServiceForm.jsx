@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./servicemanager.css"; // Ensure the CSS file is correctly linked
 
-const AddServiceForm = ({ onSubmit, serviceTypes }) => {
+const AddServiceForm = ({ onSubmit }) => {
   const [serviceName, setServiceName] = useState("");
   const [price, setPrice] = useState("");
   const [serviceTime, setServiceTime] = useState("");
@@ -37,6 +37,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Omit selectedUserPackage and selectedProviderPackage if they are empty strings
     const serviceData = {
       serviceName,
       price,
@@ -49,9 +50,9 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
       isCash,
       serviceVariant,
       creditEligibility,
-      selectedUserPackage,
-      selectedProviderPackage,
       platformCommission, // Include platform commission in service data
+      selectedUserPackage: selectedUserPackage || null,
+      selectedProviderPackage: selectedProviderPackage || null,
     };
     onSubmit(serviceData);
   };
@@ -59,9 +60,12 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
   // Function to fetch user and provider packages from APIs
   const fetchPackages = async () => {
     try {
-      // Example API fetch
-      const userPackagesResponse = await fetch("/api/user-packages");
-      const providerPackagesResponse = await fetch("/api/provider-packages");
+      const userPackagesResponse = await fetch(
+        "http://13.126.118.3:3000/v1.0/core/user-packages",
+      );
+      const providerPackagesResponse = await fetch(
+        "http://13.126.118.3:3000/v1.0/core/provider-packages",
+      );
       const userPackagesData = await userPackagesResponse.json();
       const providerPackagesData = await providerPackagesResponse.json();
       setUserPackages(userPackagesData.packages);
@@ -75,6 +79,16 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
   useEffect(() => {
     fetchPackages();
   }, []);
+
+  const serviceTypes = [
+    "Daily",
+    "Monthly",
+    "Yearly",
+    "Male",
+    "Female",
+    "Deep",
+    "Normal",
+  ];
 
   return (
     <form className="add-service-form" onSubmit={handleSubmit}>
@@ -180,7 +194,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
         >
           <option value="">Select User Package</option>
           {userPackages.map((pkg, index) => (
-            <option key={index} value={pkg.id}>
+            <option key={index} value={pkg._id}>
               {pkg.name}
             </option>
           ))}
@@ -197,7 +211,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
         >
           <option value="">Select Provider Package</option>
           {providerPackages.map((pkg, index) => (
-            <option key={index} value={pkg.id}>
+            <option key={index} value={pkg._id}>
               {pkg.name}
             </option>
           ))}
@@ -264,7 +278,6 @@ const AddServiceForm = ({ onSubmit, serviceTypes }) => {
 
 AddServiceForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  serviceTypes: PropTypes.array.isRequired,
 };
 
 export default AddServiceForm;

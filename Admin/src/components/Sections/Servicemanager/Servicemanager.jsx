@@ -241,23 +241,21 @@ const Servermanager = () => {
       description,
       locations,
       taxPercentage,
-      platformCommissionGoldCr,
-      platformCommissionGoldRs,
-      platformCommissionPlatinumCr,
-      platformCommissionPlatinumRs,
-      platformCommissionDiamondCr,
-      platformCommissionDiamondRs,
+      platformCommission,
+      selectedUserPackage,
+      selectedProviderPackage,
       isMostBooked,
       tag,
       isCash,
       serviceVariant,
+      creditEligibility,
     } = serviceData;
 
     const payload = {
       name: serviceName,
       description: description,
-      categoryId: categoryId,
-      subCategoryId: subCategoryId,
+      categoryId: selectedCategory,
+      subCategoryId: selectedSubCategory,
       serviceVariants: [
         {
           variantName: serviceVariant,
@@ -267,26 +265,18 @@ const Servermanager = () => {
       ],
       locations: locations,
       taxPercentage: taxPercentage,
-      platformCommissions: {
-        gold: {
-          cr: platformCommissionGoldCr,
-          rs: platformCommissionGoldRs,
-        },
-        platinum: {
-          cr: platformCommissionPlatinumCr,
-          rs: platformCommissionPlatinumRs,
-        },
-        diamond: {
-          cr: platformCommissionDiamondCr,
-          rs: platformCommissionDiamondRs,
-        },
-      },
+      platformCommission: platformCommission,
+      selectedUserPackage: selectedUserPackage,
+      selectedProviderPackage: selectedProviderPackage,
       isMostBooked: isMostBooked,
       tag: tag,
       isCash: isCash,
+      creditEligibility: creditEligibility,
       isActive: true,
       isDeleted: false,
     };
+
+    console.log("Payload to be sent:", JSON.stringify(payload, null, 2));
 
     try {
       const serviceResponse = await fetch(
@@ -300,15 +290,20 @@ const Servermanager = () => {
         },
       );
 
+      console.log("Service response status:", serviceResponse.status);
+      console.log("Service response OK:", serviceResponse.ok);
+
       if (!serviceResponse.ok) {
-        throw new Error("Failed to add service");
+        const errorText = await serviceResponse.text();
+        console.error("Error response text:", errorText);
+        throw new Error(`Failed to add service: ${serviceResponse.status}`);
       }
 
       const serviceDataResponse = await serviceResponse.json();
       console.log("Service added:", serviceDataResponse);
       setShowServiceForm(false);
       setSelectedService(null);
-      fetchServices(subCategoryId);
+      fetchServices(selectedSubCategory);
     } catch (error) {
       console.error("Error during the addition of service:", error);
     }

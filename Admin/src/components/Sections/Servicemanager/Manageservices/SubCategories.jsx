@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import axios from "axios"; // Ensure axios is imported
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
@@ -17,7 +17,7 @@ const SubCategories = ({
   selectedCategory,
 }) => {
   const handleSubCategorySelect = (subCategory) => {
-    setSelectedSubCategory(subCategory._id);
+    setSelectedSubCategory(subCategory);
     fetchServices(selectedCategory, subCategory._id);
   };
 
@@ -33,12 +33,12 @@ const SubCategories = ({
   };
 
   return (
-    <div className="manageservice-card" id="subcategory-card">
-      <div className="manageservice-form-group">
-        <div className="manageservice-category-header">
+    <div className="manageServiceCard" id="subCategoryCard">
+      <div className="manageServiceFormGroup">
+        <div className="manageServiceCategoryHeader">
           <span>Select Sub-Category</span>
           <button
-            className="manageservice-hamburger-icon"
+            className="manageServiceHamburgerIcon"
             onClick={() => setShowSubCategoryMenu(!showSubCategoryMenu)}
           >
             &#9776;
@@ -47,39 +47,37 @@ const SubCategories = ({
       </div>
 
       {showSubCategoryMenu && (
-        <div className="manageservice-menu">
+        <div className="manageServiceMenu">
           {subCategories.length > 0 ? (
             subCategories.map((subCategory) => (
               <div
                 key={subCategory._id}
-                className={`manageservice-menu-item ${
-                  selectedSubCategory === subCategory._id ? "selected" : ""
+                className={`manageServiceMenuItem ${
+                  selectedSubCategory?._id === subCategory._id ? "selected" : ""
                 }`}
               >
                 <span onClick={() => handleSubCategorySelect(subCategory)}>
                   {subCategory.name}
                 </span>
-                <div className="manageservice-icon-group">
+                <div className="manageServiceIconGroup">
                   <FontAwesomeIcon
                     icon={faEdit}
-                    className="manageservice-edit-icon"
+                    className="manageServiceEditIcon"
                     onClick={() => {
-                      setSelectedSubCategory(subCategory._id);
+                      setSelectedSubCategory(subCategory);
                       setShowEditSubCategoryForm(true);
                     }}
                   />
                   <FontAwesomeIcon
                     icon={faTrash}
-                    className="manageservice-delete-icon"
+                    className="manageServiceDeleteIcon"
                     onClick={() => handleDeleteSubCategory(subCategory._id)}
                   />
                 </div>
               </div>
             ))
           ) : (
-            <div className="manageservice-menu-item">
-              No subcategories found
-            </div>
+            <div className="manageServiceMenuItem">No subcategories found</div>
           )}
         </div>
       )}
@@ -89,7 +87,7 @@ const SubCategories = ({
 
 SubCategories.propTypes = {
   subCategories: PropTypes.array.isRequired,
-  selectedSubCategory: PropTypes.string,
+  selectedSubCategory: PropTypes.object,
   setSelectedSubCategory: PropTypes.func.isRequired,
   setShowEditSubCategoryForm: PropTypes.func.isRequired,
   setShowSubCategoryMenu: PropTypes.func.isRequired,

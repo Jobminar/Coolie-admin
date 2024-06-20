@@ -1,263 +1,382 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 import "./serviceform.css"; // Ensure the CSS file is correctly linked
 
-const EditServiceForm = ({ service, onSave }) => {
-  const [serviceName, setServiceName] = useState(service.name);
-  const [serviceType, setServiceType] = useState(service.type);
-  const [servicePrice, setServicePrice] = useState(service.price);
-  const [serviceTime, setServiceTime] = useState(service.time);
-  const [description, setDescription] = useState(service.description);
-  const [locations, setLocations] = useState(service.locations);
-  const [city, setCity] = useState(service.city);
-  const [tax, setTax] = useState(service.tax);
-  const [commission, setCommission] = useState(service.commission);
-  const [platformCommissionGoldCr, setPlatformCommissionGoldCr] = useState(
-    service.platformCommissionGoldCr || "",
-  );
-  const [platformCommissionGoldRs, setPlatformCommissionGoldRs] = useState(
-    service.platformCommissionGoldRs || "",
-  );
-  const [platformCommissionPlatinumCr, setPlatformCommissionPlatinumCr] =
-    useState(service.platformCommissionPlatinumCr || "");
-  const [platformCommissionPlatinumRs, setPlatformCommissionPlatinumRs] =
-    useState(service.platformCommissionPlatinumRs || "");
-  const [platformCommissionDiamondCr, setPlatformCommissionDiamondCr] =
-    useState(service.platformCommissionDiamondCr || "");
-  const [platformCommissionDiamondRs, setPlatformCommissionDiamondRs] =
-    useState(service.platformCommissionDiamondRs || "");
-  const [mostBooked, setMostBooked] = useState(service.mostBooked);
-  const [tag, setTag] = useState(service.tag);
-  const [cashAfterService, setCashAfterService] = useState(
-    service.cashAfterService,
-  );
+const EditServiceForm = ({
+  service,
+  category,
+  subCategory,
+  onSave,
+  onClose,
+}) => {
+  // Console log the props to check if they are being passed correctly
+  console.log("service prop:", service);
+  console.log("category prop:", category);
+  console.log("subCategory prop:", subCategory);
+
+  const [categoryName, setCategoryName] = useState("");
+  const [subCategoryName, setSubCategoryName] = useState("");
+  const [userPackages, setUserPackages] = useState([]);
+  const [providerPackages, setProviderPackages] = useState([]);
+  const [serviceData, setServiceData] = useState({
+    name: "",
+    serviceType: "",
+    price: "",
+    serviceTime: "",
+    description: "",
+    locations: [],
+    taxPercentage: "",
+    isMostBooked: false,
+    tag: false,
+    isCash: false,
+    creditEligibility: false,
+    selectedUserPackage: "",
+    selectedProviderPackage: "",
+    platformCommission: "",
+    isActive: false,
+    isDeleted: false,
+  });
+
+  useEffect(() => {
+    const fetchCategoryName = async () => {
+      try {
+        console.log(`Fetching category name for ID: ${category}`);
+        const response = await axios.get(
+          `http://13.126.118.3:3000/v1.0/core/categories/${category}`,
+        );
+        console.log("Category name response:", response.data);
+        setCategoryName(response.data.name);
+      } catch (error) {
+        console.error("Error fetching category name:", error);
+      }
+    };
+
+    const fetchSubCategoryName = async () => {
+      try {
+        console.log(`Fetching sub-category name for ID: ${subCategory}`);
+        const response = await axios.get(
+          `http://13.126.118.3:3000/v1.0/core/${subCategory}`,
+        );
+        console.log("Sub-category name response:", response.data);
+        setSubCategoryName(response.data.name);
+      } catch (error) {
+        console.error("Error fetching sub-category name:", error);
+      }
+    };
+
+    const fetchServiceDetails = async () => {
+      try {
+        console.log(`Fetching service details for ID: ${service._id}`);
+        const response = await axios.get(
+          `http://13.126.118.3:3000/v1.0/core/services/${service._id}`,
+        );
+        const serviceData = response.data;
+        console.log("Service details response:", serviceData);
+        setServiceData({
+          name: serviceData.name,
+          serviceType: serviceData.serviceVariants[0]?.variantName || "",
+          price: serviceData.serviceVariants[0]?.price || "",
+          serviceTime: serviceData.serviceVariants[0]?.serviceTime || "",
+          description: serviceData.description,
+          locations: serviceData.locations,
+          taxPercentage: serviceData.taxPercentage,
+          isMostBooked: serviceData.isMostBooked,
+          tag: serviceData.tag,
+          isCash: serviceData.isCash,
+          creditEligibility: serviceData.creditEligibility,
+          selectedUserPackage: serviceData.selectedUserPackage,
+          selectedProviderPackage: serviceData.selectedProviderPackage,
+          platformCommission: serviceData.platformCommission,
+          isActive: serviceData.isActive,
+          isDeleted: serviceData.isDeleted,
+        });
+      } catch (error) {
+        console.error("Error fetching service details:", error);
+      }
+    };
+
+    const fetchPackages = async () => {
+      try {
+        console.log("Fetching user packages");
+        const userPackagesResponse = await axios.get(
+          "http://13.126.118.3:3000/v1.0/core/user-packages",
+        );
+        console.log("User packages response:", userPackagesResponse.data);
+        console.log("Fetching provider packages");
+        const providerPackagesResponse = await axios.get(
+          "http://13.126.118.3:3000/v1.0/core/provider-packages",
+        );
+        console.log(
+          "Provider packages response:",
+          providerPackagesResponse.data,
+        );
+        setUserPackages(userPackagesResponse.data.packages);
+        setProviderPackages(providerPackagesResponse.data.packages);
+      } catch (error) {
+        console.error("Error fetching packages:", error);
+      }
+    };
+
+    console.log("Starting API calls...");
+    fetchCategoryName();
+    fetchSubCategoryName();
+    fetchServiceDetails();
+    fetchPackages();
+    console.log("API calls finished.");
+  }, [category, subCategory, service._id]);
 
   const handleSave = () => {
-    const updatedService = {
-      name: serviceName,
-      type: serviceType,
-      price: servicePrice,
-      time: serviceTime,
-      description,
-      locations,
-      city,
-      tax,
-      commission,
-      platformCommissionGoldCr,
-      platformCommissionGoldRs,
-      platformCommissionPlatinumCr,
-      platformCommissionPlatinumRs,
-      platformCommissionDiamondCr,
-      platformCommissionDiamondRs,
-      mostBooked,
-      tag,
-      cashAfterService,
-    };
-    onSave(updatedService);
+    onSave(serviceData);
   };
 
   return (
-    <form className="add-service-form">
-      <div className="form-group">
-        <label>Service Name:</label>
-        <input
-          type="text"
-          className="bottom-border-input"
-          value={serviceName}
-          onChange={(e) => setServiceName(e.target.value)}
-        />
+    <div className="service-detail-card">
+      <div className="service-detail-header">
+        <h6>Category: {categoryName}</h6>
+        <h6>Sub-Category: {subCategoryName}</h6>
+        <h6>Service: {serviceData.name}</h6>
       </div>
-      <div className="form-group">
-        <label>Service Type:</label>
-        <select
-          className="bottom-border-input"
-          value={serviceType}
-          onChange={(e) => setServiceType(e.target.value)}
-        >
-          <option value="Normal cleaning">Normal cleaning</option>
-          <option value="Deep cleaning">Deep cleaning</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Hour">Hour</option>
-          <option value="Daily">Daily</option>
-          <option value="Monthly">Monthly</option>
-        </select>
-      </div>
-      <div className="form-group">
-        <label>Service Price:</label>
-        <input
-          type="text"
-          className="bottom-border-input"
-          value={servicePrice}
-          onChange={(e) => setServicePrice(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Total Service Time:</label>
-        <input
-          type="text"
-          className="bottom-border-input"
-          value={serviceTime}
-          onChange={(e) => setServiceTime(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Description:</label>
-        <textarea
-          className="textarea-input"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        ></textarea>
-      </div>
-      <div className="form-group">
-        <label>Locations:</label>
-        <input
-          type="text"
-          className="bottom-border-input"
-          value={locations}
-          onChange={(e) => setLocations(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>City:</label>
-        <input
-          type="text"
-          className="bottom-border-input"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>TAX %:</label>
-        <input
-          type="text"
-          className="bottom-border-input"
-          value={tax}
-          onChange={(e) => setTax(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Provider commission:</label>
-        <input
-          type="text"
-          className="bottom-border-input"
-          value={commission}
-          onChange={(e) => setCommission(e.target.value)}
-        />
-      </div>
-
-      {/* New fields for platform commissions */}
-      <div className="form-group">
-        <label>Platform Commission Gold (Cr):</label>
-        <input
-          type="text"
-          className="bottom-border-input"
-          value={platformCommissionGoldCr}
-          onChange={(e) => setPlatformCommissionGoldCr(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Platform Commission Gold (Rs):</label>
-        <input
-          type="text"
-          className="bottom-border-input"
-          value={platformCommissionGoldRs}
-          onChange={(e) => setPlatformCommissionGoldRs(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Platform Commission Platinum (Cr):</label>
-        <input
-          type="text"
-          className="bottom-border-input"
-          value={platformCommissionPlatinumCr}
-          onChange={(e) => setPlatformCommissionPlatinumCr(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Platform Commission Platinum (Rs):</label>
-        <input
-          type="text"
-          className="bottom-border-input"
-          value={platformCommissionPlatinumRs}
-          onChange={(e) => setPlatformCommissionPlatinumRs(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Platform Commission Diamond (Cr):</label>
-        <input
-          type="text"
-          className="bottom-border-input"
-          value={platformCommissionDiamondCr}
-          onChange={(e) => setPlatformCommissionDiamondCr(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>Platform Commission Diamond (Rs):</label>
-        <input
-          type="text"
-          className="bottom-border-input"
-          value={platformCommissionDiamondRs}
-          onChange={(e) => setPlatformCommissionDiamondRs(e.target.value)}
-        />
-      </div>
-
-      <div className="form-group toggle-group">
-        <label>Add to most booked service</label>
-        <input
-          type="checkbox"
-          className="toggle-input"
-          checked={mostBooked}
-          onChange={(e) => setMostBooked(e.target.checked)}
-        />
-      </div>
-      <div className="form-group toggle-group">
-        <label>TAG</label>
-        <input
-          type="checkbox"
-          className="toggle-input"
-          checked={tag}
-          onChange={(e) => setTag(e.target.checked)}
-        />
-      </div>
-      <div className="form-group toggle-group">
-        <label>Cash After Service</label>
-        <input
-          type="checkbox"
-          className="toggle-input"
-          checked={cashAfterService}
-          onChange={(e) => setCashAfterService(e.target.checked)}
-        />
-      </div>
-      <button type="button" className="submit-button" onClick={handleSave}>
-        Update
-      </button>
-    </form>
+      <form className="add-service-form">
+        <div className="form-group">
+          <label>Service Name:</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.name}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, name: e.target.value })
+            }
+          />
+        </div>
+        <div className="form-group">
+          <label>Service Type:</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.serviceType}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, serviceType: e.target.value })
+            }
+          />
+        </div>
+        <div className="form-group">
+          <label>Service Price:</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.price}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, price: e.target.value })
+            }
+          />
+        </div>
+        <div className="form-group">
+          <label>Total Service Time:</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.serviceTime}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, serviceTime: e.target.value })
+            }
+          />
+        </div>
+        <div className="form-group">
+          <label>Description:</label>
+          <textarea
+            className="textarea-input"
+            value={serviceData.description}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, description: e.target.value })
+            }
+          ></textarea>
+        </div>
+        <div className="form-group">
+          <label>Locations:</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.locations.join(", ")}
+            onChange={(e) =>
+              setServiceData({
+                ...serviceData,
+                locations: e.target.value.split(", "),
+              })
+            }
+          />
+        </div>
+        <div className="form-group">
+          <label>Tax Percentage:</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.taxPercentage}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, taxPercentage: e.target.value })
+            }
+          />
+        </div>
+        <div className="form-group">
+          <label>User Package:</label>
+          <select
+            className="bottom-borders-input"
+            value={serviceData.selectedUserPackage}
+            onChange={(e) =>
+              setServiceData({
+                ...serviceData,
+                selectedUserPackage: e.target.value,
+              })
+            }
+          >
+            {userPackages.map((pkg) => (
+              <option key={pkg._id} value={pkg._id}>
+                {pkg.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Provider Package:</label>
+          <select
+            className="bottom-borders-input"
+            value={serviceData.selectedProviderPackage}
+            onChange={(e) =>
+              setServiceData({
+                ...serviceData,
+                selectedProviderPackage: e.target.value,
+              })
+            }
+          >
+            {providerPackages.map((pkg) => (
+              <option key={pkg._id} value={pkg._id}>
+                {pkg.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Platform Commission:</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.platformCommission}
+            onChange={(e) =>
+              setServiceData({
+                ...serviceData,
+                platformCommission: e.target.value,
+              })
+            }
+          />
+        </div>
+        <div className="form-group toggle-group">
+          <label>Add to most booked service</label>
+          <input
+            type="checkbox"
+            className="toggle-input"
+            checked={serviceData.isMostBooked}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, isMostBooked: e.target.checked })
+            }
+          />
+        </div>
+        <div className="form-group toggle-group">
+          <label>TAG</label>
+          <input
+            type="checkbox"
+            className="toggle-input"
+            checked={serviceData.tag}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, tag: e.target.checked })
+            }
+          />
+        </div>
+        <div className="form-group toggle-group">
+          <label>Cash After Service</label>
+          <input
+            type="checkbox"
+            className="toggle-input"
+            checked={serviceData.isCash}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, isCash: e.target.checked })
+            }
+          />
+        </div>
+        <div className="form-group toggle-group">
+          <label>Credit Eligibility</label>
+          <input
+            type="checkbox"
+            className="toggle-input"
+            checked={serviceData.creditEligibility}
+            onChange={(e) =>
+              setServiceData({
+                ...serviceData,
+                creditEligibility: e.target.checked,
+              })
+            }
+          />
+        </div>
+        <div className="form-group toggle-group">
+          <label>Active</label>
+          <input
+            type="checkbox"
+            className="toggle-input"
+            checked={serviceData.isActive}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, isActive: e.target.checked })
+            }
+          />
+        </div>
+        <div className="form-group toggle-group">
+          <label>Deleted</label>
+          <input
+            type="checkbox"
+            className="toggle-input"
+            checked={serviceData.isDeleted}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, isDeleted: e.target.checked })
+            }
+          />
+        </div>
+        <button type="button" className="submissionbutton" onClick={handleSave}>
+          Update
+        </button>
+        <button type="button" className="submissionbutton" onClick={onClose}>
+          Close
+        </button>
+      </form>
+    </div>
   );
 };
 
 EditServiceForm.propTypes = {
   service: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
     name: PropTypes.string,
-    type: PropTypes.string,
-    price: PropTypes.string,
-    time: PropTypes.string,
+    serviceVariants: PropTypes.arrayOf(
+      PropTypes.shape({
+        variantName: PropTypes.string,
+        price: PropTypes.string,
+        serviceTime: PropTypes.string,
+      }),
+    ),
     description: PropTypes.string,
-    locations: PropTypes.string,
-    city: PropTypes.string,
-    tax: PropTypes.string,
-    commission: PropTypes.string,
-    platformCommissionGoldCr: PropTypes.string,
-    platformCommissionGoldRs: PropTypes.string,
-    platformCommissionPlatinumCr: PropTypes.string,
-    platformCommissionPlatinumRs: PropTypes.string,
-    platformCommissionDiamondCr: PropTypes.string,
-    platformCommissionDiamondRs: PropTypes.string,
-    mostBooked: PropTypes.bool,
+    locations: PropTypes.array,
+    taxPercentage: PropTypes.string,
+    isMostBooked: PropTypes.bool,
     tag: PropTypes.bool,
-    cashAfterService: PropTypes.bool,
+    isCash: PropTypes.bool,
+    creditEligibility: PropTypes.bool,
+    selectedUserPackage: PropTypes.string,
+    selectedProviderPackage: PropTypes.string,
+    platformCommission: PropTypes.string,
+    isActive: PropTypes.bool,
+    isDeleted: PropTypes.bool,
   }).isRequired,
+  category: PropTypes.string.isRequired,
+  subCategory: PropTypes.string.isRequired,
   onSave: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default EditServiceForm;

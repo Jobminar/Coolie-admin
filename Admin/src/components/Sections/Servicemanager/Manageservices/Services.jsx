@@ -25,12 +25,12 @@ const Services = ({
   };
 
   return (
-    <div className="manageservice-card" id="service-card">
-      <div className="manageservice-form-group">
-        <div className="manageservice-category-header">
+    <div className="manageServiceCard" id="serviceCard">
+      <div className="manageServiceFormGroup">
+        <div className="manageServiceCategoryHeader">
           <span>Select Service</span>
           <button
-            className="manageservice-hamburger-icon"
+            className="manageServiceHamburgerIcon"
             onClick={() => setShowServiceVariantsMenu(!showServiceVariantsMenu)}
           >
             &#9776;
@@ -39,33 +39,37 @@ const Services = ({
       </div>
 
       {showServiceVariantsMenu && (
-        <div className="manageservice-menu">
-          {services.map((service) => (
-            <div
-              key={service._id}
-              className={`manageservice-menu-item ${
-                selectedService && selectedService._id === service._id
-                  ? "selected"
-                  : ""
-              }`}
-            >
-              <span onClick={() => setSelectedService(service)}>
-                {service.name}
-              </span>
-              <div className="manageservice-icon-group">
-                <FontAwesomeIcon
-                  icon={faEdit}
-                  className="manageservice-edit-icon"
-                  onClick={() => setSelectedService(service)}
-                />
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  className="manageservice-delete-icon"
-                  onClick={() => handleDeleteService(service._id)}
-                />
+        <div className="manageServiceMenu">
+          {services.length > 0 ? (
+            services.map((service) => (
+              <div
+                key={service._id}
+                className={`manageServiceMenuItem ${
+                  selectedService && selectedService._id === service._id
+                    ? "selected"
+                    : ""
+                }`}
+              >
+                <span onClick={() => setSelectedService(service)}>
+                  {service.name}
+                </span>
+                <div className="manageServiceIconGroup">
+                  <FontAwesomeIcon
+                    icon={faEdit}
+                    className="manageServiceEditIcon"
+                    onClick={() => setSelectedService(service)}
+                  />
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    className="manageServiceDeleteIcon"
+                    onClick={() => handleDeleteService(service._id)}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <div className="manageServiceMenuItem">No services found</div>
+          )}
         </div>
       )}
     </div>

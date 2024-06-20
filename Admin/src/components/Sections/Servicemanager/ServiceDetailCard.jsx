@@ -12,7 +12,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
   const [providerPackages, setProviderPackages] = useState([]); // State variable for provider packages
   const [serviceData, setServiceData] = useState({
     // State variable for service details
-    serviceName: "", // Service name
+    name: "", // Service name
     serviceType: "", // Service type
     price: "", // Service price
     serviceTime: "", // Total service time
@@ -63,7 +63,26 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
         const response = await axios.get(
           `http://13.126.118.3:3000/v1.0/core/services/${service._id}`,
         );
-        setServiceData(response.data); // Set the service details in state
+        const serviceData = response.data;
+        setServiceData({
+          name: serviceData.name,
+          serviceType: serviceData.serviceVariants[0]?.variantName || "",
+          price: serviceData.serviceVariants[0]?.price || "",
+          serviceTime: serviceData.serviceVariants[0]?.serviceTime || "",
+          description: serviceData.description,
+          locations: serviceData.locations,
+          taxPercentage: serviceData.taxPercentage,
+          isMostBooked: serviceData.isMostBooked,
+          tag: serviceData.tag,
+          isCash: serviceData.isCash,
+          serviceVariant: serviceData.serviceVariants[0]?.variantName || "",
+          creditEligibility: serviceData.creditEligibility,
+          selectedUserPackage: serviceData.selectedUserPackage,
+          selectedProviderPackage: serviceData.selectedProviderPackage,
+          platformCommission: serviceData.platformCommission,
+          isActive: serviceData.isActive,
+          isDeleted: serviceData.isDeleted,
+        });
       } catch (error) {
         console.error("Error fetching service details:", error);
       }
@@ -92,6 +111,15 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
     fetchPackages();
   }, [category, subCategory, service._id]); // Run useEffect when category, subCategory, or service ID changes
 
+  // Find the selected package names
+  const selectedUserPackageName =
+    userPackages.find((pkg) => pkg._id === serviceData.selectedUserPackage)
+      ?.name || "";
+  const selectedProviderPackageName =
+    providerPackages.find(
+      (pkg) => pkg._id === serviceData.selectedProviderPackage,
+    )?.name || "";
+
   // Render the component UI
   return (
     <div className="service-detail-card">
@@ -105,7 +133,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
         {/* Display sub-category name */}
         <h6>Sub-Category: {subCategoryName}</h6>
         {/* Display service name */}
-        <h6>Service: {serviceData.serviceName}</h6>
+        <h6>Service: {serviceData.name}</h6>
       </div>
       <form className="add-service-form">
         {" "}
@@ -117,7 +145,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="text"
             className="bottom-borders-input"
-            value={serviceData.serviceName}
+            value={serviceData.name}
             readOnly
           />
         </div>
@@ -183,32 +211,22 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
         {/* User Packages */}
         <div className="form-group">
           <label>User Package:</label>
-          <select
+          <input
+            type="text"
             className="bottom-borders-input"
-            value={serviceData.selectedUserPackage}
+            value={selectedUserPackageName}
             readOnly
-          >
-            {userPackages.map((pkg) => (
-              <option key={pkg.id} value={pkg.id}>
-                {pkg.name}
-              </option>
-            ))}
-          </select>
+          />
         </div>
         {/* Provider Packages */}
         <div className="form-group">
           <label>Provider Package:</label>
-          <select
+          <input
+            type="text"
             className="bottom-borders-input"
-            value={serviceData.selectedProviderPackage}
+            value={selectedProviderPackageName}
             readOnly
-          >
-            {providerPackages.map((pkg) => (
-              <option key={pkg.id} value={pkg.id}>
-                {pkg.name}
-              </option>
-            ))}
-          </select>
+          />
         </div>
         {/* Platform Commission */}
         <div className="form-group">
@@ -293,17 +311,20 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
 ServiceDetailCard.propTypes = {
   service: PropTypes.shape({
     _id: PropTypes.string.isRequired,
-    serviceName: PropTypes.string,
-    serviceType: PropTypes.string,
-    price: PropTypes.string,
-    serviceTime: PropTypes.string,
+    name: PropTypes.string,
+    serviceVariants: PropTypes.arrayOf(
+      PropTypes.shape({
+        variantName: PropTypes.string,
+        price: PropTypes.string,
+        serviceTime: PropTypes.string,
+      }),
+    ),
     description: PropTypes.string,
     locations: PropTypes.array,
     taxPercentage: PropTypes.string,
     isMostBooked: PropTypes.bool,
     tag: PropTypes.bool,
     isCash: PropTypes.bool,
-    serviceVariant: PropTypes.string,
     creditEligibility: PropTypes.bool,
     selectedUserPackage: PropTypes.string,
     selectedProviderPackage: PropTypes.string,

@@ -6,6 +6,7 @@ import {
   faArrowUpFromBracket,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
+import "./manageservice.css";
 
 const EditCategoryForm = ({
   selectedCategory,
@@ -21,12 +22,11 @@ const EditCategoryForm = ({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Ensure the component loads the current category data when mounted or when selectedCategory changes
     if (selectedCategory) {
       setCategoryName(selectedCategory.name || "");
       setCategoryIcon(selectedCategory.imageKey || "");
     }
-  }, [selectedCategory]); // Dependency array includes selectedCategory to re-run on change
+  }, [selectedCategory]);
 
   const handleCategoryIconChange = (e) => {
     const file = e.target.files[0];
@@ -78,32 +78,30 @@ const EditCategoryForm = ({
   };
 
   return (
-    <div className="manageservice-card manageservice-edit-category-form">
+    <div className="manageServiceCard manageServiceEditCategoryForm">
       <h3>
         Edit Category
         <FontAwesomeIcon
           icon={faTimes}
-          className="manageservice-cancel-icon"
+          className="manageServiceCancelIcon"
           onClick={() => setShowEditCategoryForm(false)}
         />
       </h3>
-      {successMessage && (
-        <div className="success-message">{successMessage}</div>
-      )}
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
-      <div className="manageservice-input-container">
+      {successMessage && <div className="successMessage">{successMessage}</div>}
+      {errorMessage && <div className="errorMessage">{errorMessage}</div>}
+      <div className="manageServiceInputContainer">
         <label htmlFor="categoryName">Category Name:</label>
         <input
           type="text"
           id="categoryName"
-          className="manageservice-bottom-border-input"
+          className="manageServiceBottomBorderInput"
           value={categoryName}
           onChange={(e) => setCategoryName(e.target.value)}
         />
         {categoryError && <span className="error">{categoryError}</span>}
       </div>
       {categoryIcon && (
-        <div className="manageservice-preview-container">
+        <div className="manageServicePreviewContainer">
           <img
             src={
               categoryIcon.startsWith("blob:")
@@ -111,31 +109,28 @@ const EditCategoryForm = ({
                 : `${AWS_BASE_URL}/${categoryIcon}`
             }
             alt="Category Icon"
-            className="manageservice-preview-image"
+            className="manageServicePreviewImage"
           />
         </div>
       )}
-      <div className="manageservice-upload-container">
+      <div className="manageServiceUploadContainer">
         <input
           type="file"
           id="categoryIcon"
           onChange={handleCategoryIconChange}
-          className="manageservice-file-upload"
+          className="manageServiceFileUpload"
         />
-        <label
-          htmlFor="categoryIcon"
-          className="manageservice-upload-icon-label"
-        >
+        <label htmlFor="categoryIcon" className="manageServiceUploadIconLabel">
           Choose Icon
           <FontAwesomeIcon
             icon={faArrowUpFromBracket}
-            className="manageservice-upload-icon"
+            className="manageServiceUploadIcon"
           />
         </label>
       </div>
       <button
-        id="manageservice-update-category-button"
-        className="manageservice-submit-button"
+        id="manageServiceUpdateCategoryButton"
+        className="manageServiceSubmitButton"
         onClick={handleEditCategory}
         disabled={loading}
       >
@@ -146,7 +141,11 @@ const EditCategoryForm = ({
 };
 
 EditCategoryForm.propTypes = {
-  selectedCategory: PropTypes.object,
+  selectedCategory: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    imageKey: PropTypes.string,
+  }),
   setShowEditCategoryForm: PropTypes.func.isRequired,
   API_BASE_URL: PropTypes.string.isRequired,
   AWS_BASE_URL: PropTypes.string.isRequired,
