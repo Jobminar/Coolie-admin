@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import Addproviderpackage from './Addproviderpackage';
-import Manageproviderpackage from './Manageproviderpackage';
 import '../Promotions/promotion.css'
-import Adduserpackage from './adduserpackage';
-import Manageuserpackage from './Manageuserpackage';
+
+import Mostbookedservices from '../Banners/mostbookedservices';
+import OurCoreServices from '../Banners/ourcoreservices';
 
 
 const  Userpackage = () => {
-  const [activeTab, setActiveTab] = useState("adduserpackage");
+  const [activeTab, setActiveTab] = useState("mostbookedservices");
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -15,10 +14,10 @@ const  Userpackage = () => {
 
   const renderSelectedComponent = () => {
     switch (activeTab) {
-      case "adduserpackage":
-        return <Adduserpackage/>;
-      case "manageuserpackage":
-        return < Manageuserpackage/>;
+      case "mostbookedservices":
+        return <Mostbookedservices/>;
+      case "ourcoreservices":
+        return <OurCoreServices/>;
       default:
         return null;
     }
@@ -30,16 +29,16 @@ const  Userpackage = () => {
         <h1>User Packages</h1>
         <div className='universal-buttons'>
           <div
-            className={`tab ${activeTab === "adduserpackage" ? "active" : ""}`}
-            onClick={() => handleTabClick("adduserpackage")}
+            className={`tab ${activeTab === "mostbookedservices" ? "active" : ""}`}
+            onClick={() => handleTabClick("mostbookedservices")}
           >
-            Add User Packages
+           Most booked Services
           </div>
           <div
-            className={`tab ${activeTab === "manageuserpackage" ? "active" : ""}`}
-            onClick={() => handleTabClick("manageuserpackage")}
+            className={`tab ${activeTab === "ourcoreservices" ? "active" : ""}`}
+            onClick={() => handleTabClick("ourcoreservices")}
           >
-            Manage User Packages
+           Our core services
           </div>
         </div>
       </div>

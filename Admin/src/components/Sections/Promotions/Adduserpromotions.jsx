@@ -8,7 +8,7 @@ const Addpromotions = () => {
   const [addPromo, setAddPromo] = useState({
     promoName: '',
     serviceType: '',
-    userType: '',
+    userType: [],
     offerPercentage: '',
     validFrom: '',
     validTill: '',
@@ -19,6 +19,16 @@ const Addpromotions = () => {
 
   const handleChange = (e) => {
     setAddPromo({ ...addPromo, [e.target.name]: e.target.value });
+  };
+
+  const handleUserTypeChange = (e) => {
+    const { value, checked } = e.target;
+    setAddPromo(prevState => {
+      const userType = checked
+        ? [...prevState.userType, value]
+        : prevState.userType.filter(type => type !== value);
+      return { ...prevState, userType };
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -62,7 +72,6 @@ const Addpromotions = () => {
               name='serviceType'
               value={serviceType}
               onChange={handleChange}
-              // label='Service Type'
               variant='outlined'
               margin='normal'
               fullWidth
@@ -72,27 +81,16 @@ const Addpromotions = () => {
               }}
               required
             >
-              <option>Beautician</option>
-              <option>Professional cleaning</option>
-              <option>Bathroom cleaning</option>
-              <option>Washing</option>
-              <option>AC Repair & service</option>
-              <option>Electrician</option>
-              <option>Plumber</option>
-              <option>Laundry services</option>
+              <option value=''>Select a service</option>
+              <option value='Beautician'>Beautician</option>
+              <option value='Professional cleaning'>Professional cleaning</option>
+              <option value='Bathroom cleaning'>Bathroom cleaning</option>
+              <option value='Washing'>Washing</option>
+              <option value='AC Repair & service'>AC Repair & service</option>
+              <option value='Electrician'>Electrician</option>
+              <option value='Plumber'>Plumber</option>
+              <option value='Laundry services'>Laundry services</option>
             </TextField>
-            <TextField
-              type='text'
-              name='userType'
-              value={userType}
-              onChange={handleChange}
-              label='User Type'
-              variant='outlined'
-              margin='normal'
-              fullWidth
-              className='textFieldCustom'
-              required
-            />
             <TextField
               type='number'
               name='offerPercentage'
@@ -129,12 +127,48 @@ const Addpromotions = () => {
               variant='outlined'
               margin='normal'
               fullWidth
-              className='textFieldCustom' // Ensure all TextField use this class
+              className='textFieldCustom'
               required
               InputLabelProps={{
                 shrink: true,
               }}
             />
+            <div>
+              <label>User Type:</label>
+              <div>
+                <label>
+                  <input
+                    type='checkbox'
+                    name='userType'
+                    value='Gold'
+                    checked={userType.includes('Gold')}
+                    onChange={handleUserTypeChange}
+                  />
+                  User Type 1
+                </label>
+                <label>
+                  <input
+                    type='checkbox'
+                    name='userType'
+                    value='Silver'
+                    checked={userType.includes('Silver')}
+                    onChange={handleUserTypeChange}
+                  />
+                  User Type 2
+                </label>
+                <label>
+                  <input
+                    type='checkbox'
+                    name='userType'
+                    value='Bronze'
+                    checked={userType.includes('Bronze')}
+                    onChange={handleUserTypeChange}
+                  />
+                  User Type 3
+                </label>
+              </div>
+            </div>
+
           </FormGroup>
         </FormControl>
         <button type='submit' className='submit-button'>Submit</button>

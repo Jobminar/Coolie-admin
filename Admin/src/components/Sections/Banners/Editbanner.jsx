@@ -1,7 +1,8 @@
 // EditBanner.js
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import './banners.css'
+import { useNavigate } from "react-router-dom";
 
 const EditBanner = () => {
   const location = useLocation();
@@ -52,7 +53,7 @@ const EditBanner = () => {
 
   return (
     <div className="edit-banner-form">
-      <h1>Edit User Banners</h1>
+      <h1>Edit  Banners</h1>
       <form onSubmit={handleSubmit}>
       <div>
                         <input

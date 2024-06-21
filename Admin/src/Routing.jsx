@@ -29,9 +29,8 @@ import Viewadmin from "./components/Sections/Subadmin/view-admin";
 import Addadmin from "./components/Sections/Subadmin/Addsubadmin";
 import PermissionsForm from "./components/Sections/Subadmin/SubAdminPermissions";
 import { FilterBarProvider } from "./FilterBarContext";
-import Induction from "./components/Sections/Induction/induction";
-import Training from "./components/Sections/Induction/training";
 import Popupbanners from "./components/Sections/Banners/Popupbanners";
+import TrainingMain from "./components/Sections/Induction/trainingmain";
 
 const Routing = () => {
   return (
@@ -50,6 +49,8 @@ const Routing = () => {
             <Route path="/marketing" element={<Marketing />} />
             <Route path="/subadmin" element={<Subadmin />} />
             <Route path="/inductionmain" element={<Inductionmain />} />
+            <Route path="/trainingcon" element={<TrainingMain />}/>
+
             <Route path="/addsubadmin" element={<Addsubadmin />} />
             <Route path="/editbanner" element={<EditBanner />} />
             <Route path="/editloyality" element={<Editloyalitycards />} />
@@ -73,8 +74,10 @@ const Routing = () => {
             <Route path="/viewadmin" element={<Viewadmin />} />
             <Route path="/addsubadmin" element={<Addadmin />} />
             <Route path="/permissionform" element={<PermissionsForm />} />
-            <Route path="/induction" element={<Induction />} />
-            <Route path="/training" element={<Training />} />
+           
+            
+           
+            
             <Route path="*" element={<Navigate to="/" />} />{" "}
             {/* Default redirect */}
           </Routes>
