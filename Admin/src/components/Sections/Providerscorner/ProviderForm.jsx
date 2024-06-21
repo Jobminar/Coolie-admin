@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ProviderForm.css";
 import {
   generateOtp,
@@ -8,7 +8,7 @@ import {
 } from "../../../utils/api";
 import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 
-const ProviderForm = () => {
+const ProviderForm = ({ providers }) => {
   const [activeTab, setActiveTab] = useState("verified");
   const [formData, setFormData] = useState({
     name: "",
@@ -37,6 +37,11 @@ const ProviderForm = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProviders, setFilteredProviders] = useState([]);
 
+  useEffect(() => {
+    setFilteredProviders(providers);
+  }, [providers]);
+
+  // Function to handle search by provider name
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     const filtered = providers.filter((provider) =>
@@ -45,25 +50,57 @@ const ProviderForm = () => {
     setFilteredProviders(filtered);
   };
 
+  // Function to handle tab switching
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+    setEditMode(false); // Exit edit mode when switching tabs
+    resetForm();
   };
 
+  // Function to reset the form data and errors
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      mobile: "",
+      email: "",
+      dob: "",
+      aadhar: "",
+      pan: "",
+      address: "",
+      experience: "",
+      pincode: "",
+      locations: "",
+      accountName: "",
+      accountNumber: "",
+      bankName: "",
+      ifsc: "",
+      branch: "",
+      branchAddress: "",
+      documents: null,
+    });
+    setErrors({});
+    setSubmissionError("");
+  };
+
+  // Function to handle input changes in the form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Function to handle file selection for documents
   const handleFileChange = (e) => {
     setFormData({ ...formData, documents: e.target.files[0] });
   };
 
+  // Function to generate OTP and send email
   const handleGenerateOtp = (otpSetter, recipient) => {
     const otp = generateOtp();
     otpSetter(otp);
     sendOtpEmail(otp, recipient);
   };
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmissionError("");
@@ -74,6 +111,8 @@ const ProviderForm = () => {
       try {
         const responses = await sendFormDataToApis(formData);
         console.log("Form submitted successfully:", responses);
+        resetForm();
+        setEditMode(false);
       } catch (error) {
         console.error("Error submitting form:", error);
         setSubmissionError(
@@ -83,31 +122,35 @@ const ProviderForm = () => {
     }
   };
 
+  // Function to handle edit mode for a provider
   const handleEdit = (provider) => {
-    setFormData(provider);
+    setFormData({
+      name: provider.name,
+      mobile: provider.contact.phone,
+      email: provider.contact.email,
+      dob: "",
+      aadhar: "",
+      pan: "",
+      address: provider.location.address,
+      experience: "",
+      pincode: "",
+      locations: "",
+      accountName: "",
+      accountNumber: "",
+      bankName: "",
+      ifsc: "",
+      branch: "",
+      branchAddress: "",
+      documents: null,
+    });
     setEditMode(true);
-    setActiveTab("verified");
+    setActiveTab("verified"); // Assuming switching to verified tab when editing
   };
 
+  // Placeholder function for handling provider deletion
   const handleDelete = (providerId) => {
-    // Logic to handle provider deletion
     console.log("Provider deleted:", providerId);
   };
-
-  const providers = [
-    {
-      id: 1,
-      name: "Provider 1",
-      email: "provider1@example.com",
-      phone: "1234567890",
-      location: "Location 1",
-      joinDate: "2021-01-01",
-      package: "Basic",
-      category: "Category 1",
-      status: "active",
-    },
-    // Add more sample providers as needed
-  ];
 
   return (
     <div className="provider-form-unique">
@@ -136,7 +179,7 @@ const ProviderForm = () => {
         <FaSearch className="searchIcon-unique" />
         <input
           type="text"
-          placeholder="Search with phone no"
+          placeholder="Search by provider name"
           onChange={handleSearch}
           value={searchTerm}
         />
@@ -160,16 +203,20 @@ const ProviderForm = () => {
                 </tr>
               </thead>
               <tbody>
-                {providers.map((provider) => (
+                {filteredProviders.map((provider) => (
                   <tr key={provider.id}>
                     <td>{provider.id}</td>
                     <td>{provider.name}</td>
-                    <td>{provider.email}</td>
-                    <td>{provider.phone}</td>
-                    <td>{provider.location}</td>
-                    <td>{provider.joinDate}</td>
-                    <td>{provider.package}</td>
-                    <td>{provider.category}</td>
+                    <td>{provider.contact.email}</td>
+                    <td>{provider.contact.phone}</td>
+                    <td>{provider.location.address}</td>
+                    <td>{provider.membership.joinDate}</td>
+                    <td>{provider.membership.package.type}</td>
+                    <td>
+                      {provider.workDetails
+                        .map((detail) => detail.category)
+                        .join(", ")}
+                    </td>
                     <td>
                       <div
                         className={`status-indicator-unique ${
@@ -195,6 +242,7 @@ const ProviderForm = () => {
         )}
         {activeTab === "verified" && editMode && (
           <form onSubmit={handleSubmit}>
+            {/* Form inputs for editing */}
             <div>
               <label>Enter your name:</label>
               <input
@@ -223,7 +271,7 @@ const ProviderForm = () => {
                 className="generate-otp-button"
                 onClick={() => handleGenerateOtp(setMobileOtp, formData.email)}
               >
-                Generate OTP
+                Generate Mobile OTP
               </button>
               <label>OTP:</label>
               <input type="text" value={mobileOtp} placeholder="OTP" readOnly />
@@ -265,7 +313,7 @@ const ProviderForm = () => {
                 className="generate-otp-button"
                 onClick={() => handleGenerateOtp(setAadharOtp, formData.email)}
               >
-                Generate OTP
+                Generate Aadhar OTP
               </button>
               <label>OTP:</label>
               <input type="text" value={aadharOtp} placeholder="OTP" readOnly />
@@ -279,16 +327,15 @@ const ProviderForm = () => {
                 onChange={handleInputChange}
                 placeholder="PAN"
               />
-              {errors.pan && <p className="error">{errors.pan}</p>}
             </div>
             <div>
-              <label>Postal Address:</label>
+              <label>Address:</label>
               <input
                 type="text"
                 name="address"
                 value={formData.address}
                 onChange={handleInputChange}
-                placeholder="Postal Address"
+                placeholder="Address"
               />
             </div>
             <div>
@@ -302,27 +349,26 @@ const ProviderForm = () => {
               />
             </div>
             <div>
-              <label>Address with Pincode:</label>
+              <label>Pincode:</label>
               <input
                 type="text"
                 name="pincode"
                 value={formData.pincode}
                 onChange={handleInputChange}
-                placeholder="Address with Pincode"
+                placeholder="Pincode"
               />
             </div>
             <div>
-              <label>Serving Locations:</label>
+              <label>Locations:</label>
               <input
                 type="text"
                 name="locations"
                 value={formData.locations}
                 onChange={handleInputChange}
-                placeholder="Serving Locations"
+                placeholder="Locations"
               />
             </div>
             <div>
-              <h3>Banking Details</h3>
               <label>Account Name:</label>
               <input
                 type="text"
@@ -331,6 +377,8 @@ const ProviderForm = () => {
                 onChange={handleInputChange}
                 placeholder="Account Name"
               />
+            </div>
+            <div>
               <label>Account Number:</label>
               <input
                 type="text"
@@ -339,6 +387,8 @@ const ProviderForm = () => {
                 onChange={handleInputChange}
                 placeholder="Account Number"
               />
+            </div>
+            <div>
               <label>Bank Name:</label>
               <input
                 type="text"
@@ -347,6 +397,8 @@ const ProviderForm = () => {
                 onChange={handleInputChange}
                 placeholder="Bank Name"
               />
+            </div>
+            <div>
               <label>IFSC:</label>
               <input
                 type="text"
@@ -355,6 +407,8 @@ const ProviderForm = () => {
                 onChange={handleInputChange}
                 placeholder="IFSC"
               />
+            </div>
+            <div>
               <label>Branch:</label>
               <input
                 type="text"
@@ -363,6 +417,8 @@ const ProviderForm = () => {
                 onChange={handleInputChange}
                 placeholder="Branch"
               />
+            </div>
+            <div>
               <label>Branch Address:</label>
               <input
                 type="text"
@@ -371,19 +427,30 @@ const ProviderForm = () => {
                 onChange={handleInputChange}
                 placeholder="Branch Address"
               />
-              <label>Document(s):</label>
-              <input type="file" onChange={handleFileChange} />
             </div>
-            <button type="submit" className="submit-button">
-              Submit
-            </button>
+            <div>
+              <label>Documents:</label>
+              <input type="file" name="documents" onChange={handleFileChange} />
+            </div>
             {submissionError && <p className="error">{submissionError}</p>}
+            <div className="form-actions">
+              <button type="submit" className="submit-button">
+                Submit
+              </button>
+              <button
+                type="button"
+                className="cancel-button"
+                onClick={resetForm}
+              >
+                Cancel
+              </button>
+            </div>
           </form>
         )}
         {activeTab === "underVerification" && (
-          <div className="under-verification-unique">
-            <p>Providers Under Verification content goes here...</p>
-          </div>
+          <p className="under-verification-message">
+            Under verification providers list will be displayed here.
+          </p>
         )}
       </div>
     </div>

@@ -1,4 +1,5 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import PropTypes from "prop-types";
 import "./AuthenticateProvider.css";
 import { FaEdit, FaTrash, FaArrowLeft, FaSearch } from "react-icons/fa";
 import ProviderProfile from "./ProviderProfile";
@@ -6,7 +7,7 @@ import Document1 from "../../../assets/Documents/ProviderReport1.pdf";
 import Document2 from "../../../assets/Documents/ProviderReport2.pdf";
 import { FilterBarContext } from "../../../FilterBarContext";
 
-const AuthenticateProvider = () => {
+const AuthenticateProvider = ({ providers }) => {
   const [activeComponent, setActiveComponent] = useState("ProviderList");
   const [selectedProvider, setSelectedProvider] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,6 +15,10 @@ const AuthenticateProvider = () => {
   const [comments, setComments] = useState({});
   const [overallStatus, setOverallStatus] = useState("Pending");
   const { setFilterBarProps } = useContext(FilterBarContext);
+
+  useEffect(() => {
+    console.log("providers from provider corner", providers);
+  }, [providers]);
 
   const handleVerify = (provider) => {
     setSelectedProvider(provider);
@@ -35,21 +40,6 @@ const AuthenticateProvider = () => {
   const handleDocumentsClick = () => {
     setActiveComponent("DocumentVerification");
   };
-
-  const providers = [
-    {
-      id: 1,
-      name: "Varma",
-      email: "provider1@example.com",
-      phone: "1234567890",
-      location: "Location 1",
-      joinDate: "2021-01-01",
-      package: "Basic",
-      status: "online",
-      category: "Plumbing",
-    },
-    // Add more sample providers as needed
-  ];
 
   const fakeData = {
     documents: [
@@ -123,7 +113,7 @@ const AuthenticateProvider = () => {
   };
 
   const filteredProviders = providers.filter((provider) =>
-    provider.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    provider.contact.phone.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -160,19 +150,23 @@ const AuthenticateProvider = () => {
                   <tr key={provider.id}>
                     <td>{provider.id}</td>
                     <td>{provider.name}</td>
-                    <td>{provider.email}</td>
-                    <td>{provider.phone}</td>
-                    <td>{provider.location}</td>
-                    <td>{provider.joinDate}</td>
-                    <td>{provider.package}</td>
+                    <td>{provider.contact.email}</td>
+                    <td>{provider.contact.phone}</td>
+                    <td>{provider.location.address}</td>
+                    <td>{provider.membership.joinDate}</td>
+                    <td>{provider.membership.package.type}</td>
                     <td>
                       <div
                         className={`status-indicator ${
-                          provider.status === "online" ? "online" : "offline"
+                          provider.status === "active" ? "online" : "offline"
                         }`}
                       ></div>
                     </td>
-                    <td>{provider.category}</td>
+                    <td>
+                      {provider.workDetails.map((workDetail, index) => (
+                        <div key={index}>{workDetail.category}</div>
+                      ))}
+                    </td>
                     <td className="actions">
                       <FaEdit
                         className="actionIcon edit"
@@ -277,6 +271,10 @@ const AuthenticateProvider = () => {
       )}
     </div>
   );
+};
+
+AuthenticateProvider.propTypes = {
+  providers: PropTypes.array.isRequired,
 };
 
 export default AuthenticateProvider;

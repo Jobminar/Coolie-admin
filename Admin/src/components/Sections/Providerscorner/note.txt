@@ -1,3 +1,493 @@
 npm install --save @fortawesome/fontawesome-svg-core
 npm install --save @fortawesome/free-solid-svg-icons
 npm install --save @fortawesome/react-fontawesome
+### Beginner's Guide: Building a Provider Registration Form
+
+#### Step 1: Setup the Project Structure
+
+1. **Create the Project**:
+   - Ensure your project is set up with React. If not, you can set up a new React project using Create React App:
+     ```sh
+     npx create-react-app provider-registration
+     cd provider-registration
+     ```
+
+2. **Create the Required Files**:
+   - Inside the `src` folder, create three new files:
+     - `api-service-provider.js`
+     - `ProviderDetailsForm.jsx`
+     - `ProviderFinance.jsx`
+
+#### Step 2: Setup the API Service
+
+1. **Create `api-service-provider.js`**:
+   - This file will handle all the API requests needed for our form.
+   - Add the following content to it:
+
+     ```javascript
+     import axios from "axios";
+
+     const BASE_URL = "http://13.126.118.3:3000/v1.0/providers";
+
+     // Function to generate OTP
+     export const generateOtp = async (phone) => {
+       try {
+         const response = await axios.post(`${BASE_URL}/provider-auth/signUp`, { phone });
+         return response.data;
+       } catch (error) {
+         throw new Error("Error generating OTP");
+       }
+     };
+
+     // Function to verify OTP
+     export const verifyOtp = async (otp) => {
+       try {
+         const response = await axios.post(`${BASE_URL}/provider-auth/verify-otp`, { otp });
+         return response.data;
+       } catch (error) {
+         throw new Error("Error verifying OTP");
+       }
+     };
+
+     // Function to submit provider details
+     export const submitProviderDetails = async (formData) => {
+       try {
+         const response = await axios.post(`${BASE_URL}/provider-details`, formData);
+         return response.data;
+       } catch (error) {
+         throw new Error("Error submitting provider details");
+       }
+     };
+
+     // Function to submit finance details
+     export const submitFinanceDetails = async (formData) => {
+       try {
+         const response = await axios.post(`${BASE_URL}/provider-finance`, formData);
+         return response.data;
+       } catch (error) {
+         throw new Error("Error submitting finance details");
+       }
+     };
+     ```
+
+#### Step 3: Create the Provider Details Form
+
+1. **Create `ProviderDetailsForm.jsx`**:
+   - This component will handle the "Additional Provider Details" part of the form.
+   - Add the following content to it:
+
+     ```javascript
+     import React from "react";
+
+     const ProviderDetailsForm = ({ additionalData, handleAdditionalInputChange, handleImageChange, handleAddDetails, submissionError }) => {
+       const handleSubmit = async () => {
+         const providerFormData = new FormData();
+         providerFormData.append("providerName", additionalData.providerName);
+         providerFormData.append("image", additionalData.image);
+         providerFormData.append("age", additionalData.age);
+         providerFormData.append("phone", additionalData.phone);
+         providerFormData.append("pincode", additionalData.pincode);
+         providerFormData.append("radius", additionalData.radius);
+         providerFormData.append("work", additionalData.work);
+         providerFormData.append("userId", additionalData.userId);
+
+         try {
+           await handleAddDetails(providerFormData);
+         } catch (error) {
+           console.error("Error submitting provider details:", error);
+         }
+       };
+
+       return (
+         <div className="additional-details-form">
+           <h3>Additional Provider Details</h3>
+           <form onSubmit={(e) => e.preventDefault()}>
+             <div>
+               <label>Provider Name:</label>
+               <input
+                 type="text"
+                 name="providerName"
+                 value={additionalData.providerName}
+                 onChange={handleAdditionalInputChange}
+                 placeholder="Provider Name"
+               />
+             </div>
+             <div>
+               <label>Image:</label>
+               <input type="file" onChange={handleImageChange} />
+             </div>
+             <div>
+               <label>Age:</label>
+               <input
+                 type="text"
+                 name="age"
+                 value={additionalData.age}
+                 onChange={handleAdditionalInputChange}
+                 placeholder="Age"
+               />
+             </div>
+             <div>
+               <label>Phone:</label>
+               <input
+                 type="text"
+                 name="phone"
+                 value={additionalData.phone}
+                 onChange={handleAdditionalInputChange}
+                 placeholder="Phone"
+               />
+             </div>
+             <div>
+               <label>Pincode:</label>
+               <input
+                 type="text"
+                 name="pincode"
+                 value={additionalData.pincode}
+                 onChange={handleAdditionalInputChange}
+                 placeholder="Pincode"
+               />
+             </div>
+             <div>
+               <label>Radius:</label>
+               <input
+                 type="text"
+                 name="radius"
+                 value={additionalData.radius}
+                 onChange={handleAdditionalInputChange}
+                 placeholder="Radius"
+               />
+             </div>
+             <div>
+               <label>Work:</label>
+               <input
+                 type="text"
+                 name="work"
+                 value={additionalData.work}
+                 onChange={handleAdditionalInputChange}
+                 placeholder="Work"
+               />
+             </div>
+             <button
+               type="button"
+               className="add-details-button"
+               onClick={handleSubmit}
+             >
+               Add Details
+             </button>
+             {submissionError && <p className="error">{submissionError}</p>}
+           </form>
+         </div>
+       );
+     };
+
+     export default ProviderDetailsForm;
+     ```
+
+#### Step 4: Create the Provider Finance Form
+
+1. **Create `ProviderFinance.jsx`**:
+   - This component will handle the "Banking Details" part of the form.
+   - Add the following content to it:
+
+     ```javascript
+     import React from "react";
+
+     const ProviderFinance = ({ formData, handleInputChange, handleFileChange, handleAddFinanceDetails, submissionError }) => {
+       const handleSubmit = async () => {
+         const financeFormData = new FormData();
+         financeFormData.append("accountName", formData.accountName);
+         financeFormData.append("accountNumber", formData.accountNumber);
+         financeFormData.append("bankName", formData.bankName);
+         financeFormData.append("ifsc", formData.ifsc);
+         financeFormData.append("branch", formData.branch);
+         financeFormData.append("branchAddress", formData.branchAddress);
+         financeFormData.append("documents", formData.documents);
+
+         try {
+           await handleAddFinanceDetails(financeFormData);
+         } catch (error) {
+           console.error("Error submitting finance details:", error);
+         }
+       };
+
+       return (
+         <div className="finance-details-form">
+           <h3>Banking Details</h3>
+           <form onSubmit={(e) => e.preventDefault()}>
+             <div>
+               <label>Account Name:</label>
+               <input
+                 type="text"
+                 name="accountName"
+                 value={formData.accountName}
+                 onChange={handleInputChange}
+                 placeholder="Account Name"
+               />
+             </div>
+             <div>
+               <label>Account Number:</label>
+               <input
+                 type="text"
+                 name="accountNumber"
+                 value={formData.accountNumber}
+                 onChange={handleInputChange}
+                 placeholder="Account Number"
+               />
+             </div>
+             <div>
+               <label>Bank Name:</label>
+               <input
+                 type="text"
+                 name="bankName"
+                 value={formData.bankName}
+                 onChange={handleInputChange}
+                 placeholder="Bank Name"
+               />
+             </div>
+             <div>
+               <label>IFSC:</label>
+               <input
+                 type="text"
+                 name="ifsc"
+                 value={formData.ifsc}
+                 onChange={handleInputChange}
+                 placeholder="IFSC"
+               />
+             </div>
+             <div>
+               <label>Branch:</label>
+               <input
+                 type="text"
+                 name="branch"
+                 value={formData.branch}
+                 onChange={handleInputChange}
+                 placeholder="Branch"
+               />
+             </div>
+             <div>
+               <label>Branch Address:</label>
+               <input
+                 type="text"
+                 name="branchAddress"
+                 value={formData.branchAddress}
+                 onChange={handleInputChange}
+                 placeholder="Branch Address"
+               />
+             </div>
+             <div>
+               <label>Document(s):</label>
+               <input type="file" onChange={handleFileChange} />
+             </div>
+             <button type="button" className="submit-button" onClick={handleSubmit}>
+               Submit
+             </button>
+             {submissionError && <p className="error">{submissionError}</p>}
+           </form>
+         </div>
+       );
+     };
+
+     export default ProviderFinance;
+     ```
+
+#### Step 5: Update the Main Component
+
+1. **Update `AddProvider.jsx`**:
+   - This component will handle the OTP verification and conditionally render `ProviderDetailsForm` and `ProviderFinance` based on the user's progress.
+   - Add the following content to it:
+
+     ```javascript
+     import React, { useState } from "react";
+     import "./AddProvider.css";
+     import { generateOtp, verifyOtp, submitProviderDetails, submitFinanceDetails } from "./api-service-provider";
+     import ProviderDetailsForm from "./ProviderDetailsForm";
+     import ProviderFinance from "./ProviderFinance";
+
+     const AddProvider = () => {
+       const [formData, setFormData] = useState({
+         name: "",
+         mobile: "",
+         email
+
+: "",
+         dob: "",
+         aadhar: "",
+         pan: "",
+         address: "",
+         experience: "",
+         pincode: "",
+         locations: "",
+         accountName: "",
+         accountNumber: "",
+         bankName: "",
+         ifsc: "",
+         branch: "",
+         branchAddress: "",
+         documents: null,
+       });
+       const [additionalData, setAdditionalData] = useState({
+         providerName: "",
+         image: null,
+         age: "",
+         phone: "",
+         pincode: "",
+         radius: "",
+         work: "",
+         userId: "",
+       });
+       const [mobileOtp, setMobileOtp] = useState("");
+       const [otpEntered, setOtpEntered] = useState("");
+       const [isMobileVerified, setIsMobileVerified] = useState(false);
+       const [providerId, setProviderId] = useState(null);
+       const [showProviderDetails, setShowProviderDetails] = useState(false);
+       const [showFinanceDetails, setShowFinanceDetails] = useState(false);
+       const [errors, setErrors] = useState({});
+       const [submissionError, setSubmissionError] = useState("");
+
+       const handleInputChange = (e) => {
+         const { name, value } = e.target;
+         setFormData({ ...formData, [name]: value });
+       };
+
+       const handleAdditionalInputChange = (e) => {
+         const { name, value } = e.target;
+         setAdditionalData({ ...additionalData, [name]: value });
+       };
+
+       const handleFileChange = (e) => {
+         setFormData({ ...formData, documents: e.target.files[0] });
+       };
+
+       const handleImageChange = (e) => {
+         setAdditionalData({ ...additionalData, image: e.target.files[0] });
+       };
+
+       const handleGenerateOtp = async () => {
+         try {
+           const data = await generateOtp(Number(formData.mobile));
+           setMobileOtp(data.otp);
+         } catch (error) {
+           setErrors({
+             ...errors,
+             mobile: error.message,
+           });
+         }
+       };
+
+       const handleVerifyOtp = async () => {
+         try {
+           const data = await verifyOtp(Number(otpEntered));
+           if (data.providerId) {
+             setProviderId(data.providerId);
+             setIsMobileVerified(true);
+             setErrors({ ...errors, otp: "" });
+             setShowProviderDetails(true);
+           } else {
+             setErrors({ ...errors, otp: "Invalid OTP" });
+           }
+         } catch (error) {
+           setErrors({ ...errors, otp: error.message });
+         }
+       };
+
+       const handleAddDetails = async (providerFormData) => {
+         try {
+           const data = await submitProviderDetails(providerFormData);
+           console.log("Additional details submitted successfully:", data);
+           setShowProviderDetails(false);
+           setShowFinanceDetails(true);
+         } catch (error) {
+           setSubmissionError(error.message);
+         }
+       };
+
+       const handleAddFinanceDetails = async (financeFormData) => {
+         try {
+           const data = await submitFinanceDetails(financeFormData);
+           console.log("Finance details submitted successfully:", data);
+         } catch (error) {
+           setSubmissionError(error.message);
+         }
+       };
+
+       return (
+         <div className="add-provider-form">
+           <div className="provider-form-header">
+             <h2>Provider Registration Form</h2>
+           </div>
+           <div className="provider-form-content">
+             {!isMobileVerified ? (
+               <form onSubmit={(e) => e.preventDefault()}>
+                 <div>
+                   <label>Mobile No.:</label>
+                   <input
+                     type="text"
+                     name="mobile"
+                     value={formData.mobile}
+                     onChange={handleInputChange}
+                     placeholder="Mobile No."
+                   />
+                   {errors.mobile && <p className="error">{errors.mobile}</p>}
+                 </div>
+                 <button
+                   type="button"
+                   className="generate-otp-button"
+                   onClick={handleGenerateOtp}
+                 >
+                   Generate OTP
+                 </button>
+                 <div>
+                   <label>Enter OTP:</label>
+                   <input
+                     type="text"
+                     value={otpEntered}
+                     onChange={(e) => setOtpEntered(e.target.value)}
+                     placeholder="OTP"
+                   />
+                   {errors.otp && <p className="error">{errors.otp}</p>}
+                 </div>
+                 <button
+                   type="button"
+                   className="submit-button"
+                   onClick={handleVerifyOtp}
+                 >
+                   Verify OTP
+                 </button>
+               </form>
+             ) : (
+               <>
+                 {showProviderDetails && (
+                   <ProviderDetailsForm
+                     additionalData={additionalData}
+                     handleAdditionalInputChange={handleAdditionalInputChange}
+                     handleImageChange={handleImageChange}
+                     handleAddDetails={handleAddDetails}
+                     submissionError={submissionError}
+                   />
+                 )}
+                 {showFinanceDetails && (
+                   <ProviderFinance
+                     formData={formData}
+                     handleInputChange={handleInputChange}
+                     handleFileChange={handleFileChange}
+                     handleAddFinanceDetails={handleAddFinanceDetails}
+                     submissionError={submissionError}
+                   />
+                 )}
+               </>
+             )}
+           </div>
+         </div>
+       );
+     };
+
+     export default AddProvider;
+     ```
+
+#### Summary
+1. **Set up your project** by creating necessary files.
+2. **Create API service functions** in `api-service-provider.js` for OTP generation, OTP verification, and submitting provider and finance details.
+3. **Create the `ProviderDetailsForm.jsx`** component to handle additional provider details.
+4. **Create the `ProviderFinance.jsx`** component to handle banking details.
+5. **Update the `AddProvider.jsx`** component to manage OTP verification and conditionally render `ProviderDetailsForm` and `ProviderFinance`.
+
+This

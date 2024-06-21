@@ -143,11 +143,7 @@ const FilterBar = ({
         )}
       </div>
       {activeComponent === "Providers Corner" && (
-        <div
-          className={`filter-buttons ${
-            filterBarProps.showProviderButtons ? "" : "hidden"
-          }`}
-        >
+        <div className="filter-buttons">
           <button
             className={`filter-btn ${
               activeComponentState === "view" ? "active" : ""

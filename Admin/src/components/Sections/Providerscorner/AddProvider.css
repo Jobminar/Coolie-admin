@@ -13,38 +13,37 @@
     font-family: "Roboto", sans-serif;
 }
 
-/* Scrollbar styling */
-.add-provider-content::-webkit-scrollbar {
-    width: 8px;
-}
-
-.add-provider-content::-webkit-scrollbar-thumb {
-    background-color: #ffffff;
-    border-radius: 4px;
-}
-
-.add-provider-content::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-}
-
-.add-provider-header {
+.provider-form-header {
     position: sticky;
     top: 0;
     background-color: #fff;
-    z-index: 1;
+    z-index: 1000;
     padding-bottom: 10px;
     margin-bottom: 10px;
     width: 100%;
-}
-
-.add-provider-form h2 {
-    text-align: left;
-    margin: 0;
-    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid #ddd;
 }
 
-.add-provider-content {
+#add-new-button {
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-family: "Roboto", sans-serif;
+    margin-bottom: 15px;
+}
+
+#add-new-button:hover {
+    background-color: #e60000;
+}
+
+.provider-form-content {
     flex: 1;
     overflow-y: auto;
     padding: 10px 0;
@@ -101,9 +100,9 @@
 }
 
 .add-provider-form button {
-    width: 100%;
+    width: 15%;
     padding: 12px;
-    background-color: #ffffff;
+    background-color: #ccc;
     color: rgb(0, 0, 0);
     border: none;
     cursor: pointer;
@@ -117,7 +116,6 @@
     background-color: #ffffff;
 }
 
-/* Separate styling for submit button */
 .add-provider-form .submit-button {
     background-color: #3A436E;
     color: white;
@@ -142,67 +140,41 @@
     font-family: "Roboto", sans-serif;
 }
 
-/* Providers table styling (applies to all tables) */
-.providersTableContainer {
-    width: 100%;
-    overflow-x: auto;
-    margin-bottom: 20px;
-    margin-top: 20px;
-}
-
-.providersTable {
-    width: 100%;
-    max-width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
+.document-previews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-top: 10px;
+}
+
+.document-preview {
+    width: 150px;
+    height: 50px;
+    background-color: #ffffff;
+    border-radius: 4px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+
+.document-preview span {
+    flex-grow: 1;
+    padding-right: 10px;
     font-size: 14px;
-    border: 1px solid black;
-    border-radius: 5px;
-    overflow-x: auto;
-    font-family: "Roboto", sans-serif;
-}
-
-.providersTable th,
-.providersTable td {
-    padding: 6px;
-    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
-    border: 1px solid black;
-    font-family: "Roboto", sans-serif;
 }
 
-.providersTable th {
-    background-color: #f8f8f8;
-    color: black;
-    font-weight: bold;
-}
-
-.providersTable .statusToggle {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.providersTable .statusToggle.active {
-    background-color: green;
-}
-
-.providersTable .statusToggle.inactive {
-    background-color: red;
-}
-
-.actionButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.actionButton.edit {
-    color: #007bff;
-}
-
-.actionButton.delete {
+.document-preview .fa-trash {
     color: #dc3545;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+}
+
+.document-preview .fa-trash:hover {
+    color: #a71d2a;
 }

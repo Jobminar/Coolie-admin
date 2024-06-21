@@ -1,43 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "./AddProvider.css";
-import axios from "axios";
+import {
+  generateOtp,
+  verifyOtp,
+  submitProviderDetails,
+  submitFinanceDetails,
+} from "./api-service-provider";
+import ProviderDetailsForm from "./ProviderDetailsForm";
+import ProviderFinance from "./ProviderFinance";
+import {
+  ProviderAuthContext,
+  ProviderAuthProvider,
+} from "./ProviderAuthContext";
 
-const AddProvider = () => {
+const AddProviderContent = () => {
+  const { providerId, setProviderId, phone, setPhone } =
+    useContext(ProviderAuthContext);
   const [formData, setFormData] = useState({
-    name: "",
-    mobile: "",
-    email: "",
-    dob: "",
-    aadhar: "",
-    pan: "",
-    address: "",
-    experience: "",
-    pincode: "",
-    locations: "",
-    accountName: "",
-    accountNumber: "",
-    bankName: "",
-    ifsc: "",
-    branch: "",
-    branchAddress: "",
-    documents: null,
+    mobile: phone || "",
   });
   const [additionalData, setAdditionalData] = useState({
     providerName: "",
     image: null,
     age: "",
-    phone: "",
+    phone: phone || "",
     pincode: "",
     radius: "",
     work: "",
-    userId: "",
+    userId: providerId || "",
   });
   const [mobileOtp, setMobileOtp] = useState("");
   const [otpEntered, setOtpEntered] = useState("");
-  const [isMobileVerified, setIsMobileVerified] = useState(false);
-  const [providerId, setProviderId] = useState(null);
+  const [isMobileVerified, setIsMobileVerified] = useState(!!providerId);
+  const [showProviderDetails, setShowProviderDetails] = useState(!!providerId);
+  const [showFinanceDetails, setShowFinanceDetails] = useState(false);
   const [errors, setErrors] = useState({});
   const [submissionError, setSubmissionError] = useState("");
+
+  useEffect(() => {
+    const storedProviderDetails = sessionStorage.getItem("providerDetails");
+    if (storedProviderDetails) {
+      setShowProviderDetails(false);
+      setShowFinanceDetails(true);
+    }
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -49,99 +55,104 @@ const AddProvider = () => {
     setAdditionalData({ ...additionalData, [name]: value });
   };
 
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, documents: e.target.files[0] });
-  };
-
   const handleImageChange = (e) => {
     setAdditionalData({ ...additionalData, image: e.target.files[0] });
   };
 
   const handleGenerateOtp = async () => {
     try {
-      const response = await axios.post(
-        "http://13.126.118.3:3000/v1.0/providers/provider-auth/signUp",
-        { phone: Number(formData.mobile) },
-      );
-      console.log("OTP sent:", response.data.otp);
-      setMobileOtp(response.data.otp);
+      console.log("Requesting OTP for phone number:", formData.mobile);
+      const data = await generateOtp(Number(formData.mobile));
+      setMobileOtp(data.otp);
+      console.log("OTP received:", data.otp);
     } catch (error) {
-      console.error("Error generating OTP:", error);
+      console.error("Error during OTP generation:", error);
       setErrors({
         ...errors,
-        mobile: "Error generating OTP. Please try again.",
+        mobile: error.message,
       });
     }
   };
 
   const handleVerifyOtp = async () => {
     try {
-      const response = await axios.post(
-        "http://13.126.118.3:3000/v1.0/providers/provider-auth/verify-otp",
-        { otp: Number(otpEntered) },
-      );
-      if (response.data.providerId) {
-        console.log("Provider ID:", response.data.providerId);
-        setProviderId(response.data.providerId);
+      console.log("Verifying OTP:", otpEntered);
+      const data = await verifyOtp(Number(otpEntered));
+      if (data.providerId) {
+        setProviderId(data.providerId);
+        setPhone(formData.mobile);
         setIsMobileVerified(true);
         setErrors({ ...errors, otp: "" });
+        setShowProviderDetails(true);
+        console.log(
+          "OTP verification successful, provider ID:",
+          data.providerId,
+        );
       } else {
         setErrors({ ...errors, otp: "Invalid OTP" });
+        console.log("Invalid OTP");
       }
     } catch (error) {
-      console.error("Error verifying OTP:", error);
-      setErrors({ ...errors, otp: "Error verifying OTP. Please try again." });
+      console.error("Error during OTP verification:", error);
+      setErrors({ ...errors, otp: error.message });
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmissionError("");
-    const validationErrors = validateForm(formData); // Assume this is defined elsewhere
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-    } else {
-      try {
-        const responses = await sendFormDataToApis(formData); // Assume this is defined elsewhere
-        console.log("Form submitted successfully:", responses);
-      } catch (error) {
-        console.error("Error submitting form:", error);
-        setSubmissionError(
-          "There was an error submitting the form. Please try again.",
-        );
-      }
-    }
-  };
-
-  const handleAddDetails = async () => {
-    const formData = new FormData();
-    formData.append("providerName", additionalData.providerName);
-    formData.append("image", additionalData.image);
-    formData.append("age", additionalData.age);
-    formData.append("phone", additionalData.phone);
-    formData.append("pincode", additionalData.pincode);
-    formData.append("radius", additionalData.radius);
-    formData.append("work", additionalData.work);
-    formData.append("userId", providerId);
-
+  const handleAddDetails = async (providerFormData) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/v1.0/providers/provider-details",
-        formData,
-      );
-      console.log("Additional details submitted successfully:", response.data);
+      console.log("Submitting provider details:", providerFormData);
+      const data = await submitProviderDetails(providerFormData);
+      console.log("Provider details submitted successfully:", data);
+      setShowProviderDetails(false);
+      setShowFinanceDetails(true);
+      setSubmissionError("");
     } catch (error) {
-      console.error("Error submitting additional details:", error);
-      setSubmissionError(
-        "There was an error submitting the additional details. Please try again.",
-      );
+      console.error("Error submitting provider details:", error);
+      setSubmissionError(error.message);
     }
+  };
+
+  const handleAddFinanceDetails = async (financeFormData) => {
+    try {
+      console.log("Submitting finance details:", financeFormData);
+      const data = await submitFinanceDetails(financeFormData);
+      console.log("Finance details submitted successfully:", data);
+      alert("Finance details submitted successfully!");
+      setSubmissionError("");
+    } catch (error) {
+      console.error("Error submitting finance details:", error);
+      setSubmissionError(error.message);
+    }
+  };
+
+  const handleReset = () => {
+    setProviderId("");
+    setPhone("");
+    setIsMobileVerified(false);
+    setShowProviderDetails(false);
+    setShowFinanceDetails(false);
+    sessionStorage.removeItem("providerId");
+    sessionStorage.removeItem("phone");
+    sessionStorage.removeItem("providerDetails");
+    sessionStorage.removeItem("financeDetails");
   };
 
   return (
     <div className="add-provider-form">
       <div className="provider-form-header">
         <h2>Provider Registration Form</h2>
+        <button
+          className="add-new-button"
+          id="add-new-button"
+          onClick={handleReset}
+        >
+          Add New
+        </button>
+        {showFinanceDetails && (
+          <span className="continue-message">
+            Continue with Finance Details
+          </span>
+        )}
       </div>
       <div className="provider-form-content">
         {!isMobileVerified ? (
@@ -183,241 +194,34 @@ const AddProvider = () => {
             </button>
           </form>
         ) : (
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label>Enter your name:</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="Name and Surname"
+          <>
+            {showProviderDetails && (
+              <ProviderDetailsForm
+                additionalData={additionalData}
+                handleAdditionalInputChange={handleAdditionalInputChange}
+                handleImageChange={handleImageChange}
+                handleAddDetails={handleAddDetails}
+                submissionError={submissionError}
               />
-              {errors.name && <p className="error">{errors.name}</p>}
-            </div>
-            <div>
-              <label>Email:</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="Email"
+            )}
+            {showFinanceDetails && (
+              <ProviderFinance
+                handleAddFinanceDetails={handleAddFinanceDetails}
+                submissionError={submissionError}
               />
-              {errors.email && <p className="error">{errors.email}</p>}
-            </div>
-            <div>
-              <label>DOB:</label>
-              <input
-                type="date"
-                name="dob"
-                value={formData.dob}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div>
-              <label>Aadhar Number:</label>
-              <input
-                type="text"
-                name="aadhar"
-                value={formData.aadhar}
-                onChange={handleInputChange}
-                placeholder="Aadhar Number"
-              />
-              {errors.aadhar && <p className="error">{errors.aadhar}</p>}
-            </div>
-            <div>
-              <label>PAN:</label>
-              <input
-                type="text"
-                name="pan"
-                value={formData.pan}
-                onChange={handleInputChange}
-                placeholder="PAN"
-              />
-              {errors.pan && <p className="error">{errors.pan}</p>}
-            </div>
-            <div>
-              <label>Postal Address:</label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                placeholder="Postal Address"
-              />
-            </div>
-            <div>
-              <label>Experience:</label>
-              <input
-                type="text"
-                name="experience"
-                value={formData.experience}
-                onChange={handleInputChange}
-                placeholder="Experience"
-              />
-            </div>
-            <div>
-              <label>Address with Pincode:</label>
-              <input
-                type="text"
-                name="pincode"
-                value={formData.pincode}
-                onChange={handleInputChange}
-                placeholder="Address with Pincode"
-              />
-            </div>
-            <div>
-              <label>Serving Locations:</label>
-              <input
-                type="text"
-                name="locations"
-                value={formData.locations}
-                onChange={handleInputChange}
-                placeholder="Serving Locations"
-              />
-            </div>
-            <div>
-              <h3>Banking Details</h3>
-              <label>Account Name:</label>
-              <input
-                type="text"
-                name="accountName"
-                value={formData.accountName}
-                onChange={handleInputChange}
-                placeholder="Account Name"
-              />
-              <label>Account Number:</label>
-              <input
-                type="text"
-                name="accountNumber"
-                value={formData.accountNumber}
-                onChange={handleInputChange}
-                placeholder="Account Number"
-              />
-              <label>Bank Name:</label>
-              <input
-                type="text"
-                name="bankName"
-                value={formData.bankName}
-                onChange={handleInputChange}
-                placeholder="Bank Name"
-              />
-              <label>IFSC:</label>
-              <input
-                type="text"
-                name="ifsc"
-                value={formData.ifsc}
-                onChange={handleInputChange}
-                placeholder="IFSC"
-              />
-              <label>Branch:</label>
-              <input
-                type="text"
-                name="branch"
-                value={formData.branch}
-                onChange={handleInputChange}
-                placeholder="Branch"
-              />
-              <label>Branch Address:</label>
-              <input
-                type="text"
-                name="branchAddress"
-                value={formData.branchAddress}
-                onChange={handleInputChange}
-                placeholder="Branch Address"
-              />
-              <label>Document(s):</label>
-              <input type="file" onChange={handleFileChange} />
-            </div>
-            <button type="submit" className="submit-button">
-              Submit
-            </button>
-            {submissionError && <p className="error">{submissionError}</p>}
-          </form>
-        )}
-
-        {isMobileVerified && (
-          <div className="additional-details-form">
-            <h3>Additional Provider Details</h3>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <div>
-                <label>Provider Name:</label>
-                <input
-                  type="text"
-                  name="providerName"
-                  value={additionalData.providerName}
-                  onChange={handleAdditionalInputChange}
-                  placeholder="Provider Name"
-                />
-              </div>
-              <div>
-                <label>Image:</label>
-                <input type="file" onChange={handleImageChange} />
-              </div>
-              <div>
-                <label>Age:</label>
-                <input
-                  type="text"
-                  name="age"
-                  value={additionalData.age}
-                  onChange={handleAdditionalInputChange}
-                  placeholder="Age"
-                />
-              </div>
-              <div>
-                <label>Phone:</label>
-                <input
-                  type="text"
-                  name="phone"
-                  value={additionalData.phone}
-                  onChange={handleAdditionalInputChange}
-                  placeholder="Phone"
-                />
-              </div>
-              <div>
-                <label>Pincode:</label>
-                <input
-                  type="text"
-                  name="pincode"
-                  value={additionalData.pincode}
-                  onChange={handleAdditionalInputChange}
-                  placeholder="Pincode"
-                />
-              </div>
-              <div>
-                <label>Radius:</label>
-                <input
-                  type="text"
-                  name="radius"
-                  value={additionalData.radius}
-                  onChange={handleAdditionalInputChange}
-                  placeholder="Radius"
-                />
-              </div>
-              <div>
-                <label>Work:</label>
-                <input
-                  type="text"
-                  name="work"
-                  value={additionalData.work}
-                  onChange={handleAdditionalInputChange}
-                  placeholder="Work"
-                />
-              </div>
-              <button
-                type="button"
-                className="add-details-button"
-                onClick={handleAddDetails}
-              >
-                Add Details
-              </button>
-              {submissionError && <p className="error">{submissionError}</p>}
-            </form>
-          </div>
+            )}
+          </>
         )}
       </div>
     </div>
+  );
+};
+
+const AddProvider = () => {
+  return (
+    <ProviderAuthProvider>
+      <AddProviderContent />
+    </ProviderAuthProvider>
   );
 };
 

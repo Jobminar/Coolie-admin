@@ -5,7 +5,7 @@ const ProviderList = ({ providers, handleEdit, handleDelete }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredProviders = providers.filter((provider) =>
-    provider.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    provider.contact.phone.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -40,12 +40,16 @@ const ProviderList = ({ providers, handleEdit, handleDelete }) => {
               <tr key={provider.id}>
                 <td>{provider.id}</td>
                 <td>{provider.name}</td>
-                <td>{provider.email}</td>
-                <td>{provider.phone}</td>
-                <td>{provider.location}</td>
-                <td>{provider.joinDate}</td>
-                <td>{provider.package}</td>
-                <td>{provider.category}</td>
+                <td>{provider.contact.email}</td>
+                <td>{provider.contact.phone}</td>
+                <td>{provider.location.address}</td>
+                <td>{provider.membership.joinDate}</td>
+                <td>{provider.membership.package.type}</td>
+                <td>
+                  {provider.workDetails.map((workDetail, index) => (
+                    <div key={index}>{workDetail.category}</div>
+                  ))}
+                </td>
                 <td>
                   <div
                     className={`birdviewStatusToggle ${

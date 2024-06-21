@@ -56,7 +56,7 @@ const EditServiceForm = ({
       try {
         console.log(`Fetching sub-category name for ID: ${subCategory}`);
         const response = await axios.get(
-          `http://13.126.118.3:3000/v1.0/core/${subCategory}`,
+          `http://13.126.118.3:3000/v1.0/core/sub-category/${subCategory}`,
         );
         console.log("Sub-category name response:", response.data);
         setSubCategoryName(response.data.name);
