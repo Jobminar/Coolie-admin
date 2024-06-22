@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ProviderAuthContext } from "./ProviderAuthContext";
-import { submitFinanceDetails } from "./api-service-provider";
+import { submitFinanceDetails } from "./api/api-service-provider";
 import "./AddProvider.css"; // Ensure this is the same stylesheet used for AddProvider
 import { FaTrash } from "react-icons/fa";
 

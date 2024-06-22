@@ -5,7 +5,7 @@ import {
   verifyOtp,
   submitProviderDetails,
   submitFinanceDetails,
-} from "./api-service-provider";
+} from "./api/api-service-provider";
 import ProviderDetailsForm from "./ProviderDetailsForm";
 import ProviderFinance from "./ProviderFinance";
 import {

@@ -8,7 +8,7 @@ import {
 } from "../../../utils/api";
 import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import VerificationTable from "./VerificationTable";
-import { fetchProviderDetails } from "./provider-form-api";
+import { fetchProviderDetails } from "./api/provider-form-api";
 
 const ProviderForm = ({ providers }) => {
   const [activeTab, setActiveTab] = useState("verified");
