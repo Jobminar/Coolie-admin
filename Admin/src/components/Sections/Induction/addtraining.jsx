@@ -1,29 +1,30 @@
 import React, { useState } from 'react';
 
-function InductionForm() {
-  const [formdata, setFormdata] = useState({
-      profession: '',
-      title: '',
-      skip: false,
+const AddTraining = () => {
+  const [formData, setFormData] = useState({
+    profession: '',
+    title: '',
+    skip: false,
+    quickLinks: false,
   });
-    
-  const{profession,title,skip}=formdata
+  const {profession,title,skip,quickLinks} = formData
 
-  const[video,setVideo]=useState(null)
+  const [video, setVideo] = useState(null);
 
   const handleChange = (e) => {
-     setFormdata({...formdata,[e.target.name]: e.target.value})
+    setFormData({...formData, [e.target.name]: e.target.value});
   };
 
-  const handleToggleChange = () => {
-    setFormdata(prevState => ({
+  const handleToggleChange = (e) => {
+    const { name, checked } = e.target;
+    setFormData(prevState => ({
       ...prevState,
-      skip: !prevState.skip
+      [name]: checked
     }));
   };
 
   const handleFileChange = (e) => {
-    setVideo(e.target.files[0])
+    setVideo(e.target.files[0]);
   };
 
   const handleSubmit=async (e) => {
@@ -32,6 +33,7 @@ function InductionForm() {
     formData.append('profession',profession),
     formData.append('title',title),
     formData.append('skip',skip),
+    formData.append('quickLinks',quickLinks),
     formData.append('video',video)
 
     try{
@@ -57,7 +59,7 @@ function InductionForm() {
       <select 
         className='dropdown'
         name='profession' 
-        value={formdata.profession} 
+        value={formData.profession} 
         onChange={handleChange} 
         placeholder='Profession' 
       >
@@ -75,17 +77,27 @@ function InductionForm() {
       <input 
         type='text' 
         name='title' 
-        value={formdata.title} 
+        value={formData.title} 
         onChange={handleChange} 
         placeholder='Title' 
-       
       />
 
       <label className='toggle-label'>
         Skip:
         <input 
+          name='skip'
           type='checkbox' 
-          checked={formdata.skip} 
+          checked={formData.skip} 
+          onChange={handleToggleChange} 
+        />
+      </label>
+
+      <label className='toggle-label'>
+        Quick links:
+        <input 
+          name='quickLinks'
+          type='checkbox' 
+          checked={formData.quickLinks} 
           onChange={handleToggleChange} 
         />
       </label>
@@ -100,4 +112,4 @@ function InductionForm() {
   );
 }
 
-export default InductionForm;
+export default AddTraining;

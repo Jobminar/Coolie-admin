@@ -339,20 +339,16 @@ const Sidebar = ({ children }) => {
           {inductionDropdown && (
             <div className="dropdown-menu">
               <div
-                className={`dropdown-item ${
-                  activeDropdownItem === "induction" ? "active" : ""
-                }`}
-                onClick={() => handleNavigation("/induction", "Induction")}
+                className={activeItem === "/induction" ? "active" : ""}
+                onClick={() => handleNavigation("/inductionmain")}
               >
                 Induction
               </div>
               <div
-                className={`dropdown-item ${
-                  activeDropdownItem === "training" ? "active" : ""
-                }`}
-                onClick={() => handleNavigation("/training", "Training")}
+                className={activeItem === "/trainingcon" ? "active" : ""}
+                onClick={() => handleNavigation("/trainingcon")}
               >
-                Training
+                Training main
               </div>
             </div>
           )}

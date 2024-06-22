@@ -82,7 +82,7 @@ const AddUserPackage = () => {
           name='discountPlatformCom'
           value={userPackage.discountPlatformCom}
           onChange={handleChange}
-          label='Discount in Platform Commission (%)'
+          label='Discount in(%)'
           variant='outlined'
           multiline
           fullWidth

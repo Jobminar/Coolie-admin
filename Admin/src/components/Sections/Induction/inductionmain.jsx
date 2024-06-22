@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import Induction from './induction';
-import Training from './training';
 import './induction.css'
 import Addinduction from './addinduction';
 import Manageinduction from './Manageinduction';

@@ -48,3 +48,13 @@
     width: 14rem;
     
 }
+.induction-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    margin: 2rem;
+    row-gap: 2rem;
+    
+}
