@@ -14,7 +14,7 @@ const SubCategoryForm = ({
   return (
     <div className="servermanager-card servermanager-add-sub-category-form">
       <h3>Add Sub-Category</h3>
-      <div className="servermanager-input-container">
+      <div className="servermanagerinputcontainer">
         <label htmlFor="subCategoryName">Sub-Category Name:</label>
         <input
           type="text"
@@ -26,7 +26,7 @@ const SubCategoryForm = ({
         />
         {subCategoryError && <span className="error">{subCategoryError}</span>}
       </div>
-      <div className="servermanager-upload-container">
+      <div className="servermanageruploadcontainer">
         <input
           type="file"
           id="subCategoryIcon"

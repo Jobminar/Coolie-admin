@@ -41,7 +41,7 @@ const CategoryForm = ({
       onSubmit={handleSubmit}
     >
       <h3>Add Category</h3>
-      <div className="servermanager-input-container">
+      <div className="servermanagerinputcontainer">
         <label htmlFor="categoryName">Category Name:</label>
         <input
           type="text"
@@ -53,7 +53,7 @@ const CategoryForm = ({
         />
         {categoryError && <span className="error">{categoryError}</span>}
       </div>
-      <div className="servermanager-upload-container">
+      <div className="servermanageruploadcontainer">
         <input
           type="file"
           id="categoryIcon"
@@ -79,7 +79,7 @@ const CategoryForm = ({
           />
         )}
       </div>
-      <div className="servermanager-input-container">
+      <div className="servermanagerinputcontainer">
         <label>Service Types:</label>
         <div className="radio-group">
           <label>
