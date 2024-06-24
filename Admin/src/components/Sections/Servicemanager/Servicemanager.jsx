@@ -32,7 +32,7 @@ const Servermanager = () => {
 
   useEffect(() => {
     axios
-      .get("http://13.126.118.3:3000/v1.0/core/categories")
+      .get("https://api.coolieno1.in/v1.0/core/categories")
       .then((response) => {
         console.log("Categories fetched:", response.data);
         setCategories(response.data);
