@@ -19,7 +19,7 @@ const OurCoreServices = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://13.126.118.3:3000/v1.0/admin/our-core-services');
+                const response = await fetch('http://13.126.118.3:3000/v1.0/core/services');
                 if (!response.ok) {
                     throw new Error('Error occurred');
                 }
@@ -142,21 +142,23 @@ const OurCoreServices = () => {
 
     return (
         <>
-            <h1>Our Core Services</h1>
+          <div className='service-selection-con'>
             {fetchService.length > 0 ? (
-                <select value={selectedServiceId} onChange={handleSelectChange}>
-                    <option value="">Select a service</option>
-                    {fetchService.map(service => (
-                        <option key={service._id} value={service._id}>
-                            {service.name}
-                        </option>
-                    ))}
-                </select>
-            ) : (
-                <p>No services found.</p>
-            )}
+                    <select value={selectedServiceId} onChange={handleSelectChange} className='service-selection'>
+                        <option value="">Select a service</option>
+                        {fetchService.map(service => (
+                            <option key={service._id} value={service._id}>
+                                {service.name}
+                            </option>
+                        ))}
+                    </select>
+                ) : (
+                    <p>No services found.</p>
+                )}
+          </div>  
+         
 
-            <div className='core-services-form'>
+            <div className='mostbookedform'>
                 {selectedService && selectedService.name ? (
                     <form onSubmit={handleSubmit}>
                         <div>
@@ -172,15 +174,14 @@ const OurCoreServices = () => {
                             </button>
                             {image && <p>Selected file: {image.name}</p>}
                         </div>
-                        <button type="submit">Submit</button>
+                        <button type="submit" className='most-button'>Submit</button>
                     </form>
                 ) : (
-                    <p>Please select a service to see details.</p>
+                    <p className='note'>Please select a service to see details.</p>
                 )}
             </div>
 
-            <div className="main-banners">
-            <div className="banner-con">
+            <div className="mbs-banners-con">
             {Array.isArray(coreservices) && coreservices.map((banner) => (
                 <div className="banner-sub-con" key={banner._id}>
                 <img
@@ -196,8 +197,6 @@ const OurCoreServices = () => {
                 </div>
                 </div>
             ))}
-            </div>
-
             </div>
         </>
     );

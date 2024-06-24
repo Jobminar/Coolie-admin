@@ -125,12 +125,12 @@ const Providerbanners = () => {
              placeholder="Enter your Service Name"
              onChange={handleChange}
            />
-           <button type="submit" className="submit-button">Submit</button>
+           <button type="submit" className="add-button">Submit</button>
          </form>
        </div>
       )}
 
-      <div className="main-banners">
+     
         <div className="banner-con">
           {data.map((banner) => (
             <div className="banner-sub-con" key={banner._id}>
@@ -151,7 +151,6 @@ const Providerbanners = () => {
             </div>
           ))}
         </div>
-      </div>
     </>
   );
 };

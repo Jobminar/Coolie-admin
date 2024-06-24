@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import '../Promotions/promotion.css'
-
-import Mostbookedservices from '../Banners/mostbookedservices';
-import OurCoreServices from '../Banners/ourcoreservices';
+import AddUserPackage from './adduserpackage';
+import Manageuserpackage from './Manageuserpackage';
 
 
 const  Userpackage = () => {
-  const [activeTab, setActiveTab] = useState("mostbookedservices");
+  const [activeTab, setActiveTab] = useState("adduserpackage");
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -14,10 +13,10 @@ const  Userpackage = () => {
 
   const renderSelectedComponent = () => {
     switch (activeTab) {
-      case "mostbookedservices":
-        return <Mostbookedservices/>;
-      case "ourcoreservices":
-        return <OurCoreServices/>;
+      case "adduserpackage":
+        return <AddUserPackage/>;
+      case "manageuserpackage":
+        return <Manageuserpackage/>;
       default:
         return null;
     }
@@ -29,16 +28,16 @@ const  Userpackage = () => {
         <h1>User Packages</h1>
         <div className='universal-buttons'>
           <div
-            className={`tab ${activeTab === "mostbookedservices" ? "active" : ""}`}
-            onClick={() => handleTabClick("mostbookedservices")}
+            className={`tab ${activeTab === "adduserpackage" ? "active" : ""}`}
+            onClick={() => handleTabClick("adduserpackage")}
           >
-           Most booked Services
+          Add Packages
           </div>
           <div
-            className={`tab ${activeTab === "ourcoreservices" ? "active" : ""}`}
-            onClick={() => handleTabClick("ourcoreservices")}
+            className={`tab ${activeTab === "manageuserpackage" ? "active" : ""}`}
+            onClick={() => handleTabClick("manageuserpackage")}
           >
-           Our core services
+          Manage packages
           </div>
         </div>
       </div>

@@ -51,7 +51,7 @@ const EditproviderPromotion = () => {
   };
 
   return (
-    <div className="u-mian-con">
+    <div className="u-main-con">
       <h1>Edit provider Promotion</h1>
       <form onSubmit={handleSubmit} className="universal-edit-con">
         <div className="universal-edit">

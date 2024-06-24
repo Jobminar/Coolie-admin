@@ -55,7 +55,7 @@ const Manageuserpackage = () => {
 
     return (
         <>
-            <div className='u-manage-con'>
+            <div className='manage-promotion-main-con'>
                 {packages.map((packageItem, index) => (
                     <div key={index} className='u-manage-sub-con'>
                         

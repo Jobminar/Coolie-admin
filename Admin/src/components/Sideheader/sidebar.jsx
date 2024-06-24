@@ -284,10 +284,10 @@ const Sidebar = ({ children }) => {
               </div>
               <div
                 className={`dropdown-item ${
-                  activeDropdownItem === "providerpromotions" ? "active" : ""
+                  activeDropdownItem === "providerpromition" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/providerpromotions", "Provider Promotions")
+                  handleNavigation("/providerpromition", "Provider Promotions")
                 }
               >
                 Provider Promotions
