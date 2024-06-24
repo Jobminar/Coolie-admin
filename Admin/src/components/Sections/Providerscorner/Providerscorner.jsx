@@ -8,7 +8,7 @@ import ProviderList from "./ProviderList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FilterBarContext } from "../../../FilterBarContext";
-import { fetchCategories, fetchProviders } from "./api-services"; // Import the fetchCategories and fetchProviders functions
+import { fetchCategories, fetchProviders } from "./api/api-services"; // Import the fetchCategories and fetchProviders functions
 import MapboxView from "./MapboxView"; // Import MapboxView
 
 const ProvidersCorner = () => {

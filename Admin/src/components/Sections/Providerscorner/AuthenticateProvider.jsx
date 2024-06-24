@@ -208,7 +208,7 @@ const AuthenticateProvider = ({ providers }) => {
                 <embed
                   src={document.file}
                   type="application/pdf"
-                  className="document-preview"
+                  className="document-display"
                 />
                 <label>
                   Status: {documentStatuses[document.id] || "Pending"}

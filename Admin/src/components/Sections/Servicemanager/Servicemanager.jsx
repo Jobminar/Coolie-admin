@@ -181,9 +181,9 @@ const Servermanager = () => {
       const data = await response.json();
       console.log("Category added:", data);
       setShowAddSubCategoryForm(true);
-      const categoryId = data._id;
-      setCategoryId(categoryId);
-      localStorage.setItem("categoryId", categoryId);
+      const newCategoryId = data._id;
+      setCategoryId(newCategoryId);
+      sessionStorage.setItem("categoryId", newCategoryId); // Store category ID in session storage
       setShowAddCategoryForm(false);
       setCategoryName("");
       setCategoryIcon(null);
@@ -223,8 +223,9 @@ const Servermanager = () => {
 
       const subCategoryDataResponse = await subCategoryResponse.json();
       console.log("Subcategory added:", subCategoryDataResponse);
-      const subCategoryId = subCategoryDataResponse._id;
-      setSubCategoryId(subCategoryId);
+      const newSubCategoryId = subCategoryDataResponse._id;
+      setSubCategoryId(newSubCategoryId);
+      sessionStorage.setItem("subCategoryId", newSubCategoryId); // Store subcategory ID in session storage
       setShowAddSubCategoryForm(false);
       setShowServiceForm(true); // Ensure the form is shown here
     } catch (error) {
@@ -235,9 +236,7 @@ const Servermanager = () => {
 
   const handleAddService = async (serviceData) => {
     const {
-      serviceName,
-      price,
-      serviceTime,
+      name,
       description,
       locations,
       taxPercentage,
@@ -247,31 +246,28 @@ const Servermanager = () => {
       isMostBooked,
       tag,
       isCash,
-      serviceVariant,
       creditEligibility,
+      serviceVariants,
     } = serviceData;
 
+    const storedCategoryId = sessionStorage.getItem("categoryId");
+    const storedSubCategoryId = sessionStorage.getItem("subCategoryId");
+
     const payload = {
-      name: serviceName,
-      description: description,
-      categoryId: selectedCategory,
-      subCategoryId: selectedSubCategory,
-      serviceVariants: [
-        {
-          variantName: serviceVariant,
-          price: price,
-          serviceTime: serviceTime,
-        },
-      ],
-      locations: locations,
-      taxPercentage: taxPercentage,
-      platformCommission: platformCommission,
-      selectedUserPackage: selectedUserPackage,
-      selectedProviderPackage: selectedProviderPackage,
-      isMostBooked: isMostBooked,
-      tag: tag,
-      isCash: isCash,
-      creditEligibility: creditEligibility,
+      name,
+      description,
+      categoryId: storedCategoryId || selectedCategory,
+      subCategoryId: storedSubCategoryId || selectedSubCategory,
+      serviceVariants,
+      locations,
+      taxPercentage,
+      platformCommission,
+      selectedUserPackage,
+      selectedProviderPackage,
+      isMostBooked,
+      tag,
+      isCash,
+      creditEligibility,
       isActive: true,
       isDeleted: false,
     };
@@ -487,8 +483,8 @@ const Servermanager = () => {
           <hr style={{ borderTop: "2px solid #D70D09", height: "1px" }} />
           <ServiceDetailCard
             service={selectedService}
-            category={selectedService.categoryId._id}
-            subCategory={selectedService.subCategoryId._id}
+            category={selectedService.categoryId}
+            subCategory={selectedService.subCategoryId}
             onClose={() => setSelectedService(null)}
           />
         </>
