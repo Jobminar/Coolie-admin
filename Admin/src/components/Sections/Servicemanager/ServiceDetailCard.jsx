@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 import "./servicemanager.css";
 
 const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
@@ -7,11 +8,16 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
   const [subCategoryName, setSubCategoryName] = useState(
     subCategory.name || "",
   );
+  const [userPackageName, setUserPackageName] = useState("");
+  const [providerPackageName, setProviderPackageName] = useState("");
   const [serviceData, setServiceData] = useState({
     name: service.name,
     serviceType: service.serviceVariants[0]?.variantName || "",
     price: service.serviceVariants[0]?.price || "",
     serviceTime: service.serviceVariants[0]?.serviceTime || "",
+    metric: service.serviceVariants[0]?.metric || "",
+    min: service.serviceVariants[0]?.min || "",
+    max: service.serviceVariants[0]?.max || "",
     description: service.description,
     locations: service.locations,
     taxPercentage: service.taxPercentage,
@@ -34,6 +40,9 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
       serviceType: service.serviceVariants[0]?.variantName || "",
       price: service.serviceVariants[0]?.price || "",
       serviceTime: service.serviceVariants[0]?.serviceTime || "",
+      metric: service.serviceVariants[0]?.metric || "",
+      min: service.serviceVariants[0]?.min || "",
+      max: service.serviceVariants[0]?.max || "",
       description: service.description,
       locations: service.locations,
       taxPercentage: service.taxPercentage,
@@ -47,6 +56,28 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
       isActive: service.isActive,
       isDeleted: service.isDeleted,
     });
+
+    const fetchPackageNames = async () => {
+      try {
+        if (service.selectedUserPackage) {
+          const userPackageResponse = await axios.get(
+            `http://13.126.118.3:3000/v1.0/admin/user-package/${service.selectedUserPackage}`,
+          );
+          setUserPackageName(userPackageResponse.data.packageName);
+        }
+
+        if (service.selectedProviderPackage) {
+          const providerPackageResponse = await axios.get(
+            `http://13.126.118.3:3000/v1.0/admin/provider-package/${service.selectedProviderPackage}`,
+          );
+          setProviderPackageName(providerPackageResponse.data.packageName);
+        }
+      } catch (error) {
+        console.error("Error fetching package names:", error);
+      }
+    };
+
+    fetchPackageNames();
   }, [service, category, subCategory]);
 
   return (
@@ -94,6 +125,33 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           />
         </div>
         <div className="form-group">
+          <label>Metric:</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.metric}
+            readOnly
+          />
+        </div>
+        <div className="form-group">
+          <label>Min:</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.min}
+            readOnly
+          />
+        </div>
+        <div className="form-group">
+          <label>Max:</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.max}
+            readOnly
+          />
+        </div>
+        <div className="form-group">
           <label>Description:</label>
           <textarea
             className="textarea-input"
@@ -124,7 +182,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="text"
             className="bottom-borders-input"
-            value={serviceData.selectedUserPackage}
+            value={userPackageName}
             readOnly
           />
         </div>
@@ -133,7 +191,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <input
             type="text"
             className="bottom-borders-input"
-            value={serviceData.selectedProviderPackage}
+            value={providerPackageName}
             readOnly
           />
         </div>
@@ -217,6 +275,9 @@ ServiceDetailCard.propTypes = {
         variantName: PropTypes.string,
         price: PropTypes.string,
         serviceTime: PropTypes.string,
+        metric: PropTypes.string,
+        min: PropTypes.number,
+        max: PropTypes.number,
       }),
     ),
     description: PropTypes.string,

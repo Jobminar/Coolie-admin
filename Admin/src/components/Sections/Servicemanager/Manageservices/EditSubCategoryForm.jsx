@@ -49,6 +49,10 @@ const EditSubCategoryForm = ({
       return;
     }
 
+    if (!window.confirm("Are you sure you want to update this sub-category?")) {
+      return;
+    }
+
     setLoading(true);
     const formData = new FormData();
     formData.append("name", subCategoryName);
@@ -92,7 +96,11 @@ const EditSubCategoryForm = ({
         <FontAwesomeIcon
           icon={faTimes}
           className="manageServiceCancelIcon"
-          onClick={() => setShowEditSubCategoryForm(false)}
+          onClick={() => {
+            if (window.confirm("Are you sure you want to cancel the edit?")) {
+              setShowEditSubCategoryForm(false);
+            }
+          }}
         />
       </h3>
       {successMessage && <div className="successMessage">{successMessage}</div>}

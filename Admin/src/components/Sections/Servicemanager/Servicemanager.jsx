@@ -480,11 +480,11 @@ const Servermanager = () => {
       )}
       {selectedService && (
         <>
-          <hr style={{ borderTop: "2px solid #D70D09", height: "1px" }} />
+          <hr style={{ borderTop: "2px solid #ccc", height: "1px" }} />
           <ServiceDetailCard
             service={selectedService}
-            category={selectedService.categoryId}
-            subCategory={selectedService.subCategoryId}
+            category={selectedService.categoryId._id}
+            subCategory={selectedService.subCategoryId._id}
             onClose={() => setSelectedService(null)}
           />
         </>
