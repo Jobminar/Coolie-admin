@@ -53,8 +53,101 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid black;
-    margin: 2rem;
+    /* border: 1px solid black; */
+    margin: 3rem;
     row-gap: 2rem;
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 28.13px;
+    text-align: left;
     
+}
+.ITinputs{
+    margin-bottom: 0.5rem;
+    width: 20rem;
+    height: 2rem;
+}
+
+
+.ITinputs .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border-color: black;
+  }
+  
+  /* Border color on hover */
+  .ITinputs .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: black;
+  }
+  
+  /* Border color when focused/clicked */
+  .ITinputs .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: black;
+  }
+  
+  /* Label color when focused */
+  .ITinputs .MuiFormLabel-root.Mui-focused {
+    color: black;
+  }
+  
+  /* Label color */
+  .ITinputs .MuiFormLabel-root {
+    color: black;
+  }
+  
+  /* Ensuring the background remains white */
+  .ITinputs .MuiOutlinedInput-root .MuiOutlinedInput-input {
+    background-color: white;
+  }
+  
+  /* Ensuring the background remains white on hover */
+  .ITinputs .MuiOutlinedInput-root:hover .MuiOutlinedInput-input {
+    background-color: white;
+  }
+  
+  /* Ensuring the background remains white when focused/clicked */
+  .ITinputs .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input {
+    background-color: white;
+  }
+
+  ..ITinputs .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: black;
+}
+
+/* Border color on hover */
+.ITinputs .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: black;
+}
+
+/* Border color when focused/clicked */
+.ITinputs .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: black;
+}
+
+/* Label color when focused */
+.ITinputs .MuiFormLabel-root.Mui-focused {
+  color: black;
+}
+
+/* Label color */
+.ITinputs .MuiFormLabel-root {
+  color: black;
+}
+
+/* Ensuring the background remains white */
+.ITinputs .MuiOutlinedInput-root .MuiOutlinedInput-input {
+  background-color: white;
+}
+
+/* Ensuring the background remains white on hover */
+.ITinputs .MuiOutlinedInput-root:hover .MuiOutlinedInput-input {
+  background-color: white;
+}
+
+/* Ensuring the background remains white when focused/clicked */
+.ITinputs .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input {
+  background-color: white;
+}
+.skip{
+    width: 1rem;
+    height: 1rem;
 }

@@ -134,34 +134,32 @@ const Providerbanners = () => {
               placeholder="Enter your Service Name"
               onChange={handleChange}
             />
-            <button type="submit" className="submit-button">
+            <button type="submit" className="add-button">
               Submit
             </button>
           </form>
         </div>
       )}
 
-      <div className="main-banners">
-        <div className="banner-con">
-          {data.map((banner) => (
-            <div className="banner-sub-con" key={banner._id}>
-              <img
-                src={`https://coolie1-dev.s3.ap-south-1.amazonaws.com/${banner.image}`}
-                alt={banner.name}
-              />
-              <p className="title">{banner.name}</p>
-              <div className="edit-button" onClick={() => handleEdit(banner)}>
-                <EditOutlinedIcon />
-              </div>
-              <div
-                className="delete-button"
-                onClick={() => handleDelete(banner._id)}
-              >
-                <DeleteOutlineOutlinedIcon />
-              </div>
+      <div className="banner-con">
+        {data.map((banner) => (
+          <div className="banner-sub-con" key={banner._id}>
+            <img
+              src={`https://coolie1-dev.s3.ap-south-1.amazonaws.com/${banner.image}`}
+              alt={banner.name}
+            />
+            <p className="title">{banner.name}</p>
+            <div className="edit-button" onClick={() => handleEdit(banner)}>
+              <EditOutlinedIcon />
             </div>
-          ))}
-        </div>
+            <div
+              className="delete-button"
+              onClick={() => handleDelete(banner._id)}
+            >
+              <DeleteOutlineOutlinedIcon />
+            </div>
+          </div>
+        ))}
       </div>
     </>
   );

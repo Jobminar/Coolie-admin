@@ -26,12 +26,24 @@ text-align: center;
 color: white;
     
 }
+.bannername{
+    width: 15rem;
+    height: 2.5rem;
+    font-size: 20px;
+font-weight: 500;
+line-height: 37.5px;
+text-align: center;
+}
+.bannername.filled {
+    background-color: white; /* Set background color to white when filled */
+  }
 .banner-con{
     /* border: 1px solid black; */
     display: grid;
     grid-template-columns: 48% 48%;
     justify-content: space-between;
     gap: 2rem;
+    margin: 2rem 0rem;
 }
 .banner-sub-con{
     /* border: 1px solid black; */
@@ -51,18 +63,19 @@ color: white;
 }
 .edit-button{
     position: absolute;
-    top: 1%;
+    top: 3%;
     left: 2%;
     background-color: #FFC107;
     padding: 5px;
     border-radius: 50%;
 }
+
 .edit-button:hover{
     cursor: pointer;
 }
 .delete-button{
     position: absolute;
-    top: 1%;
+    top: 3%;
     right: 2%;
     background-color: #FFC107;
     padding: 5px;
@@ -93,10 +106,16 @@ color: white;
     align-items: center;
     gap: 1rem;
     flex-direction: column;
+
 }
 .edit-banner-form form input{
     width: 14rem;
     height: 2rem;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 37.5px;
+    text-align: center;
 }
 .add-banner-form form{
     display: flex;
@@ -108,13 +127,93 @@ color: white;
     margin-right: auto;
     gap: 1rem;
    padding: 1rem;
+  
 
 }
 
-.banner-button{
-    width: 15rem;
+.edit-banners-button{
+    width: 10rem;
     height: 2.5rem;
     background-color: #FFC107;
     color: white;
     border: none;
+    border-radius: 10px;
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 20.5px;
+    text-align: center;
+    color: white;
+}
+
+/* most boked services */
+.service-selection-con{
+   
+    margin: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.service-selection{
+    width: 20rem;
+    height: 2rem;
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 37.5px;
+    text-align: center;
+    border: 1px solid #FFC107;
+
+}
+.mostbookedform{
+    display: flex;
+    flex-direction: 
+    column;
+    justify-content: center;
+    align-items: center;
+}
+.most-button{
+    width: 15rem;
+    height: 2.5rem;
+    border-radius: 10px;
+    background-color: #FFC107;
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 20.5px;
+    text-align: center;
+    color: white;
+    margin: 1rem 0rem;
+    border: none;
+}
+.add-button{
+    width: 15rem;
+    height: 2.5rem;
+    border-radius: 10px;
+    background-color: #FFC107;
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 20.5px;
+    text-align: center;
+    color: white;
+    margin: 1rem 0rem;
+    border: none;
+}
+.note{
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 20.5px;
+    text-align: center;
+
+}
+.mbs-banners-con{
+    /* border: 1px solid black; */
+    margin: 2rem 0rem;
+   display: grid;
+   grid-template-columns: 45% 45%;
+   justify-content: space-between;
+   row-gap: 2rem;
+   
 }

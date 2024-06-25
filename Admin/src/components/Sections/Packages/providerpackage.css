@@ -5,6 +5,16 @@
     align-items: center;
     padding: 2rem;
     row-gap: 25px;
+   
+
+}
+.inputss TextField{
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 22.5px;
+    text-align: center;
+    width: 15rem;
 }
 .submit-button{
     width: 725px;
@@ -67,13 +77,21 @@
     padding: 1rem;
     gap: 10px;
 }
+.u-main-con {
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;.
+    margin: 0px;;
+}
 .u-main-con h1{
     font-family: Roboto;
     font-size: 36px;
-    font-weight: 700;
+    font-weight: 400;
     line-height: 42.19px;
     text-align: left;
-    margin-left: 4rem;
+    margin-left: 2rem;
 
 }
 .universal-edit{
@@ -86,35 +104,38 @@
 .universal-edit p{
     font-family: Roboto;
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 28.13px;
     text-align: left;
     margin: 0px;
+    margin-bottom: 5px;
 
 }
 .universal-edit input,textarea{
-    width: 15rem;
-    height: 2rem;
+    width: 20rem;
+    height: 3rem;
     font-family: Roboto;
     font-size: 18.66px;
     font-weight: 400;
     line-height: 35.49px;
     text-align: left;
-
+   border-radius: 3px;
+   padding:0rem 1rem;
 
 }
 .update-button{
     width: 15rem;
     background-color: #FFC107;
-    height: 2.5rem;
+    height: 3rem;
     color: white;
     font-family: Roboto;
-font-size: 20.47px;
-font-weight: 500;
-line-height: 33.36px;
-text-align: center;
-border: none;
-margin: 1rem;
+    font-size: 20.47px;
+    font-weight: 500;
+    line-height: 33.36px;
+    text-align: center;
+    border: none;
+    margin: 1rem;
+    border-radius: 10px;
 
 }
 .universal-edit-notify{
@@ -132,7 +153,7 @@ margin: 1rem;
 .universal-edit-notify p{
     font-family: Roboto;
     font-size: 24px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 28.13px;
     text-align: left;
 
@@ -141,21 +162,28 @@ margin: 1rem;
 
 /* manage */
 
-.u-manage-con{
+.manage-promotion-main-con{
     /* border: 1px solid black; */
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: center;
     padding: 2rem 0rem;
-    row-gap: 2rem;
+    row-gap: 5rem;
+
 }
 .u-manage-sub-con{
     min-width: 579px;
     min-height: 536p;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     /* padding: 1rem; */
-  
+    border-radius: 10px;
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 28.13px;
+    text-align: left;
+    /* border: 1px solid black; */
 }
 .u-manage-buttons{
     display: grid;
@@ -164,11 +192,12 @@ margin: 1rem;
     align-items: center;
     background-color:  #FDE9AD;
     padding: 0rem 1rem;
+    border-radius: 10px;
 }
 .u-manage-buttons h3{
     font-family: Roboto;
     font-size: 26px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 22.5px;
     text-align: left;
 
@@ -188,10 +217,129 @@ margin: 1rem;
     height: 89px;
     margin-bottom: 0px; /* Remove margin between text fields */
     font-family: Roboto;
-font-size: 23.66px;
-font-weight: 400;
-line-height: 35.49px;
-text-align: left;
+    font-size: 66px;
+    font-weight: 400;
+    line-height: 35.49px;
+    text-align: left;
 
   }
   
+
+  /* MUI styling */
+
+  .inputss {
+    margin-bottom: 1.5rem;
+  }
+  
+  .textFieldCustom {
+    width: 100%
+    
+  }
+
+  .contact-con{
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+   row-gap: 1rem;
+   padding: 2rem;
+  }
+  h1{
+  text-align: center;
+  margin: 1rem;
+  
+    
+  }
+  .inputs{
+    width: 20rem;
+  }
+  .submit{
+    width: 20rem;
+  
+  }
+  .submit:hover{
+    background:#F4821F;
+    border-radius:10px;
+    color:white;
+  }
+  
+/* Existing styles */
+.inputss .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: black;
+}
+
+.inputss .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: black;
+}
+
+.inputss .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: black;
+}
+
+.inputss .MuiFormLabel-root.Mui-focused {
+  color: black;
+}
+
+.inputss .MuiFormLabel-root {
+  color: black;
+}
+
+/* New rules to maintain white background */
+.inputss .MuiOutlinedInput-root .MuiOutlinedInput-input {
+  background-color: white;
+}
+
+.inputss .MuiOutlinedInput-root:hover .MuiOutlinedInput-input {
+  background-color: white;
+}
+
+.inputss .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input {
+  background-color: white;
+}
+
+
+  /* checkboxes */
+
+  .inputs-checkboxes {
+    margin-top: 16px;
+    font-family: Roboto;
+    font-size: 66px;
+    font-weight: 400;
+    line-height: 35.49px;
+    text-align: left;
+
+  }
+  
+  .inputs-checkboxes label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    
+  }
+  
+  .inputs-checkboxes label input[type="checkbox"] {
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  
+  .inputs-checkboxes label span {
+    vertical-align: middle;
+  }
+  
+  /* Optional: Styling checked state */
+  .inputs-checkboxes label input[type="checkbox"]:checked + span {
+    font-weight: bold;
+    color: #333; 
+  }
+  
+
+  .inputs-checkboxes {
+  margin-top: 16px;
+}
+
+.inputs-checkboxes label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+}

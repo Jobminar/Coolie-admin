@@ -80,7 +80,7 @@ const EditBanner = () => {
           placeholder="Enter your Service Name"
           onChange={handleChange}
         />
-        <button type="submit" className="submit-button">
+        <button type="submit" className="add-button">
           Update
         </button>
       </form>

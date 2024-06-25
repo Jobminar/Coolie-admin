@@ -64,7 +64,7 @@ const Addpromotions = () => {
     <div className="add-package-con">
       <form className="form-con" onSubmit={handleSubmit}>
         <FormControl component="fieldset" fullWidth>
-          <FormGroup>
+          <div className="inputss">
             <TextField
               type="text"
               name="promoName"
@@ -77,6 +77,8 @@ const Addpromotions = () => {
               className="textFieldCustom"
               required
             />
+          </div>
+          <div className="inputss">
             <TextField
               select
               name="serviceType"
@@ -103,6 +105,8 @@ const Addpromotions = () => {
               <option value="Plumber">Plumber</option>
               <option value="Laundry services">Laundry services</option>
             </TextField>
+          </div>
+          <div className="inputss">
             <TextField
               type="number"
               name="offerPercentage"
@@ -115,6 +119,8 @@ const Addpromotions = () => {
               className="textFieldCustom"
               required
             />
+          </div>
+          <div className="inputss">
             <TextField
               type="date"
               name="validFrom"
@@ -130,6 +136,8 @@ const Addpromotions = () => {
                 shrink: true,
               }}
             />
+          </div>
+          <div className="inputss">
             <TextField
               type="date"
               name="validTill"
@@ -145,42 +153,42 @@ const Addpromotions = () => {
                 shrink: true,
               }}
             />
-            <div>
-              <label>User Type:</label>
-              <div>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="userType"
-                    value="Gold"
-                    checked={userType.includes("Gold")}
-                    onChange={handleUserTypeChange}
-                  />
-                  User Type 1
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="userType"
-                    value="Silver"
-                    checked={userType.includes("Silver")}
-                    onChange={handleUserTypeChange}
-                  />
-                  User Type 2
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="userType"
-                    value="Bronze"
-                    checked={userType.includes("Bronze")}
-                    onChange={handleUserTypeChange}
-                  />
-                  User Type 3
-                </label>
-              </div>
+          </div>
+          <div className="inputs-checkboxes">
+            <label>User Type:</label>
+            <div className="sub-ckeckboxes">
+              <label>
+                <input
+                  type="checkbox"
+                  name="userType"
+                  value="Gold"
+                  checked={userType.includes("Gold")}
+                  onChange={handleUserTypeChange}
+                />
+                GOld
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="userType"
+                  value="Silver"
+                  checked={userType.includes("Silver")}
+                  onChange={handleUserTypeChange}
+                />
+                Silver
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="userType"
+                  value="Bronze"
+                  checked={userType.includes("Bronze")}
+                  onChange={handleUserTypeChange}
+                />
+                Bronze
+              </label>
             </div>
-          </FormGroup>
+          </div>
         </FormControl>
         <button type="submit" className="submit-button">
           Submit

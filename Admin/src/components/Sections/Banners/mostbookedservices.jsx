@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import './banners.css'
 
 const Mostbookedservices = () => {
   const navigate = useNavigate(2);
@@ -126,6 +127,7 @@ const Mostbookedservices = () => {
       return;
     }
 
+<<<<<<< HEAD
     try {
       const response = await fetch(
         `https://api.coolieno1.in/v1.0/admin/most-booked/${id}`,
@@ -225,6 +227,73 @@ const Mostbookedservices = () => {
       </div>
     </>
   );
+=======
+    return (
+        <>
+          <div className='service-selection-con'>
+          {fetchService.length > 0 ? (
+                <select value={selectedServiceId} onChange={handleSelectChange} className='service-selection'>
+                    <option value="">Select a service</option>
+                    {fetchService.map(service => (
+                        <option key={service._id} value={service._id}>
+                            {service.name}
+                        </option>
+                    ))}
+                </select>
+            ) : (
+                <p>No services found.</p>
+            )}
+          </div>
+          
+
+            <div className='mostbookedform'>
+                {selectedService && selectedService.name ? (
+                    <form onSubmit={handleSubmit}>
+                        <div>
+                            <input
+                                type='file'
+                                id='hiddenFileInput'
+                                className='file-input'
+                                onChange={handleFileChange}
+                                style={{ display: 'none' }}
+                            />
+                            <button type='button' className='custom-button' onClick={handleButtonClick}>
+                                Upload Banner image
+                            </button>
+                            {image && <p>Selected file: {image.name}</p>}
+                        </div>
+                        <button type="submit" className='most-button'>Submit</button>
+                    </form>
+                ) : (
+                    <p className='note'>Please select a service to upload Banner image.</p>
+                )}
+            </div>
+
+          
+           
+              <div className="mbs-banners-con">
+                {mostBookedData.map((banner) => (
+                  <div className="banner-sub-con" key={banner._id}>
+                    <img
+                      src={`https://coolie1-dev.s3.ap-south-1.amazonaws.com/${banner.image}`}
+                      alt={banner.name}
+                    />
+                    <p className="title">{banner.name}</p>
+                    <div className="edit-button" onClick={() => handleEdit(banner)}>
+                      <EditOutlinedIcon />
+                    </div>
+                    <div
+                      className="delete-button"
+                      onClick={() => handleDelete(banner._id)}
+                    >
+                      <DeleteOutlineOutlinedIcon />
+                    </div>
+                  </div>
+                ))}
+              </div>
+        </>
+    );
+>>>>>>> 29a7f2891273e70e6d43c0175092523cd74a0f39
 };
 
 export default Mostbookedservices;

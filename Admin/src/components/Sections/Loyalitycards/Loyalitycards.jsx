@@ -4,6 +4,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import TextField from "@mui/material/TextField";
 
 const Loyalitycards = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Loyalitycards = () => {
   const { name, points, amount, minimumSpentValue, discount } = data;
 
   const [visible, setVisible] = useState(false);
-  const handlechange = (e) => {
+  const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
@@ -115,47 +116,64 @@ const Loyalitycards = () => {
         </div>
         {visible && (
           <div className="loyality-form">
-            <form onSubmit={handlesubmit}>
-              <input
-                type="text"
-                name="name"
-                value={name}
-                className="name"
-                onChange={handlechange}
-                placeholder="Loyalty card name"
-              />
-              <input
-                type="tel"
-                name="points"
-                value={points}
-                className="points"
-                onChange={handlechange}
-                placeholder="Loyalty points"
-              />
-              <input
-                type="text"
-                name="amount"
-                value={amount}
-                className="amount"
-                onChange={handlechange}
-                placeholder="Amount per points"
-              />
-              <input
-                type="text"
-                name="minimumSpentValue"
-                value={minimumSpentValue}
-                className="minimumSpentValue"
-                onChange={handlechange}
-                placeholder="Minimum Spent Value"
-              />
-              <input
-                type="text"
-                name="discount"
-                value={discount}
-                className="discount"
-                onChange={handlechange}
-                placeholder="Discount"
-              />
+            <form onSubmit={handlesubmit} className="form-submit-con">
+              <div className="inputs-loyality">
+                <TextField
+                  name="name"
+                  value={name}
+                  onChange={handleChange}
+                  label="Loyalty card name"
+                  variant="outlined"
+                  margin="normal"
+                  fullWidth
+                />
+              </div>
+              <div className="inputs-loyality">
+                <TextField
+                  type="tel"
+                  name="points"
+                  value={points}
+                  onChange={handleChange}
+                  label="Loyalty points"
+                  variant="outlined"
+                  margin="normal"
+                  fullWidth
+                />
+              </div>
+              <div className="inputs-loyality">
+                <TextField
+                  name="amount"
+                  value={amount}
+                  onChange={handleChange}
+                  label="Amount per points"
+                  variant="outlined"
+                  margin="normal"
+                  fullWidth
+                />
+              </div>
+              <div className="inputs-loyality">
+                <TextField
+                  name="minimumSpentValue"
+                  value={minimumSpentValue}
+                  onChange={handleChange}
+                  label="Minimum Spent Value"
+                  variant="outlined"
+                  margin="normal"
+                  fullWidth
+                />
+              </div>
+              <div className="inputs-loyality">
+                <TextField
+                  name="discount"
+                  value={discount}
+                  onChange={handleChange}
+                  label="Discount"
+                  variant="outlined"
+                  margin="normal"
+                  fullWidth
+                />
+              </div>
+
               <div>
                 <input
                   type="file"
@@ -173,7 +191,7 @@ const Loyalitycards = () => {
                 </button>
                 {image && <p>Selected file: {image.name}</p>}
               </div>
-              <button className="submit" type="submit">
+              <button className="loyality-submit" type="submit">
                 Submit
               </button>
             </form>
