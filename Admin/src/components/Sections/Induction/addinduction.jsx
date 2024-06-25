@@ -9,8 +9,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import './induction.css'
 function InductionForm() {
   const [formdata, setFormdata] = useState({
-    profession: '',
-    title: '',
+    profession: "",
+    title: "",
     skip: false,
   });
 
@@ -82,7 +82,7 @@ function InductionForm() {
             <MenuItem value='Laundry services'>Laundry services</MenuItem>
           </Select>
       </div>
-      <div className='ITinputs'>
+      <div className="ITinputs">
         <TextField
           type='text'
           name='title'

@@ -16,7 +16,7 @@ const Providerbanners = () => {
 
   useEffect(() => {
     axios
-      .get("http://13.126.118.3:3000/v1.0/admin/provider-banners")
+      .get("https://api.coolieno1.in/v1.0/admin/provider-banners")
       .then((response) => setData(response.data))
       .catch((error) => setError(error));
   }, []);
@@ -35,17 +35,17 @@ const Providerbanners = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(name, 'name', image, 'image');
+    console.log(name, "name", image, "image");
     try {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("image", image);
       const response = await fetch(
-        "http://13.126.118.3:3000/v1.0/admin/provider-banners",
+        "https://api.coolieno1.in/v1.0/admin/provider-banners",
         {
           method: "POST",
           body: formData,
-        }
+        },
       );
       if (response.ok) {
         alert("Banner added successfully");
@@ -66,9 +66,12 @@ const Providerbanners = () => {
     }
 
     try {
-      const response = await fetch(`http://13.126.118.3:3000/v1.0/admin/provider-banners/banners/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `https://api.coolieno1.in/v1.0/admin/provider-banners/banners/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (response.ok) {
         alert("Deleted successfully");
@@ -83,7 +86,9 @@ const Providerbanners = () => {
   };
 
   const handleEdit = (banner) => {
-    navigate("/editbanner", { state: { banner, apiEndpoint: 'provider-banners' } });
+    navigate("/editbanner", {
+      state: { banner, apiEndpoint: "provider-banners" },
+    });
   };
 
   const toggleFormVisibility = () => {
@@ -92,8 +97,8 @@ const Providerbanners = () => {
 
   const handleButtonClick = (e) => {
     e.preventDefault(); // Prevent default form submission
-    document.getElementById('hiddenFileInput').click();
- };
+    document.getElementById("hiddenFileInput").click();
+  };
 
   return (
     <>
@@ -102,55 +107,60 @@ const Providerbanners = () => {
         <button onClick={toggleFormVisibility}>Add banners</button>
       </div>
       {showForm && (
-         <div className="add-banner-form">
-         <form onSubmit={handleSubmit}>
+        <div className="add-banner-form">
+          <form onSubmit={handleSubmit}>
             <div>
-                       <input
-                       type='file'
-                       id='hiddenFileInput'
-                       className='file-input'
-                       onChange={handleFileChange}
-                       style={{ display: 'none' }}
-                       />
-                       <button type='button' className='custom-button' onClick={handleButtonClick}>
-                       Upload Loyalty card image
-                       </button>
-                       {image && <p>Selected file: {image.name}</p>}
-                    </div>
-           <input
-             type="text"
-             name="name"
-             value={name}
-             className="bannername"
-             placeholder="Enter your Service Name"
-             onChange={handleChange}
-           />
-           <button type="submit" className="add-button">Submit</button>
-         </form>
-       </div>
+              <input
+                type="file"
+                id="hiddenFileInput"
+                className="file-input"
+                onChange={handleFileChange}
+                style={{ display: "none" }}
+              />
+              <button
+                type="button"
+                className="custom-button"
+                onClick={handleButtonClick}
+              >
+                Upload Loyalty card image
+              </button>
+              {image && <p>Selected file: {image.name}</p>}
+            </div>
+            <input
+              type="text"
+              name="name"
+              value={name}
+              className="bannername"
+              placeholder="Enter your Service Name"
+              onChange={handleChange}
+            />
+            <button type="submit" className="add-button">
+              Submit
+            </button>
+          </form>
+        </div>
       )}
 
-     
-        <div className="banner-con">
-          {data.map((banner) => (
-            <div className="banner-sub-con" key={banner._id}>
-              <img
-                src={`https://coolie1-dev.s3.ap-south-1.amazonaws.com/${banner.image}`}
-                alt={banner.name}
-              />
-              <p className="title">{banner.name}</p>
-              <div className="edit-button" onClick={() => handleEdit(banner)}>
-                <EditOutlinedIcon />
-              </div>
-              <div
-                className="delete-button"
-                onClick={() => handleDelete(banner._id)}
-              >
-                <DeleteOutlineOutlinedIcon />
-              </div>
+      <div className="banner-con">
+        {data.map((banner) => (
+          <div className="banner-sub-con" key={banner._id}>
+            <img
+              src={`https://coolie1-dev.s3.ap-south-1.amazonaws.com/${banner.image}`}
+              alt={banner.name}
+            />
+            <p className="title">{banner.name}</p>
+            <div className="edit-button" onClick={() => handleEdit(banner)}>
+              <EditOutlinedIcon />
             </div>
-          ))}
-        </div>
+            <div
+              className="delete-button"
+              onClick={() => handleDelete(banner._id)}
+            >
+              <DeleteOutlineOutlinedIcon />
+            </div>
+          </div>
+        ))}
+      </div>
     </>
   );
 };

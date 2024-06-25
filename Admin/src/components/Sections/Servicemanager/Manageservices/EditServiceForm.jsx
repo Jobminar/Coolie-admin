@@ -10,11 +10,6 @@ const EditServiceForm = ({
   onSave,
   onClose,
 }) => {
-  // Console log the props to check if they are being passed correctly
-  console.log("service prop:", service);
-  console.log("category prop:", category);
-  console.log("subCategory prop:", subCategory);
-
   const [categoryName, setCategoryName] = useState("");
   const [subCategoryName, setSubCategoryName] = useState("");
   const [userPackages, setUserPackages] = useState([]);
@@ -24,6 +19,9 @@ const EditServiceForm = ({
     serviceType: "",
     price: "",
     serviceTime: "",
+    metric: "",
+    min: 1,
+    max: 1,
     description: "",
     locations: [],
     taxPercentage: "",
@@ -38,14 +36,16 @@ const EditServiceForm = ({
     isDeleted: false,
   });
 
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const fetchCategoryName = async () => {
       try {
-        console.log(`Fetching category name for ID: ${category}`);
         const response = await axios.get(
-          `http://13.126.118.3:3000/v1.0/core/categories/${category}`,
+          `https://api.coolieno1.in/v1.0/core/categories/${category}`,
         );
-        console.log("Category name response:", response.data);
         setCategoryName(response.data.name);
       } catch (error) {
         console.error("Error fetching category name:", error);
@@ -54,11 +54,9 @@ const EditServiceForm = ({
 
     const fetchSubCategoryName = async () => {
       try {
-        console.log(`Fetching sub-category name for ID: ${subCategory}`);
         const response = await axios.get(
-          `http://13.126.118.3:3000/v1.0/core/sub-category/${subCategory}`,
+          `https://api.coolieno1.in/v1.0/core/sub-categories/${subCategory}`,
         );
-        console.log("Sub-category name response:", response.data);
         setSubCategoryName(response.data.name);
       } catch (error) {
         console.error("Error fetching sub-category name:", error);
@@ -67,17 +65,18 @@ const EditServiceForm = ({
 
     const fetchServiceDetails = async () => {
       try {
-        console.log(`Fetching service details for ID: ${service._id}`);
         const response = await axios.get(
-          `http://13.126.118.3:3000/v1.0/core/services/${service._id}`,
+          `https://api.coolieno1.in/v1.0/core/services/${service._id}`,
         );
         const serviceData = response.data;
-        console.log("Service details response:", serviceData);
         setServiceData({
           name: serviceData.name,
           serviceType: serviceData.serviceVariants[0]?.variantName || "",
           price: serviceData.serviceVariants[0]?.price || "",
           serviceTime: serviceData.serviceVariants[0]?.serviceTime || "",
+          metric: serviceData.serviceVariants[0]?.metric || "",
+          min: serviceData.serviceVariants[0]?.min || 1,
+          max: serviceData.serviceVariants[0]?.max || 1,
           description: serviceData.description,
           locations: serviceData.locations,
           taxPercentage: serviceData.taxPercentage,
@@ -98,18 +97,11 @@ const EditServiceForm = ({
 
     const fetchPackages = async () => {
       try {
-        console.log("Fetching user packages");
         const userPackagesResponse = await axios.get(
-          "http://13.126.118.3:3000/v1.0/core/user-packages",
+          "https://api.coolieno1.in/v1.0/admin/user-package",
         );
-        console.log("User packages response:", userPackagesResponse.data);
-        console.log("Fetching provider packages");
         const providerPackagesResponse = await axios.get(
-          "http://13.126.118.3:3000/v1.0/core/provider-packages",
-        );
-        console.log(
-          "Provider packages response:",
-          providerPackagesResponse.data,
+          "https://api.coolieno1.in/v1.0/admin/provider-package",
         );
         setUserPackages(userPackagesResponse.data.packages);
         setProviderPackages(providerPackagesResponse.data.packages);
@@ -118,16 +110,38 @@ const EditServiceForm = ({
       }
     };
 
-    console.log("Starting API calls...");
     fetchCategoryName();
     fetchSubCategoryName();
     fetchServiceDetails();
     fetchPackages();
-    console.log("API calls finished.");
   }, [category, subCategory, service._id]);
 
   const handleSave = () => {
-    onSave(serviceData);
+    if (!window.confirm("Are you sure you want to update this service?")) {
+      return;
+    }
+
+    setLoading(true);
+    axios
+      .put(
+        `https://api.coolieno1.in/v1.0/core/services/${service._id}`,
+        serviceData,
+      )
+      .then((response) => {
+        setSuccessMessage("Service updated successfully.");
+        setErrorMessage("");
+        onSave(response.data);
+      })
+      .catch((error) => {
+        const errorResponse = error.response
+          ? error.response.data
+          : "Network error";
+        setErrorMessage(`Failed to update service: ${errorResponse}`);
+        setSuccessMessage("");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -138,6 +152,10 @@ const EditServiceForm = ({
         <h6>Service: {serviceData.name}</h6>
       </div>
       <form className="add-service-form">
+        {successMessage && (
+          <div className="successMessage">{successMessage}</div>
+        )}
+        {errorMessage && <div className="errorMessage">{errorMessage}</div>}
         <div className="form-group">
           <label>Service Name:</label>
           <input
@@ -179,6 +197,39 @@ const EditServiceForm = ({
             value={serviceData.serviceTime}
             onChange={(e) =>
               setServiceData({ ...serviceData, serviceTime: e.target.value })
+            }
+          />
+        </div>
+        <div className="form-group">
+          <label>Metric:</label>
+          <input
+            type="text"
+            className="bottom-borders-input"
+            value={serviceData.metric}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, metric: e.target.value })
+            }
+          />
+        </div>
+        <div className="form-group">
+          <label>Min:</label>
+          <input
+            type="number"
+            className="bottom-borders-input"
+            value={serviceData.min}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, min: e.target.value })
+            }
+          />
+        </div>
+        <div className="form-group">
+          <label>Max:</label>
+          <input
+            type="number"
+            className="bottom-borders-input"
+            value={serviceData.max}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, max: e.target.value })
             }
           />
         </div>
@@ -229,11 +280,12 @@ const EditServiceForm = ({
               })
             }
           >
-            {userPackages.map((pkg) => (
-              <option key={pkg._id} value={pkg._id}>
-                {pkg.name}
-              </option>
-            ))}
+            {userPackages &&
+              userPackages.map((pkg) => (
+                <option key={pkg._id} value={pkg._id}>
+                  {pkg.packageName}
+                </option>
+              ))}
           </select>
         </div>
         <div className="form-group">
@@ -248,11 +300,12 @@ const EditServiceForm = ({
               })
             }
           >
-            {providerPackages.map((pkg) => (
-              <option key={pkg._id} value={pkg._id}>
-                {pkg.name}
-              </option>
-            ))}
+            {providerPackages &&
+              providerPackages.map((pkg) => (
+                <option key={pkg._id} value={pkg._id}>
+                  {pkg.packageName}
+                </option>
+              ))}
           </select>
         </div>
         <div className="form-group">
@@ -338,10 +391,23 @@ const EditServiceForm = ({
             }
           />
         </div>
-        <button type="button" className="submissionbutton" onClick={handleSave}>
-          Update
+        <button
+          type="button"
+          className="submissionbutton"
+          onClick={handleSave}
+          disabled={loading}
+        >
+          {loading ? "Updating..." : "Update"}
         </button>
-        <button type="button" className="submissionbutton" onClick={onClose}>
+        <button
+          type="button"
+          className="submissionbutton"
+          onClick={() => {
+            if (window.confirm("Are you sure you want to cancel the edit?")) {
+              onClose();
+            }
+          }}
+        >
           Close
         </button>
       </form>
@@ -358,6 +424,9 @@ EditServiceForm.propTypes = {
         variantName: PropTypes.string,
         price: PropTypes.string,
         serviceTime: PropTypes.string,
+        metric: PropTypes.string,
+        min: PropTypes.number,
+        max: PropTypes.number,
       }),
     ),
     description: PropTypes.string,

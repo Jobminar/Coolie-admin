@@ -22,14 +22,23 @@ const SubCategories = ({
   };
 
   const handleDeleteSubCategory = (subCategoryId) => {
-    axios
-      .delete(`${API_BASE_URL}/v1.0/core/sub-categories/${subCategoryId}`)
-      .then(() => {
-        setSubCategories((prev) =>
-          prev.filter((sub) => sub._id !== subCategoryId),
-        );
-      })
-      .catch((error) => console.error("Error deleting sub-category:", error));
+    if (window.confirm("Are you sure you want to delete this sub-category?")) {
+      axios
+        .delete(`${API_BASE_URL}/v1.0/core/sub-categories/${subCategoryId}`)
+        .then(() => {
+          setSubCategories((prev) =>
+            prev.filter((sub) => sub._id !== subCategoryId),
+          );
+        })
+        .catch((error) => console.error("Error deleting sub-category:", error));
+    }
+  };
+
+  const handleEditSubCategory = (subCategory) => {
+    if (window.confirm("Are you sure you want to edit this sub-category?")) {
+      setSelectedSubCategory(subCategory);
+      setShowEditSubCategoryForm(true);
+    }
   };
 
   return (
@@ -63,10 +72,7 @@ const SubCategories = ({
                   <FontAwesomeIcon
                     icon={faEdit}
                     className="manageServiceEditIcon"
-                    onClick={() => {
-                      setSelectedSubCategory(subCategory);
-                      setShowEditSubCategoryForm(true);
-                    }}
+                    onClick={() => handleEditSubCategory(subCategory)}
                   />
                   <FontAwesomeIcon
                     icon={faTrash}

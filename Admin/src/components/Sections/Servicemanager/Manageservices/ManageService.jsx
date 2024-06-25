@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./manageservice.css";
 
-const API_BASE_URL = "http://13.126.118.3:3000";
+const API_BASE_URL = "https://api.coolieno1.in";
 const AWS_BASE_URL = "https://coolie1-dev.s3.ap-south-1.amazonaws.com";
 
 const ManageService = () => {
@@ -33,7 +33,10 @@ const ManageService = () => {
         console.log("Fetched categories:", response.data);
         setCategories(response.data);
       })
-      .catch((error) => console.error("Error fetching categories:", error));
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+        alert("Error fetching categories.");
+      });
   }, []);
 
   const fetchSubcategories = (categoryId) => {
@@ -44,7 +47,10 @@ const ManageService = () => {
         console.log("Fetched subcategories:", response.data);
         setSubCategories(response.data);
       })
-      .catch((error) => console.error("Error fetching subcategories:", error));
+      .catch((error) => {
+        console.error("Error fetching subcategories:", error);
+        alert("Error fetching subcategories.");
+      });
   };
 
   const fetchServices = (categoryId, subCategoryId) => {
@@ -59,7 +65,10 @@ const ManageService = () => {
         console.log("Fetched services:", response.data.data);
         setServices(response.data.data);
       })
-      .catch((error) => console.error("Error fetching services:", error));
+      .catch((error) => {
+        console.error("Error fetching services:", error);
+        alert("Error fetching services.");
+      });
   };
 
   const updateSubCategoryInParent = (updatedSubCategory) => {
@@ -93,6 +102,41 @@ const ManageService = () => {
     setSelectedService(null);
     setShowEditSubCategoryForm(false);
     setShowServiceVariantsMenu(false);
+  };
+
+  const handleSaveService = async (updatedService, serviceId) => {
+    try {
+      console.log(`Updating service with ID: ${serviceId}`);
+      const response = await axios.put(
+        `${API_BASE_URL}/v1.0/core/services/${serviceId}`,
+        updatedService,
+      );
+      console.log("Service updated successfully:", response.data);
+      alert("Service updated successfully.");
+      setSelectedService(null);
+      // Fetch the updated list of services
+      if (selectedCategory && selectedSubCategory) {
+        fetchServices(selectedCategory._id, selectedSubCategory._id);
+      }
+    } catch (error) {
+      console.error("Error updating service:", error);
+      alert("Error updating service.");
+    }
+  };
+
+  const handleDeleteCategory = (categoryId) => {
+    if (window.confirm("Are you sure you want to delete this category?")) {
+      axios
+        .delete(`${API_BASE_URL}/v1.0/core/categories/${categoryId}`)
+        .then(() => {
+          setCategories((prev) => prev.filter((cat) => cat._id !== categoryId));
+          alert("Category deleted successfully.");
+        })
+        .catch((error) => {
+          console.error("Error deleting category:", error);
+          alert("Error deleting category.");
+        });
+    }
   };
 
   return (
@@ -131,30 +175,22 @@ const ManageService = () => {
                       icon={faEdit}
                       className="manageServiceEditIcon"
                       onClick={() => {
-                        console.log("Editing category:", category);
-                        setSelectedCategory(category);
-                        fetchSubcategories(category._id);
-                        setShowEditCategoryForm(true);
+                        if (
+                          window.confirm(
+                            "Are you sure you want to edit this category?",
+                          )
+                        ) {
+                          console.log("Editing category:", category);
+                          setSelectedCategory(category);
+                          fetchSubcategories(category._id);
+                          setShowEditCategoryForm(true);
+                        }
                       }}
                     />
                     <FontAwesomeIcon
                       icon={faTrash}
                       className="manageServiceDeleteIcon"
-                      onClick={() => {
-                        console.log("Deleting category:", category);
-                        axios
-                          .delete(
-                            `${API_BASE_URL}/v1.0/core/categories/${category._id}`,
-                          )
-                          .then(() =>
-                            setCategories((prev) =>
-                              prev.filter((cat) => cat._id !== category._id),
-                            ),
-                          )
-                          .catch((error) =>
-                            console.error("Error deleting category:", error),
-                          );
-                      }}
+                      onClick={() => handleDeleteCategory(category._id)}
                     />
                   </div>
                 </div>
@@ -211,10 +247,9 @@ const ManageService = () => {
             service={selectedService}
             category={selectedCategory._id}
             subCategory={selectedSubCategory._id}
-            onSave={(updatedService) => {
-              console.log("Service save callback", updatedService);
-              setSelectedService(null);
-            }}
+            onSave={(updatedService) =>
+              handleSaveService(updatedService, selectedService._id)
+            }
             onClose={handleCloseServiceForm}
           />
         )}

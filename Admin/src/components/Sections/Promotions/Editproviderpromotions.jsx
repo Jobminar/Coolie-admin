@@ -6,7 +6,16 @@ const EditproviderPromotion = () => {
   const navigate = useNavigate();
   const { promotion, apiEndpoint } = location?.state || {};
 
-  const { promoName, serviceType, cities, noOfJobs, offerAmount, validFrom, validTill, notifyProviders } = promotion;
+  const {
+    promoName,
+    serviceType,
+    cities,
+    noOfJobs,
+    offerAmount,
+    validFrom,
+    validTill,
+    notifyProviders,
+  } = promotion;
 
   const [editedPromotion, setEditedPromotion] = useState({
     promoName,
@@ -31,14 +40,14 @@ const EditproviderPromotion = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `http://13.126.118.3:3000/v1.0/admin/provider-promotions/${promotion._id}`,
+        `https://api.coolieno1.in/v1.0/admin/provider-promotions/${promotion._id}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(editedPromotion),
-        }
+        },
       );
       if (response.ok) {
         alert("Promotion updated successfully");
@@ -125,15 +134,17 @@ const EditproviderPromotion = () => {
           />
         </div>
         <div className="universal-edit-notify">
-            <p>Notify Users</p>
-            <input
-              type="checkbox"
-              name="notifyUsers"
-              checked={editedPromotion.notifyUsers}
-              onChange={handleChange}
-            />
-          </div>
-        <button type="submit" className="update-button">Update promotion</button>
+          <p>Notify Users</p>
+          <input
+            type="checkbox"
+            name="notifyUsers"
+            checked={editedPromotion.notifyUsers}
+            onChange={handleChange}
+          />
+        </div>
+        <button type="submit" className="update-button">
+          Update promotion
+        </button>
       </form>
     </div>
   );

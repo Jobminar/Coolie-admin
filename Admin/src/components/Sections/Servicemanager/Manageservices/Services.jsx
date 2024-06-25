@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import axios from "axios"; // Ensure axios is imported
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
@@ -14,14 +14,22 @@ const Services = ({
   API_BASE_URL,
 }) => {
   const handleDeleteService = (serviceId) => {
-    axios
-      .delete(`${API_BASE_URL}/v1.0/core/services/${serviceId}`)
-      .then((response) => {
-        setServices((prev) =>
-          prev.filter((service) => service._id !== serviceId),
-        );
-      })
-      .catch((error) => console.error("Error deleting service:", error));
+    if (window.confirm("Are you sure you want to delete this service?")) {
+      axios
+        .delete(`${API_BASE_URL}/v1.0/core/services/${serviceId}`)
+        .then((response) => {
+          setServices((prev) =>
+            prev.filter((service) => service._id !== serviceId),
+          );
+        })
+        .catch((error) => console.error("Error deleting service:", error));
+    }
+  };
+
+  const handleEditService = (service) => {
+    if (window.confirm("Are you sure you want to edit this service?")) {
+      setSelectedService(service);
+    }
   };
 
   return (
@@ -57,7 +65,7 @@ const Services = ({
                   <FontAwesomeIcon
                     icon={faEdit}
                     className="manageServiceEditIcon"
-                    onClick={() => setSelectedService(service)}
+                    onClick={() => handleEditService(service)}
                   />
                   <FontAwesomeIcon
                     icon={faTrash}

@@ -32,7 +32,7 @@ const Servermanager = () => {
 
   useEffect(() => {
     axios
-      .get("http://13.126.118.3:3000/v1.0/core/categories")
+      .get("https://api.coolieno1.in/v1.0/core/categories")
       .then((response) => {
         console.log("Categories fetched:", response.data);
         setCategories(response.data);
@@ -47,7 +47,7 @@ const Servermanager = () => {
     }
     axios
       .get(
-        `http://13.126.118.3:3000/v1.0/core/sub-categories/category/${categoryId}`,
+        `https://api.coolieno1.in/v1.0/core/sub-categories/category/${categoryId}`,
       )
       .then((response) => {
         console.log("Subcategories fetched:", response.data);
@@ -64,7 +64,7 @@ const Servermanager = () => {
       return;
     }
 
-    const url = `http://13.126.118.3:3000/v1.0/core/services/filter/${selectedCategory}/${subCategoryId}`;
+    const url = `https://api.coolieno1.in/v1.0/core/services/filter/${selectedCategory}/${subCategoryId}`;
 
     axios
       .get(url)
@@ -167,7 +167,7 @@ const Servermanager = () => {
 
     try {
       const response = await fetch(
-        "http://13.126.118.3:3000/v1.0/core/categories",
+        "https://api.coolieno1.in/v1.0/core/categories",
         {
           method: "POST",
           body: formData,
@@ -210,7 +210,7 @@ const Servermanager = () => {
 
     try {
       const subCategoryResponse = await fetch(
-        "http://13.126.118.3:3000/v1.0/core/sub-categories",
+        "https://api.coolieno1.in/v1.0/core/sub-categories",
         {
           method: "POST",
           body: formData,
@@ -276,7 +276,7 @@ const Servermanager = () => {
 
     try {
       const serviceResponse = await fetch(
-        "http://13.126.118.3:3000/v1.0/core/services",
+        "https://api.coolieno1.in/v1.0/core/services",
         {
           method: "POST",
           headers: {
@@ -480,11 +480,11 @@ const Servermanager = () => {
       )}
       {selectedService && (
         <>
-          <hr style={{ borderTop: "2px solid #D70D09", height: "1px" }} />
+          <hr style={{ borderTop: "2px solid #ccc", height: "1px" }} />
           <ServiceDetailCard
             service={selectedService}
-            category={selectedService.categoryId}
-            subCategory={selectedService.subCategoryId}
+            category={selectedService.categoryId._id}
+            subCategory={selectedService.subCategoryId._id}
             onClose={() => setSelectedService(null)}
           />
         </>

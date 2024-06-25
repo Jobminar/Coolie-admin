@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
-import "./servicemanager.css"; // Ensure the CSS file is correctly linked
+import "./servicemanager.css";
 
 const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
   const [serviceName, setServiceName] = useState("");
@@ -20,8 +20,9 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
   const [providerPackages, setProviderPackages] = useState([]);
   const [platformCommission, setPlatformCommission] = useState("");
   const [serviceVariants, setServiceVariants] = useState([
-    { variantName: "", price: "", serviceTime: "" },
+    { variantName: "", price: "", serviceTime: "", metric: "", min: 1, max: 1 },
   ]);
+  const [showVariantFields, setShowVariantFields] = useState(false);
 
   const defaultServiceTypes = [
     "Daily",
@@ -33,7 +34,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
     "DEEP",
     "NORMAL",
   ];
-
+  const defaultMetrics = ["sqmts", "mts", "members", "quantity"];
   const typesToDisplay =
     serviceTypes.length > 0 ? serviceTypes : defaultServiceTypes;
 
@@ -50,15 +51,25 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
   };
 
   const handleAddVariant = () => {
+    setShowVariantFields(true);
     setServiceVariants([
       ...serviceVariants,
-      { variantName: "", price: "", serviceTime: "" },
+      {
+        variantName: "",
+        price: "",
+        serviceTime: "",
+        metric: "",
+        min: 1,
+        max: 1,
+      },
     ]);
   };
 
   const handleRemoveVariant = (index) => {
-    const newVariants = serviceVariants.filter((_, i) => i !== index);
-    setServiceVariants(newVariants);
+    if (serviceVariants.length > 1) {
+      const newVariants = serviceVariants.filter((_, i) => i !== index);
+      setServiceVariants(newVariants);
+    }
   };
 
   const handleVariantChange = (index, field, value) => {
@@ -74,6 +85,9 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
       variantName: variant.variantName,
       price: parseFloat(variant.price),
       serviceTime: parseFloat(variant.serviceTime),
+      metric: variant.metric,
+      min: parseFloat(variant.min),
+      max: parseFloat(variant.max),
     }));
 
     const serviceData = {
@@ -96,41 +110,26 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
     onSubmit(serviceData);
   };
 
-  // Function to fetch user and provider packages from APIs
-  const fetchPackages = async () => {
-    try {
-      const userResponse = await fetch(
-        "http://13.126.118.3:3000/v1.0/admin/user-package",
-      );
-      const providerResponse = await fetch(
-        "http://13.126.118.3:3000/v1.0/admin/provider-package",
-      );
-
-      if (!userResponse.ok || !providerResponse.ok) {
-        throw new Error("Failed to fetch packages");
-      }
-
-      const userData = await userResponse.json();
-      const providerData = await providerResponse.json();
-
-      if (
-        userData &&
-        userData.length > 0 &&
-        providerData &&
-        providerData.length > 0
-      ) {
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const userResponse = await fetch(
+          "https://api.coolieno1.in/v1.0/admin/user-package",
+        );
+        const providerResponse = await fetch(
+          "https://api.coolieno1.in/v1.0/admin/provider-package",
+        );
+        if (!userResponse.ok || !providerResponse.ok) {
+          throw new Error("Failed to fetch packages");
+        }
+        const userData = await userResponse.json();
+        const providerData = await providerResponse.json();
         setUserPackages(userData);
         setProviderPackages(providerData);
-      } else {
-        throw new Error("Invalid package data structure");
+      } catch (error) {
+        console.error("Error fetching packages:", error);
       }
-    } catch (error) {
-      console.error("Error fetching packages:", error);
-    }
-  };
-
-  // Fetch packages on component mount
-  useEffect(() => {
+    };
     fetchPackages();
   }, []);
 
@@ -195,18 +194,57 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
               }
             />
             <br />
-            <FontAwesomeIcon
-              icon={faTrash}
-              className="remove-variant-icon"
-              onClick={() => handleRemoveVariant(index)}
+            <select
+              className="bottom-borders-input"
+              value={variant.metric}
+              onChange={(e) =>
+                handleVariantChange(index, "metric", e.target.value)
+              }
+            >
+              <option value="">Select Metric</option>
+              {defaultMetrics.map((metric, i) => (
+                <option key={i} value={metric}>
+                  {metric}
+                </option>
+              ))}
+            </select>
+            <br />
+            <input
+              type="number"
+              className="bottom-borders-input"
+              placeholder="Min"
+              value={variant.min}
+              onChange={(e) =>
+                handleVariantChange(index, "min", e.target.value)
+              }
             />
+            <br />
+            <input
+              type="number"
+              className="bottom-borders-input"
+              placeholder="Max"
+              value={variant.max}
+              onChange={(e) =>
+                handleVariantChange(index, "max", e.target.value)
+              }
+            />
+            <br />
+            {serviceVariants.length > 1 && (
+              <FontAwesomeIcon
+                icon={faTrash}
+                className="remove-variant-icon"
+                onClick={() => handleRemoveVariant(index)}
+              />
+            )}
           </div>
         ))}
-        <FontAwesomeIcon
-          icon={faPlus}
-          className="add-variant-icon"
-          onClick={handleAddVariant}
-        />
+        {!showVariantFields && (
+          <FontAwesomeIcon
+            icon={faPlus}
+            className="add-variant-icon"
+            onClick={handleAddVariant}
+          />
+        )}
       </div>
 
       <div className="form-group">

@@ -17,7 +17,7 @@ const Popupbanners = () => {
 
   useEffect(() => {
     axios
-      .get("http://13.126.118.3:3000/v1.0/admin/user-banners")
+      .get("https://api.coolieno1.in/v1.0/admin/user-banners")
       .then((response) => setData(response.data))
       .catch((error) => setError(error));
   }, []);
@@ -36,17 +36,17 @@ const Popupbanners = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(name, 'name', image, 'image');
+    console.log(name, "name", image, "image");
     try {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("image", image);
       const response = await fetch(
-        "http://13.126.118.3:3000/v1.0/admin/user-banners",
+        "https://api.coolieno1.in/v1.0/admin/user-banners",
         {
           method: "POST",
           body: formData,
-        }
+        },
       );
       if (response.ok) {
         alert("Banner added successfully");
@@ -67,9 +67,12 @@ const Popupbanners = () => {
     }
 
     try {
-      const response = await fetch(`http://13.126.118.3:3000/v1.0/admin/user-banners/banners/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `https://api.coolieno1.in/v1.0/admin/user-banners/banners/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (response.ok) {
         alert("Deleted successfully");
@@ -84,7 +87,7 @@ const Popupbanners = () => {
   };
 
   const handleEdit = (banner) => {
-    navigate("/editbanner", { state: { banner, apiEndpoint: 'user-banners' } });
+    navigate("/editbanner", { state: { banner, apiEndpoint: "user-banners" } });
   };
 
   const toggleFormVisibility = () => {

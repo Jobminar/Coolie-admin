@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
@@ -7,11 +8,14 @@ import InputLabel from '@mui/material/InputLabel';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import './induction.css';
+=======
+import React, { useState } from "react";
+>>>>>>> 0cf3610007683ca2aaa439430b0ce6e1c8d2a2bb
 
 function AddTraining() {
   const [formData, setFormData] = useState({
-    profession: '',
-    title: '',
+    profession: "",
+    title: "",
     skip: false,
     quickLinks: false,
   });
@@ -138,6 +142,6 @@ function AddTraining() {
       </form>
     </>
   );
-}
+};
 
 export default AddTraining;
