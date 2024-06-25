@@ -304,7 +304,7 @@ const Sidebar = ({ children }) => {
           onClick={() => handleNavigation("/inductionmain")}
         >
           Induction Main
-        </div>
+        </div>{" "}
         <div
           className={`dropdown marketingDropdown ${
             activeDropdown === "marketing" ? "active" : ""
