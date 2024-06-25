@@ -23,7 +23,7 @@ const TrainingMain = () => {
 
   return (
     <div className='induction-main-container'>
-      <div className="induction-con">
+      {/* <div className="induction-con">
         <div
           className={`tab ${activeTab === 'addtraining' && 'active'}`}
           onClick={() => handleTabClick('addtraining')}
@@ -36,7 +36,7 @@ const TrainingMain = () => {
         >
           Modify Training
         </div>
-      </div>
+      </div> */}
       {renderSelectedComponent()}
     </div>
   );

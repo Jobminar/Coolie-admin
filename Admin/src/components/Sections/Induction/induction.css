@@ -109,7 +109,7 @@
     background-color: white;
   }
 
-  ..ITinputs .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  .ITinputs .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
   border-color: black;
 }
 
@@ -150,4 +150,40 @@
 .skip{
     width: 1rem;
     height: 1rem;
+}
+
+.induction-button{
+    border: 1px solid black;
+    width: 20rem;
+    height: 2.5rem;
+    background-color: yellow;
+    border-radius: 10px;
+    
+}
+
+.profession-select{
+  width: 20rem;
+}
+.induction-form{
+  
+}
+.IT-button{
+  width: 15rem;
+  height: 2.5rem;
+  background-color: #FFC107;
+  border: none;
+  font-family: Roboto;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 28.13px;
+  text-align: center;
+  color: white;
+}
+.IThead{
+  font-family: Roboto;
+  font-size: 35px;
+  font-weight: 400;
+  line-height: 28.13px;
+  text-align: center;
+  color: #FFC107;
 }

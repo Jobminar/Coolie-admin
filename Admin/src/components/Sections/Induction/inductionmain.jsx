@@ -25,20 +25,19 @@ const Inductionmain = () => {
     <div  className='induction-main-container'>
   
       <div className="induction-con">
-        <div
+        {/* <div
           className={`tab ${activeTab === 'addinduction' && 'active'}`}
           onClick={() => handleTabClick('addinduction')}
         >
-          {/* <img src={general} alt="" width={30}/> */}
          Add Induction
-        </div>
-        <div
+        </div> */}
+        {/* <div
           className={`tab ${activeTab === 'training' && 'active'}`}
           onClick={() => handleTabClick('training')}
         >
-          {/* <img src={denting} alt="" width={30}/> */}
+          
           Manage Induction
-        </div>
+        </div> */}
       </div>
       {renderSelectedComponent()}
     </div>
