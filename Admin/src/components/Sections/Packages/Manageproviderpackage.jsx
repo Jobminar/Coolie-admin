@@ -58,7 +58,6 @@ const ManageProviderPackages = () => {
     }
   };
 
-<<<<<<< HEAD
   return (
     <>
       <div className="u-manage-con">
@@ -76,25 +75,6 @@ const ManageProviderPackages = () => {
                 onClick={() => handleDelete(packageItem._id)}
                 style={{ fontSize: "30px" }}
               />
-=======
-    return (
-        <>
-            <div className='manage-promotion-main-con'>
-                {packages.map((packageItem, index) => (
-                    <div key={index} className='u-manage-sub-con'>
-                        <div className="u-manage-buttons">
-                         <h3>{packageItem.packageName}</h3>
-                         <EditOutlinedIcon style={{ fontSize: '30px' }}  onClick={() => {handleEdit(packageItem)}} />
-                         <DeleteOutlineOutlinedIcon onClick={() =>handleDelete(packageItem._id)} style={{ fontSize: '30px' }} />
-                        </div>
-                        <p>No of Job Offers: {packageItem.noOfJobOffers}</p>
-                        <p>Price in RS: {packageItem.priceRs}</p>
-                        <p>Price in Cr: {packageItem.priceCr}</p>
-                        <p>Discount in Platform Commission: {packageItem.discountPlatformCom}%</p>
-                        <p>Comments: {packageItem.comments}</p>
-                    </div>
-                ))}
->>>>>>> 29a7f2891273e70e6d43c0175092523cd74a0f39
             </div>
             <p>No of Job Offers: {packageItem.noOfJobOffers}</p>
             <p>Price in RS: {packageItem.priceRs}</p>
