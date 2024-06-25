@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./manageservice.css";
 
-const API_BASE_URL = "http://13.126.118.3:3000";
+const API_BASE_URL = "https://api.coolieno1.in";
 const AWS_BASE_URL = "https://coolie1-dev.s3.ap-south-1.amazonaws.com";
 
 const ManageService = () => {

@@ -44,7 +44,7 @@ const EditServiceForm = ({
     const fetchCategoryName = async () => {
       try {
         const response = await axios.get(
-          `http://13.126.118.3:3000/v1.0/core/categories/${category}`,
+          `https://api.coolieno1.in/v1.0/core/categories/${category}`,
         );
         setCategoryName(response.data.name);
       } catch (error) {
@@ -55,7 +55,7 @@ const EditServiceForm = ({
     const fetchSubCategoryName = async () => {
       try {
         const response = await axios.get(
-          `http://13.126.118.3:3000/v1.0/core/sub-categories/${subCategory}`,
+          `https://api.coolieno1.in/v1.0/core/sub-categories/${subCategory}`,
         );
         setSubCategoryName(response.data.name);
       } catch (error) {
@@ -66,7 +66,7 @@ const EditServiceForm = ({
     const fetchServiceDetails = async () => {
       try {
         const response = await axios.get(
-          `http://13.126.118.3:3000/v1.0/core/services/${service._id}`,
+          `https://api.coolieno1.in/v1.0/core/services/${service._id}`,
         );
         const serviceData = response.data;
         setServiceData({
@@ -98,10 +98,10 @@ const EditServiceForm = ({
     const fetchPackages = async () => {
       try {
         const userPackagesResponse = await axios.get(
-          "http://13.126.118.3:3000/v1.0/admin/user-package",
+          "https://api.coolieno1.in/v1.0/admin/user-package",
         );
         const providerPackagesResponse = await axios.get(
-          "http://13.126.118.3:3000/v1.0/admin/provider-package",
+          "https://api.coolieno1.in/v1.0/admin/provider-package",
         );
         setUserPackages(userPackagesResponse.data.packages);
         setProviderPackages(providerPackagesResponse.data.packages);
@@ -124,7 +124,7 @@ const EditServiceForm = ({
     setLoading(true);
     axios
       .put(
-        `http://13.126.118.3:3000/v1.0/core/services/${service._id}`,
+        `https://api.coolieno1.in/v1.0/core/services/${service._id}`,
         serviceData,
       )
       .then((response) => {

@@ -61,14 +61,14 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
       try {
         if (service.selectedUserPackage) {
           const userPackageResponse = await axios.get(
-            `http://13.126.118.3:3000/v1.0/admin/user-package/${service.selectedUserPackage}`,
+            `https://api.coolieno1.in/v1.0/admin/user-package/${service.selectedUserPackage}`,
           );
           setUserPackageName(userPackageResponse.data.packageName);
         }
 
         if (service.selectedProviderPackage) {
           const providerPackageResponse = await axios.get(
-            `http://13.126.118.3:3000/v1.0/admin/provider-package/${service.selectedProviderPackage}`,
+            `https://api.coolieno1.in/v1.0/admin/provider-package/${service.selectedProviderPackage}`,
           );
           setProviderPackageName(providerPackageResponse.data.packageName);
         }

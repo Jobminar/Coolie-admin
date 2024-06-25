@@ -1,119 +1,123 @@
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import './providerpackage.css';
+import React, { useState } from "react";
+import TextField from "@mui/material/TextField";
+import "./providerpackage.css";
 
 const AddProviderPackage = () => {
   const [propackage, setPropackage] = useState({
-    packageName: '',
-    noOfJobOffers: '',
-    priceRs: '',
-    priceCr: '',
-    discountPlatformCom: '',
-    comments: '',
+    packageName: "",
+    noOfJobOffers: "",
+    priceRs: "",
+    priceCr: "",
+    discountPlatformCom: "",
+    comments: "",
   });
 
   const handleChange = (e) => {
     setPropackage({ ...propackage, [e.target.name]: e.target.value });
-    console.log(propackage, 'handle change triggered');
+    console.log(propackage, "handle change triggered");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(propackage);
     try {
-      const response = await fetch('http://13.126.118.3:3000/v1.0/admin/package', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        "https://api.coolieno1.in/v1.0/admin/package",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(propackage),
         },
-        body: JSON.stringify(propackage),
-      });
+      );
 
       if (response.ok) {
-        alert('Success');
+        alert("Success");
       } else {
-        alert('Failed to submit');
-        console.error('Response error:', response.statusText);
+        alert("Failed to submit");
+        console.error("Response error:", response.statusText);
       }
     } catch (err) {
-      console.error('Error:', err);
-      alert('An error occurred while submitting the form');
+      console.error("Error:", err);
+      alert("An error occurred while submitting the form");
     }
   };
 
   return (
-    <div className='add-package-con'>
-      <form className='form-con' onSubmit={handleSubmit}>
+    <div className="add-package-con">
+      <form className="form-con" onSubmit={handleSubmit}>
         <TextField
-          type='text'
-          name='packageName'
+          type="text"
+          name="packageName"
           value={propackage.packageName}
           onChange={handleChange}
-          label='Package Name'
+          label="Package Name"
           multiline
           maxRows={4}
-          variant='outlined'
+          variant="outlined"
           fullWidth
-          classes={{ root: 'textFieldCustom' }}
+          classes={{ root: "textFieldCustom" }}
         />
         <TextField
-          type='number'
-          name='noOfJobOffers'
+          type="number"
+          name="noOfJobOffers"
           value={propackage.noOfJobOffers}
           onChange={handleChange}
-          label='No of Job Offers'
-          variant='outlined'
+          label="No of Job Offers"
+          variant="outlined"
           multiline
           fullWidth
-          classes={{ root: 'textFieldCustom' }}
+          classes={{ root: "textFieldCustom" }}
         />
         <TextField
-          type='number'
-          name='priceCr'
+          type="number"
+          name="priceCr"
           value={propackage.priceCr}
           onChange={handleChange}
-          label='Price in Cr'
-          variant='outlined'
+          label="Price in Cr"
+          variant="outlined"
           multiline
           fullWidth
-          classes={{ root: 'textFieldCustom' }}
+          classes={{ root: "textFieldCustom" }}
         />
         <TextField
-          type='number'
-          name='priceRs'
+          type="number"
+          name="priceRs"
           value={propackage.priceRs}
           onChange={handleChange}
-          label='Price in Rs'
-          variant='outlined'
+          label="Price in Rs"
+          variant="outlined"
           multiline
           fullWidth
-          classes={{ root: 'textFieldCustom' }}
+          classes={{ root: "textFieldCustom" }}
         />
         <TextField
-          type='number'
-          name='discountPlatformCom'
+          type="number"
+          name="discountPlatformCom"
           value={propackage.discountPlatformCom}
           onChange={handleChange}
-          label='Discount in Platform Commission (%)'
-          variant='outlined'
+          label="Discount in Platform Commission (%)"
+          variant="outlined"
           multiline
           fullWidth
-          classes={{ root: 'textFieldCustom' }}
+          classes={{ root: "textFieldCustom" }}
         />
         <TextField
-          type='text'
-          name='comments'
+          type="text"
+          name="comments"
           value={propackage.comments}
           onChange={handleChange}
-          label='Comments'
+          label="Comments"
           multiline
           maxRows={4}
-          variant='outlined'
+          variant="outlined"
           fullWidth
-          classes={{ root: 'textFieldCustom' }}
-          
+          classes={{ root: "textFieldCustom" }}
         />
-        <button type='submit' className='submit-button'>Submit</button>
+        <button type="submit" className="submit-button">
+          Submit
+        </button>
       </form>
     </div>
   );

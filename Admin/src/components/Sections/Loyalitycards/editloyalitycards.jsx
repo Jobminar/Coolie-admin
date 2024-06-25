@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import '../Packages/providerpackage.css'
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import "../Packages/providerpackage.css";
 
 const EditLoyaltyCards = () => {
   const location = useLocation();
@@ -8,11 +8,11 @@ const EditLoyaltyCards = () => {
   const { editdata, apiEndpoint } = location.state || {};
 
   const [formData, setFormData] = useState({
-    name: editdata.name || '',
-    points: editdata.points || '',
-    amount: editdata.amount || '',
-    minimumSpentValue: editdata.minimumSpentValue || '',
-    discount: editdata.discount || '',
+    name: editdata.name || "",
+    points: editdata.points || "",
+    amount: editdata.amount || "",
+    minimumSpentValue: editdata.minimumSpentValue || "",
+    discount: editdata.discount || "",
     image: null,
   });
 
@@ -33,27 +33,30 @@ const EditLoyaltyCards = () => {
         formDataToSend.append(key, formData[key]);
       }
 
-      const response = await fetch(`http://13.126.118.3:3000/v1.0/admin/loyalty/${editdata._id}`, {
-        method: 'PATCH',
-        body: formDataToSend,
-      });
+      const response = await fetch(
+        `https://api.coolieno1.in/v1.0/admin/loyalty/${editdata._id}`,
+        {
+          method: "PATCH",
+          body: formDataToSend,
+        },
+      );
 
       if (response.ok) {
-        alert('Loyalty Card updated successfully');
+        alert("Loyalty Card updated successfully");
         navigate(-1); // Navigate back to the previous page
       } else {
-        alert('Error: Failed to update Loyalty Card');
+        alert("Error: Failed to update Loyalty Card");
       }
     } catch (err) {
-      console.log('Error:', err);
-      alert('An error occurred while updating Loyalty Card');
+      console.log("Error:", err);
+      alert("An error occurred while updating Loyalty Card");
     }
   };
 
   return (
     <div className="universal-edit-con">
       <h1>Edit Loyalty Cards</h1>
-      <form onSubmit={handleSubmit} className='loyality-edit-form'>
+      <form onSubmit={handleSubmit} className="loyality-edit-form">
         <div>
           <label htmlFor="name">Name:</label>
           <input

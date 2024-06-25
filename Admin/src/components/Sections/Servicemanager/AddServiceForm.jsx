@@ -114,10 +114,10 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
     const fetchPackages = async () => {
       try {
         const userResponse = await fetch(
-          "http://13.126.118.3:3000/v1.0/admin/user-package",
+          "https://api.coolieno1.in/v1.0/admin/user-package",
         );
         const providerResponse = await fetch(
-          "http://13.126.118.3:3000/v1.0/admin/provider-package",
+          "https://api.coolieno1.in/v1.0/admin/provider-package",
         );
         if (!userResponse.ok || !providerResponse.ok) {
           throw new Error("Failed to fetch packages");
