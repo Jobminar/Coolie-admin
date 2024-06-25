@@ -49,13 +49,12 @@ const Routing = () => {
             <Route path="/marketing" element={<Marketing />} />
             <Route path="/subadmin" element={<Subadmin />} />
             <Route path="/inductionmain" element={<Inductionmain />} />
-            <Route path="/trainingcon" element={<TrainingMain />}/>
-
+            <Route path="/trainingcon" element={<TrainingMain />} />
             <Route path="/addsubadmin" element={<Addsubadmin />} />
             <Route path="/editbanner" element={<EditBanner />} />
             <Route path="/editloyality" element={<Editloyalitycards />} />
             <Route path="/userpromotion" element={<Userpromotions />} />
-            <Route path="/providerpromition" element={<Providerpromotions />} />
+            <Route path="/providerpromotion" element={<Providerpromotions />} />
             <Route
               path="/editproviderpromotion"
               element={<EditproviderPromotion />}
@@ -74,10 +73,6 @@ const Routing = () => {
             <Route path="/viewadmin" element={<Viewadmin />} />
             <Route path="/addsubadmin" element={<Addadmin />} />
             <Route path="/permissionform" element={<PermissionsForm />} />
-           
-            
-           
-            
             <Route path="*" element={<Navigate to="/" />} />{" "}
             {/* Default redirect */}
           </Routes>
