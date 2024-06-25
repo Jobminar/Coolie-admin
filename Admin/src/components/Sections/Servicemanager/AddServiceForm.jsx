@@ -209,25 +209,34 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
               ))}
             </select>
             <br />
-            <input
-              type="number"
-              className="bottom-borders-input"
-              placeholder="Min"
-              value={variant.min}
-              onChange={(e) =>
-                handleVariantChange(index, "min", e.target.value)
-              }
-            />
+            <label htmlFor={`min-${index}`} style={{ fontSize: "0.8em" }}>
+              Min:
+              <input
+                type="number"
+                className="bottom-borders-input"
+                id={`min-${index}`}
+                placeholder="Min"
+                value={variant.min}
+                onChange={(e) =>
+                  handleVariantChange(index, "min", e.target.value)
+                }
+              />
+            </label>
             <br />
-            <input
-              type="number"
-              className="bottom-borders-input"
-              placeholder="Max"
-              value={variant.max}
-              onChange={(e) =>
-                handleVariantChange(index, "max", e.target.value)
-              }
-            />
+            <label htmlFor={`max-${index}`} style={{ fontSize: "0.8em" }}>
+              Max:
+              <input
+                type="number"
+                className="bottom-borders-input"
+                id={`max-${index}`}
+                placeholder="Max"
+                value={variant.max}
+                onChange={(e) =>
+                  handleVariantChange(index, "max", e.target.value)
+                }
+              />
+            </label>
+
             <br />
             {serviceVariants.length > 1 && (
               <FontAwesomeIcon
