@@ -82,7 +82,7 @@ const ProviderForm = ({ providers }) => {
   return (
     <div className="provider-form-unique">
       <div className="provider-form-header">
-        <h2>Provider Managing Form</h2>
+        <h2>Provider Verification</h2>
         <div className="provider-tabs-unique">
           <button
             className={`provider-tab-unique ${
