@@ -113,7 +113,8 @@
 }
 
 .dropdown-menu div:not(:last-child) {
-    border-bottom: 1px solid #030B33;
+    border-bottom: none;
+    border-radius: 0%;
 }
 
 .dropdown.active {
