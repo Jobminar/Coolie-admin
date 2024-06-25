@@ -14,10 +14,10 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
   const [tag, setTag] = useState(false);
   const [isCash, setIsCash] = useState(false);
   const [creditEligibility, setCreditEligibility] = useState(false);
-  const [selectedUserPackage, setSelectedUserPackage] = useState("");
-  const [selectedProviderPackage, setSelectedProviderPackage] = useState("");
-  const [userPackages, setUserPackages] = useState([]);
-  const [providerPackages, setProviderPackages] = useState([]);
+  // const [selectedUserPackage, setSelectedUserPackage] = useState("");
+  // const [selectedProviderPackage, setSelectedProviderPackage] = useState("");
+  // const [userPackages, setUserPackages] = useState([]);
+  // const [providerPackages, setProviderPackages] = useState([]);
   const [platformCommission, setPlatformCommission] = useState("");
   const [serviceVariants, setServiceVariants] = useState([
     { variantName: "", price: "", serviceTime: "", metric: "", min: 1, max: 1 },
@@ -97,8 +97,8 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
       locations,
       taxPercentage: parseFloat(taxPercentage),
       platformCommission: parseFloat(platformCommission),
-      selectedUserPackage,
-      selectedProviderPackage,
+      // selectedUserPackage,
+      // selectedProviderPackage,
       isMostBooked,
       tag,
       isCash,
@@ -110,28 +110,28 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
     onSubmit(serviceData);
   };
 
-  useEffect(() => {
-    const fetchPackages = async () => {
-      try {
-        const userResponse = await fetch(
-          "https://api.coolieno1.in/v1.0/admin/user-package",
-        );
-        const providerResponse = await fetch(
-          "https://api.coolieno1.in/v1.0/admin/provider-package",
-        );
-        if (!userResponse.ok || !providerResponse.ok) {
-          throw new Error("Failed to fetch packages");
-        }
-        const userData = await userResponse.json();
-        const providerData = await providerResponse.json();
-        setUserPackages(userData);
-        setProviderPackages(providerData);
-      } catch (error) {
-        console.error("Error fetching packages:", error);
-      }
-    };
-    fetchPackages();
-  }, []);
+  // useEffect(() => {
+  //   const fetchPackages = async () => {
+  //     try {
+  //       const userResponse = await fetch(
+  //         "https://api.coolieno1.in/v1.0/admin/user-package",
+  //       );
+  //       const providerResponse = await fetch(
+  //         "https://api.coolieno1.in/v1.0/admin/provider-package",
+  //       );
+  //       if (!userResponse.ok || !providerResponse.ok) {
+  //         throw new Error("Failed to fetch packages");
+  //       }
+  //       const userData = await userResponse.json();
+  //       const providerData = await providerResponse.json();
+  //       setUserPackages(userData);
+  //       setProviderPackages(providerData);
+  //     } catch (error) {
+  //       console.error("Error fetching packages:", error);
+  //     }
+  //   };
+  //   fetchPackages();
+  // }, []);
 
   return (
     <form className="add-serviceForm-new" onSubmit={handleSubmit}>
@@ -286,7 +286,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
         />
       </div>
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <label>User Packages:</label>
         <select
           className="bottom-borders-input"
@@ -316,7 +316,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
             </option>
           ))}
         </select>
-      </div>
+      </div> */}
 
       <div className="form-group">
         <label>Platform Commission (%):</label>

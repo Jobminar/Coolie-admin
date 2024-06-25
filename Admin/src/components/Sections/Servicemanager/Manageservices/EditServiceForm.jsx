@@ -12,8 +12,8 @@ const EditServiceForm = ({
 }) => {
   const [categoryName, setCategoryName] = useState("");
   const [subCategoryName, setSubCategoryName] = useState("");
-  const [userPackages, setUserPackages] = useState([]);
-  const [providerPackages, setProviderPackages] = useState([]);
+  // const [userPackages, setUserPackages] = useState([]);
+  // const [providerPackages, setProviderPackages] = useState([]);
   const [serviceData, setServiceData] = useState({
     name: "",
     serviceType: "",
@@ -29,8 +29,8 @@ const EditServiceForm = ({
     tag: false,
     isCash: false,
     creditEligibility: false,
-    selectedUserPackage: "",
-    selectedProviderPackage: "",
+    // selectedUserPackage: "",
+    // selectedProviderPackage: "",
     platformCommission: "",
     isActive: false,
     isDeleted: false,
@@ -84,8 +84,8 @@ const EditServiceForm = ({
           tag: serviceData.tag,
           isCash: serviceData.isCash,
           creditEligibility: serviceData.creditEligibility,
-          selectedUserPackage: serviceData.selectedUserPackage,
-          selectedProviderPackage: serviceData.selectedProviderPackage,
+          // selectedUserPackage: serviceData.selectedUserPackage,
+          // selectedProviderPackage: serviceData.selectedProviderPackage,
           platformCommission: serviceData.platformCommission,
           isActive: serviceData.isActive,
           isDeleted: serviceData.isDeleted,
@@ -95,25 +95,25 @@ const EditServiceForm = ({
       }
     };
 
-    const fetchPackages = async () => {
-      try {
-        const userPackagesResponse = await axios.get(
-          "https://api.coolieno1.in/v1.0/admin/user-package",
-        );
-        const providerPackagesResponse = await axios.get(
-          "https://api.coolieno1.in/v1.0/admin/provider-package",
-        );
-        setUserPackages(userPackagesResponse.data.packages);
-        setProviderPackages(providerPackagesResponse.data.packages);
-      } catch (error) {
-        console.error("Error fetching packages:", error);
-      }
-    };
+    // const fetchPackages = async () => {
+    //   try {
+    //     const userPackagesResponse = await axios.get(
+    //       "https://api.coolieno1.in/v1.0/admin/user-package",
+    //     );
+    //     const providerPackagesResponse = await axios.get(
+    //       "https://api.coolieno1.in/v1.0/admin/provider-package",
+    //     );
+    //     setUserPackages(userPackagesResponse.data.packages);
+    //     setProviderPackages(providerPackagesResponse.data.packages);
+    //   } catch (error) {
+    //     console.error("Error fetching packages:", error);
+    //   }
+    // };
 
     fetchCategoryName();
     fetchSubCategoryName();
     fetchServiceDetails();
-    fetchPackages();
+    // fetchPackages();
   }, [category, subCategory, service._id]);
 
   const handleSave = () => {
@@ -268,7 +268,7 @@ const EditServiceForm = ({
             }
           />
         </div>
-        <div className="form-group">
+        {/* <div className="form-group">
           <label>User Package:</label>
           <select
             className="bottom-borders-input"
@@ -307,7 +307,7 @@ const EditServiceForm = ({
                 </option>
               ))}
           </select>
-        </div>
+        </div> */}
         <div className="form-group">
           <label>Platform Commission:</label>
           <input
@@ -436,8 +436,8 @@ EditServiceForm.propTypes = {
     tag: PropTypes.bool,
     isCash: PropTypes.bool,
     creditEligibility: PropTypes.bool,
-    selectedUserPackage: PropTypes.string,
-    selectedProviderPackage: PropTypes.string,
+    // selectedUserPackage: PropTypes.string,
+    // selectedProviderPackage: PropTypes.string,
     platformCommission: PropTypes.string,
     isActive: PropTypes.bool,
     isDeleted: PropTypes.bool,

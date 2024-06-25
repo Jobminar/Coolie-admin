@@ -8,8 +8,8 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
   const [subCategoryName, setSubCategoryName] = useState(
     subCategory.name || "",
   );
-  const [userPackageName, setUserPackageName] = useState("");
-  const [providerPackageName, setProviderPackageName] = useState("");
+  // const [userPackageName, setUserPackageName] = useState("");
+  // const [providerPackageName, setProviderPackageName] = useState("");
   const [serviceData, setServiceData] = useState({
     name: service.name,
     serviceType: service.serviceVariants[0]?.variantName || "",
@@ -25,8 +25,8 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
     tag: service.tag,
     isCash: service.isCash,
     creditEligibility: service.creditEligibility,
-    selectedUserPackage: service.selectedUserPackage,
-    selectedProviderPackage: service.selectedProviderPackage,
+    // selectedUserPackage: service.selectedUserPackage,
+    // selectedProviderPackage: service.selectedProviderPackage,
     platformCommission: service.platformCommission,
     isActive: service.isActive,
     isDeleted: service.isDeleted,
@@ -50,34 +50,34 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
       tag: service.tag,
       isCash: service.isCash,
       creditEligibility: service.creditEligibility,
-      selectedUserPackage: service.selectedUserPackage,
-      selectedProviderPackage: service.selectedProviderPackage,
+      // selectedUserPackage: service.selectedUserPackage,
+      // selectedProviderPackage: service.selectedProviderPackage,
       platformCommission: service.platformCommission,
       isActive: service.isActive,
       isDeleted: service.isDeleted,
     });
 
-    const fetchPackageNames = async () => {
-      try {
-        if (service.selectedUserPackage) {
-          const userPackageResponse = await axios.get(
-            `https://api.coolieno1.in/v1.0/admin/user-package/${service.selectedUserPackage}`,
-          );
-          setUserPackageName(userPackageResponse.data.packageName);
-        }
+    // const fetchPackageNames = async () => {
+    //   try {
+    //     if (service.selectedUserPackage) {
+    //       const userPackageResponse = await axios.get(
+    //         `https://api.coolieno1.in/v1.0/admin/user-package/${service.selectedUserPackage}`,
+    //       );
+    //       setUserPackageName(userPackageResponse.data.packageName);
+    //     }
 
-        if (service.selectedProviderPackage) {
-          const providerPackageResponse = await axios.get(
-            `https://api.coolieno1.in/v1.0/admin/provider-package/${service.selectedProviderPackage}`,
-          );
-          setProviderPackageName(providerPackageResponse.data.packageName);
-        }
-      } catch (error) {
-        console.error("Error fetching package names:", error);
-      }
-    };
+    //     if (service.selectedProviderPackage) {
+    //       const providerPackageResponse = await axios.get(
+    //         `https://api.coolieno1.in/v1.0/admin/provider-package/${service.selectedProviderPackage}`,
+    //       );
+    //       setProviderPackageName(providerPackageResponse.data.packageName);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching package names:", error);
+    //   }
+    // };
 
-    fetchPackageNames();
+    // fetchPackageNames();
   }, [service, category, subCategory]);
 
   return (
@@ -177,7 +177,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
             readOnly
           />
         </div>
-        <div className="form-group">
+        {/* <div className="form-group">
           <label>User Package:</label>
           <input
             type="text"
@@ -194,7 +194,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
             value={providerPackageName}
             readOnly
           />
-        </div>
+        </div> */}
         <div className="form-group">
           <label>Platform Commission:</label>
           <input
@@ -287,8 +287,8 @@ ServiceDetailCard.propTypes = {
     tag: PropTypes.bool,
     isCash: PropTypes.bool,
     creditEligibility: PropTypes.bool,
-    selectedUserPackage: PropTypes.string,
-    selectedProviderPackage: PropTypes.string,
+    // selectedUserPackage: PropTypes.string,
+    // selectedProviderPackage: PropTypes.string,
     platformCommission: PropTypes.string,
     isActive: PropTypes.bool,
     isDeleted: PropTypes.bool,
