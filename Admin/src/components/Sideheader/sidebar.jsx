@@ -49,37 +49,49 @@ const Sidebar = ({ children }) => {
   const toggleServiceManagerDropdown = () => {
     setServiceManagerDropdown((prev) => !prev);
     closeOtherDropdowns("serviceManager");
-    // Do not set activeItem to the dropdown path
+    if (!serviceManagerDropdown) {
+      handleNavigation("/addservice", "Add Service");
+    }
   };
 
   const togglePromotionsDropdown = () => {
     setPromotionsDropdown((prev) => !prev);
     closeOtherDropdowns("promotions");
-    // Do not set activeItem to the dropdown path
+    if (!promotionsDropdown) {
+      handleNavigation("/userpromotion", "User Promotions");
+    }
   };
 
   const togglePackagesDropdown = () => {
     setPackagesDropdown((prev) => !prev);
     closeOtherDropdowns("packages");
-    // Do not set activeItem to the dropdown path
+    if (!packagesDropdown) {
+      handleNavigation("/userpackages", "User Packages");
+    }
   };
 
   const toggleMarketingDropdown = () => {
     setMarketingDropdown((prev) => !prev);
     closeOtherDropdowns("marketing");
-    // Do not set activeItem to the dropdown path
+    if (!marketingDropdown) {
+      handleNavigation("/user", "User");
+    }
   };
 
   const toggleBannersDropdown = () => {
     setBannersDropdown((prev) => !prev);
     closeOtherDropdowns("banners");
-    // Do not set activeItem to the dropdown path
+    if (!bannersDropdown) {
+      handleNavigation("/userbanners", "User Banners");
+    }
   };
 
   const toggleInductionDropdown = () => {
     setInductionDropdown((prev) => !prev);
     closeOtherDropdowns("induction");
-    // Do not set activeItem to the dropdown path
+    if (!inductionDropdown) {
+      handleNavigation("/inductionmain", "Induction");
+    }
   };
 
   const closeOtherDropdowns = (activeDropdown) => {
@@ -339,7 +351,7 @@ const Sidebar = ({ children }) => {
           {inductionDropdown && (
             <div className="dropdown-menu">
               <div
-                className={activeItem === "/induction" ? "active" : ""}
+                className={activeItem === "/inductionmain" ? "active" : ""}
                 onClick={() => handleNavigation("/inductionmain")}
               >
                 Induction
