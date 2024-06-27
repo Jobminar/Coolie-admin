@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://13.126.118.3:3000/v1.0/providers";
+const BASE_URL = "https://api.coolieno1.in/v1.0/providers";
 
 // Function to generate OTP
 export const generateOtp = async (phone) => {
