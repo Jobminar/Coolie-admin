@@ -61,6 +61,9 @@ const Subadmin = () => {
                   Mobile No
                 </th>
                 <th style={{ border: "1px solid black", padding: "8px" }}>
+                  Designation
+                </th>
+                <th style={{ border: "1px solid black", padding: "8px" }}>
                   Email
                 </th>
                 <th style={{ border: "1px solid black", padding: "8px" }}>
@@ -76,6 +79,9 @@ const Subadmin = () => {
                   </td>
                   <td style={{ border: "1px solid black", padding: "8px" }}>
                     {admin.mobileNo}
+                  </td>
+                  <td style={{ border: "1px solid black", padding: "8px" }}>
+                    {admin.designation}
                   </td>
                   <td style={{ border: "1px solid black", padding: "8px" }}>
                     {admin.emailforCommunication}

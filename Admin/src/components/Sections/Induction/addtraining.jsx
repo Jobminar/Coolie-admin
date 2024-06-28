@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { TextField, MenuItem, Select, FormControlLabel, Checkbox } from '@mui/material';
+import './induction.css'
 
 const AddTraining = () => {
   const [formData, setFormData] = useState({
@@ -37,15 +39,12 @@ const AddTraining = () => {
       formData.append("video", video);
 
     try {
-      const responce = await fetch(
-        "https://api.coolieno1.in/v1.0/admin/induction",
-        {
-          method: "POST",
-          body: formData,
-        },
-      );
-      if (responce.ok) {
-        alert("Form submitted");
+      const response = await fetch('https://api.coolieno1.in/v1.0/admin/induction', {
+        method: 'POST',
+        body: formData,
+      });
+      if (response.ok) {
+        alert('Form submitted');
       }
       console.log(formData);
     } catch (err) {
