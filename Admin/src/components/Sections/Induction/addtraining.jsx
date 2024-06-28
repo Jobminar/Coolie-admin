@@ -1,16 +1,5 @@
-<<<<<<< HEAD
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import './induction.css';
-=======
 import React, { useState } from "react";
->>>>>>> 0cf3610007683ca2aaa439430b0ce6e1c8d2a2bb
+import { TextField, MenuItem, Select, FormControlLabel, Checkbox } from '@mui/material';
 
 function AddTraining() {
   const [formData, setFormData] = useState({
@@ -53,7 +42,7 @@ function AddTraining() {
     formData.append('video', video);
 
     try {
-      const response = await fetch('http://13.126.118.3:3000/v1.0/admin/induction', {
+      const response = await fetch('https://api.coolieno1.in/v1.0/admin/induction', {
         method: 'POST',
         body: formData,
       });

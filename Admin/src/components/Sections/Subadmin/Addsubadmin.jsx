@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { TextField, Button } from "@mui/material";
 import "./Subadmin.css";
 
 const initialAdminState = {
@@ -65,7 +66,7 @@ const Addadmin = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(addAdmin),
-        },
+        }
       );
       if (response.ok) {
         alert("Form submitted");
@@ -76,142 +77,251 @@ const Addadmin = () => {
   };
 
   return (
-    <div className="form-con">
+    <div className="subadmin-main-con">
       <h1>Add Sub Admin</h1>
-      <input
-        type="text"
-        name="fullName"
-        value={fullName}
-        placeholder="Full Name"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="mobileNo"
-        value={mobileNo}
-        placeholder="Mobile No"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="emailforCommunication"
-        value={emailforCommunication}
-        placeholder="Email for Communication"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="loginEmailId"
-        value={loginEmailId}
-        placeholder="Login Email Id"
-        onChange={handleChange}
-      />
-      <input
-        type="password"
-        name="password"
-        value={password}
-        placeholder="Password"
-        onChange={handleChange}
-      />
-      <input
-        type="date"
-        name="dob"
-        value={dob}
-        placeholder="Date of Birth"
-        onChange={handleChange}
-      />
-      <input
-        type="number"
-        name="aadharNumber"
-        value={aadharNumber}
-        placeholder="Aadhar Number"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="pan"
-        value={pan}
-        placeholder="PAN"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="designation"
-        value={designation}
-        placeholder="Designation"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="experience"
-        value={experience}
-        placeholder="Experience"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="addressWithPincode"
-        value={addressWithPincode}
-        placeholder="Address with Pincode"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="servingLocations"
-        value={servingLocations}
-        placeholder="Serving Locations"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="accountName"
-        value={accountName}
-        placeholder="Account Name"
-        onChange={handleChange}
-      />
-      <input
-        type="number"
-        name="accountNumber"
-        value={accountNumber}
-        placeholder="Account Number"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="bankName"
-        value={bankName}
-        placeholder="Bank Name"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="ifscCode"
-        value={ifscCode}
-        placeholder="IFSC Code"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="branchName"
-        value={branchName}
-        placeholder="Branch Name"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="branchAddress"
-        value={branchAddress}
-        placeholder="Branch Address"
-        onChange={handleChange}
-      />
-      <button onClick={handleSubmit}>Submit</button>
-      <button
-        onClick={() => {
-          navigate("/permissionform");
-        }}
-      >
-        Add Permissions
-      </button>
+      <div className="subadmin-main">
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="fullName"
+            value={fullName}
+            label="Full Name"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="mobileNo"
+            value={mobileNo}
+            label="Mobile No"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="emailforCommunication"
+            value={emailforCommunication}
+            label="Email for Communication"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="loginEmailId"
+            value={loginEmailId}
+            label="Login Email Id"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="password"
+            name="password"
+            value={password}
+            label="Password"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="date"
+            name="dob"
+            value={dob}
+            label="Date of Birth"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="number"
+            name="aadharNumber"
+            value={aadharNumber}
+            label="Aadhar Number"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="pan"
+            value={pan}
+            label="PAN"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="designation"
+            value={designation}
+            label="Designation"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="experience"
+            value={experience}
+            label="Experience"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="addressWithPincode"
+            value={addressWithPincode}
+            label="Address with Pincode"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="servingLocations"
+            value={servingLocations}
+            label="Serving Locations"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="accountName"
+            value={accountName}
+            label="Account Name"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="number"
+            name="accountNumber"
+            value={accountNumber}
+            label="Account Number"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="bankName"
+            value={bankName}
+            label="Bank Name"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="ifscCode"
+            value={ifscCode}
+            label="IFSC Code"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="branchName"
+            value={branchName}
+            label="Branch Name"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <TextField
+            type="text"
+            name="branchAddress"
+            value={branchAddress}
+            label="Branch Address"
+            variant="outlined"
+            fullWidth
+            onChange={handleChange}
+            margin="normal"
+          />
+        </div>
+        <div className="subadmin-text">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            fullWidth
+          >
+            Submit
+          </Button>
+        </div>
+        <div className="subadmin-text">
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              navigate("/permissionform");
+            }}
+            fullWidth
+          >
+            Add Permissions
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

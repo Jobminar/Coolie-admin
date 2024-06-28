@@ -45,7 +45,7 @@ function InductionForm() {
     formData.append('video', video);
 
     try {
-      const response = await fetch('http://13.126.118.3:3000/v1.0/admin/induction', {
+      const response = await fetch('https://api.coolieno1.in/v1.0/admin/induction', {
         method: 'POST',
         body: formData,
       });
