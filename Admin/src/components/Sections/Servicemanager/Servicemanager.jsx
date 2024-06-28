@@ -29,22 +29,27 @@ const Servermanager = () => {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(false); // Loading state
+  const [reload, setReload] = useState(false); // Reload state
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get("https://api.coolieno1.in/v1.0/core/categories")
       .then((response) => {
         console.log("Categories fetched:", response.data);
         setCategories(response.data);
       })
-      .catch((error) => console.error("Error fetching categories:", error));
-  }, []);
+      .catch((error) => console.error("Error fetching categories:", error))
+      .finally(() => setLoading(false));
+  }, [reload]); // Add reload dependency
 
   const fetchSubcategories = (categoryId) => {
     if (!categoryId) {
       console.error("Category ID is undefined");
       return;
     }
+    setLoading(true);
     axios
       .get(
         `https://api.coolieno1.in/v1.0/core/sub-categories/category/${categoryId}`,
@@ -55,7 +60,8 @@ const Servermanager = () => {
         setSelectedCategory(categoryId);
         setServices([]);
       })
-      .catch((error) => console.error("Error fetching subcategories:", error));
+      .catch((error) => console.error("Error fetching subcategories:", error))
+      .finally(() => setLoading(false));
   };
 
   const fetchServices = (subCategoryId) => {
@@ -66,6 +72,7 @@ const Servermanager = () => {
 
     const url = `https://api.coolieno1.in/v1.0/core/services/filter/${selectedCategory}/${subCategoryId}`;
 
+    setLoading(true);
     axios
       .get(url)
       .then((response) => {
@@ -80,7 +87,8 @@ const Servermanager = () => {
       .catch((error) => {
         console.error("Error fetching services:", error);
         setShowServiceList(false);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   const handleCategorySelect = (categoryId) => {
@@ -165,6 +173,7 @@ const Servermanager = () => {
       formData.append("image", categoryIcon);
     }
 
+    setLoading(true);
     try {
       const response = await fetch(
         "https://api.coolieno1.in/v1.0/core/categories",
@@ -187,9 +196,12 @@ const Servermanager = () => {
       setShowAddCategoryForm(false);
       setCategoryName("");
       setCategoryIcon(null);
+      setReload(!reload); // Trigger reload
     } catch (error) {
       console.error("Error during category addition:", error);
       setCategoryError(error.message || "An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -208,6 +220,7 @@ const Servermanager = () => {
     formData.append("isActive", true);
     formData.append("isDeleted", false);
 
+    setLoading(true);
     try {
       const subCategoryResponse = await fetch(
         "https://api.coolieno1.in/v1.0/core/sub-categories",
@@ -228,9 +241,12 @@ const Servermanager = () => {
       sessionStorage.setItem("subCategoryId", newSubCategoryId); // Store subcategory ID in session storage
       setShowAddSubCategoryForm(false);
       setShowServiceForm(true); // Ensure the form is shown here
+      setReload(!reload); // Trigger reload
     } catch (error) {
       console.error("Error during the addition of sub-category:", error);
       setSubCategoryError(error.message || "An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -274,6 +290,7 @@ const Servermanager = () => {
 
     console.log("Payload to be sent:", JSON.stringify(payload, null, 2));
 
+    setLoading(true);
     try {
       const serviceResponse = await fetch(
         "https://api.coolieno1.in/v1.0/core/services",
@@ -300,15 +317,21 @@ const Servermanager = () => {
       setShowServiceForm(false);
       setSelectedService(null);
       fetchServices(selectedSubCategory);
+      setReload(!reload); // Trigger reload
     } catch (error) {
       console.error("Error during the addition of service:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="servermanager-container">
       <h2>Add Service</h2>
-
+      <div>
+        {loading && <div className="loading">Loading...</div>}
+        {/* Rest of your component JSX */}
+      </div>
       <div className="servermanager-card-container">
         <div className="servermanager-card" id="category-card">
           <div className="servermanager-form-group">

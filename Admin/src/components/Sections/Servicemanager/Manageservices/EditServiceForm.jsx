@@ -84,8 +84,6 @@ const EditServiceForm = ({
           tag: serviceData.tag,
           isCash: serviceData.isCash,
           creditEligibility: serviceData.creditEligibility,
-          // selectedUserPackage: serviceData.selectedUserPackage,
-          // selectedProviderPackage: serviceData.selectedProviderPackage,
           platformCommission: serviceData.platformCommission,
           isActive: serviceData.isActive,
           isDeleted: serviceData.isDeleted,
@@ -131,6 +129,7 @@ const EditServiceForm = ({
         setSuccessMessage("Service updated successfully.");
         setErrorMessage("");
         onSave(response.data);
+        window.location.reload(); // Reload the page after successful update
       })
       .catch((error) => {
         const errorResponse = error.response
@@ -146,6 +145,7 @@ const EditServiceForm = ({
 
   return (
     <div className="service-detail-card">
+      {loading && <div className="loading">Loading...</div>}
       <div className="service-detail-header">
         <h6>Category: {categoryName}</h6>
         <h6>Sub-Category: {subCategoryName}</h6>

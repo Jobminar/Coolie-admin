@@ -17,6 +17,7 @@ const ProviderFinance = ({ handleAddFinanceDetails, submissionError }) => {
     branchAddress: "",
   });
   const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(false); // Loading state
 
   useEffect(() => {
     // Initialize form data if stored in sessionStorage
@@ -45,6 +46,12 @@ const ProviderFinance = ({ handleAddFinanceDetails, submissionError }) => {
   };
 
   const handleSubmit = async () => {
+    if (
+      !window.confirm("Are you sure you want to submit these finance details?")
+    ) {
+      return;
+    }
+
     const financeFormData = new FormData();
     financeFormData.append("userId", providerId);
     financeFormData.append("pan", formData.pan);
@@ -59,15 +66,22 @@ const ProviderFinance = ({ handleAddFinanceDetails, submissionError }) => {
       financeFormData.append("documents", doc);
     });
 
+    setLoading(true);
     try {
       await handleAddFinanceDetails(financeFormData);
+      alert("Finance details submitted successfully.");
+      window.location.reload(); // Reload the page
     } catch (error) {
       console.error("Error submitting finance details:", error);
+      alert("Error submitting finance details.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="finance-details-form add-provider-form">
+      {loading && <div className="loading">Loading...</div>}
       <div className="form-header">
         <h3>Banking Details</h3>
       </div>

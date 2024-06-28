@@ -24,8 +24,14 @@ const ManageService = () => {
   const [showCategoryMenu, setShowCategoryMenu] = useState(true);
   const [showSubCategoryMenu, setShowSubCategoryMenu] = useState(true);
   const [showServiceVariantsMenu, setShowServiceVariantsMenu] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = () => {
+    setLoading(true);
     console.log("Fetching categories from API...");
     axios
       .get(`${API_BASE_URL}/v1.0/core/categories`)
@@ -36,10 +42,12 @@ const ManageService = () => {
       .catch((error) => {
         console.error("Error fetching categories:", error);
         alert("Error fetching categories.");
-      });
-  }, []);
+      })
+      .finally(() => setLoading(false));
+  };
 
   const fetchSubcategories = (categoryId) => {
+    setLoading(true);
     console.log(`Fetching subcategories for category ID: ${categoryId}`);
     axios
       .get(`${API_BASE_URL}/v1.0/core/sub-categories/category/${categoryId}`)
@@ -50,10 +58,12 @@ const ManageService = () => {
       .catch((error) => {
         console.error("Error fetching subcategories:", error);
         alert("Error fetching subcategories.");
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   const fetchServices = (categoryId, subCategoryId) => {
+    setLoading(true);
     console.log(
       `Fetching services for category ID: ${categoryId}, sub-category ID: ${subCategoryId}`,
     );
@@ -68,7 +78,8 @@ const ManageService = () => {
       .catch((error) => {
         console.error("Error fetching services:", error);
         alert("Error fetching services.");
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   const updateSubCategoryInParent = (updatedSubCategory) => {
@@ -105,6 +116,7 @@ const ManageService = () => {
   };
 
   const handleSaveService = async (updatedService, serviceId) => {
+    setLoading(true);
     try {
       console.log(`Updating service with ID: ${serviceId}`);
       const response = await axios.put(
@@ -121,27 +133,33 @@ const ManageService = () => {
     } catch (error) {
       console.error("Error updating service:", error);
       alert("Error updating service.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDeleteCategory = (categoryId) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
+      setLoading(true);
       axios
         .delete(`${API_BASE_URL}/v1.0/core/categories/${categoryId}`)
         .then(() => {
           setCategories((prev) => prev.filter((cat) => cat._id !== categoryId));
           alert("Category deleted successfully.");
+          window.location.reload(); // Reload the page after deletion
         })
         .catch((error) => {
           console.error("Error deleting category:", error);
           alert("Error deleting category.");
-        });
+        })
+        .finally(() => setLoading(false));
     }
   };
 
   return (
     <div className="manageServiceContainer">
       <h2>Manage Service</h2>
+      {loading && <div className="loading">Loading...</div>}
       <div className="manageServiceCardContainer">
         <div className="manageServiceCard" id="categoryCard">
           <div className="manageServiceFormGroup">

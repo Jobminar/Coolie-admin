@@ -15,7 +15,6 @@ const ProviderForm = ({ providers }) => {
   const [underVerificationProviders, setUnderVerificationProviders] = useState(
     [],
   );
-
   const [isLoading, setIsLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -29,7 +28,9 @@ const ProviderForm = ({ providers }) => {
       });
     }
   }, [providers, activeTab]);
+
   useEffect(() => {
+    setIsLoading(true);
     fetchProviderDetails()
       .then((data) => {
         setUnderVerificationProviders(data);
@@ -40,6 +41,7 @@ const ProviderForm = ({ providers }) => {
         setIsLoading(false);
       });
   }, []);
+
   // Function to handle search by provider name
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -55,32 +57,50 @@ const ProviderForm = ({ providers }) => {
     setEditMode(false); // Exit edit mode when switching tabs
   };
 
-  // Function to handle edit mode for a provider
-
-  // Placeholder function for handling provider deletion
+  // Function to handle provider verification
   const handleVerify = (provider) => {
-    // Assuming an API endpoint to verify the provider
-    fetch(`api/verify-provider/${provider._id}`, { method: "POST" })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Provider verified:", data);
-        // Optionally refresh the list or update the status in the state
-      })
-      .catch((error) => console.error("Error verifying provider:", error));
+    if (window.confirm("Are you sure you want to verify this provider?")) {
+      setIsLoading(true);
+      fetch(`api/verify-provider/${provider._id}`, { method: "POST" })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Provider verified:", data);
+          alert("Provider verified successfully.");
+          window.location.reload(); // Reload the page
+        })
+        .catch((error) => {
+          console.error("Error verifying provider:", error);
+          alert("Error verifying provider.");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
 
   const handleReject = (provider) => {
-    fetch(`api/reject-provider/${provider._id}`, { method: "POST" })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Provider rejected:", data);
-        // Optionally refresh the list or update the status in the state
-      })
-      .catch((error) => console.error("Error rejecting provider:", error));
+    if (window.confirm("Are you sure you want to reject this provider?")) {
+      setIsLoading(true);
+      fetch(`api/reject-provider/${provider._id}`, { method: "POST" })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Provider rejected:", data);
+          alert("Provider rejected successfully.");
+          window.location.reload(); // Reload the page
+        })
+        .catch((error) => {
+          console.error("Error rejecting provider:", error);
+          alert("Error rejecting provider.");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
 
   return (
     <div className="provider-form-unique">
+      {isLoading && <div className="loading">Loading...</div>}
       <div className="provider-form-header">
         <h2>Provider Verification</h2>
         <div className="provider-tabs-unique">
@@ -90,7 +110,7 @@ const ProviderForm = ({ providers }) => {
             }`}
             onClick={() => handleTabClick("verified")}
           >
-            Verified Providers
+            Providers Under Verification
           </button>
           <button
             className={`provider-tab-unique ${
@@ -98,7 +118,7 @@ const ProviderForm = ({ providers }) => {
             }`}
             onClick={() => handleTabClick("underVerification")}
           >
-            Providers Under Verification
+            Verified Providers
           </button>
         </div>
       </div>
