@@ -155,7 +155,8 @@ const Mostbookedservices = () => {
 
   return (
     <>
-      {fetchService.length > 0 ? (
+      <div className="select-option">
+        {fetchService.length > 0 ? (
         <select value={selectedServiceId} onChange={handleSelectChange}>
           <option value="">Select a service</option>
           {fetchService.map((service) => (
@@ -171,7 +172,7 @@ const Mostbookedservices = () => {
       <div className="mostbookedform">
         {selectedService && selectedService.name ? (
           <form onSubmit={handleSubmit}>
-            <div>
+            <div className="most-booked-form">
               <input
                 type="file"
                 id="hiddenFileInput"
@@ -188,7 +189,7 @@ const Mostbookedservices = () => {
               </button>
               {image && <p>Selected file: {image.name}</p>}
             </div>
-            <button type="submit">Submit</button>
+            <button type="submit" className="most-button">Submit</button>
           </form>
         ) : (
           <p>Please select a service to see details.</p>
@@ -202,7 +203,9 @@ const Mostbookedservices = () => {
           <p>No most booked services found.</p>
         )}
       </div>
-      <div className="main-banners">
+
+      </div>
+           <div className="main-banners">
         <div className="banner-con">
           {mostBookedData.map((banner) => (
             <div className="banner-sub-con" key={banner._id}>

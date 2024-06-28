@@ -43,7 +43,7 @@ const Subadmin = () => {
         </button>
         <button
           onClick={() => {
-            navigate("/permissionform");
+            navigate("/managesubadmin");
           }}
         >
           Manage Sub-admin

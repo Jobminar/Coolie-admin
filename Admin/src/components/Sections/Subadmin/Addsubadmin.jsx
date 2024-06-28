@@ -59,7 +59,7 @@ const Addadmin = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        "https://api.coolieno1.in/v1.0/admin/sub-admin/signup",
+        "https://api.coolieno1.in/v1.0/admin/sub-admin",
         {
           method: "POST",
           headers: {
