@@ -15,18 +15,23 @@ const AuthenticateProvider = ({ providers }) => {
   const [comments, setComments] = useState({});
   const [overallStatus, setOverallStatus] = useState("Pending");
   const { setFilterBarProps } = useContext(FilterBarContext);
+  const [loading, setLoading] = useState(false); // Loading state
 
   useEffect(() => {
     console.log("providers from provider corner", providers);
   }, [providers]);
 
   const handleVerify = (provider) => {
-    setSelectedProvider(provider);
-    setActiveComponent("ProviderProfile");
-    setFilterBarProps((prev) => ({
-      ...prev,
-      showProviderButtons: false,
-    }));
+    if (window.confirm("Are you sure you want to verify this provider?")) {
+      setLoading(true);
+      setSelectedProvider(provider);
+      setActiveComponent("ProviderProfile");
+      setFilterBarProps((prev) => ({
+        ...prev,
+        showProviderButtons: false,
+      }));
+      setLoading(false);
+    }
   };
 
   const handleBackClick = () => {
@@ -50,27 +55,46 @@ const AuthenticateProvider = ({ providers }) => {
   };
 
   const handleDocumentApprove = (documentId) => {
-    setDocumentStatuses((prevStatuses) => ({
-      ...prevStatuses,
-      [documentId]: "Approved",
-    }));
-    console.log("Document approved:", documentId);
+    if (window.confirm("Are you sure you want to approve this document?")) {
+      setLoading(true);
+      setDocumentStatuses((prevStatuses) => ({
+        ...prevStatuses,
+        [documentId]: "Approved",
+      }));
+      console.log("Document approved:", documentId);
+      alert("Document approved successfully.");
+      setLoading(false);
+    }
   };
 
   const handleDocumentReupload = (documentId) => {
-    setDocumentStatuses((prevStatuses) => ({
-      ...prevStatuses,
-      [documentId]: "Reupload",
-    }));
-    console.log("Reupload requested for document:", documentId);
+    if (
+      window.confirm(
+        "Are you sure you want to request a reupload for this document?",
+      )
+    ) {
+      setLoading(true);
+      setDocumentStatuses((prevStatuses) => ({
+        ...prevStatuses,
+        [documentId]: "Reupload",
+      }));
+      console.log("Reupload requested for document:", documentId);
+      alert("Reupload requested successfully.");
+      setLoading(false);
+    }
   };
 
   const handleDocumentDecline = (documentId) => {
-    setDocumentStatuses((prevStatuses) => ({
-      ...prevStatuses,
-      [documentId]: "Declined",
-    }));
-    console.log("Document declined:", documentId);
+    if (window.confirm("Are you sure you want to decline this document?")) {
+      setLoading(true);
+      setDocumentStatuses((prevStatuses) => ({
+        ...prevStatuses,
+        [documentId]: "Declined",
+      }));
+      console.log("Document declined:", documentId);
+      alert("Document declined successfully.");
+      setLoading(false);
+    }
   };
 
   const handleCommentChange = (documentId, value) => {
@@ -95,21 +119,33 @@ const AuthenticateProvider = ({ providers }) => {
   };
 
   const handleApproveAll = () => {
-    const newStatuses = {};
-    fakeData.documents.forEach((doc) => {
-      newStatuses[doc.id] = "Approved";
-    });
-    setDocumentStatuses(newStatuses);
-    setOverallStatus("Approved");
+    if (window.confirm("Are you sure you want to approve all documents?")) {
+      setLoading(true);
+      const newStatuses = {};
+      fakeData.documents.forEach((doc) => {
+        newStatuses[doc.id] = "Approved";
+      });
+      setDocumentStatuses(newStatuses);
+      setOverallStatus("Approved");
+      alert("All documents approved successfully.");
+      setLoading(false);
+    }
   };
 
   const handlePendingAll = () => {
-    const newStatuses = {};
-    fakeData.documents.forEach((doc) => {
-      newStatuses[doc.id] = "Pending";
-    });
-    setDocumentStatuses(newStatuses);
-    setOverallStatus("Pending");
+    if (
+      window.confirm("Are you sure you want to mark all documents as pending?")
+    ) {
+      setLoading(true);
+      const newStatuses = {};
+      fakeData.documents.forEach((doc) => {
+        newStatuses[doc.id] = "Pending";
+      });
+      setDocumentStatuses(newStatuses);
+      setOverallStatus("Pending");
+      alert("All documents marked as pending.");
+      setLoading(false);
+    }
   };
 
   const filteredProviders = providers.filter((provider) =>
@@ -118,6 +154,7 @@ const AuthenticateProvider = ({ providers }) => {
 
   return (
     <div className="authenticate-provider">
+      {loading && <div className="loading">Loading...</div>}
       {activeComponent === "ProviderList" && (
         <>
           <div className="providers-table-container">

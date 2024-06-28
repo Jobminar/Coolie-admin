@@ -18,9 +18,11 @@ const ProvidersCorner = () => {
   const [categories, setCategories] = useState([]);
   const [providers, setProviders] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [loading, setLoading] = useState(false); // Loading state
 
   useEffect(() => {
     const loadData = async () => {
+      setLoading(true);
       try {
         const categoriesData = await fetchCategories();
         if (categoriesData) {
@@ -34,6 +36,9 @@ const ProvidersCorner = () => {
         }
       } catch (error) {
         console.error("Failed to load data:", error);
+        alert("Failed to load data.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -72,15 +77,22 @@ const ProvidersCorner = () => {
   };
 
   const handleEdit = (provider) => {
-    console.log("Edit provider:", provider.id);
+    if (window.confirm("Are you sure you want to edit this provider?")) {
+      console.log("Edit provider:", provider.id);
+      alert("Provider edited successfully.");
+    }
   };
 
   const handleDelete = (providerId) => {
-    console.log("Delete provider:", providerId);
+    if (window.confirm("Are you sure you want to delete this provider?")) {
+      console.log("Delete provider:", providerId);
+      alert("Provider deleted successfully.");
+    }
   };
 
   return (
     <div className="birdviewProvidersContainer">
+      {loading && <div className="loading">Loading...</div>}
       {activeComponent === "view" && (
         <>
           <div className="birdviewProvidersSidebar">

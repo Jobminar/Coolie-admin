@@ -11,8 +11,15 @@ const ProviderDetailsForm = ({
 }) => {
   const { providerId, phone } = useContext(ProviderAuthContext);
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false); // Loading state
 
   const handleSubmit = async () => {
+    if (
+      !window.confirm("Are you sure you want to submit these provider details?")
+    ) {
+      return;
+    }
+
     const providerFormData = new FormData();
     providerFormData.append("providerName", additionalData.providerName);
     providerFormData.append("image", additionalData.image);
@@ -23,16 +30,23 @@ const ProviderDetailsForm = ({
     providerFormData.append("work", additionalData.work);
     providerFormData.append("userId", providerId);
 
+    setLoading(true);
     try {
       await handleAddDetails(providerFormData);
+      alert("Provider details submitted successfully.");
+      window.location.reload(); // Reload the page
     } catch (error) {
       console.error("Error submitting provider details:", error);
+      alert("Error submitting provider details.");
       setErrors(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="additional-details-form add-provider-form">
+      {loading && <div className="loading">Loading...</div>}
       <h3 className="form-header">Additional Provider Details</h3>
       <form onSubmit={(e) => e.preventDefault()} className="form-content">
         <div className="form-group">

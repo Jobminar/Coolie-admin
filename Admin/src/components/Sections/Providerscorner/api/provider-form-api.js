@@ -3,7 +3,7 @@ export const fetchProviderDetails = async () => {
   console.log("Fetching provider details from the API...");
   try {
     const response = await fetch(
-      "http://13.126.118.3:3000/v1.0/providers/provider-details",
+      "https://api.coolieno1.in/v1.0/providers/provider-details",
     );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
