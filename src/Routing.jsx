@@ -1,9 +1,6 @@
 import React from "react";
 import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
 
-
-
-
 import ManageService from "./Pages/Servicemanager/Manageservices/ManageService";
 import Providerscorner from "./Pages/Providerscorner/Providerscorner";
 import Loyalitycards from "./Pages/Loyalitycards/Loyalitycards";
@@ -34,23 +31,26 @@ import Managesubadmin from "./Pages/Subadmin/managesubadmin";
 import Header from "./components/Header/header";
 import Sidebar from "./components/Sideheader/sidebar";
 import Jobsarea from "./Pages/Jobsarea/jobsarea";
-import Servermanager from "./Pages/Servicemanager/Servicemanager";
+import Servermanager from "./Pages/Servicemanager/Addservices/Servicemanager";
 
 const Routing = () => {
   return (
     <FilterBarProvider>
       <BrowserRouter>
-        < Header/>
+        <Header />
         <Sidebar>
           <Routes>
-            <Route path="/" element={<Jobsarea/>} />
+            <Route path="/" element={<Jobsarea />} />
             <Route path="/addservice" element={<Servermanager />} />
             <Route path="/manageservice" element={<ManageService />} />
             <Route path="/usercorner" element={<UserManager />} />
             <Route path="/providersrcorner" element={<Providerscorner />} />
             {/* loyality cards */}
             <Route path="/loyality-cards" element={<Loyalitycards />} />
-            <Route path="/edit-loyality-cards" element={<Editloyalitycards />} />
+            <Route
+              path="/edit-loyality-cards"
+              element={<Editloyalitycards />}
+            />
             {/* banners */}
             <Route path="/user-banners" element={<Userbanners />} />
             <Route path="/provider-banners" element={<Providerbanners />} />
@@ -58,13 +58,25 @@ const Routing = () => {
             <Route path="/edit-banner" element={<EditBanner />} />
             {/* promotions */}
             <Route path="/user-promotion" element={<Userpromotions />} />
-            <Route path="/provider-promotion" element={<Providerpromotions />} />
-            <Route path="/edit-provider-promotion" element={<EditproviderPromotion />}/>
-            <Route path="/edit-user-promotion" element={<EditUserPromotion />} />
+            <Route
+              path="/provider-promotion"
+              element={<Providerpromotions />}
+            />
+            <Route
+              path="/edit-provider-promotion"
+              element={<EditproviderPromotion />}
+            />
+            <Route
+              path="/edit-user-promotion"
+              element={<EditUserPromotion />}
+            />
             {/* Packages */}
             <Route path="/provider-packages" element={<Providerpackage />} />
             <Route path="/user-packages" element={<Userpackage />} />
-            <Route path="/edit-provider-package" element={<EditProviderPackage />}/>
+            <Route
+              path="/edit-provider-package"
+              element={<EditProviderPackage />}
+            />
             <Route path="/edit-user-package" element={<EditUserPackage />} />
             {/* Induction & Training */}
             <Route path="/induction" element={<Inductionmain />} />
