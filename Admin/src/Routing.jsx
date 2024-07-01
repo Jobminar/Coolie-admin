@@ -31,6 +31,7 @@ import PermissionsForm from "./components/Sections/Subadmin/SubAdminPermissions"
 import { FilterBarProvider } from "./FilterBarContext";
 import Popupbanners from "./components/Sections/Banners/Popupbanners";
 import TrainingMain from "./components/Sections/Induction/trainingmain";
+import Managesubadmin from "./components/Sections/Subadmin/managesubadmin";
 
 const Routing = () => {
   return (
@@ -72,7 +73,7 @@ const Routing = () => {
             <Route path="/popupbanners" element={<Popupbanners />} />
             <Route path="/viewadmin" element={<Viewadmin />} />
             <Route path="/addsubadmin" element={<Addadmin />} />
-            <Route path="/permissionform" element={<PermissionsForm />} />
+            <Route path="/managesubadmin" element={<Managesubadmin />} />
             <Route path="*" element={<Navigate to="/" />} />{" "}
             {/* Default redirect */}
           </Routes>

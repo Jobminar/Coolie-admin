@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextField, MenuItem, Select, FormControlLabel, Checkbox } from '@mui/material';
-import './induction.css'
+import './induction.css';
 
 const AddTraining = () => {
   const [formData, setFormData] = useState({
@@ -54,57 +54,73 @@ const AddTraining = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="induction-form">
-      <select
-        className="dropdown"
-        name="profession"
-        value={formData.profession}
-        onChange={handleChange}
-        placeholder="Profession"
-      >
-        <option value="">Select a service</option>
-        <option value="Beautician">Beautician</option>
-        <option value="Professional cleaning">Professional cleaning</option>
-        <option value="Bathroom cleaning">Bathroom cleaning</option>
-        <option value="Washing">Washing</option>
-        <option value="AC Repair & service">AC Repair & service</option>
-        <option value="Electrician">Electrician</option>
-        <option value="Plumber">Plumber</option>
-        <option value="Laundry services">Laundry services</option>
-      </select>
-
-      <input
-        type="text"
-        name="title"
-        value={formData.title}
-        onChange={handleChange}
-        placeholder="Title"
-      />
-
-      <label className="toggle-label">
-        Skip:
-        <input
-          name="skip"
-          type="checkbox"
-          checked={formData.skip}
-          onChange={handleToggleChange}
-        />
-      </label>
-
-      <label className="toggle-label">
-        Quick links:
-        <input
-          name="quickLinks"
-          type="checkbox"
-          checked={formData.quickLinks}
-          onChange={handleToggleChange}
-        />
-      </label>
-
-      <input type="file" onChange={handleFileChange} />
-
-      <button type="submit">Submit</button>
-    </form>
+    <>
+      <h1 className='IThead'>Training</h1>
+      <form onSubmit={handleSubmit} className="induction-form">
+        <div className="ITinputs">
+          <Select
+            className="dropdown"
+            name="profession"
+            value={formData.profession}
+            onChange={handleChange}
+            displayEmpty
+            fullWidth
+          >
+            <MenuItem value=""><em>Select a service</em></MenuItem>
+            <MenuItem value="Beautician">Beautician</MenuItem>
+            <MenuItem value="Professional cleaning">Professional cleaning</MenuItem>
+            <MenuItem value="Bathroom cleaning">Bathroom cleaning</MenuItem>
+            <MenuItem value="Washing">Washing</MenuItem>
+            <MenuItem value="AC Repair & service">AC Repair & service</MenuItem>
+            <MenuItem value="Electrician">Electrician</MenuItem>
+            <MenuItem value="Plumber">Plumber</MenuItem>
+            <MenuItem value="Laundry services">Laundry services</MenuItem>
+          </Select>
+        </div>
+        <div className="ITinputs">
+          <TextField
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            placeholder="Title"
+            label="Title"
+            variant="outlined"
+            fullWidth
+          />
+        </div>
+        <div className="ITinputs">
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="skip"
+                checked={formData.skip}
+                onChange={handleToggleChange}
+              />
+            }
+            label="Skip"
+          />
+        </div>
+        <div className="ITinputs">
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="quickLinks"
+                checked={formData.quickLinks}
+                onChange={handleToggleChange}
+              />
+            }
+            label="Quick links"
+          />
+        </div>
+        <div className="ITinputs">
+          <input type="file" onChange={handleFileChange} />
+        </div>
+        <div className="ITinputs">
+          <button type="submit" className="custom-button">Submit</button>
+        </div>
+      </form>
+    </>
   );
 };
 
