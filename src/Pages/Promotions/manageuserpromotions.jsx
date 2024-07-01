@@ -4,7 +4,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import { useNavigate } from "react-router-dom";
 import "./managepromotion.css";
 
-const ManagePromotions = () => {
+const Manageuserpromotions = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const ManagePromotions = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://api.coolieno1.in/v1.0/admin/provider-promotions",
+          "https://api.coolieno1.in/v1.0/admin/user-promotions",
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -30,7 +30,9 @@ const ManagePromotions = () => {
   }, []);
 
   const handleEdit = (promotion) => {
-    navigate("/editproviderpromotion", { state: { promotion } });
+    navigate("/edit-user-promotion", {
+      state: { promotion, apiEndpoint: "provider-promotions" },
+    });
   };
 
   const handleDelete = async (id) => {
@@ -41,7 +43,7 @@ const ManagePromotions = () => {
 
     try {
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/admin/provider-promotions/${id}`,
+        `https://api.coolieno1.in/v1.0/admin/user-promotions/${id}`,
         {
           method: "DELETE",
         },
@@ -111,4 +113,4 @@ const ManagePromotions = () => {
   );
 };
 
-export default ManagePromotions;
+export default Manageuserpromotions;

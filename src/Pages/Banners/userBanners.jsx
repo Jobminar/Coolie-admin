@@ -14,9 +14,9 @@ const  Userbanners = () => {
 
   const renderSelectedComponent = () => {
     switch (activeTab) {
-      case "mostbookedservices":
+      case "most-booked-services":
         return <Mostbookedservices/>;
-      case "ourcoreservices":
+      case "our-core-services":
         return <OurCoreServices/>;
       default:
         return null;
@@ -29,14 +29,14 @@ const  Userbanners = () => {
         <h1>User Banners</h1>
         <div className='universal-buttons'>
           <div
-            className={`tab ${activeTab === "mostbookedservices" ? "active" : ""}`}
-            onClick={() => handleTabClick("mostbookedservices")}
+            className={`tab ${activeTab === "most-booked-services" ? "active" : ""}`}
+            onClick={() => handleTabClick("most-booked-services")}
           >
            Most booked Services
           </div>
           <div
-            className={`tab ${activeTab === "ourcoreservices" ? "active" : ""}`}
-            onClick={() => handleTabClick("ourcoreservices")}
+            className={`tab ${activeTab === "our-core-services" ? "active" : ""}`}
+            onClick={() => handleTabClick("our-core-services")}
           >
            Our core services
           </div>

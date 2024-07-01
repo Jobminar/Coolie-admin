@@ -58,7 +58,7 @@ const Sidebar = ({ children }) => {
     setPromotionsDropdown((prev) => !prev);
     closeOtherDropdowns("promotions");
     if (!promotionsDropdown) {
-      handleNavigation("/userpromotion", "User Promotions");
+      handleNavigation("/user-promotion", "User Promotions");
     }
   };
 
@@ -66,7 +66,7 @@ const Sidebar = ({ children }) => {
     setPackagesDropdown((prev) => !prev);
     closeOtherDropdowns("packages");
     if (!packagesDropdown) {
-      handleNavigation("/userpackages", "User Packages");
+      handleNavigation("/user-packages", "User Packages");
     }
   };
 
@@ -82,7 +82,7 @@ const Sidebar = ({ children }) => {
     setBannersDropdown((prev) => !prev);
     closeOtherDropdowns("banners");
     if (!bannersDropdown) {
-      handleNavigation("/userbanners", "User Banners");
+      handleNavigation("/user-banners", "User Banners");
     }
   };
 
@@ -90,7 +90,7 @@ const Sidebar = ({ children }) => {
     setInductionDropdown((prev) => !prev);
     closeOtherDropdowns("induction");
     if (!inductionDropdown) {
-      handleNavigation("/inductionmain", "Induction");
+      handleNavigation("/induction", "Induction");
     }
   };
 
@@ -105,21 +105,21 @@ const Sidebar = ({ children }) => {
 
   const renderFilterBar = () => {
     const filterBarExcludedComponents = [
-      "/loyalitycards",
-      "/userbanners",
-      "/providerbanners",
-      "/popupbanners",
+      "/loyality-cards",
+      "/user-banners",
+      "/provider-banners",
+      "/popup-banners",
       "/promotionsDropdown",
-      "/userpromotion",
-      "/providerpromotions",
+      "/user-promotion",
+      "/provider-promotion",
       "/packagesDropdown",
-      "/userpackages",
-      "/providerpackages",
+      "/user-packages",
+      "/provider-packages",
       "/inductionDropdown",
       "/induction",
       "/training",
       "/subadmin",
-      "/inductionmain",
+      "/induction",
       "/marketingDropdown",
       "/user",
       "/provider",
@@ -228,8 +228,8 @@ const Sidebar = ({ children }) => {
           Providers Corner
         </div>
         <div
-          className={activeItem === "/loyalitycards" ? "active" : ""}
-          onClick={() => handleNavigation("/loyalitycards")}
+          className={activeItem === "/loyality-cards" ? "active" : ""}
+          onClick={() => handleNavigation("/loyality-cards")}
         >
           Loyalty Cards
         </div>
@@ -245,28 +245,28 @@ const Sidebar = ({ children }) => {
             <div className="dropdown-menu">
               <div
                 className={`dropdown-item ${
-                  activeDropdownItem === "userbanners" ? "active" : ""
+                  activeDropdownItem === "user-banners" ? "active" : ""
                 }`}
-                onClick={() => handleNavigation("/userbanners", "User Banners")}
+                onClick={() => handleNavigation("/user-banners", "User Banners")}
               >
                 User Banners
               </div>
               <div
                 className={`dropdown-item ${
-                  activeDropdownItem === "providerbanners" ? "active" : ""
+                  activeDropdownItem === "provider-banners" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/providerbanners", "Provider Banners")
+                  handleNavigation("/provider-banners", "Provider Banners")
                 }
               >
                 Provider Banners
               </div>
               <div
                 className={`dropdown-item ${
-                  activeDropdownItem === "popupbanners" ? "active" : ""
+                  activeDropdownItem === "popup-banners" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/popupbanners", "Popup Banner")
+                  handleNavigation("/popup-banners", "Popup Banner")
                 }
               >
                 Popup Banner
@@ -286,20 +286,20 @@ const Sidebar = ({ children }) => {
             <div className="dropdown-menu">
               <div
                 className={`dropdown-item ${
-                  activeDropdownItem === "userpromotion" ? "active" : ""
+                  activeDropdownItem === "user-promotion" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/userpromotion", "User Promotions")
+                  handleNavigation("/user-promotion", "User Promotions")
                 }
               >
                 User Promotions
               </div>
               <div
                 className={`dropdown-item ${
-                  activeDropdownItem === "providerpromotions" ? "active" : ""
+                  activeDropdownItem === "provider-promotion" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/providerpromotion", "Provider Promotions")
+                  handleNavigation("/provider-promotion", "Provider Promotions")
                 }
               >
                 Provider Promotions
@@ -319,20 +319,20 @@ const Sidebar = ({ children }) => {
             <div className="dropdown-menu">
               <div
                 className={`dropdown-item ${
-                  activeDropdownItem === "userpackages" ? "active" : ""
+                  activeDropdownItem === "user-packages" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/userpackages", "User Packages")
+                  handleNavigation("/user-packages", "User Packages")
                 }
               >
                 User Packages
               </div>
               <div
                 className={`dropdown-item ${
-                  activeDropdownItem === "providerpackages" ? "active" : ""
+                  activeDropdownItem === "provider-packages" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/providerpackages", "Provider Packages")
+                  handleNavigation("/provider-packages", "Provider Packages")
                 }
               >
                 Provider Packages
@@ -346,21 +346,21 @@ const Sidebar = ({ children }) => {
           }`}
         >
           <div onClick={toggleInductionDropdown}>
-            Induction & Training <FaCaretDown />
+            Induction & training <FaCaretDown />
           </div>
           {inductionDropdown && (
             <div className="dropdown-menu">
               <div
-                className={activeItem === "/inductionmain" ? "active" : ""}
-                onClick={() => handleNavigation("/inductionmain")}
+                className={activeItem === "/induction" ? "active" : ""}
+                onClick={() => handleNavigation("/induction")}
               >
                 Induction
               </div>
               <div
-                className={activeItem === "/trainingcon" ? "active" : ""}
-                onClick={() => handleNavigation("/trainingcon")}
+                className={activeItem === "/training" ? "active" : ""}
+                onClick={() => handleNavigation("/training")}
               >
-                Training
+                training
               </div>
             </div>
           )}

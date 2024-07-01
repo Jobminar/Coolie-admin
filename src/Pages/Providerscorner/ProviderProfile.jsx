@@ -1,7 +1,7 @@
 import React from "react";
 import "./ProviderProfile.css";
 import { FaArrowLeft } from "react-icons/fa";
-import ProfileImage from "../../../assets/images/profile-image.jpeg";
+import ProfileImage from "../../assets/images/profile-image.jpeg";
 
 const ProviderProfile = ({ onDocumentsClick, onBackClick }) => {
   const providerData = {

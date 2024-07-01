@@ -87,7 +87,7 @@ const Popupbanners = () => {
   };
 
   const handleEdit = (banner) => {
-    navigate("/editbanner", { state: { banner, apiEndpoint: "user-banners" } });
+    navigate("/edit-banner", { state: { banner, apiEndpoint: "user-banners" } });
   };
 
   const toggleFormVisibility = () => {

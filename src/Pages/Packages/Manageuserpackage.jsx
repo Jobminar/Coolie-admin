@@ -28,7 +28,7 @@ const Manageuserpackage = () => {
   };
 
   const handleEdit = (packageItem) => {
-    navigate("/edituserpackage", { state: { package: packageItem } });
+    navigate("/edit-user-package", { state: { package: packageItem } });
   };
 
   const handleDelete = async (id) => {

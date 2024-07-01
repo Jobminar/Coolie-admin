@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
-import logo from "../../../assets/images/logo.png.png"; // Ensure you have the logo.png file in the correct path
+import logo from "../../assets/images/logo.png.png"; // Ensure you have the logo.png file in the correct path
 
 // Add your Mapbox access token
 mapboxgl.accessToken =

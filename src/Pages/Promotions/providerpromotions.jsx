@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import './promotion.css';
-import Addpromotions from './Adduserpromotions';
-import Managepromotions from './manageuserpromotions';
 import Addpropromotions from './Addproviderpromotions';
 import Managepropromotions from './Managepropromotions';
 

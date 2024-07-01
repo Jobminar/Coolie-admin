@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import "./AuthenticateProvider.css";
 import { FaEdit, FaTrash, FaArrowLeft, FaSearch } from "react-icons/fa";
 import ProviderProfile from "./ProviderProfile";
-import Document1 from "../../../assets/Documents/ProviderReport1.pdf";
-import Document2 from "../../../assets/Documents/ProviderReport2.pdf";
-import { FilterBarContext } from "../../../FilterBarContext";
+import Document1 from "../../assets/Documents/ProviderReport1.pdf";
+import Document2 from "../../assets/Documents/ProviderReport2.pdf";
+import { FilterBarContext } from "../../FilterBarContext";
 
 const AuthenticateProvider = ({ providers }) => {
   const [activeComponent, setActiveComponent] = useState("ProviderList");

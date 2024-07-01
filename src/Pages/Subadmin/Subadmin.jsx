@@ -28,7 +28,7 @@ const Subadmin = () => {
   }, []);
 
   const handleSend = (admin) => {
-    navigate("/viewadmin", { state: { admin } });
+    navigate("/view-admin", { state: { admin } });
   };
 
   return (
@@ -36,14 +36,14 @@ const Subadmin = () => {
       <div className="sub-admin-main-con">
         <button
           onClick={() => {
-            navigate("/addsubadmin");
+            navigate("/add-subadmin");
           }}
         >
           Add Sub-admin
         </button>
         <button
           onClick={() => {
-            navigate("/managesubadmin");
+            navigate("/manage-subadmin");
           }}
         >
           Manage Sub-admin

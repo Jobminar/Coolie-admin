@@ -26,7 +26,7 @@ const initialAdminState = {
   documents: [""],
 };
 
-const Addadmin = () => {
+const Addsubadmin = () => {
   const [addAdmin, setAddAdmin] = useState(initialAdminState);
   const navigate = useNavigate();
 
@@ -326,4 +326,4 @@ const Addadmin = () => {
   );
 };
 
-export default Addadmin;
+export default Addsubadmin;

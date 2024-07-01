@@ -86,7 +86,7 @@ const Providerbanners = () => {
   };
 
   const handleEdit = (banner) => {
-    navigate("/editbanner", {
+    navigate("/edit-banner", {
       state: { banner, apiEndpoint: "provider-banners" },
     });
   };

@@ -96,7 +96,7 @@ const Loyalitycards = () => {
   const [editdata, seteditdata] = useState([]);
   const handleEdit = (item) => {
     seteditdata(item);
-    navigate("/editloyality", { state: { editdata: item } });
+    navigate("/edit-loyality-cards", { state: { editdata: item } });
     console.log(item, "data");
   };
 

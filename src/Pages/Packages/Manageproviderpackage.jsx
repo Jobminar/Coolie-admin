@@ -28,7 +28,7 @@ const ManageProviderPackages = () => {
   };
 
   const handleEdit = (packageItem) => {
-    navigate("/editproviderpackage", { state: { package: packageItem } });
+    navigate("/edit-provider-package", { state: { package: packageItem } });
   };
 
   const handleDelete = async (id) => {
