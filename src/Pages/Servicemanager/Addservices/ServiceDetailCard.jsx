@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import "./servicemanager.css";
+import "./styles/servicemanager.css";
 
 const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
   const [categoryName, setCategoryName] = useState(category?.name || "");

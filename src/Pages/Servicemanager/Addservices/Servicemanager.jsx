@@ -4,7 +4,7 @@ import AddServiceForm from "./AddServiceForm";
 import ServiceDetailCard from "./ServiceDetailCard";
 import SubCategoryForm from "./SubCategoryForm";
 import CategoryForm from "./CategoryForm";
-import "./servicemanager.css";
+import "./styles/servicemanager.css";
 
 const Servermanager = () => {
   const [showServiceList, setShowServiceList] = useState(false);

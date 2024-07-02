@@ -12,8 +12,6 @@ const EditServiceForm = ({
 }) => {
   const [categoryName, setCategoryName] = useState("");
   const [subCategoryName, setSubCategoryName] = useState("");
-  // const [userPackages, setUserPackages] = useState([]);
-  // const [providerPackages, setProviderPackages] = useState([]);
   const [serviceData, setServiceData] = useState({
     name: "",
     serviceType: "",
@@ -29,8 +27,6 @@ const EditServiceForm = ({
     tag: false,
     isCash: false,
     creditEligibility: false,
-    // selectedUserPackage: "",
-    // selectedProviderPackage: "",
     platformCommission: "",
     isActive: false,
     isDeleted: false,
@@ -93,25 +89,9 @@ const EditServiceForm = ({
       }
     };
 
-    // const fetchPackages = async () => {
-    //   try {
-    //     const userPackagesResponse = await axios.get(
-    //       "https://api.coolieno1.in/v1.0/admin/user-package",
-    //     );
-    //     const providerPackagesResponse = await axios.get(
-    //       "https://api.coolieno1.in/v1.0/admin/provider-package",
-    //     );
-    //     setUserPackages(userPackagesResponse.data.packages);
-    //     setProviderPackages(providerPackagesResponse.data.packages);
-    //   } catch (error) {
-    //     console.error("Error fetching packages:", error);
-    //   }
-    // };
-
     fetchCategoryName();
     fetchSubCategoryName();
     fetchServiceDetails();
-    // fetchPackages();
   }, [category, subCategory, service._id]);
 
   const handleSave = () => {
@@ -141,6 +121,16 @@ const EditServiceForm = ({
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const handleDeleteToggle = () => {
+    if (
+      window.confirm(
+        "This operation will delete this service permanently. Do you want to proceed?",
+      )
+    ) {
+      setServiceData({ ...serviceData, isDeleted: !serviceData.isDeleted });
+    }
   };
 
   return (
@@ -268,46 +258,6 @@ const EditServiceForm = ({
             }
           />
         </div>
-        {/* <div className="form-group">
-          <label>User Package:</label>
-          <select
-            className="service-input-borders"
-            value={serviceData.selectedUserPackage}
-            onChange={(e) =>
-              setServiceData({
-                ...serviceData,
-                selectedUserPackage: e.target.value,
-              })
-            }
-          >
-            {userPackages &&
-              userPackages.map((pkg) => (
-                <option key={pkg._id} value={pkg._id}>
-                  {pkg.packageName}
-                </option>
-              ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label>Provider Package:</label>
-          <select
-            className="service-input-borders"
-            value={serviceData.selectedProviderPackage}
-            onChange={(e) =>
-              setServiceData({
-                ...serviceData,
-                selectedProviderPackage: e.target.value,
-              })
-            }
-          >
-            {providerPackages &&
-              providerPackages.map((pkg) => (
-                <option key={pkg._id} value={pkg._id}>
-                  {pkg.packageName}
-                </option>
-              ))}
-          </select>
-        </div> */}
         <div className="form-group">
           <label>Platform Commission:</label>
           <input
@@ -386,9 +336,7 @@ const EditServiceForm = ({
             type="checkbox"
             className="toggle-input"
             checked={serviceData.isDeleted}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, isDeleted: e.target.checked })
-            }
+            onChange={handleDeleteToggle}
           />
         </div>
         <button
@@ -436,8 +384,6 @@ EditServiceForm.propTypes = {
     tag: PropTypes.bool,
     isCash: PropTypes.bool,
     creditEligibility: PropTypes.bool,
-    // selectedUserPackage: PropTypes.string,
-    // selectedProviderPackage: PropTypes.string,
     platformCommission: PropTypes.string,
     isActive: PropTypes.bool,
     isDeleted: PropTypes.bool,

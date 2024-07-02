@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import "./AddProvider.css";
+import "./styles/AddProvider.css";
 import {
   generateOtp,
   verifyOtp,

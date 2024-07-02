@@ -247,7 +247,9 @@ const Sidebar = ({ children }) => {
                 className={`dropdown-item ${
                   activeDropdownItem === "user-banners" ? "active" : ""
                 }`}
-                onClick={() => handleNavigation("/user-banners", "User Banners")}
+                onClick={() =>
+                  handleNavigation("/user-banners", "User Banners")
+                }
               >
                 User Banners
               </div>

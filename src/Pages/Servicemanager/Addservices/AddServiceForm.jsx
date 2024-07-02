@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
-import "./servicemanager.css";
+import "./styles/servicemanager.css";
 
 const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
   const [serviceName, setServiceName] = useState("");

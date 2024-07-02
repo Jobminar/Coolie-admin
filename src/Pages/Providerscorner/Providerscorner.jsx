@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
-import "./ProvidersCorner.css";
+import "./styles/ProvidersCorner.css";
 import ProviderForm from "./ProviderForm";
 import AddProvider from "./AddProviderForm";
 import AuthenticateProvider from "./AuthenticateProvider";
@@ -146,7 +146,7 @@ const ProvidersCorner = () => {
 };
 
 ProvidersCorner.propTypes = {
-  setFilterBarProps: PropTypes.func.isRequired,
+  setFilterBarProps: PropTypes.func,
 };
 
 export default ProvidersCorner;

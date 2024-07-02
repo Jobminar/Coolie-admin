@@ -1,5 +1,5 @@
 import React from "react";
-import "./ProviderProfile.css";
+import "./styles/ProviderProfile.css";
 import { FaArrowLeft } from "react-icons/fa";
 import ProfileImage from "../../assets/images/profile-image.jpeg";
 

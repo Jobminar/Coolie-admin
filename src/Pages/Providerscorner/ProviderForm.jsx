@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./ProviderForm.css";
+import "./styles/ProviderForm.css";
 import {
   generateOtp,
   sendOtpEmail,

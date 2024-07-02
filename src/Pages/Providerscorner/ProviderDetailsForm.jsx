@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { ProviderAuthContext } from "./ProviderAuthContext";
-import "./AddProvider.css"; // Ensure this is the same stylesheet used for AddProvider
+import "./styles/AddProvider.css"; // Ensure this is the same stylesheet used for AddProvider
 
 const ProviderDetailsForm = ({
   additionalData,
