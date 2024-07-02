@@ -6,7 +6,7 @@ import {
   faArrowUpFromBracket,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-import "./manageservice.css";
+import "./styles/manageservice.css";
 
 const EditCategoryForm = ({
   selectedCategory,

@@ -1,32 +1,33 @@
-.manageServiceContainer {
+.servermanager-container {
     font-family: Roboto, sans-serif;
     padding: 20px;
 }
 
-.manageServiceCardContainer {
+.servermanager-card-container {
     display: flex;
-    flex-wrap: wrap;
     gap: 20px;
+    flex-wrap: wrap;
     align-items: flex-start;
 }
 
-.manageServiceCard {
+.servermanager-card {
     border: 1px solid #000000;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 350px;
+    /* Increased width */
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
-
+    flex: 0 1 auto;
 }
 
-.manageServiceFormGroup {
+.servermanager-form-group {
     margin-bottom: 10px;
 }
 
-.manageServiceCategoryHeader {
+.servermanager-category-header {
     display: flex;
     align-items: center;
     border-radius: 2.5px;
@@ -36,15 +37,15 @@
     margin: -10px -10px 10px -10px;
 }
 
-.manageServiceCategoryHeader span {
+.servermanager-category-header span {
     flex-grow: 1;
     text-align: center;
     font-size: 16px;
     font-weight: bold;
 }
 
-.manageServiceAddButton,
-.manageServiceHamburgerIcon {
+.servermanager-add-button,
+.servermanager-hamburger-icon {
     background: none;
     border: 1px solid #000000;
     border-radius: 5px;
@@ -59,18 +60,18 @@
     color: #000;
 }
 
-.manageServiceAddButton {
+.servermanager-add-button {
     margin-left: auto;
     margin-right: 10px;
 }
 
-.manageServiceHamburgerIcon {
+.servermanager-hamburger-icon {
     margin-left: 10px;
     border: 1px solid #000000;
     border-radius: 5px;
 }
 
-.manageServiceMenu {
+.servermanager-menu {
     border: 1px solid #000000;
     border-radius: 5px;
     margin-top: 10px;
@@ -79,7 +80,7 @@
     overflow-y: auto;
 }
 
-.manageServiceMenuItem {
+.servermanager-menu-item {
     display: flex;
     justify-content: space-between;
     padding: 10px;
@@ -88,30 +89,29 @@
     font-size: 14px;
 }
 
-.manageServiceMenuItem.selected {
+.servermanager-menu-item.selected {
     background-color: #f0f0f0;
 }
 
-.manageServiceMenuItem:last-child {
+.servermanager-menu-item:last-child {
     border-bottom: none;
 }
 
-.manageServiceMenuItem:hover {
+.servermanager-menu-item:hover {
     background-color: #e0e0e0;
 }
 
-.manageServiceIconGroup {
-    display: flex;
-    gap: 10px;
+.servermanager-edit-icon {
+    color: black !important;
 }
 
-.manageServiceEditIcon,
-.manageServiceDeleteIcon {
+.servermanager-cancel-icon {
+    margin-left: 10px;
     cursor: pointer;
 }
 
-.manageServiceEditCategoryForm,
-.manageServiceEditSubCategoryForm {
+.servermanager-add-category-form,
+.servermanager-add-sub-category-form {
     margin-top: 10px;
     border: 1px solid #000000;
     border-radius: 5px;
@@ -120,21 +120,22 @@
     padding: 0;
 }
 
-.manageServiceEditCategoryForm h3,
-.manageServiceEditSubCategoryForm h3 {
+.servermanager-add-category-form h3,
+.servermanager-add-sub-category-form h3 {
     margin: 0 0 10px 0;
     font-size: 16px;
     font-weight: bold;
     display: flex;
     align-items: center;
     padding: 10px;
+    border-bottom: 1px solid #000000;
     border-top: none;
     border-right: none;
     border-left: none;
     border-radius: 2.5px 2.5px 2.5px 2.5px;
 }
 
-.manageServiceInputContainer {
+.servermanager-input-container {
     border-top: 1px solid #000000;
     border-bottom: 1px solid #000000;
     border-left: none;
@@ -142,10 +143,11 @@
     border-radius: 0px;
     margin-bottom: 10px;
     padding: 10px;
-    width: 92.9%;
+    width: 96%;
+    /* Increased width */
 }
 
-.manageServiceUploadContainer {
+.servermanager-upload-container {
     border-top: 1px solid #000000;
     border-bottom: 1px solid #000000;
     border-left: none;
@@ -156,10 +158,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 92.9%;
+    width: 96%;
+    /* Increased width */
 }
 
-.manageServiceUploadIconLabel {
+.servermanager-upload-icon-label {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -167,12 +170,12 @@
     justify-content: space-between;
 }
 
-.manageServiceUploadIcon {
+.servermanager-upload-icon {
     font-size: 1.2em;
     margin-left: 10px;
 }
 
-.manageServiceUploadPreview {
+.servermanager-upload-preview {
     margin-top: 10px;
     max-width: 100px;
     max-height: 100px;
@@ -180,29 +183,29 @@
     border-radius: 2.5px;
 }
 
-.manageServiceBottomBorderInput {
+.servermanager-bottom-border-input {
     border: none;
     border-bottom: 1px solid #000;
     padding: 10px;
     outline: none;
     transition: border-bottom-color 0.3s;
     font-size: 14px;
-    width: 95%;
+    width: 100%;
 }
 
-.manageServiceBottomBorderInput:focus {
+.servermanager-bottom-border-input:focus {
     border-bottom-color: #039F54;
 }
 
-.manageServiceEditCategoryForm label,
-.manageServiceEditSubCategoryForm label {
+.servermanager-add-category-form label,
+.servermanager-add-sub-category-form label {
     margin-bottom: 5px;
     font-size: 14px;
     font-weight: bold;
 }
 
-.manageServiceEditCategoryForm select,
-.manageServiceEditSubCategoryForm select {
+.servermanager-add-category-form select,
+.servermanager-add-sub-category-form select {
     border: none;
     padding: 10px;
     outline: none;
@@ -211,13 +214,13 @@
     width: 100%;
 }
 
-.manageServiceEditCategoryForm select:focus,
-.manageServiceEditSubCategoryForm select:focus {
+.servermanager-add-category-form select:focus,
+.servermanager-add-sub-category-form select:focus {
     border-bottom-color: #039F54;
 }
 
-.manageServiceEditCategoryForm .submitButton,
-.manageServiceEditSubCategoryForm .submitButton {
+.servermanager-add-category-form .servermanager-submit-button,
+.servermanager-add-sub-category-form .servermanager-submit-button {
     background-color: #030B33;
     color: #fff;
     border: none;
@@ -231,46 +234,69 @@
     text-align: center;
 }
 
-.manageServiceEditCategoryForm .submitButton:hover,
-.manageServiceEditSubCategoryForm .submitButton:hover {
+.servermanager-add-category-form .servermanager-submit-button:hover,
+.servermanager-add-sub-category-form .servermanager-submit-button:hover {
     background-color: #444;
 }
 
-.manageServiceEditServiceForm {
+.servermanager-add-service-form,
+.add-service-form,
+.edit-service-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    max-width: 600px;
+    max-width: 1600px;
+    /* Doubled max-width */
     margin: 20px 0;
-    padding: 25px;
+    padding: 23px;
     border: 1px solid #000000;
-    border-radius: 2.5px;
+    border-radius: 6px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.manageServiceTextareaInput {
+.servermanager-bottom-border-input,
+.service-input-borders {
+    border: none;
+    border-bottom: 1px solid #000;
+    padding: 5px;
+    outline: none;
+    transition: border-bottom-color 0.3s;
+    width: 30%
+}
+
+.servermanager-bottom-border-input:focus,
+.service-input-borders:focus {
+    border-bottom-color: #039F54;
+}
+
+.servermanager-textarea-input,
+.textarea-input {
     border: 1px solid #000;
     padding: 10px;
     outline: none;
     font-size: 14px;
-    width: 100%;
+    width: 98%;
+    /* Increased width */
     resize: vertical;
     height: 100px;
     border-radius: 5px;
 }
 
-.manageServiceTextareaInput:focus {
+.servermanager-textarea-input:focus,
+.textarea-input:focus {
     border-color: #039F54;
 }
 
-.manageServiceToggleGroup {
+.servermanager-toggle-group,
+.toggle-group {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.manageServiceToggleInput {
+.servermanager-toggle-input,
+.toggle-input {
     appearance: none;
     width: 40px;
     height: 20px;
@@ -282,12 +308,14 @@
     transition: background-color 0.3s;
 }
 
-.manageServiceToggleInput:checked {
+.servermanager-toggle-input:checked,
+.toggle-input:checked {
     background-color: green;
 }
 
-.manageServiceToggleInput::before {
-    content: "";
+.servermanager-toggle-input::before,
+.toggle-input::before {
+    content: '';
     position: absolute;
     top: 3px;
     left: 3px;
@@ -298,11 +326,13 @@
     transition: transform 0.3s;
 }
 
-.manageServiceToggleInput:checked::before {
+.servermanager-toggle-input:checked::before,
+.toggle-input:checked::before {
     transform: translateX(20px);
 }
 
-.manageServiceSubmitButton {
+.servermanager-submit-button,
+.submit-button {
     background-color: #030B33;
     color: #fff;
     border: none;
@@ -311,20 +341,21 @@
     cursor: pointer;
     margin-top: 20px;
     width: 70%;
-    align-self: flex-end;
+    align-self: center;
 }
 
-.manageServiceSubmitButton:hover {
+.servermanager-submit-button:hover,
+.submit-button:hover {
     background-color: #444;
 }
 
-.manageServiceFileUpload {
+.servermanager-file-upload {
     display: none;
 }
 
-#manageServiceUpdateCategoryButton,
-#manageServiceUpdateSubCategoryButton,
-#manageServiceUpdateServiceVariantButton {
+#servermanager-update-category-button,
+#servermanager-update-subcategory-button,
+#servermanager-update-service-variant-button {
     background-color: #030B33;
     color: #fff;
     border: none;
@@ -338,38 +369,31 @@
     text-align: center;
 }
 
-#manageServiceUpdateCategoryButton:hover,
-#manageServiceUpdateSubCategoryButton:hover,
-#manageServiceUpdateServiceVariantButton:hover {
+#servermanager-update-category-button:hover,
+#servermanager-update-subcategory-button:hover,
+#servermanager-update-service-variant-button:hover {
     background-color: #444;
 }
 
-.manageServiceEditCategoryForm,
-.manageServiceEditSubCategoryForm {
+.servermanager-edit-category-form,
+.servermanager-edit-sub-category-form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.manageServicePreviewContainer {
-    text-align: center;
-    margin-top: 10px;
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
 }
 
-.manageServicePreviewImage {
-    max-width: 150px;
-    max-height: 150px;
-    border: 1px solid #000;
-    border-radius: 5px;
-}
-
-.loadingMessage {
-    text-align: center;
-    margin: 20px 0;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.hidden {
-    display: none;
+.service-detail-header {
+    display: flex;
+    gap: 65px;
+    justify-content: flex-start;
+    align-items: center;
+    max-height: 2px;
+    margin-top: 1px;
 }

@@ -7,7 +7,7 @@ import EditSubCategoryForm from "./EditSubCategoryForm";
 import EditServiceForm from "./EditServiceForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import "./manageservice.css";
+import "./styles/manageservice.css";
 
 const API_BASE_URL = "https://api.coolieno1.in";
 const AWS_BASE_URL = "https://coolie1-dev.s3.ap-south-1.amazonaws.com";

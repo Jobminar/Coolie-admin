@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
-import "./serviceform.css"; // Ensure the CSS file is correctly linked
+import "./styles/serviceform.css"; // Ensure the CSS file is correctly linked
 
 const EditServiceForm = ({
   service,
@@ -160,7 +160,7 @@ const EditServiceForm = ({
           <label>Service Name:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.name}
             onChange={(e) =>
               setServiceData({ ...serviceData, name: e.target.value })
@@ -171,7 +171,7 @@ const EditServiceForm = ({
           <label>Service Type:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.serviceType}
             onChange={(e) =>
               setServiceData({ ...serviceData, serviceType: e.target.value })
@@ -182,7 +182,7 @@ const EditServiceForm = ({
           <label>Service Price:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.price}
             onChange={(e) =>
               setServiceData({ ...serviceData, price: e.target.value })
@@ -193,7 +193,7 @@ const EditServiceForm = ({
           <label>Total Service Time:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.serviceTime}
             onChange={(e) =>
               setServiceData({ ...serviceData, serviceTime: e.target.value })
@@ -204,7 +204,7 @@ const EditServiceForm = ({
           <label>Metric:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.metric}
             onChange={(e) =>
               setServiceData({ ...serviceData, metric: e.target.value })
@@ -215,7 +215,7 @@ const EditServiceForm = ({
           <label>Min:</label>
           <input
             type="number"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.min}
             onChange={(e) =>
               setServiceData({ ...serviceData, min: e.target.value })
@@ -226,7 +226,7 @@ const EditServiceForm = ({
           <label>Max:</label>
           <input
             type="number"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.max}
             onChange={(e) =>
               setServiceData({ ...serviceData, max: e.target.value })
@@ -247,7 +247,7 @@ const EditServiceForm = ({
           <label>Locations:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.locations.join(", ")}
             onChange={(e) =>
               setServiceData({
@@ -261,7 +261,7 @@ const EditServiceForm = ({
           <label>Tax Percentage:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.taxPercentage}
             onChange={(e) =>
               setServiceData({ ...serviceData, taxPercentage: e.target.value })
@@ -271,7 +271,7 @@ const EditServiceForm = ({
         {/* <div className="form-group">
           <label>User Package:</label>
           <select
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.selectedUserPackage}
             onChange={(e) =>
               setServiceData({
@@ -291,7 +291,7 @@ const EditServiceForm = ({
         <div className="form-group">
           <label>Provider Package:</label>
           <select
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.selectedProviderPackage}
             onChange={(e) =>
               setServiceData({
@@ -312,7 +312,7 @@ const EditServiceForm = ({
           <label>Platform Commission:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.platformCommission}
             onChange={(e) =>
               setServiceData({
