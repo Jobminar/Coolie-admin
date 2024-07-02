@@ -25,6 +25,7 @@ const ManageService = () => {
   const [showSubCategoryMenu, setShowSubCategoryMenu] = useState(true);
   const [showServiceVariantsMenu, setShowServiceVariantsMenu] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [subCategoriesError, setSubCategoriesError] = useState("");
 
   useEffect(() => {
     fetchCategories();
@@ -54,9 +55,11 @@ const ManageService = () => {
       .then((response) => {
         console.log("Fetched subcategories:", response.data);
         setSubCategories(response.data);
+        setSubCategoriesError("");
       })
       .catch((error) => {
         console.error("Error fetching subcategories:", error);
+        setSubCategoriesError("Error fetching subcategories.");
         alert("Error fetching subcategories.");
       })
       .finally(() => setLoading(false));
@@ -227,6 +230,7 @@ const ManageService = () => {
         {selectedCategory && (
           <SubCategories
             subCategories={subCategories}
+            subCategoriesError={subCategoriesError}
             selectedSubCategory={selectedSubCategory}
             setSelectedSubCategory={setSelectedSubCategory}
             setShowEditSubCategoryForm={setShowEditSubCategoryForm}

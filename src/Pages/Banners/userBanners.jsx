@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import '../Promotions/promotion.css'
+import React, { useState } from "react";
+import "../Promotions/promotion.css";
 
-import Mostbookedservices from '../Banners/mostbookedservices';
-import OurCoreServices from '../Banners/ourcoreservices';
+import Mostbookedservices from "../Banners/mostbookedservices";
+import OurCoreServices from "../Banners/ourcoreservices";
 
-
-const  Userbanners = () => {
-  const [activeTab, setActiveTab] = useState("mostbookedservices");
+const Userbanners = () => {
+  const [activeTab, setActiveTab] = useState("most-booked-services");
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -15,9 +14,9 @@ const  Userbanners = () => {
   const renderSelectedComponent = () => {
     switch (activeTab) {
       case "most-booked-services":
-        return <Mostbookedservices/>;
+        return <Mostbookedservices />;
       case "our-core-services":
-        return <OurCoreServices/>;
+        return <OurCoreServices />;
       default:
         return null;
     }
@@ -25,20 +24,24 @@ const  Userbanners = () => {
 
   return (
     <>
-      <div className='universal-con'>
+      <div className="universal-con">
         <h1>User Banners</h1>
-        <div className='universal-buttons'>
+        <div className="universal-buttons">
           <div
-            className={`tab ${activeTab === "most-booked-services" ? "active" : ""}`}
+            className={`tab ${
+              activeTab === "most-booked-services" ? "active" : ""
+            }`}
             onClick={() => handleTabClick("most-booked-services")}
           >
-           Most booked Services
+            Most booked Services
           </div>
           <div
-            className={`tab ${activeTab === "our-core-services" ? "active" : ""}`}
+            className={`tab ${
+              activeTab === "our-core-services" ? "active" : ""
+            }`}
             onClick={() => handleTabClick("our-core-services")}
           >
-           Our core services
+            Our core services
           </div>
         </div>
       </div>
@@ -47,4 +50,4 @@ const  Userbanners = () => {
   );
 };
 
-export default  Userbanners;
+export default Userbanners;

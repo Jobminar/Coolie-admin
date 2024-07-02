@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
-import SubCategories from "./SubCategories";
 import "./styles/serviceform.css"; // Ensure the CSS file is correctly linked
 
 const EditServiceForm = ({
@@ -11,6 +10,10 @@ const EditServiceForm = ({
   onSave,
   onClose,
 }) => {
+  // Console logs to verify the props being passed
+  console.log("service prop:", service);
+  console.log("category prop:", category);
+  console.log("subCategory prop:", subCategory);
   const [categoryName, setCategoryName] = useState("");
   const [subCategoryName, setSubCategoryName] = useState("");
   const [serviceData, setServiceData] = useState({
@@ -32,9 +35,6 @@ const EditServiceForm = ({
     isActive: false,
     isDeleted: false,
   });
-  const [subCategories, setSubCategories] = useState([]);
-  const [subCategoriesError, setSubCategoriesError] = useState(false);
-
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -54,12 +54,12 @@ const EditServiceForm = ({
     const fetchSubCategoryName = async () => {
       try {
         const response = await axios.get(
-          `https://api.coolieno1.in/v1.0/core/sub-categories/${subCategory}`,
+          `https://api.coolieno1.in/v1.0/core/sub-categories/category/${category}`,
         );
+        console.log("Fetched sub-category data:", response.data);
         setSubCategoryName(response.data.name);
       } catch (error) {
         console.error("Error fetching sub-category name:", error);
-        setSubCategoriesError(true);
       }
     };
 
@@ -73,7 +73,8 @@ const EditServiceForm = ({
           name: serviceData.name,
           serviceType: serviceData.serviceVariants[0]?.variantName || "",
           price: serviceData.serviceVariants[0]?.price.toString() || "",
-          serviceTime: serviceData.serviceVariants[0]?.serviceTime || "",
+          serviceTime:
+            serviceData.serviceVariants[0]?.serviceTime?.toString() || "",
           metric: serviceData.serviceVariants[0]?.metric || "",
           min: serviceData.serviceVariants[0]?.min || 1,
           max: serviceData.serviceVariants[0]?.max || 1,
@@ -135,11 +136,6 @@ const EditServiceForm = ({
         <h6>Sub-Category: {subCategoryName}</h6>
         <h6>Service: {serviceData.name}</h6>
       </div>
-      <SubCategories
-        subCategories={subCategories}
-        subCategoriesError={subCategoriesError}
-        // other props...
-      />
       <form className="add-service-form">
         {successMessage && (
           <div className="successMessage">{successMessage}</div>
@@ -335,7 +331,9 @@ const EditServiceForm = ({
             type="checkbox"
             className="toggle-input"
             checked={serviceData.isDeleted}
-            onChange={() => {}}
+            onChange={(e) =>
+              setServiceData({ ...serviceData, isDeleted: e.target.checked })
+            }
           />
         </div>
         <button
@@ -370,7 +368,7 @@ EditServiceForm.propTypes = {
       PropTypes.shape({
         variantName: PropTypes.string,
         price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        serviceTime: PropTypes.string,
+        serviceTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         metric: PropTypes.string,
         min: PropTypes.number,
         max: PropTypes.number,
