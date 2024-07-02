@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
 import "./servicemanager.css";
 
 const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
-  const [categoryName, setCategoryName] = useState(category.name || "");
+  const [categoryName, setCategoryName] = useState(category?.name || "");
   const [subCategoryName, setSubCategoryName] = useState(
-    subCategory.name || "",
+    subCategory?.name || "",
   );
-  // const [userPackageName, setUserPackageName] = useState("");
-  // const [providerPackageName, setProviderPackageName] = useState("");
+
   const [serviceData, setServiceData] = useState({
     name: service.name,
     serviceType: service.serviceVariants[0]?.variantName || "",
@@ -25,16 +23,14 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
     tag: service.tag,
     isCash: service.isCash,
     creditEligibility: service.creditEligibility,
-    // selectedUserPackage: service.selectedUserPackage,
-    // selectedProviderPackage: service.selectedProviderPackage,
     platformCommission: service.platformCommission,
     isActive: service.isActive,
     isDeleted: service.isDeleted,
   });
 
   useEffect(() => {
-    setCategoryName(category.name || "");
-    setSubCategoryName(subCategory.name || "");
+    setCategoryName(category?.name || "");
+    setSubCategoryName(subCategory?.name || "");
     setServiceData({
       name: service.name,
       serviceType: service.serviceVariants[0]?.variantName || "",
@@ -50,34 +46,10 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
       tag: service.tag,
       isCash: service.isCash,
       creditEligibility: service.creditEligibility,
-      // selectedUserPackage: service.selectedUserPackage,
-      // selectedProviderPackage: service.selectedProviderPackage,
       platformCommission: service.platformCommission,
       isActive: service.isActive,
       isDeleted: service.isDeleted,
     });
-
-    // const fetchPackageNames = async () => {
-    //   try {
-    //     if (service.selectedUserPackage) {
-    //       const userPackageResponse = await axios.get(
-    //         `https://api.coolieno1.in/v1.0/admin/user-package/${service.selectedUserPackage}`,
-    //       );
-    //       setUserPackageName(userPackageResponse.data.packageName);
-    //     }
-
-    //     if (service.selectedProviderPackage) {
-    //       const providerPackageResponse = await axios.get(
-    //         `https://api.coolieno1.in/v1.0/admin/provider-package/${service.selectedProviderPackage}`,
-    //       );
-    //       setProviderPackageName(providerPackageResponse.data.packageName);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching package names:", error);
-    //   }
-    // };
-
-    // fetchPackageNames();
   }, [service, category, subCategory]);
 
   return (
@@ -92,7 +64,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <label>Service Name:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.name}
             readOnly
           />
@@ -101,7 +73,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <label>Service Type:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.serviceType}
             readOnly
           />
@@ -110,7 +82,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <label>Service Price:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.price}
             readOnly
           />
@@ -119,7 +91,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <label>Total Service Time:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.serviceTime}
             readOnly
           />
@@ -128,7 +100,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <label>Metric:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.metric}
             readOnly
           />
@@ -137,7 +109,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <label>Min:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.min}
             readOnly
           />
@@ -146,7 +118,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <label>Max:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.max}
             readOnly
           />
@@ -163,7 +135,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <label>Locations:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.locations.join(", ")}
             readOnly
           />
@@ -172,34 +144,17 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           <label>Tax Percentage:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.taxPercentage}
             readOnly
           />
         </div>
-        {/* <div className="form-group">
-          <label>User Package:</label>
-          <input
-            type="text"
-            className="bottom-borders-input"
-            value={userPackageName}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label>Provider Package:</label>
-          <input
-            type="text"
-            className="bottom-borders-input"
-            value={providerPackageName}
-            readOnly
-          />
-        </div> */}
+
         <div className="form-group">
           <label>Platform Commission:</label>
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={serviceData.platformCommission}
             readOnly
           />
@@ -287,8 +242,6 @@ ServiceDetailCard.propTypes = {
     tag: PropTypes.bool,
     isCash: PropTypes.bool,
     creditEligibility: PropTypes.bool,
-    // selectedUserPackage: PropTypes.string,
-    // selectedProviderPackage: PropTypes.string,
     platformCommission: PropTypes.string,
     isActive: PropTypes.bool,
     isDeleted: PropTypes.bool,

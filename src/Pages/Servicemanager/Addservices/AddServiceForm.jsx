@@ -140,7 +140,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
         <label>Service Name:</label>
         <input
           type="text"
-          className="bottom-borders-input"
+          className="service-input-borders"
           value={serviceName}
           onChange={(e) => setServiceName(e.target.value)}
         />
@@ -160,7 +160,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
         {serviceVariants.map((variant, index) => (
           <div key={index} className="variant-input-group">
             <select
-              className="bottom-borders-input"
+              className="service-input-borders"
               value={variant.variantName}
               onChange={(e) =>
                 handleVariantChange(index, "variantName", e.target.value)
@@ -176,7 +176,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
             <br />
             <input
               type="text"
-              className="bottom-borders-input"
+              className="service-input-borders"
               placeholder="Price"
               value={variant.price}
               onChange={(e) =>
@@ -186,7 +186,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
             <br />
             <input
               type="text"
-              className="bottom-borders-input"
+              className="service-input-borders"
               placeholder="Service Time"
               value={variant.serviceTime}
               onChange={(e) =>
@@ -195,7 +195,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
             />
             <br />
             <select
-              className="bottom-borders-input"
+              className="service-input-borders"
               value={variant.metric}
               onChange={(e) =>
                 handleVariantChange(index, "metric", e.target.value)
@@ -213,7 +213,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
               Min:
               <input
                 type="number"
-                className="bottom-borders-input"
+                className="service-input-borders"
                 id={`min-${index}`}
                 placeholder="Min"
                 value={variant.min}
@@ -227,7 +227,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
               Max:
               <input
                 type="number"
-                className="bottom-borders-input"
+                className="service-input-borders"
                 id={`max-${index}`}
                 placeholder="Max"
                 value={variant.max}
@@ -261,7 +261,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
         <div className="location-input-group">
           <input
             type="text"
-            className="bottom-borders-input"
+            className="service-input-borders"
             value={locationInput}
             onChange={(e) => setLocationInput(e.target.value)}
           />
@@ -289,7 +289,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
         <label>Tax Percentage:</label>
         <input
           type="text"
-          className="bottom-borders-input"
+          className="service-input-borders"
           value={taxPercentage}
           onChange={(e) => setTaxPercentage(e.target.value)}
         />
@@ -298,7 +298,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
       {/* <div className="form-group">
         <label>User Packages:</label>
         <select
-          className="bottom-borders-input"
+          className="service-input-borders"
           value={selectedUserPackage}
           onChange={(e) => setSelectedUserPackage(e.target.value)}
         >
@@ -314,7 +314,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
       <div className="form-group">
         <label>Provider Packages:</label>
         <select
-          className="bottom-borders-input"
+          className="service-input-borders"
           value={selectedProviderPackage}
           onChange={(e) => setSelectedProviderPackage(e.target.value)}
         >
@@ -331,7 +331,7 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
         <label>Platform Commission (%):</label>
         <input
           type="text"
-          className="bottom-borders-input"
+          className="service-input-borders"
           value={platformCommission}
           onChange={(e) => setPlatformCommission(e.target.value)}
         />

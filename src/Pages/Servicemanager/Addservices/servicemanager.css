@@ -6,7 +6,7 @@
 
 .servermanager-card-container {
     display: flex;
-    gap: 20px;
+    gap: 10px;
     flex-wrap: wrap;
     align-items: flex-start;
 }
@@ -76,14 +76,14 @@
 
 /* Menu Styles */
 .servermanager-menu {
-    border: none;
+    border: 1px solid #000000;
     border-top: 1px solid #000000;
     border-bottom: 1px solid #000000;
     padding: 0;
     max-height: 200px;
     overflow-y: auto;
     box-sizing: border-box;
-    margin: 0;
+    margin: 10px;
 }
 
 .servermanager-menu-item {
@@ -120,7 +120,7 @@
 .servermanager-add-category-form,
 .servermanager-add-sub-category-form {
     margin-top: 0;
-    border: none;
+    border: 1px solid #000000;
     border-top: 1px solid #000000;
     display: flex;
     flex-direction: column;
@@ -179,6 +179,17 @@
     transition: border-bottom-color 0.3s;
     font-size: 14px;
     width: 100%;
+    box-sizing: border-box;
+}
+
+.service-input-borders {
+    border: none;
+    border-bottom: 1px solid #000;
+    padding: 10px;
+    outline: none;
+    transition: border-bottom-color 0.3s;
+    font-size: 14px;
+    width: 30%;
     box-sizing: border-box;
 }
 
@@ -268,7 +279,7 @@
     padding: 5px;
     outline: none;
     transition: border-bottom-color 0.3s;
-    width: 30%;
+    width: 90%;
     box-sizing: border-box;
 }
 
@@ -409,6 +420,21 @@
     margin-top: 1px;
     box-sizing: border-box;
 }
+
+.service-detail-card {
+
+    padding: 10px;
+    border-radius: 5px;
+
+    width: 100%;
+    /* Increase width to take full container width */
+    max-width: 800px;
+    /* Set a max-width if necessary */
+    margin: -10px;
+    /* Center the card */
+    transition: all 0.3s ease;
+}
+
 
 /* Responsive Styles */
 @media (max-width: 1200px) {

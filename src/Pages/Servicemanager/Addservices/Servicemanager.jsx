@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import * as api from "./api/servicemanager-api";
 import AddServiceForm from "./AddServiceForm";
 import ServiceDetailCard from "./ServiceDetailCard";
 import SubCategoryForm from "./SubCategoryForm";
@@ -29,39 +29,40 @@ const Servermanager = () => {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(false); // Loading state
   const [reload, setReload] = useState(false); // Reload state
+  const [subCategoryErrorStatus, setSubCategoryErrorStatus] = useState(false); // Error state for subcategories
 
   useEffect(() => {
-    setLoading(true);
-    axios
-      .get("https://api.coolieno1.in/v1.0/core/categories")
+    api
+      .fetchCategories()
       .then((response) => {
         console.log("Categories fetched:", response.data);
         setCategories(response.data);
       })
-      .catch((error) => console.error("Error fetching categories:", error))
-      .finally(() => setLoading(false));
-  }, [reload]); // Add reload dependency
+      .catch((error) => console.error("Error fetching categories:", error));
+  }, [reload]);
 
   const fetchSubcategories = (categoryId) => {
     if (!categoryId) {
       console.error("Category ID is undefined");
       return;
     }
-    setLoading(true);
-    axios
-      .get(
-        `https://api.coolieno1.in/v1.0/core/sub-categories/category/${categoryId}`,
-      )
+    api
+      .fetchSubcategories(categoryId)
       .then((response) => {
         console.log("Subcategories fetched:", response.data);
         setSubCategories(response.data);
-        setSelectedCategory(categoryId);
+        setSubCategoryErrorStatus(false);
+        setSelectedCategory(categories.find((cat) => cat._id === categoryId));
         setServices([]);
       })
-      .catch((error) => console.error("Error fetching subcategories:", error))
-      .finally(() => setLoading(false));
+      .catch((error) => {
+        console.error("Error fetching subcategories:", error);
+        if (error.response && error.response.status === 404) {
+          setSubCategoryErrorStatus(true);
+          setSubCategories([]);
+        }
+      });
   };
 
   const fetchServices = (subCategoryId) => {
@@ -70,25 +71,20 @@ const Servermanager = () => {
       return;
     }
 
-    const url = `https://api.coolieno1.in/v1.0/core/services/filter/${selectedCategory}/${subCategoryId}`;
-
-    setLoading(true);
-    axios
-      .get(url)
+    api
+      .fetchServices(selectedCategory._id, subCategoryId)
       .then((response) => {
         console.log("Services fetched:", response.data);
 
         const fetchedServices = response.data.data;
         setServices(fetchedServices);
-
         setShowServiceList(true);
         setSelectedService(null);
       })
       .catch((error) => {
         console.error("Error fetching services:", error);
         setShowServiceList(false);
-      })
-      .finally(() => setLoading(false));
+      });
   };
 
   const handleCategorySelect = (categoryId) => {
@@ -111,7 +107,9 @@ const Servermanager = () => {
       setShowServiceForm(false);
     } else {
       fetchServices(subCategoryId);
-      setSelectedSubCategory(subCategoryId);
+      setSelectedSubCategory(
+        subCategories.find((subCat) => subCat._id === subCategoryId),
+      );
       setShowAddSubCategoryForm(false);
       setShowServiceVariantsMenu(true);
       setShowServiceForm(false);
@@ -133,8 +131,10 @@ const Servermanager = () => {
       const categoryId = service.categoryId._id;
       const subCategoryId = service.subCategoryId._id;
 
-      setSelectedCategory(categoryId);
-      setSelectedSubCategory(subCategoryId);
+      setSelectedCategory(categories.find((cat) => cat._id === categoryId));
+      setSelectedSubCategory(
+        subCategories.find((subCat) => subCat._id === subCategoryId),
+      );
     }
   };
 
@@ -173,35 +173,21 @@ const Servermanager = () => {
       formData.append("image", categoryIcon);
     }
 
-    setLoading(true);
     try {
-      const response = await fetch(
-        "https://api.coolieno1.in/v1.0/core/categories",
-        {
-          method: "POST",
-          body: formData,
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to add category");
-      }
-
-      const data = await response.json();
+      const response = await api.addCategory(formData);
+      const data = response.data;
       console.log("Category added:", data);
       setShowAddSubCategoryForm(true);
       const newCategoryId = data._id;
       setCategoryId(newCategoryId);
-      sessionStorage.setItem("categoryId", newCategoryId); // Store category ID in session storage
+      sessionStorage.setItem("categoryId", newCategoryId);
       setShowAddCategoryForm(false);
       setCategoryName("");
       setCategoryIcon(null);
-      setReload(!reload); // Trigger reload
+      setReload(!reload);
     } catch (error) {
       console.error("Error during category addition:", error);
       setCategoryError(error.message || "An error occurred");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -220,33 +206,19 @@ const Servermanager = () => {
     formData.append("isActive", true);
     formData.append("isDeleted", false);
 
-    setLoading(true);
     try {
-      const subCategoryResponse = await fetch(
-        "https://api.coolieno1.in/v1.0/core/sub-categories",
-        {
-          method: "POST",
-          body: formData,
-        },
-      );
-
-      if (!subCategoryResponse.ok) {
-        throw new Error("Failed to add sub-category");
-      }
-
-      const subCategoryDataResponse = await subCategoryResponse.json();
-      console.log("Subcategory added:", subCategoryDataResponse);
-      const newSubCategoryId = subCategoryDataResponse._id;
+      const response = await api.addSubCategory(formData);
+      const data = response.data;
+      console.log("Subcategory added:", data);
+      const newSubCategoryId = data._id;
       setSubCategoryId(newSubCategoryId);
-      sessionStorage.setItem("subCategoryId", newSubCategoryId); // Store subcategory ID in session storage
+      sessionStorage.setItem("subCategoryId", newSubCategoryId);
       setShowAddSubCategoryForm(false);
-      setShowServiceForm(true); // Ensure the form is shown here
-      setReload(!reload); // Trigger reload
+      setShowServiceForm(true);
+      setReload(!reload);
     } catch (error) {
       console.error("Error during the addition of sub-category:", error);
       setSubCategoryError(error.message || "An error occurred");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -257,8 +229,6 @@ const Servermanager = () => {
       locations,
       taxPercentage,
       platformCommission,
-      // selectedUserPackage,
-      // selectedProviderPackage,
       isMostBooked,
       tag,
       isCash,
@@ -272,14 +242,12 @@ const Servermanager = () => {
     const payload = {
       name,
       description,
-      categoryId: storedCategoryId || selectedCategory,
-      subCategoryId: storedSubCategoryId || selectedSubCategory,
+      categoryId: storedCategoryId || selectedCategory._id,
+      subCategoryId: storedSubCategoryId || selectedSubCategory._id,
       serviceVariants,
       locations,
       taxPercentage,
       platformCommission,
-      // selectedUserPackage,
-      // selectedProviderPackage,
       isMostBooked,
       tag,
       isCash,
@@ -290,48 +258,22 @@ const Servermanager = () => {
 
     console.log("Payload to be sent:", JSON.stringify(payload, null, 2));
 
-    setLoading(true);
     try {
-      const serviceResponse = await fetch(
-        "https://api.coolieno1.in/v1.0/core/services",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        },
-      );
-
-      console.log("Service response status:", serviceResponse.status);
-      console.log("Service response OK:", serviceResponse.ok);
-
-      if (!serviceResponse.ok) {
-        const errorText = await serviceResponse.text();
-        console.error("Error response text:", errorText);
-        throw new Error(`Failed to add service: ${serviceResponse.status}`);
-      }
-
-      const serviceDataResponse = await serviceResponse.json();
-      console.log("Service added:", serviceDataResponse);
+      const response = await api.addService(payload);
+      const data = response.data;
+      console.log("Service added:", data);
       setShowServiceForm(false);
       setSelectedService(null);
-      fetchServices(selectedSubCategory);
-      setReload(!reload); // Trigger reload
+      fetchServices(selectedSubCategory._id);
+      setReload(!reload);
     } catch (error) {
       console.error("Error during the addition of service:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <div className="servermanager-container">
       <h2>Add Service</h2>
-      <div>
-        {loading && <div className="loading">Loading...</div>}
-        {/* Rest of your component JSX */}
-      </div>
       <div className="servermanager-card-container">
         <div className="servermanager-card" id="category-card">
           <div className="servermanager-form-group">
@@ -359,7 +301,9 @@ const Servermanager = () => {
                   <div
                     key={category._id}
                     className={`servermanager-menu-item ${
-                      selectedCategory === category._id ? "selected" : ""
+                      selectedCategory && selectedCategory._id === category._id
+                        ? "selected"
+                        : ""
                     }`}
                     onClick={() => handleCategorySelect(category._id)}
                   >
@@ -409,27 +353,32 @@ const Servermanager = () => {
               </div>
             </div>
 
-            {showSubCategoryMenu && (
-              <div className="servermanager-menu">
-                {subCategories.length > 0 ? (
-                  subCategories.map((subCategory) => (
-                    <div
-                      key={subCategory._id}
-                      className={`servermanager-menu-item ${
-                        selectedSubCategory === subCategory._id
-                          ? "selected"
-                          : ""
-                      }`}
-                      onClick={() => handleSubCategorySelect(subCategory._id)}
-                    >
-                      {subCategory.name}
-                    </div>
-                  ))
-                ) : (
-                  <div>No subcategories</div>
-                )}
-              </div>
-            )}
+            <div className="servermanager-menu">
+              {subCategories.length > 0 ? (
+                subCategories.map((subCategory) => (
+                  <div
+                    key={subCategory._id}
+                    className={`servermanager-menu-item ${
+                      selectedSubCategory &&
+                      selectedSubCategory._id === subCategory._id
+                        ? "selected"
+                        : ""
+                    }`}
+                    onClick={() => handleSubCategorySelect(subCategory._id)}
+                  >
+                    {subCategory.name}
+                  </div>
+                ))
+              ) : subCategoryErrorStatus ? (
+                <div className="servermanager-menu-item">
+                  No subcategories available
+                </div>
+              ) : (
+                <div className="servermanager-menu-item">
+                  Loading subcategories...
+                </div>
+              )}
+            </div>
           </div>
         )}
 
@@ -506,8 +455,8 @@ const Servermanager = () => {
           <hr style={{ borderTop: "2px solid #ccc", height: "1px" }} />
           <ServiceDetailCard
             service={selectedService}
-            category={selectedService.categoryId._id}
-            subCategory={selectedService.subCategoryId._id}
+            category={selectedCategory}
+            subCategory={selectedSubCategory}
             onClose={() => setSelectedService(null)}
           />
         </>
