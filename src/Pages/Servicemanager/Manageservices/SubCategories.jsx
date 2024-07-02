@@ -15,6 +15,7 @@ const SubCategories = ({
   fetchServices,
   API_BASE_URL,
   selectedCategory,
+  subCategoriesError,
 }) => {
   const handleSubCategorySelect = (subCategory) => {
     setSelectedSubCategory(subCategory);
@@ -57,7 +58,11 @@ const SubCategories = ({
 
       {showSubCategoryMenu && (
         <div className="manageServiceMenu">
-          {subCategories.length > 0 ? (
+          {subCategoriesError ? (
+            <div className="manageServiceMenuItem">
+              No available subcategories
+            </div>
+          ) : subCategories.length > 0 ? (
             subCategories.map((subCategory) => (
               <div
                 key={subCategory._id}
@@ -102,6 +107,7 @@ SubCategories.propTypes = {
   fetchServices: PropTypes.func.isRequired,
   API_BASE_URL: PropTypes.string.isRequired,
   selectedCategory: PropTypes.string.isRequired,
+  subCategoriesError: PropTypes.bool.isRequired,
 };
 
 export default SubCategories;

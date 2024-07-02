@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import SubCategories from "./SubCategories";
 import "./styles/serviceform.css"; // Ensure the CSS file is correctly linked
 
 const EditServiceForm = ({
@@ -31,6 +32,8 @@ const EditServiceForm = ({
     isActive: false,
     isDeleted: false,
   });
+  const [subCategories, setSubCategories] = useState([]);
+  const [subCategoriesError, setSubCategoriesError] = useState(false);
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -56,6 +59,7 @@ const EditServiceForm = ({
         setSubCategoryName(response.data.name);
       } catch (error) {
         console.error("Error fetching sub-category name:", error);
+        setSubCategoriesError(true);
       }
     };
 
@@ -68,7 +72,7 @@ const EditServiceForm = ({
         setServiceData({
           name: serviceData.name,
           serviceType: serviceData.serviceVariants[0]?.variantName || "",
-          price: serviceData.serviceVariants[0]?.price || "",
+          price: serviceData.serviceVariants[0]?.price.toString() || "",
           serviceTime: serviceData.serviceVariants[0]?.serviceTime || "",
           metric: serviceData.serviceVariants[0]?.metric || "",
           min: serviceData.serviceVariants[0]?.min || 1,
@@ -123,16 +127,6 @@ const EditServiceForm = ({
       });
   };
 
-  const handleDeleteToggle = () => {
-    if (
-      window.confirm(
-        "This operation will delete this service permanently. Do you want to proceed?",
-      )
-    ) {
-      setServiceData({ ...serviceData, isDeleted: !serviceData.isDeleted });
-    }
-  };
-
   return (
     <div className="service-detail-card">
       {loading && <div className="loading">Loading...</div>}
@@ -141,6 +135,11 @@ const EditServiceForm = ({
         <h6>Sub-Category: {subCategoryName}</h6>
         <h6>Service: {serviceData.name}</h6>
       </div>
+      <SubCategories
+        subCategories={subCategories}
+        subCategoriesError={subCategoriesError}
+        // other props...
+      />
       <form className="add-service-form">
         {successMessage && (
           <div className="successMessage">{successMessage}</div>
@@ -336,7 +335,7 @@ const EditServiceForm = ({
             type="checkbox"
             className="toggle-input"
             checked={serviceData.isDeleted}
-            onChange={handleDeleteToggle}
+            onChange={() => {}}
           />
         </div>
         <button
@@ -370,7 +369,7 @@ EditServiceForm.propTypes = {
     serviceVariants: PropTypes.arrayOf(
       PropTypes.shape({
         variantName: PropTypes.string,
-        price: PropTypes.string,
+        price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         serviceTime: PropTypes.string,
         metric: PropTypes.string,
         min: PropTypes.number,
