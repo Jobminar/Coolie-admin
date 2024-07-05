@@ -98,11 +98,15 @@ const ManageService = () => {
 
   useEffect(() => {
     if (showEditSubCategoryForm && selectedSubCategory) {
+      console.log(
+        `Fetching services because showEditSubCategoryForm is ${showEditSubCategoryForm} and selectedSubCategory is set`,
+      );
       fetchServices(selectedCategory._id, selectedSubCategory._id);
     }
   }, [showEditSubCategoryForm, selectedSubCategory]);
 
   const handleCloseServiceForm = () => {
+    console.log("Closing service form");
     setSelectedService(null);
   };
 
@@ -144,6 +148,7 @@ const ManageService = () => {
   const handleDeleteCategory = (categoryId) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
       setLoading(true);
+      console.log(`Deleting category with ID: ${categoryId}`);
       axios
         .delete(`${API_BASE_URL}/v1.0/core/categories/${categoryId}`)
         .then(() => {
