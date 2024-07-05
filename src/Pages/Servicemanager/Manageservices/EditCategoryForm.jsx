@@ -16,6 +16,7 @@ const EditCategoryForm = ({
 }) => {
   const [categoryName, setCategoryName] = useState("");
   const [categoryIcon, setCategoryIcon] = useState("");
+  const [categoryFile, setCategoryFile] = useState(null);
   const [categoryError, setCategoryError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -23,6 +24,7 @@ const EditCategoryForm = ({
 
   useEffect(() => {
     if (selectedCategory) {
+      console.log("Selected category:", selectedCategory);
       setCategoryName(selectedCategory.name || "");
       setCategoryIcon(selectedCategory.imageKey || "");
     }
@@ -30,18 +32,23 @@ const EditCategoryForm = ({
 
   const handleCategoryIconChange = (e) => {
     const file = e.target.files[0];
+    console.log("Selected file:", file);
     if (file) {
       setCategoryIcon(URL.createObjectURL(file));
+      setCategoryFile(file);
     }
   };
 
   const handleEditCategory = () => {
+    console.log("Starting category edit...");
     if (!selectedCategory) {
+      console.log("No category selected.");
       setCategoryError("No category selected.");
       return;
     }
 
     if (!categoryName.trim()) {
+      console.log("Category name is required.");
       setCategoryError("Category name is required.");
       return;
     }
@@ -53,16 +60,25 @@ const EditCategoryForm = ({
     formData.append("isDeleted", false);
 
     // Only append image if it's a new one
-    if (categoryIcon.startsWith("blob:")) {
-      formData.append("image", categoryIcon);
+    if (categoryFile) {
+      console.log("Appending image file to form data:", categoryFile);
+      formData.append("image", categoryFile);
     }
+
+    console.log("Form data before sending:", formData);
 
     axios
       .put(
         `${API_BASE_URL}/v1.0/core/categories/${selectedCategory._id}`,
         formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
       )
-      .then(() => {
+      .then((response) => {
+        console.log("Category updated successfully:", response);
         setSuccessMessage("Category updated successfully");
         setErrorMessage("");
         setShowEditCategoryForm(false);
@@ -71,10 +87,14 @@ const EditCategoryForm = ({
         const errorResponse = error.response
           ? error.response.data
           : "Network error";
+        console.log("Failed to update category:", errorResponse);
         setErrorMessage(`Failed to update category: ${errorResponse}`);
         setSuccessMessage("");
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        console.log("Finished category edit.");
+      });
   };
 
   return (
@@ -84,7 +104,10 @@ const EditCategoryForm = ({
         <FontAwesomeIcon
           icon={faTimes}
           className="manageServiceCancelIcon"
-          onClick={() => setShowEditCategoryForm(false)}
+          onClick={() => {
+            console.log("Closing edit category form.");
+            setShowEditCategoryForm(false);
+          }}
         />
       </h3>
       {successMessage && <div className="successMessage">{successMessage}</div>}
@@ -96,7 +119,10 @@ const EditCategoryForm = ({
           id="categoryName"
           className="manageServiceBottomBorderInput"
           value={categoryName}
-          onChange={(e) => setCategoryName(e.target.value)}
+          onChange={(e) => {
+            console.log("Category name changed:", e.target.value);
+            setCategoryName(e.target.value);
+          }}
         />
         {categoryError && <span className="error">{categoryError}</span>}
       </div>
