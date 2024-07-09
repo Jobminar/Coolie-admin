@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpFromBracket } from "@fortawesome/free-solid-svg-icons";
@@ -11,6 +11,27 @@ const SubCategoryForm = ({
   subCategoryIcon,
   handleAddSubCategory,
 }) => {
+  useEffect(() => {
+    console.log("Component mounted");
+    return () => {
+      console.log("Component unmounted");
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("subCategoryName changed:", subCategoryName);
+  }, [subCategoryName]);
+
+  useEffect(() => {
+    console.log("subCategoryError changed:", subCategoryError);
+  }, [subCategoryError]);
+
+  useEffect(() => {
+    console.log("subCategoryIcon changed:", subCategoryIcon);
+  }, [subCategoryIcon]);
+
+  console.log("Rendering SubCategoryForm");
+
   return (
     <div className="servermanager-card servermanager-add-sub-category-form">
       <h3>Add Sub-Category</h3>
@@ -21,16 +42,27 @@ const SubCategoryForm = ({
           id="subCategoryName"
           className="servermanager-bottom-border-input"
           value={subCategoryName}
-          onChange={(e) => setSubCategoryName(e.target.value)}
+          onChange={(e) => {
+            console.log("Sub-category name input changed:", e.target.value);
+            setSubCategoryName(e.target.value);
+          }}
           aria-label="Sub-Category Name"
         />
-        {subCategoryError && <span className="error">{subCategoryError}</span>}
+        {subCategoryError && (
+          <span className="error">
+            {console.log("Displaying subCategoryError:", subCategoryError)}
+            {subCategoryError}
+          </span>
+        )}
       </div>
       <div className="servermanageruploadcontainer">
         <input
           type="file"
           id="subCategoryIcon"
-          onChange={handleSubCategoryIconChange}
+          onChange={(e) => {
+            console.log("File input changed:", e.target.files[0]);
+            handleSubCategoryIconChange(e);
+          }}
           className="servermanager-file-upload"
           aria-label="Sub-Category Icon"
         />
@@ -54,7 +86,10 @@ const SubCategoryForm = ({
       </div>
       <button
         className="servermanager-submit-button"
-        onClick={handleAddSubCategory}
+        onClick={() => {
+          console.log("Add Sub-Category button clicked");
+          handleAddSubCategory();
+        }}
         aria-label="Add Sub-Category"
       >
         Add

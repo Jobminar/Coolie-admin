@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -14,15 +14,13 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
   const [tag, setTag] = useState(false);
   const [isCash, setIsCash] = useState(false);
   const [creditEligibility, setCreditEligibility] = useState(false);
-  // const [selectedUserPackage, setSelectedUserPackage] = useState("");
-  // const [selectedProviderPackage, setSelectedProviderPackage] = useState("");
-  // const [userPackages, setUserPackages] = useState([]);
-  // const [providerPackages, setProviderPackages] = useState([]);
   const [platformCommission, setPlatformCommission] = useState("");
   const [serviceVariants, setServiceVariants] = useState([
     { variantName: "", price: "", serviceTime: "", metric: "", min: 1, max: 1 },
   ]);
   const [showVariantFields, setShowVariantFields] = useState(false);
+
+  const [errors, setErrors] = useState({});
 
   const defaultServiceTypes = [
     "Daily",
@@ -79,8 +77,47 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
     setServiceVariants(newVariants);
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!serviceName.trim()) {
+      newErrors.serviceName = "Service Name is required.";
+    }
+    if (!description.trim()) {
+      newErrors.description = "Description is required.";
+    }
+    if (!taxPercentage.trim() || isNaN(taxPercentage)) {
+      newErrors.taxPercentage = "Valid Tax Percentage is required.";
+    }
+    if (!platformCommission.trim() || isNaN(platformCommission)) {
+      newErrors.platformCommission = "Valid Platform Commission is required.";
+    }
+    serviceVariants.forEach((variant, index) => {
+      if (!variant.variantName.trim()) {
+        newErrors[`variantName-${index}`] = "Variant Name is required.";
+      }
+      if (!variant.price.trim() || isNaN(variant.price)) {
+        newErrors[`price-${index}`] = "Valid Price is required.";
+      }
+      if (!variant.serviceTime.trim() || isNaN(variant.serviceTime)) {
+        newErrors[`serviceTime-${index}`] = "Valid Service Time is required.";
+      }
+      if (!variant.metric.trim()) {
+        newErrors[`metric-${index}`] = "Metric is required.";
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
     const formattedServiceVariants = serviceVariants.map((variant) => ({
       variantName: variant.variantName,
       price: parseFloat(variant.price),
@@ -97,8 +134,6 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
       locations,
       taxPercentage: parseFloat(taxPercentage),
       platformCommission: parseFloat(platformCommission),
-      // selectedUserPackage,
-      // selectedProviderPackage,
       isMostBooked,
       tag,
       isCash,
@@ -106,32 +141,10 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
       isActive: true,
       isDeleted: false,
     };
+
     console.log("Payload to be sent:", serviceData); // Logging the payload for debugging
     onSubmit(serviceData);
   };
-
-  // useEffect(() => {
-  //   const fetchPackages = async () => {
-  //     try {
-  //       const userResponse = await fetch(
-  //         "https://api.coolieno1.in/v1.0/admin/user-package",
-  //       );
-  //       const providerResponse = await fetch(
-  //         "https://api.coolieno1.in/v1.0/admin/provider-package",
-  //       );
-  //       if (!userResponse.ok || !providerResponse.ok) {
-  //         throw new Error("Failed to fetch packages");
-  //       }
-  //       const userData = await userResponse.json();
-  //       const providerData = await providerResponse.json();
-  //       setUserPackages(userData);
-  //       setProviderPackages(providerData);
-  //     } catch (error) {
-  //       console.error("Error fetching packages:", error);
-  //     }
-  //   };
-  //   fetchPackages();
-  // }, []);
 
   return (
     <form className="add-serviceForm-new" onSubmit={handleSubmit}>
@@ -144,6 +157,9 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
           value={serviceName}
           onChange={(e) => setServiceName(e.target.value)}
         />
+        {errors.serviceName && (
+          <span className="error">{errors.serviceName}</span>
+        )}
       </div>
 
       <div className="form-group">
@@ -153,6 +169,9 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
+        {errors.description && (
+          <span className="error">{errors.description}</span>
+        )}
       </div>
 
       <div className="form-group">
@@ -173,9 +192,12 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
                 </option>
               ))}
             </select>
+            {errors[`variantName-${index}`] && (
+              <span className="error">{errors[`variantName-${index}`]}</span>
+            )}
             <br />
             <input
-              type="text"
+              type="number"
               className="service-input-borders"
               placeholder="Price"
               value={variant.price}
@@ -183,9 +205,12 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
                 handleVariantChange(index, "price", e.target.value)
               }
             />
+            {errors[`price-${index}`] && (
+              <span className="error">{errors[`price-${index}`]}</span>
+            )}
             <br />
             <input
-              type="text"
+              type="number"
               className="service-input-borders"
               placeholder="Service Time"
               value={variant.serviceTime}
@@ -193,6 +218,9 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
                 handleVariantChange(index, "serviceTime", e.target.value)
               }
             />
+            {errors[`serviceTime-${index}`] && (
+              <span className="error">{errors[`serviceTime-${index}`]}</span>
+            )}
             <br />
             <select
               className="service-input-borders"
@@ -208,6 +236,9 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
                 </option>
               ))}
             </select>
+            {errors[`metric-${index}`] && (
+              <span className="error">{errors[`metric-${index}`]}</span>
+            )}
             <br />
             <label htmlFor={`min-${index}`} style={{ fontSize: "0.8em" }}>
               Min:
@@ -288,53 +319,27 @@ const AddServiceForm = ({ onSubmit, serviceTypes = [] }) => {
       <div className="form-group">
         <label>Tax Percentage:</label>
         <input
-          type="text"
+          type="number"
           className="service-input-borders"
           value={taxPercentage}
           onChange={(e) => setTaxPercentage(e.target.value)}
         />
+        {errors.taxPercentage && (
+          <span className="error">{errors.taxPercentage}</span>
+        )}
       </div>
-
-      {/* <div className="form-group">
-        <label>User Packages:</label>
-        <select
-          className="service-input-borders"
-          value={selectedUserPackage}
-          onChange={(e) => setSelectedUserPackage(e.target.value)}
-        >
-          <option value="">Select User Package</option>
-          {userPackages.map((pkg) => (
-            <option key={pkg._id} value={pkg._id}>
-              {pkg.packageName}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="form-group">
-        <label>Provider Packages:</label>
-        <select
-          className="service-input-borders"
-          value={selectedProviderPackage}
-          onChange={(e) => setSelectedProviderPackage(e.target.value)}
-        >
-          <option value="">Select Provider Package</option>
-          {providerPackages.map((pkg) => (
-            <option key={pkg._id} value={pkg._id}>
-              {pkg.packageName}
-            </option>
-          ))}
-        </select>
-      </div> */}
 
       <div className="form-group">
         <label>Platform Commission (%):</label>
         <input
-          type="text"
+          type="number"
           className="service-input-borders"
           value={platformCommission}
           onChange={(e) => setPlatformCommission(e.target.value)}
         />
+        {errors.platformCommission && (
+          <span className="error">{errors.platformCommission}</span>
+        )}
       </div>
 
       <div className="toggle-buttons">

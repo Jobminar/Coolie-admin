@@ -25,14 +25,15 @@ const Servermanager = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [categoryId, setCategoryId] = useState(null);
   const [subCategoryId, setSubCategoryId] = useState(null);
-  const [serviceTypes, setServiceTypes] = useState([]); // Ensure service types are managed
+  const [serviceTypes, setServiceTypes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [services, setServices] = useState([]);
-  const [reload, setReload] = useState(false); // Reload state
-  const [subCategoryErrorStatus, setSubCategoryErrorStatus] = useState(false); // Error state for subcategories
+  const [reload, setReload] = useState(false);
+  const [subCategoryErrorStatus, setSubCategoryErrorStatus] = useState(false);
 
   useEffect(() => {
+    console.log("Component mounted");
     api
       .fetchCategories()
       .then((response) => {
@@ -41,6 +42,114 @@ const Servermanager = () => {
       })
       .catch((error) => console.error("Error fetching categories:", error));
   }, [reload]);
+
+  useEffect(() => {
+    console.log("State changed: showServiceList", showServiceList);
+  }, [showServiceList]);
+
+  useEffect(() => {
+    console.log("State changed: showCategoryMenu", showCategoryMenu);
+  }, [showCategoryMenu]);
+
+  useEffect(() => {
+    console.log("State changed: showSubCategoryMenu", showSubCategoryMenu);
+  }, [showSubCategoryMenu]);
+
+  useEffect(() => {
+    console.log(
+      "State changed: showServiceVariantsMenu",
+      showServiceVariantsMenu,
+    );
+  }, [showServiceVariantsMenu]);
+
+  useEffect(() => {
+    console.log("State changed: selectedCategory", selectedCategory);
+    if (selectedCategory) {
+      setCategoryId(selectedCategory._id);
+    }
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    console.log("State changed: selectedSubCategory", selectedSubCategory);
+  }, [selectedSubCategory]);
+
+  useEffect(() => {
+    console.log("State changed: showAddCategoryForm", showAddCategoryForm);
+  }, [showAddCategoryForm]);
+
+  useEffect(() => {
+    console.log(
+      "State changed: showAddSubCategoryForm",
+      showAddSubCategoryForm,
+    );
+  }, [showAddSubCategoryForm]);
+
+  useEffect(() => {
+    console.log("State changed: showServiceForm", showServiceForm);
+  }, [showServiceForm]);
+
+  useEffect(() => {
+    console.log("State changed: categoryIcon", categoryIcon);
+  }, [categoryIcon]);
+
+  useEffect(() => {
+    console.log("State changed: subCategoryIcon", subCategoryIcon);
+  }, [subCategoryIcon]);
+
+  useEffect(() => {
+    console.log("State changed: categoryName", categoryName);
+  }, [categoryName]);
+
+  useEffect(() => {
+    console.log("State changed: subCategoryName", subCategoryName);
+  }, [subCategoryName]);
+
+  useEffect(() => {
+    console.log("State changed: categoryError", categoryError);
+  }, [categoryError]);
+
+  useEffect(() => {
+    console.log("State changed: subCategoryError", subCategoryError);
+  }, [subCategoryError]);
+
+  useEffect(() => {
+    console.log("State changed: selectedService", selectedService);
+  }, [selectedService]);
+
+  useEffect(() => {
+    console.log("State changed: categoryId", categoryId);
+  }, [categoryId]);
+
+  useEffect(() => {
+    console.log("State changed: subCategoryId", subCategoryId);
+  }, [subCategoryId]);
+
+  useEffect(() => {
+    console.log("State changed: serviceTypes", serviceTypes);
+  }, [serviceTypes]);
+
+  useEffect(() => {
+    console.log("State changed: categories", categories);
+  }, [categories]);
+
+  useEffect(() => {
+    console.log("State changed: subCategories", subCategories);
+  }, [subCategories]);
+
+  useEffect(() => {
+    console.log("State changed: services", services);
+  }, [services]);
+
+  useEffect(() => {
+    console.log("State changed: reload", reload);
+  }, [reload]);
+
+  useEffect(() => {
+    console.log(
+      "State changed: subCategoryErrorStatus",
+      subCategoryErrorStatus,
+    );
+  }, [subCategoryErrorStatus]);
 
   const fetchSubcategories = (categoryId) => {
     if (!categoryId) {
@@ -61,6 +170,8 @@ const Servermanager = () => {
         if (error.response && error.response.status === 404) {
           setSubCategoryErrorStatus(true);
           setSubCategories([]);
+          setSelectedCategory(categories.find((cat) => cat._id === categoryId));
+          setServices([]);
         }
       });
   };
@@ -75,7 +186,6 @@ const Servermanager = () => {
       .fetchServices(selectedCategory._id, subCategoryId)
       .then((response) => {
         console.log("Services fetched:", response.data);
-
         const fetchedServices = response.data.data;
         setServices(fetchedServices);
         setShowServiceList(true);
@@ -118,7 +228,6 @@ const Servermanager = () => {
 
   const handleServiceSelect = (service) => {
     console.log("Selected service:", service);
-
     if (service.name === "Add New Service") {
       setShowServiceForm(true);
       setSelectedService(null);
@@ -193,6 +302,12 @@ const Servermanager = () => {
 
   const handleAddSubCategory = async () => {
     setSubCategoryError("");
+    console.log("Adding subcategory with details: ", {
+      subCategoryName,
+      subCategoryIcon,
+      categoryId,
+      selectedCategory,
+    });
 
     if (subCategoryName.trim() === "" || !subCategoryIcon || !categoryId) {
       setSubCategoryError("All fields are required.");
@@ -447,7 +562,7 @@ const Servermanager = () => {
       {showServiceForm && (
         <AddServiceForm
           onSubmit={handleAddService}
-          serviceTypes={serviceTypes} // Pass service types to AddServiceForm
+          serviceTypes={serviceTypes}
         />
       )}
       {selectedService && (
