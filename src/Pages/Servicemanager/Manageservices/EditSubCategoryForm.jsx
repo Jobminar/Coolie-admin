@@ -18,14 +18,23 @@ const EditSubCategoryForm = ({
 }) => {
   const [subCategoryName, setSubCategoryName] = useState("");
   const [subCategoryIcon, setSubCategoryIcon] = useState("");
+  const [subCategoryFile, setSubCategoryFile] = useState(null);
   const [subCategoryError, setSubCategoryError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  console.log("Initial props:", {
+    selectedSubCategory,
+    API_BASE_URL,
+    AWS_BASE_URL,
+    selectedCategory,
+  });
+
   useEffect(() => {
     // Pre-fill the form with the current subcategory details
     if (selectedSubCategory) {
+      console.log("Selected sub-category:", selectedSubCategory);
       setSubCategoryName(selectedSubCategory.name || "");
       setSubCategoryIcon(selectedSubCategory.imageKey || "");
     }
@@ -33,18 +42,29 @@ const EditSubCategoryForm = ({
 
   const handleSubCategoryIconChange = (e) => {
     const file = e.target.files[0];
+    console.log("Selected file:", file);
     if (file) {
       setSubCategoryIcon(URL.createObjectURL(file));
+      setSubCategoryFile(file);
     }
   };
 
   const handleEditSubCategory = () => {
+    console.log("Starting sub-category edit...");
+    console.log("Current state before edit:", {
+      subCategoryName,
+      subCategoryIcon,
+      subCategoryFile,
+    });
+
     if (!selectedSubCategory) {
+      console.log("No sub-category selected.");
       setSubCategoryError("No sub-category selected.");
       return;
     }
 
     if (subCategoryName.trim() === "") {
+      console.log("Sub-category name is required.");
       setSubCategoryError("Sub-category name is required.");
       return;
     }
@@ -60,9 +80,12 @@ const EditSubCategoryForm = ({
     formData.append("isDeleted", false);
 
     // Only append image if it's a new one
-    if (subCategoryIcon.startsWith("blob:")) {
-      formData.append("image", subCategoryIcon);
+    if (subCategoryFile) {
+      console.log("Appending image file to form data:", subCategoryFile);
+      formData.append("image", subCategoryFile);
     }
+
+    console.log("Form data before sending:", formData);
 
     axios
       .put(
@@ -70,6 +93,7 @@ const EditSubCategoryForm = ({
         formData,
       )
       .then((response) => {
+        console.log("Sub-category updated successfully:", response);
         const updatedSubCategory = response.data;
         setSuccessMessage("Sub-category updated successfully");
         setErrorMessage("");
@@ -81,11 +105,13 @@ const EditSubCategoryForm = ({
         const errorResponse = error.response
           ? error.response.data
           : "Network error";
+        console.log("Failed to update sub-category:", errorResponse);
         setErrorMessage(`Failed to update sub-category: ${errorResponse}`);
         setSuccessMessage("");
       })
       .finally(() => {
         setLoading(false);
+        console.log("Finished sub-category edit.");
       });
   };
 
@@ -98,6 +124,7 @@ const EditSubCategoryForm = ({
           className="manageServiceCancelIcon"
           onClick={() => {
             if (window.confirm("Are you sure you want to cancel the edit?")) {
+              console.log("Closing edit sub-category form.");
               setShowEditSubCategoryForm(false);
             }
           }}
@@ -111,7 +138,10 @@ const EditSubCategoryForm = ({
           type="text"
           className="manageServiceBottomBorderInput"
           value={subCategoryName}
-          onChange={(e) => setSubCategoryName(e.target.value)}
+          onChange={(e) => {
+            console.log("Sub-category name changed:", e.target.value);
+            setSubCategoryName(e.target.value);
+          }}
         />
         {subCategoryError && <span className="error">{subCategoryError}</span>}
       </div>
@@ -125,6 +155,11 @@ const EditSubCategoryForm = ({
             }
             alt="Sub-Category Icon"
             className="manageServicePreviewImage"
+            onLoad={() => console.log("Image loaded successfully")}
+            onError={(e) => {
+              console.error("Error loading image:", e);
+              e.target.src = ""; // Fallback in case the image fails to load
+            }}
           />
         </div>
       )}
