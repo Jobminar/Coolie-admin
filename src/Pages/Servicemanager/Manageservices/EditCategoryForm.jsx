@@ -22,6 +22,12 @@ const EditCategoryForm = ({
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  console.log("Initial props:", {
+    selectedCategory,
+    API_BASE_URL,
+    AWS_BASE_URL,
+  });
+
   useEffect(() => {
     if (selectedCategory) {
       console.log("Selected category:", selectedCategory);
@@ -41,6 +47,12 @@ const EditCategoryForm = ({
 
   const handleEditCategory = () => {
     console.log("Starting category edit...");
+    console.log("Current state before edit:", {
+      categoryName,
+      categoryIcon,
+      categoryFile,
+    });
+
     if (!selectedCategory) {
       console.log("No category selected.");
       setCategoryError("No category selected.");
@@ -136,6 +148,11 @@ const EditCategoryForm = ({
             }
             alt="Category Icon"
             className="manageServicePreviewImage"
+            onLoad={() => console.log("Image loaded successfully")}
+            onError={(e) => {
+              console.error("Error loading image:", e);
+              e.target.src = ""; // Fallback in case the image fails to load
+            }}
           />
         </div>
       )}
