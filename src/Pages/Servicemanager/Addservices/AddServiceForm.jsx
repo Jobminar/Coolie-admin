@@ -4,12 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./styles/servicemanager.css";
 
-// API call to fetch uiVariant based on categoryId
-
-
 const AddServiceForm = ({ category, onSubmit }) => {
-
-
   const [serviceName, setServiceName] = useState("");
   const [description, setDescription] = useState("");
   const [locations, setLocations] = useState([]);
@@ -20,12 +15,14 @@ const AddServiceForm = ({ category, onSubmit }) => {
   const [isCash, setIsCash] = useState(false);
   const [creditEligibility, setCreditEligibility] = useState(false);
   const [platformCommission, setPlatformCommission] = useState("");
+  const [miscFee, setMiscFee] = useState("");
   const [serviceVariants, setServiceVariants] = useState([
     { variantName: "", price: "", serviceTime: "", metric: "", min: 1, max: 1 },
   ]);
   const [showVariantFields, setShowVariantFields] = useState(false);
   const [errors, setErrors] = useState({});
-  const [uiVariant, setUiVariant] = useState([]); // State to store uiVariant
+  const [uiVariant, setUiVariant] = useState([]);
+  const [imageFile, setImageFile] = useState(null);
 
   const fetchUiVariant = async (category) => {
     const API_BASE_URL = "https://api.coolieno1.in/v1.0/core";
@@ -33,7 +30,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
     const data = await response.json();
     return data.uiVariant;
   };
-  // Fetch uiVariant when categoryId changes
+
   useEffect(() => {
     if (category) {
       fetchUiVariant(category).then((data) => setUiVariant(data));
@@ -56,14 +53,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
     setShowVariantFields(true);
     setServiceVariants([
       ...serviceVariants,
-      {
-        variantName: "",
-        price: "",
-        serviceTime: "",
-        metric: "",
-        min: 1,
-        max: 1,
-      },
+      { variantName: "", price: "", serviceTime: "", metric: "", min: 1, max: 1 },
     ]);
   };
 
@@ -76,9 +66,14 @@ const AddServiceForm = ({ category, onSubmit }) => {
 
   const handleVariantChange = (index, field, value) => {
     const newVariants = serviceVariants.map((variant, i) =>
-      i === index ? { ...variant, [field]: value } : variant,
+      i === index ? { ...variant, [field]: value } : variant
     );
     setServiceVariants(newVariants);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
   };
 
   const validateForm = () => {
@@ -95,6 +90,9 @@ const AddServiceForm = ({ category, onSubmit }) => {
     }
     if (!platformCommission.trim() || isNaN(platformCommission)) {
       newErrors.platformCommission = "Valid Platform Commission is required.";
+    }
+    if (!miscFee.trim() || isNaN(miscFee)) {
+      newErrors.miscFee = "Valid Misc Fee is required.";
     }
     serviceVariants.forEach((variant, index) => {
       if (!variant.variantName.trim()) {
@@ -122,32 +120,38 @@ const AddServiceForm = ({ category, onSubmit }) => {
       return;
     }
 
-    const formattedServiceVariants = serviceVariants.map((variant) => ({
-      variantName: variant.variantName,
-      price: parseFloat(variant.price),
-      serviceTime: parseFloat(variant.serviceTime),
-      metric: variant.metric,
-      min: parseFloat(variant.min),
-      max: parseFloat(variant.max),
-    }));
+    const formData = new FormData();
+    formData.append("name", serviceName);
+    formData.append("description", description);
+    formData.append("taxPercentage", taxPercentage);
+    formData.append("platformCommission", platformCommission);
+    formData.append("miscFee", miscFee);
+    formData.append("isMostBooked", isMostBooked);
+    formData.append("tag", tag);
+    formData.append("isCash", isCash);
+    formData.append("creditEligibility", creditEligibility);
+    formData.append("isActive", true);
+    formData.append("isDeleted", false);
 
-    const serviceData = {
-      name: serviceName,
-      description,
-      serviceVariants: formattedServiceVariants,
-      locations,
-      taxPercentage: parseFloat(taxPercentage),
-      platformCommission: parseFloat(platformCommission),
-      isMostBooked,
-      tag,
-      isCash,
-      creditEligibility,
-      isActive: true,
-      isDeleted: false,
-    };
+    serviceVariants.forEach((variant, index) => {
+      formData.append(`serviceVariants[${index}][variantName]`, variant.variantName);
+      formData.append(`serviceVariants[${index}][price]`, variant.price);
+      formData.append(`serviceVariants[${index}][serviceTime]`, variant.serviceTime);
+      formData.append(`serviceVariants[${index}][metric]`, variant.metric);
+      formData.append(`serviceVariants[${index}][min]`, variant.min);
+      formData.append(`serviceVariants[${index}][max]`, variant.max);
+    });
 
-    console.log("Payload to be sent:", serviceData); // Logging the payload for debugging
-    onSubmit(serviceData);
+    locations.forEach((location, index) => {
+      formData.append(`locations[${index}]`, location);
+    });
+
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
+    console.log("Payload to be sent:", formData); // Logging the payload for debugging
+    onSubmit(formData);
   };
 
   return (
@@ -244,85 +248,72 @@ const AddServiceForm = ({ category, onSubmit }) => {
               <span className="error">{errors[`metric-${index}`]}</span>
             )}
             <br />
-            <label htmlFor={`min-${index}`} style={{ fontSize: "0.8em" }}>
-              Min:
-              <input
-                type="number"
-                className="service-input-borders"
-                id={`min-${index}`}
-                placeholder="Min"
-                value={variant.min}
-                onChange={(e) =>
-                  handleVariantChange(index, "min", e.target.value)
-                }
-                min="1"
-              />
-            </label>
-            <label htmlFor={`max-${index}`} style={{ fontSize: "0.8em" }}>
-              Max:
-              <input
-                type="number"
-                className="service-input-borders"
-                id={`max-${index}`}
-                placeholder="Max"
-                value={variant.max}
-                onChange={(e) =>
-                  handleVariantChange(index, "max", e.target.value)
-                }
-                min="1"
-              />
-            </label>
-            <br />
+            <input
+              type="number"
+              className="service-input-borders"
+              placeholder="Min"
+              min="1"
+              value={variant.min}
+              onChange={(e) =>
+                handleVariantChange(index, "min", e.target.value)
+              }
+            />
+            <input
+              type="number"
+              className="service-input-borders"
+              placeholder="Max"
+              min="1"
+              value={variant.max}
+              onChange={(e) =>
+                handleVariantChange(index, "max", e.target.value)
+              }
+            />
             <button
               type="button"
-              className="service-button remove-variant"
+              className="remove-variant-btn"
               onClick={() => handleRemoveVariant(index)}
             >
-              <FontAwesomeIcon icon={faTrash} /> Remove Variant
+              <FontAwesomeIcon icon={faTrash} />
             </button>
-            <hr />
           </div>
         ))}
-        <button
-          type="button"
-          className="service-button add-variant"
-          onClick={handleAddVariant}
-        >
+        <button type="button" onClick={handleAddVariant}>
           <FontAwesomeIcon icon={faPlus} /> Add Variant
         </button>
+        {showVariantFields && serviceVariants.length > 1 && (
+          <button
+            type="button"
+            className="remove-variant-btn"
+            onClick={() => setShowVariantFields(false)}
+          >
+            <FontAwesomeIcon icon={faTrash} /> Remove Last Variant
+          </button>
+        )}
       </div>
 
       <div className="form-group">
         <label>Locations:</label>
-        <div>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={locationInput}
-            onChange={(e) => setLocationInput(e.target.value)}
-          />
-          <button
-            type="button"
-            className="service-button add-location"
-            onClick={handleAddLocation}
-          >
-            Add Location
-          </button>
-        </div>
-        <ul>
-          {locations.map((location, index) => (
-            <li key={index}>
-              {location}
-              <button
-                type="button"
-                className="service-button remove-location"
-                onClick={() => handleRemoveLocation(index)}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            </li>
-          ))}
-        </ul>
+        <input
+          type="text"
+          className="service-input-borders"
+          value={locationInput}
+          onChange={(e) => setLocationInput(e.target.value)}
+        />
+        <button type="button" onClick={handleAddLocation}>
+          Add Location
+        </button>
+        {locations.map((location, index) => (
+          <div key={index} className="location-item">
+            <span>{location}</span>
+            <button
+              type="button"
+              className="remove-location-btn"
+              onClick={() => handleRemoveLocation(index)}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+          </div>
+        ))}
       </div>
 
       <div className="form-group">
@@ -352,52 +343,68 @@ const AddServiceForm = ({ category, onSubmit }) => {
       </div>
 
       <div className="form-group">
-        <label>Most Booked:</label>
+        <label>Misc Fee:</label>
         <input
-          type="checkbox"
-          checked={isMostBooked}
-          onChange={() => setIsMostBooked(!isMostBooked)}
+          type="number"
+          className="service-input-borders"
+          value={miscFee}
+          onChange={(e) => setMiscFee(e.target.value)}
+        />
+        {errors.miscFee && <span className="error">{errors.miscFee}</span>}
+      </div>
+
+      <div className="form-group">
+        <label>Service Image:</label>
+        <input
+          type="file"
+          className="service-input-borders"
+          accept="image/*"
+          onChange={handleImageChange}
         />
       </div>
 
       <div className="form-group">
-        <label>Tag:</label>
-        <input
-          type="checkbox"
-          checked={tag}
-          onChange={() => setTag(!tag)}
-        />
+        <label>
+          <input
+            type="checkbox"
+            checked={isMostBooked}
+            onChange={() => setIsMostBooked(!isMostBooked)}
+          />
+          Most Booked
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={tag}
+            onChange={() => setTag(!tag)}
+          />
+          Tag
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={isCash}
+            onChange={() => setIsCash(!isCash)}
+          />
+          Cash Payment
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={creditEligibility}
+            onChange={() => setCreditEligibility(!creditEligibility)}
+          />
+          Credit Eligibility
+        </label>
       </div>
 
-      <div className="form-group">
-        <label>Cash Payment Accepted:</label>
-        <input
-          type="checkbox"
-          checked={isCash}
-          onChange={() => setIsCash(!isCash)}
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Credit Eligibility:</label>
-        <input
-          type="checkbox"
-          checked={creditEligibility}
-          onChange={() => setCreditEligibility(!creditEligibility)}
-        />
-      </div>
-
-      <div className="form-group">
-        <button type="submit" className="service-button submit">
-          Submit
-        </button>
-      </div>
+      <button type="submit" className="submit-btn">Submit</button>
     </form>
   );
 };
 
 AddServiceForm.propTypes = {
-  categoryId: PropTypes.string.isRequired,
+  category: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };
 

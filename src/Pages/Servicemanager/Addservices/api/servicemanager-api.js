@@ -32,10 +32,18 @@ export const addSubCategory = (formData) => {
   });
 };
 
-export const addService = (serviceData) => {
-  return axios.post(`${API_BASE_URL}/services`, serviceData, {
+export const addService = (formData) => {
+  console.log("the formData sent to api", formData);
+
+  // Ensure that the formData is an instance of FormData
+  if (!(formData instanceof FormData)) {
+    console.error("Provided formData is not an instance of FormData");
+    return;
+  }
+
+  return axios.post(`${API_BASE_URL}/services`, formData, {
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data", // Adjust header for FormData
     },
   });
 };
