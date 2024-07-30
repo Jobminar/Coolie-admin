@@ -159,8 +159,9 @@ const Servermanager = () => {
   };
 
   const handleAddSubCategory = async () => {
+    
     setSubCategoryError("");
-    if (subCategoryName.trim() === "" || !subCategoryIcon || !categoryId) {
+    if (subCategoryName.trim() === "" || !subCategoryIcon || !selectedCategory._id) {
       setSubCategoryError("All fields are required.");
       return;
     }
@@ -168,7 +169,7 @@ const Servermanager = () => {
     const formData = new FormData();
     formData.append("name", subCategoryName);
     formData.append("image", subCategoryIcon);
-    formData.append("categoryId", categoryId);
+    formData.append("categoryId", selectedCategory._id);
     formData.append("isActive", true);
     formData.append("isDeleted", false);
 
