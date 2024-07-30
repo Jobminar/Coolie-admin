@@ -10,7 +10,7 @@ const CategoryForm = ({
   handleCategoryIconChange,
   categoryIcon,
   handleAddCategory,
-  setServiceTypes, // New prop to set service types
+  setUiVariants, // Updated prop name
 }) => {
   const [serviceTypeSelection, setServiceTypeSelection] = useState("");
 
@@ -21,18 +21,20 @@ const CategoryForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const selectedServiceTypes = [];
+    const selectedUiVariants = [];
+
     if (serviceTypeSelection === "Cleaning") {
-      selectedServiceTypes.push("Normal cleaning", "Deep cleaning");
+      selectedUiVariants.push("Normal cleaning", "Deep cleaning");
     }
     if (serviceTypeSelection === "Gender") {
-      selectedServiceTypes.push("Male", "Female");
+      selectedUiVariants.push("Male", "Female");
     }
     if (serviceTypeSelection === "Time") {
-      selectedServiceTypes.push("Hour", "Daily", "Monthly");
+      selectedUiVariants.push("Hour", "Daily", "Monthly");
     }
-    setServiceTypes(selectedServiceTypes); // Pass selected service types to parent
-    handleAddCategory(); // Add category after setting service types
+
+    setUiVariants(selectedUiVariants); // Pass selected UI variants to parent
+    handleAddCategory(selectedUiVariants); // Add category after setting UI variants
   };
 
   return (
@@ -132,7 +134,7 @@ CategoryForm.propTypes = {
   handleCategoryIconChange: PropTypes.func.isRequired,
   categoryIcon: PropTypes.instanceOf(File),
   handleAddCategory: PropTypes.func.isRequired,
-  setServiceTypes: PropTypes.func.isRequired, // New prop type
+  setUiVariants: PropTypes.func.isRequired, // Updated prop type
 };
 
 export default CategoryForm;

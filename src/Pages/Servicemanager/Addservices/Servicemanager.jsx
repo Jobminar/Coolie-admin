@@ -25,7 +25,7 @@ const Servermanager = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [categoryId, setCategoryId] = useState(null);
   const [subCategoryId, setSubCategoryId] = useState(null);
-  const [serviceTypes, setServiceTypes] = useState([]);
+  const [uiVariants, setUiVariants] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [services, setServices] = useState([]);
@@ -125,8 +125,8 @@ const Servermanager = () => {
   }, [subCategoryId]);
 
   useEffect(() => {
-    console.log("State changed: serviceTypes", serviceTypes);
-  }, [serviceTypes]);
+    console.log("State changed: uiVariants", uiVariants);
+  }, [uiVariants]);
 
   useEffect(() => {
     console.log("State changed: categories", categories);
@@ -265,8 +265,7 @@ const Servermanager = () => {
       console.log("Subcategory icon selected:", e.target.files[0]);
     }
   };
-
-  const handleAddCategory = async () => {
+  const handleAddCategory = async (UiVariant) => {
     setCategoryError("");
 
     if (categoryName.trim() === "") {
@@ -280,6 +279,12 @@ const Servermanager = () => {
     formData.append("isDeleted", false);
     if (categoryIcon) {
       formData.append("image", categoryIcon);
+    }
+    UiVariant.forEach((variant) => formData.append("uiVariant", variant)); // Append each variant separately
+
+    // Log FormData entries to check if UiVariant is included
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
     }
 
     try {
@@ -296,7 +301,9 @@ const Servermanager = () => {
       setReload(!reload);
     } catch (error) {
       console.error("Error during category addition:", error);
-      setCategoryError(error.message || "An error occurred");
+      setCategoryError(
+        error.response?.data?.message || error.message || "An error occurred",
+      );
     }
   };
 
@@ -434,7 +441,7 @@ const Servermanager = () => {
 
         {showAddCategoryForm && (
           <CategoryForm
-            setServiceTypes={setServiceTypes}
+            setUiVariants={setUiVariants}
             {...{
               categoryName,
               setCategoryName,
@@ -562,7 +569,7 @@ const Servermanager = () => {
       {showServiceForm && (
         <AddServiceForm
           onSubmit={handleAddService}
-          serviceTypes={serviceTypes}
+          serviceTypes={uiVariants} // Updated prop name
         />
       )}
       {selectedService && (

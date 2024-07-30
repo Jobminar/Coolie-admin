@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
-
 import ManageService from "./Pages/Servicemanager/Manageservices/ManageService";
 import Providerscorner from "./Pages/Providerscorner/Providerscorner";
 import Loyalitycards from "./Pages/Loyalitycards/Loyalitycards";
