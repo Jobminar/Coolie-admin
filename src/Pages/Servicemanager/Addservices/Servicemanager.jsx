@@ -568,8 +568,9 @@ const Servermanager = () => {
 
       {showServiceForm && (
         <AddServiceForm
+        category={selectedCategory}
           onSubmit={handleAddService}
-          serviceTypes={uiVariants} // Updated prop name
+
         />
       )}
       {selectedService && (
