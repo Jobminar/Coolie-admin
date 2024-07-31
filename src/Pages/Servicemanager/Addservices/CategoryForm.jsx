@@ -10,13 +10,22 @@ const CategoryForm = ({
   handleCategoryIconChange,
   categoryIcon,
   handleAddCategory,
-  setUiVariants, // Updated prop name
+  setUiVariants,
 }) => {
   const [serviceTypeSelection, setServiceTypeSelection] = useState("");
+  const [imageError, setImageError] = useState("");
 
   const handleServiceTypeChange = (e) => {
     const { value } = e.target;
     setServiceTypeSelection(value);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageError("");
+      handleCategoryIconChange(e);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -25,16 +34,16 @@ const CategoryForm = ({
 
     if (serviceTypeSelection === "Cleaning") {
       selectedUiVariants.push("Normal cleaning", "Deep cleaning");
-    }
-    if (serviceTypeSelection === "Gender") {
+    } else if (serviceTypeSelection === "Gender") {
       selectedUiVariants.push("Male", "Female");
-    }
-    if (serviceTypeSelection === "Time") {
+    } else if (serviceTypeSelection === "Time") {
       selectedUiVariants.push("Hour", "Daily", "Monthly");
+    } else if (serviceTypeSelection === "None") {
+      selectedUiVariants.push("None");
     }
 
-    setUiVariants(selectedUiVariants); // Pass selected UI variants to parent
-    handleAddCategory(selectedUiVariants); // Add category after setting UI variants
+    setUiVariants(selectedUiVariants);
+    handleAddCategory(selectedUiVariants);
   };
 
   return (
@@ -59,7 +68,7 @@ const CategoryForm = ({
         <input
           type="file"
           id="categoryIcon"
-          onChange={handleCategoryIconChange}
+          onChange={handleFileChange}
           className="servermanager-file-upload"
           aria-label="Category Icon"
         />
@@ -73,6 +82,7 @@ const CategoryForm = ({
             className="servermanager-upload-icon"
           />
         </label>
+        {imageError && <span className="error">{imageError}</span>}
         {categoryIcon && (
           <img
             src={URL.createObjectURL(categoryIcon)}
@@ -114,6 +124,16 @@ const CategoryForm = ({
             />
             Time (Hour/Daily/Monthly)
           </label>
+          <label>
+            <input
+              type="radio"
+              name="serviceType"
+              value="None"
+              checked={serviceTypeSelection === "None"}
+              onChange={handleServiceTypeChange}
+            />
+            None
+          </label>
         </div>
       </div>
       <button
@@ -134,7 +154,7 @@ CategoryForm.propTypes = {
   handleCategoryIconChange: PropTypes.func.isRequired,
   categoryIcon: PropTypes.instanceOf(File),
   handleAddCategory: PropTypes.func.isRequired,
-  setUiVariants: PropTypes.func.isRequired, // Updated prop type
+  setUiVariants: PropTypes.func.isRequired,
 };
 
 export default CategoryForm;
