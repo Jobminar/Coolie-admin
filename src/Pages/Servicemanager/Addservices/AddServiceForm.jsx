@@ -17,7 +17,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
   const [platformCommission, setPlatformCommission] = useState("");
   const [miscFee, setMiscFee] = useState("");
   const [serviceVariants, setServiceVariants] = useState([
-    { variantName: "", price: "", serviceTime: "", metric: "", min: 1, max: 1 },
+    { variantName: "", price: "", serviceTime: "", metric: "", min: 0, max: 1 },
   ]);
   const [showVariantFields, setShowVariantFields] = useState(false);
   const [errors, setErrors] = useState({});
@@ -53,7 +53,14 @@ const AddServiceForm = ({ category, onSubmit }) => {
     setShowVariantFields(true);
     setServiceVariants([
       ...serviceVariants,
-      { variantName: "", price: "", serviceTime: "", metric: "", min: 1, max: 1 },
+      {
+        variantName: "",
+        price: "",
+        serviceTime: "",
+        metric: "",
+        min: 0,
+        max: 1,
+      },
     ]);
   };
 
@@ -66,7 +73,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
 
   const handleVariantChange = (index, field, value) => {
     const newVariants = serviceVariants.map((variant, i) =>
-      i === index ? { ...variant, [field]: value } : variant
+      i === index ? { ...variant, [field]: value } : variant,
     );
     setServiceVariants(newVariants);
   };
@@ -134,9 +141,15 @@ const AddServiceForm = ({ category, onSubmit }) => {
     formData.append("isDeleted", false);
 
     serviceVariants.forEach((variant, index) => {
-      formData.append(`serviceVariants[${index}][variantName]`, variant.variantName);
+      formData.append(
+        `serviceVariants[${index}][variantName]`,
+        variant.variantName,
+      );
       formData.append(`serviceVariants[${index}][price]`, variant.price);
-      formData.append(`serviceVariants[${index}][serviceTime]`, variant.serviceTime);
+      formData.append(
+        `serviceVariants[${index}][serviceTime]`,
+        variant.serviceTime,
+      );
       formData.append(`serviceVariants[${index}][metric]`, variant.metric);
       formData.append(`serviceVariants[${index}][min]`, variant.min);
       formData.append(`serviceVariants[${index}][max]`, variant.max);
@@ -155,9 +168,9 @@ const AddServiceForm = ({ category, onSubmit }) => {
   };
 
   return (
-    <form className="add-serviceForm-new" onSubmit={handleSubmit}>
+    <form className="servermanager-add-service-form" onSubmit={handleSubmit}>
       <h3>Add Service</h3>
-      <div className="form-group">
+      <div className="servermanager-form-group">
         <label>Service Name:</label>
         <input
           type="text"
@@ -170,10 +183,10 @@ const AddServiceForm = ({ category, onSubmit }) => {
         )}
       </div>
 
-      <div className="form-group">
+      <div className="servermanager-form-group">
         <label>Description:</label>
         <textarea
-          className="textarea-input"
+          className="servermanager-textarea-input"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
@@ -182,7 +195,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
         )}
       </div>
 
-      <div className="form-group">
+      <div className="servermanager-form-group">
         <label>Service Variants:</label>
         {serviceVariants.map((variant, index) => (
           <div key={index} className="variant-input-group">
@@ -252,7 +265,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
               type="number"
               className="service-input-borders"
               placeholder="Min"
-              min="1"
+              min="0"
               value={variant.min}
               onChange={(e) =>
                 handleVariantChange(index, "min", e.target.value)
@@ -262,7 +275,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
               type="number"
               className="service-input-borders"
               placeholder="Max"
-              min="1"
+              max="1"
               value={variant.max}
               onChange={(e) =>
                 handleVariantChange(index, "max", e.target.value)
@@ -270,20 +283,24 @@ const AddServiceForm = ({ category, onSubmit }) => {
             />
             <button
               type="button"
-              className="remove-variant-btn"
+              className="servermanager-cancel-icon"
               onClick={() => handleRemoveVariant(index)}
             >
               <FontAwesomeIcon icon={faTrash} />
             </button>
           </div>
         ))}
-        <button type="button" onClick={handleAddVariant}>
-          <FontAwesomeIcon icon={faPlus} /> Add Variant
+        <button
+          type="button"
+          className="servermanager-add-button"
+          onClick={handleAddVariant}
+        >
+          <FontAwesomeIcon icon={faPlus} /><h6>Add a new UI Variant</h6>
         </button>
         {showVariantFields && serviceVariants.length > 1 && (
           <button
             type="button"
-            className="remove-variant-btn"
+            className="servermanager-cancel-icon"
             onClick={() => setShowVariantFields(false)}
           >
             <FontAwesomeIcon icon={faTrash} /> Remove Last Variant
@@ -291,23 +308,30 @@ const AddServiceForm = ({ category, onSubmit }) => {
         )}
       </div>
 
-      <div className="form-group">
+      <div className="servermanager-form-group">
         <label>Locations:</label>
-        <input
-          type="text"
-          className="service-input-borders"
-          value={locationInput}
-          onChange={(e) => setLocationInput(e.target.value)}
-        />
-        <button type="button" onClick={handleAddLocation}>
-          Add Location
-        </button>
+        <div className="location-input-group">
+          <input
+            type="text"
+            className="service-input-borders"
+            value={locationInput}
+            onChange={(e) => setLocationInput(e.target.value)}
+            placeholder="Type a new location"
+          />
+          <button
+            type="button"
+            className="servermanager-add-button"
+            onClick={handleAddLocation}
+          >
+            <FontAwesomeIcon icon={faPlus} /><h6>Click here to add the new location</h6>
+          </button>
+        </div>
         {locations.map((location, index) => (
-          <div key={index} className="location-item">
+          <div key={index} className="servermanager-menu-item">
             <span>{location}</span>
             <button
               type="button"
-              className="remove-location-btn"
+              className="servermanager-cancel-icon"
               onClick={() => handleRemoveLocation(index)}
             >
               <FontAwesomeIcon icon={faTrash} />
@@ -316,7 +340,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
         ))}
       </div>
 
-      <div className="form-group">
+      <div className="servermanager-form-group">
         <label>Tax Percentage:</label>
         <input
           type="number"
@@ -329,7 +353,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
         )}
       </div>
 
-      <div className="form-group">
+      <div className="servermanager-form-group">
         <label>Platform Commission:</label>
         <input
           type="number"
@@ -342,7 +366,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
         )}
       </div>
 
-      <div className="form-group">
+      <div className="servermanager-form-group">
         <label>Misc Fee:</label>
         <input
           type="number"
@@ -353,7 +377,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
         {errors.miscFee && <span className="error">{errors.miscFee}</span>}
       </div>
 
-      <div className="form-group">
+      <div className="servermanager-form-group">
         <label>Service Image:</label>
         <input
           type="file"
@@ -363,42 +387,48 @@ const AddServiceForm = ({ category, onSubmit }) => {
         />
       </div>
 
-      <div className="form-group">
+      <div className="servermanager-toggle-group">
         <label>
+          Most Booked
           <input
             type="checkbox"
+            className="servermanager-toggle-input"
             checked={isMostBooked}
             onChange={() => setIsMostBooked(!isMostBooked)}
           />
-          Most Booked
         </label>
         <label>
+          Tag
           <input
             type="checkbox"
+            className="servermanager-toggle-input"
             checked={tag}
             onChange={() => setTag(!tag)}
           />
-          Tag
         </label>
         <label>
+          Cash Payment
           <input
             type="checkbox"
+            className="servermanager-toggle-input"
             checked={isCash}
             onChange={() => setIsCash(!isCash)}
           />
-          Cash Payment
         </label>
         <label>
+          Credit Eligibility
           <input
             type="checkbox"
+            className="servermanager-toggle-input"
             checked={creditEligibility}
             onChange={() => setCreditEligibility(!creditEligibility)}
           />
-          Credit Eligibility
         </label>
       </div>
 
-      <button type="submit" className="submit-btn">Submit</button>
+      <button type="submit" className="servermanager-submissionbutton">
+        Submit
+      </button>
     </form>
   );
 };

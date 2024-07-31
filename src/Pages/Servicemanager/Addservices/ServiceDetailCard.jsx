@@ -11,8 +11,8 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
   const [serviceData, setServiceData] = useState({
     name: service.name,
     serviceType: service.serviceVariants[0]?.variantName || "",
-    price: service.serviceVariants[0]?.price || "",
-    serviceTime: service.serviceVariants[0]?.serviceTime || "",
+    price: service.serviceVariants[0]?.price || 0,
+    serviceTime: service.serviceVariants[0]?.serviceTime || 0,
     metric: service.serviceVariants[0]?.metric || "",
     min: service.serviceVariants[0]?.min || "",
     max: service.serviceVariants[0]?.max || "",
@@ -34,8 +34,8 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
     setServiceData({
       name: service.name,
       serviceType: service.serviceVariants[0]?.variantName || "",
-      price: service.serviceVariants[0]?.price || "",
-      serviceTime: service.serviceVariants[0]?.serviceTime || "",
+      price: service.serviceVariants[0]?.price || 0,
+      serviceTime: service.serviceVariants[0]?.serviceTime || 0,
       metric: service.serviceVariants[0]?.metric || "",
       min: service.serviceVariants[0]?.min || "",
       max: service.serviceVariants[0]?.max || "",
@@ -228,8 +228,8 @@ ServiceDetailCard.propTypes = {
     serviceVariants: PropTypes.arrayOf(
       PropTypes.shape({
         variantName: PropTypes.string,
-        price: PropTypes.string,
-        serviceTime: PropTypes.string,
+        price: PropTypes.number,
+        serviceTime: PropTypes.number,
         metric: PropTypes.string,
         min: PropTypes.number,
         max: PropTypes.number,
