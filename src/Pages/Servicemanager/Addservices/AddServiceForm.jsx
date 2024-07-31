@@ -59,7 +59,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
         serviceTime: "",
         metric: "",
         min: 0,
-        max: 1,
+        max: 100,
       },
     ]);
   };
@@ -275,7 +275,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
               type="number"
               className="service-input-borders"
               placeholder="Max"
-              max="1"
+              max="100"
               value={variant.max}
               onChange={(e) =>
                 handleVariantChange(index, "max", e.target.value)
@@ -295,7 +295,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
           className="servermanager-add-button"
           onClick={handleAddVariant}
         >
-          <FontAwesomeIcon icon={faPlus} /><h6>Add a new UI Variant</h6>
+          <FontAwesomeIcon icon={faPlus} /> <h6>Add a new UI Variant</h6>
         </button>
         {showVariantFields && serviceVariants.length > 1 && (
           <button
@@ -323,7 +323,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
             className="servermanager-add-button"
             onClick={handleAddLocation}
           >
-            <FontAwesomeIcon icon={faPlus} /><h6>Click here to add the new location</h6>
+            <FontAwesomeIcon icon={faPlus} /> <h6>Click here to add the new location</h6>
           </button>
         </div>
         {locations.map((location, index) => (

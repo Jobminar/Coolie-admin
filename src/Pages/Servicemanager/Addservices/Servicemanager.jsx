@@ -227,7 +227,7 @@ const Servermanager = () => {
             <div className="servermanager-category-header">
               <span>Select Category</span>
               <button
-                className="servermanager-add-button"
+                className="servermanager-main-add-button"
                 onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}
               >
                 +
@@ -281,7 +281,7 @@ const Servermanager = () => {
               <div className="servermanager-category-header">
                 <span>Select Sub-Category</span>
                 <button
-                  className="servermanager-add-button"
+                  className="servermanager-main-add-button"
                   onClick={() => setShowAddSubCategoryForm(!showAddSubCategoryForm)}
                 >
                   +
@@ -337,7 +337,7 @@ const Servermanager = () => {
               <div className="servermanager-category-header">
                 <span>Select Service</span>
                 <button
-                  className="servermanager-add-button"
+                  className="servermanager-main-add-button"
                   onClick={toggleServiceForm}
                 >
                   +
