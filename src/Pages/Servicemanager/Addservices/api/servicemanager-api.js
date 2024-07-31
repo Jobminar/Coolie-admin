@@ -1,5 +1,5 @@
 import axios from "axios";
-
+//new url added
 const API_BASE_URL = "http://13.126.118.3:3000/v1.0/core";
 
 export const fetchCategories = () => {
