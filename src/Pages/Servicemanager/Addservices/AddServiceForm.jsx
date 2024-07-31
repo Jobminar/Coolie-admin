@@ -25,7 +25,7 @@ const AddServiceForm = ({ category, onSubmit }) => {
   const [imageFile, setImageFile] = useState(null);
 
   const fetchUiVariant = async (category) => {
-    const API_BASE_URL = "https://api.coolieno1.in/v1.0/core";
+    const API_BASE_URL = "http://13.126.118.3:3000/v1.0/core";
     const response = await fetch(`${API_BASE_URL}/categories/${category._id}`);
     const data = await response.json();
     return data.uiVariant;
