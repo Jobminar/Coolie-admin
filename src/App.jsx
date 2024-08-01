@@ -1,17 +1,16 @@
-import Routing from "./Routing"
-import './App.css'
-
+import Routing from "./Routing";
+import "./App.css";
+import { Toaster } from "react-hot-toast";
 
 function App() {
-  
-
   return (
     <>
-        <div className="App">
-        <Routing/>
-        </div>      
+      <div className="App">
+        <Toaster />
+        <Routing />
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

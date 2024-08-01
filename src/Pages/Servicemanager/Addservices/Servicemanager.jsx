@@ -34,62 +34,91 @@ const Servermanager = () => {
   useEffect(() => {
     api
       .fetchCategories()
-      .then((response) => setCategories(response.data))
+      .then((response) => {
+        setCategories(response.data);
+        const lastCategoryId = sessionStorage.getItem("categoryId");
+        if (lastCategoryId) {
+          const lastCategory = response.data.find(
+            (cat) => cat._id === lastCategoryId,
+          );
+          if (lastCategory) {
+            selectedCategoryRef.current = lastCategory;
+            fetchSubcategories(lastCategoryId);
+          }
+        }
+      })
       .catch((error) => console.error("Error fetching categories:", error));
   }, [reload]);
 
   useEffect(() => {
-    const storedCategoryId = sessionStorage.getItem("categoryId");
     const storedSubCategoryId = sessionStorage.getItem("subCategoryId");
-
-    if (storedCategoryId) {
-      fetchSubcategories(storedCategoryId);
-    }
 
     if (storedSubCategoryId) {
       fetchServices(storedSubCategoryId);
     }
   }, [reload]);
 
-  const fetchSubcategories = useMemo(() => (categoryId) => {
-    if (!categoryId) return;
-    api
-      .fetchSubcategories(categoryId)
-      .then((response) => {
-        setSubCategories(response.data);
-        setSubCategoryErrorStatus(false);
-        const selectedCategory = categories.find((cat) => cat._id === categoryId);
-        selectedCategoryRef.current = selectedCategory;
-        sessionStorage.setItem("categoryId", categoryId);
-        setServices([]);
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 404) {
-          setSubCategoryErrorStatus(true);
-          setSubCategories([]);
-          const selectedCategory = categories.find((cat) => cat._id === categoryId);
+  const fetchSubcategories = useMemo(
+    () => (categoryId) => {
+      if (!categoryId) return;
+      api
+        .fetchSubcategories(categoryId)
+        .then((response) => {
+          setSubCategories(response.data);
+          setSubCategoryErrorStatus(false);
+          const selectedCategory = categories.find(
+            (cat) => cat._id === categoryId,
+          );
           selectedCategoryRef.current = selectedCategory;
           sessionStorage.setItem("categoryId", categoryId);
-          setServices([]);
-        }
-      });
-  }, [categories]);
 
-  const fetchServices = useMemo(() => (subCategoryId) => {
-    if (!selectedCategoryRef.current || !subCategoryId) return;
-    api
-      .fetchServices(selectedCategoryRef.current._id, subCategoryId)
-      .then((response) => {
-        setServices(response.data.data);
-        setShowServiceList(true);
-        setSelectedService(null);
-        sessionStorage.setItem("subCategoryId", subCategoryId);
-      })
-      .catch((error) => {
-        console.error("Error fetching services:", error);
-        setShowServiceList(false);
-      });
-  }, []);
+          const lastSubCategoryId = sessionStorage.getItem("subCategoryId");
+          if (lastSubCategoryId) {
+            const lastSubCategory = response.data.find(
+              (subCat) => subCat._id === lastSubCategoryId,
+            );
+            if (lastSubCategory) {
+              selectedSubCategoryRef.current = lastSubCategory;
+              fetchServices(lastSubCategoryId);
+            }
+          } else {
+            setServices([]);
+          }
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 404) {
+            setSubCategoryErrorStatus(true);
+            setSubCategories([]);
+            const selectedCategory = categories.find(
+              (cat) => cat._id === categoryId,
+            );
+            selectedCategoryRef.current = selectedCategory;
+            sessionStorage.setItem("categoryId", categoryId);
+            setServices([]);
+          }
+        });
+    },
+    [categories],
+  );
+
+  const fetchServices = useMemo(
+    () => (subCategoryId) => {
+      if (!selectedCategoryRef.current || !subCategoryId) return;
+      api
+        .fetchServices(selectedCategoryRef.current._id, subCategoryId)
+        .then((response) => {
+          setServices(response.data.data);
+          setShowServiceList(true);
+          setSelectedService(null);
+          sessionStorage.setItem("subCategoryId", subCategoryId);
+        })
+        .catch((error) => {
+          console.error("Error fetching services:", error);
+          setShowServiceList(false);
+        });
+    },
+    [],
+  );
 
   const handleCategorySelect = (categoryId) => {
     if (categoryId === "Add new category") {
@@ -109,7 +138,9 @@ const Servermanager = () => {
       setShowServiceForm(false);
     } else {
       fetchServices(subCategoryId);
-      const selectedSubCategory = subCategories.find((subCat) => subCat._id === subCategoryId);
+      const selectedSubCategory = subCategories.find(
+        (subCat) => subCat._id === subCategoryId,
+      );
       selectedSubCategoryRef.current = selectedSubCategory;
       setShowAddSubCategoryForm(false);
       setShowServiceVariantsMenu(true);
@@ -124,8 +155,12 @@ const Servermanager = () => {
     } else {
       setSelectedService(service);
       setShowServiceForm(false);
-      const selectedCategory = categories.find((cat) => cat._id === service.categoryId._id);
-      const selectedSubCategory = subCategories.find((subCat) => subCat._id === service.subCategoryId._id);
+      const selectedCategory = categories.find(
+        (cat) => cat._id === service.categoryId._id,
+      );
+      const selectedSubCategory = subCategories.find(
+        (subCat) => subCat._id === service.subCategoryId._id,
+      );
       selectedCategoryRef.current = selectedCategory;
       selectedSubCategoryRef.current = selectedSubCategory;
     }
@@ -159,19 +194,29 @@ const Servermanager = () => {
 
     try {
       const response = await api.addCategory(formData);
+      const newCategory = response.data;
       setShowAddSubCategoryForm(true);
       setShowAddCategoryForm(false);
       setCategoryName("");
       setCategoryIcon(null);
       setReload(!reload);
+      selectedCategoryRef.current = newCategory;
+      sessionStorage.setItem("categoryId", newCategory._id);
+      fetchSubcategories(newCategory._id); // Fetch subcategories for the new category
     } catch (error) {
-      setCategoryError(error.response?.data?.message || error.message || "An error occurred");
+      setCategoryError(
+        error.response?.data?.message || error.message || "An error occurred",
+      );
     }
   };
 
   const handleAddSubCategory = async () => {
     setSubCategoryError("");
-    if (subCategoryName.trim() === "" || !subCategoryIcon || !selectedCategoryRef.current._id) {
+    if (
+      subCategoryName.trim() === "" ||
+      !subCategoryIcon ||
+      !selectedCategoryRef.current._id
+    ) {
       setSubCategoryError("All fields are required.");
       return;
     }
@@ -185,9 +230,13 @@ const Servermanager = () => {
 
     try {
       const response = await api.addSubCategory(formData);
+      const newSubCategory = response.data;
       setShowAddSubCategoryForm(false);
       setShowServiceForm(true);
       setReload(!reload);
+      selectedSubCategoryRef.current = newSubCategory;
+      sessionStorage.setItem("subCategoryId", newSubCategory._id);
+      fetchServices(newSubCategory._id); // Fetch services for the new subcategory
     } catch (error) {
       setSubCategoryError(error.message || "An error occurred");
     }
@@ -247,7 +296,8 @@ const Servermanager = () => {
                   <div
                     key={category._id}
                     className={`servermanager-menu-item ${
-                      selectedCategoryRef.current && selectedCategoryRef.current._id === category._id
+                      selectedCategoryRef.current &&
+                      selectedCategoryRef.current._id === category._id
                         ? "selected"
                         : ""
                     }`}
@@ -282,7 +332,9 @@ const Servermanager = () => {
                 <span>Select Sub-Category</span>
                 <button
                   className="servermanager-main-add-button"
-                  onClick={() => setShowAddSubCategoryForm(!showAddSubCategoryForm)}
+                  onClick={() =>
+                    setShowAddSubCategoryForm(!showAddSubCategoryForm)
+                  }
                 >
                   +
                 </button>
@@ -300,7 +352,8 @@ const Servermanager = () => {
                   <div
                     key={subCategory._id}
                     className={`servermanager-menu-item ${
-                      selectedSubCategoryRef.current && selectedSubCategoryRef.current._id === subCategory._id
+                      selectedSubCategoryRef.current &&
+                      selectedSubCategoryRef.current._id === subCategory._id
                         ? "selected"
                         : ""
                     }`}
@@ -344,7 +397,9 @@ const Servermanager = () => {
                 </button>
                 <button
                   className="servermanager-hamburger-icon"
-                  onClick={() => setShowServiceVariantsMenu(!showServiceVariantsMenu)}
+                  onClick={() =>
+                    setShowServiceVariantsMenu(!showServiceVariantsMenu)
+                  }
                 >
                   &#9776;
                 </button>
@@ -364,9 +419,10 @@ const Servermanager = () => {
                       onClick={() => handleServiceSelect(service)}
                     >
                       {service.name}
-                      {service.serviceVariants && service.serviceVariants.length > 0 && (
-                        <span> (₹{service.serviceVariants[0].price})</span>
-                      )}
+                      {service.serviceVariants &&
+                        service.serviceVariants.length > 0 && (
+                          <span> (₹{service.serviceVariants[0].price})</span>
+                        )}
                     </div>
                   ))
                 ) : (
