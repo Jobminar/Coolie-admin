@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import toast from "react-hot-toast";
 
 const Services = ({
   services,
@@ -14,22 +17,50 @@ const Services = ({
   API_BASE_URL,
 }) => {
   const handleDeleteService = (serviceId) => {
-    if (window.confirm("Are you sure you want to delete this service?")) {
-      axios
-        .delete(`${API_BASE_URL}/v1.0/core/services/${serviceId}`)
-        .then((response) => {
-          setServices((prev) =>
-            prev.filter((service) => service._id !== serviceId),
-          );
-        })
-        .catch((error) => console.error("Error deleting service:", error));
-    }
+    confirmAlert({
+      title: "Confirm",
+      message: "Are you sure you want to delete this service?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            axios
+              .delete(`${API_BASE_URL}/v1.0/core/services/${serviceId}`)
+              .then((response) => {
+                setServices((prev) =>
+                  prev.filter((service) => service._id !== serviceId),
+                );
+                toast.success("Service deleted successfully.");
+              })
+              .catch((error) => {
+                console.error("Error deleting service:", error);
+                toast.error("Error deleting service.");
+              });
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
   };
 
   const handleEditService = (service) => {
-    if (window.confirm("Are you sure you want to edit this service?")) {
-      setSelectedService(service);
-    }
+    confirmAlert({
+      title: "Confirm",
+      message: "Are you sure you want to edit this service?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            setSelectedService(service);
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
   };
 
   return (

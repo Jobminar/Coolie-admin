@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import toast from "react-hot-toast";
 
 const SubCategories = ({
   subCategories,
@@ -23,23 +26,53 @@ const SubCategories = ({
   };
 
   const handleDeleteSubCategory = (subCategoryId) => {
-    if (window.confirm("Are you sure you want to delete this sub-category?")) {
-      axios
-        .delete(`${API_BASE_URL}/v1.0/core/sub-categories/${subCategoryId}`)
-        .then(() => {
-          setSubCategories((prev) =>
-            prev.filter((sub) => sub._id !== subCategoryId),
-          );
-        })
-        .catch((error) => console.error("Error deleting sub-category:", error));
-    }
+    confirmAlert({
+      title: "Confirm",
+      message: "Are you sure you want to delete this sub-category?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            axios
+              .delete(
+                `${API_BASE_URL}/v1.0/core/sub-categories/${subCategoryId}`,
+              )
+              .then(() => {
+                setSubCategories((prev) =>
+                  prev.filter((sub) => sub._id !== subCategoryId),
+                );
+                toast.success("Sub-category deleted successfully.");
+              })
+              .catch((error) => {
+                console.error("Error deleting sub-category:", error);
+                toast.error("Error deleting sub-category.");
+              });
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
   };
 
   const handleEditSubCategory = (subCategory) => {
-    if (window.confirm("Are you sure you want to edit this sub-category?")) {
-      setSelectedSubCategory(subCategory);
-      setShowEditSubCategoryForm(true);
-    }
+    confirmAlert({
+      title: "Confirm",
+      message: "Are you sure you want to edit this sub-category?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            setSelectedSubCategory(subCategory);
+            setShowEditSubCategoryForm(true);
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
   };
 
   return (

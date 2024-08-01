@@ -323,7 +323,8 @@ const AddServiceForm = ({ category, onSubmit }) => {
             className="servermanager-add-button"
             onClick={handleAddLocation}
           >
-            <FontAwesomeIcon icon={faPlus} /> <h6>Click here to add the new location</h6>
+            <FontAwesomeIcon icon={faPlus} />{" "}
+            <h6>Click here to add the new location</h6>
           </button>
         </div>
         {locations.map((location, index) => (

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
-import "./styles/serviceform.css"; // Ensure the CSS file is correctly linked
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import "./styles/serviceform.css";
 
 const EditServiceForm = ({
   service,
@@ -10,111 +12,202 @@ const EditServiceForm = ({
   onSave,
   onClose,
 }) => {
-  // Console logs to verify the props being passed
-  console.log("service prop:", service);
-  console.log("category prop:", category);
-  console.log("subCategory prop:", subCategory);
-  const [categoryName, setCategoryName] = useState("");
-  const [subCategoryName, setSubCategoryName] = useState("");
-  const [serviceData, setServiceData] = useState({
-    name: "",
-    serviceType: "",
-    price: "",
-    serviceTime: "",
-    metric: "",
-    min: 1,
-    max: 1,
-    description: "",
-    locations: [],
-    taxPercentage: "",
-    isMostBooked: false,
-    tag: false,
-    isCash: false,
-    creditEligibility: false,
-    platformCommission: "",
-    isActive: false,
-    isDeleted: false,
-  });
+  const [serviceName, setServiceName] = useState("");
+  const [description, setDescription] = useState("");
+  const [locations, setLocations] = useState([]);
+  const [locationInput, setLocationInput] = useState("");
+  const [taxPercentage, setTaxPercentage] = useState(0);
+  const [isMostBooked, setIsMostBooked] = useState(false);
+  const [tag, setTag] = useState(false);
+  const [isCash, setIsCash] = useState(false);
+  const [creditEligibility, setCreditEligibility] = useState(false);
+  const [platformCommission, setPlatformCommission] = useState(0);
+  const [miscFee, setMiscFee] = useState(0);
+  const [serviceVariants, setServiceVariants] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [uiVariant, setUiVariant] = useState([]);
+  const [imageFile, setImageFile] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchCategoryName = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.coolieno1.in/v1.0/core/categories/${category}`,
+    const fetchUiVariant = async (category) => {
+      const API_BASE_URL = "https://api.coolieno1.in/v1.0/core";
+      const response = await axios.get(
+        `${API_BASE_URL}/categories/${category}`,
+      );
+      return response.data.uiVariant;
+    };
+
+    const fetchData = async () => {
+      if (category) {
+        const uiVariantData = await fetchUiVariant(category);
+        setUiVariant(uiVariantData);
+      }
+
+      if (service) {
+        setServiceName(service.name || "");
+        setDescription(service.description || "");
+        setLocations(service.locations || []);
+        setTaxPercentage(service.taxPercentage || 0);
+        setIsMostBooked(service.isMostBooked || false);
+        setTag(service.tag || false);
+        setIsCash(service.isCash || false);
+        setCreditEligibility(service.creditEligibility || false);
+        setPlatformCommission(service.platformCommission || 0);
+        setMiscFee(service.miscFee || 0);
+        setServiceVariants(
+          service.serviceVariants.map((variant) => ({
+            variantName: variant.variantName || "",
+            price: variant.price || "",
+            serviceTime: variant.serviceTime || "",
+            metric: variant.metric || "",
+            min: variant.min || 0,
+            max: variant.max || 100,
+          })),
         );
-        setCategoryName(response.data.name);
-      } catch (error) {
-        console.error("Error fetching category name:", error);
       }
     };
 
-    const fetchSubCategoryName = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.coolieno1.in/v1.0/core/sub-categories/category/${category}`,
-        );
-        console.log("Fetched sub-category data:", response.data);
-        setSubCategoryName(response.data.name);
-      } catch (error) {
-        console.error("Error fetching sub-category name:", error);
+    fetchData();
+  }, [category, service]);
+
+  const handleAddLocation = () => {
+    if (locationInput.trim() !== "") {
+      setLocations([...locations, locationInput.trim()]);
+      setLocationInput("");
+    }
+  };
+
+  const handleRemoveLocation = (index) => {
+    const newLocations = locations.filter((_, i) => i !== index);
+    setLocations(newLocations);
+  };
+
+  const handleAddVariant = () => {
+    setServiceVariants([
+      ...serviceVariants,
+      {
+        variantName: "",
+        price: "",
+        serviceTime: "",
+        metric: "",
+        min: 0,
+        max: 100,
+      },
+    ]);
+  };
+
+  const handleRemoveVariant = (index) => {
+    if (serviceVariants.length > 1) {
+      const newVariants = serviceVariants.filter((_, i) => i !== index);
+      setServiceVariants(newVariants);
+    }
+  };
+
+  const handleVariantChange = (index, field, value) => {
+    const newVariants = serviceVariants.map((variant, i) =>
+      i === index ? { ...variant, [field]: value } : variant,
+    );
+    setServiceVariants(newVariants);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!serviceName.trim()) {
+      newErrors.serviceName = "Service Name is required.";
+    }
+    if (!description.trim()) {
+      newErrors.description = "Description is required.";
+    }
+    if (isNaN(taxPercentage)) {
+      newErrors.taxPercentage = "Valid Tax Percentage is required.";
+    }
+    if (isNaN(platformCommission)) {
+      newErrors.platformCommission = "Valid Platform Commission is required.";
+    }
+    if (isNaN(miscFee)) {
+      newErrors.miscFee = "Valid Misc Fee is required.";
+    }
+    serviceVariants.forEach((variant, index) => {
+      if (!variant.variantName.trim()) {
+        newErrors[`variantName-${index}`] = "Variant Name is required.";
       }
-    };
-
-    const fetchServiceDetails = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.coolieno1.in/v1.0/core/services/${service._id}`,
-        );
-        const serviceData = response.data;
-        setServiceData({
-          name: serviceData.name,
-          serviceType: serviceData.serviceVariants[0]?.variantName || "",
-          price: serviceData.serviceVariants[0]?.price.toString() || "",
-          serviceTime:
-            serviceData.serviceVariants[0]?.serviceTime?.toString() || "",
-          metric: serviceData.serviceVariants[0]?.metric || "",
-          min: serviceData.serviceVariants[0]?.min || 1,
-          max: serviceData.serviceVariants[0]?.max || 1,
-          description: serviceData.description,
-          locations: serviceData.locations,
-          taxPercentage: serviceData.taxPercentage,
-          isMostBooked: serviceData.isMostBooked,
-          tag: serviceData.tag,
-          isCash: serviceData.isCash,
-          creditEligibility: serviceData.creditEligibility,
-          platformCommission: serviceData.platformCommission,
-          isActive: serviceData.isActive,
-          isDeleted: serviceData.isDeleted,
-        });
-      } catch (error) {
-        console.error("Error fetching service details:", error);
+      if (isNaN(variant.price)) {
+        newErrors[`price-${index}`] = "Valid Price is required.";
       }
-    };
+      if (isNaN(variant.serviceTime)) {
+        newErrors[`serviceTime-${index}`] = "Valid Service Time is required.";
+      }
+      if (!variant.metric.trim()) {
+        newErrors[`metric-${index}`] = "Metric is required.";
+      }
+    });
 
-    fetchCategoryName();
-    fetchSubCategoryName();
-    fetchServiceDetails();
-  }, [category, subCategory, service._id]);
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-  const handleSave = () => {
-    if (!window.confirm("Are you sure you want to update this service?")) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
       return;
     }
 
     setLoading(true);
+    const formData = new FormData();
+    formData.append("name", serviceName);
+    formData.append("description", description);
+    formData.append("taxPercentage", taxPercentage);
+    formData.append("platformCommission", platformCommission);
+    formData.append("miscFee", miscFee);
+    formData.append("isMostBooked", isMostBooked);
+    formData.append("tag", tag);
+    formData.append("isCash", isCash);
+    formData.append("creditEligibility", creditEligibility);
+    formData.append("isActive", true);
+    formData.append("isDeleted", false);
+
+    serviceVariants.forEach((variant, index) => {
+      formData.append(
+        `serviceVariants[${index}][variantName]`,
+        variant.variantName,
+      );
+      formData.append(`serviceVariants[${index}][price]`, variant.price);
+      formData.append(
+        `serviceVariants[${index}][serviceTime]`,
+        variant.serviceTime,
+      );
+      formData.append(`serviceVariants[${index}][metric]`, variant.metric);
+      formData.append(`serviceVariants[${index}][min]`, variant.min);
+      formData.append(`serviceVariants[${index}][max]`, variant.max);
+    });
+
+    locations.forEach((location, index) => {
+      formData.append(`locations[${index}]`, location);
+    });
+
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
     axios
       .put(
         `https://api.coolieno1.in/v1.0/core/services/${service._id}`,
-        serviceData,
+        formData,
       )
       .then((response) => {
         setSuccessMessage("Service updated successfully.");
         setErrorMessage("");
         onSave(response.data);
-        window.location.reload(); // Reload the page after successful update
       })
       .catch((error) => {
         const errorResponse = error.response
@@ -129,234 +222,287 @@ const EditServiceForm = ({
   };
 
   return (
-    <div className="service-detail-card">
-      {loading && <div className="loading">Loading...</div>}
-      <div className="service-detail-header">
-        <h6>Category: {categoryName}</h6>
-        <h6>Sub-Category: {subCategoryName}</h6>
-        <h6>Service: {serviceData.name}</h6>
-      </div>
-      <form className="add-service-form">
-        {successMessage && (
-          <div className="successMessage">{successMessage}</div>
+    <form className="servermanager-add-service-form" onSubmit={handleSubmit}>
+      <h3>Edit Service</h3>
+      {successMessage && <div className="successMessage">{successMessage}</div>}
+      {errorMessage && <div className="errorMessage">{errorMessage}</div>}
+      <div className="servermanager-form-group">
+        <label>Service Name:</label>
+        <input
+          type="text"
+          className="service-input-borders"
+          value={serviceName}
+          onChange={(e) => setServiceName(e.target.value)}
+        />
+        {errors.serviceName && (
+          <span className="error">{errors.serviceName}</span>
         )}
-        {errorMessage && <div className="errorMessage">{errorMessage}</div>}
-        <div className="form-group">
-          <label>Service Name:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.name}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, name: e.target.value })
-            }
-          />
-        </div>
-        <div className="form-group">
-          <label>Service Type:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.serviceType}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, serviceType: e.target.value })
-            }
-          />
-        </div>
-        <div className="form-group">
-          <label>Service Price:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.price}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, price: e.target.value })
-            }
-          />
-        </div>
-        <div className="form-group">
-          <label>Total Service Time:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.serviceTime}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, serviceTime: e.target.value })
-            }
-          />
-        </div>
-        <div className="form-group">
-          <label>Metric:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.metric}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, metric: e.target.value })
-            }
-          />
-        </div>
-        <div className="form-group">
-          <label>Min:</label>
-          <input
-            type="number"
-            className="service-input-borders"
-            value={serviceData.min}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, min: e.target.value })
-            }
-          />
-        </div>
-        <div className="form-group">
-          <label>Max:</label>
-          <input
-            type="number"
-            className="service-input-borders"
-            value={serviceData.max}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, max: e.target.value })
-            }
-          />
-        </div>
-        <div className="form-group">
-          <label>Description:</label>
-          <textarea
-            className="textarea-input"
-            value={serviceData.description}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, description: e.target.value })
-            }
-          ></textarea>
-        </div>
-        <div className="form-group">
-          <label>Locations:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.locations.join(", ")}
-            onChange={(e) =>
-              setServiceData({
-                ...serviceData,
-                locations: e.target.value.split(", "),
-              })
-            }
-          />
-        </div>
-        <div className="form-group">
-          <label>Tax Percentage:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.taxPercentage}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, taxPercentage: e.target.value })
-            }
-          />
-        </div>
-        <div className="form-group">
-          <label>Platform Commission:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.platformCommission}
-            onChange={(e) =>
-              setServiceData({
-                ...serviceData,
-                platformCommission: e.target.value,
-              })
-            }
-          />
-        </div>
-        <div className="form-group toggle-group">
-          <label>Add to most booked service</label>
-          <input
-            type="checkbox"
-            className="toggle-input"
-            checked={serviceData.isMostBooked}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, isMostBooked: e.target.checked })
-            }
-          />
-        </div>
-        <div className="form-group toggle-group">
-          <label>TAG</label>
-          <input
-            type="checkbox"
-            className="toggle-input"
-            checked={serviceData.tag}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, tag: e.target.checked })
-            }
-          />
-        </div>
-        <div className="form-group toggle-group">
-          <label>Cash After Service</label>
-          <input
-            type="checkbox"
-            className="toggle-input"
-            checked={serviceData.isCash}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, isCash: e.target.checked })
-            }
-          />
-        </div>
-        <div className="form-group toggle-group">
-          <label>Credit Eligibility</label>
-          <input
-            type="checkbox"
-            className="toggle-input"
-            checked={serviceData.creditEligibility}
-            onChange={(e) =>
-              setServiceData({
-                ...serviceData,
-                creditEligibility: e.target.checked,
-              })
-            }
-          />
-        </div>
-        <div className="form-group toggle-group">
-          <label>Active</label>
-          <input
-            type="checkbox"
-            className="toggle-input"
-            checked={serviceData.isActive}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, isActive: e.target.checked })
-            }
-          />
-        </div>
-        <div className="form-group toggle-group">
-          <label>Deleted</label>
-          <input
-            type="checkbox"
-            className="toggle-input"
-            checked={serviceData.isDeleted}
-            onChange={(e) =>
-              setServiceData({ ...serviceData, isDeleted: e.target.checked })
-            }
-          />
-        </div>
+      </div>
+
+      <div className="servermanager-form-group">
+        <label>Description:</label>
+        <textarea
+          className="servermanager-textarea-input"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        ></textarea>
+        {errors.description && (
+          <span className="error">{errors.description}</span>
+        )}
+      </div>
+
+      <div className="servermanager-form-group">
+        <label>Service Variants:</label>
+        {serviceVariants.map((variant, index) => (
+          <div key={index} className="variant-input-group">
+            <select
+              className="service-input-borders"
+              value={variant.variantName}
+              onChange={(e) =>
+                handleVariantChange(index, "variantName", e.target.value)
+              }
+            >
+              <option value="">Select Service Type</option>
+              {uiVariant.map((type, i) => (
+                <option key={i} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+            {errors[`variantName-${index}`] && (
+              <span className="error">{errors[`variantName-${index}`]}</span>
+            )}
+            <br />
+            <input
+              type="number"
+              className="service-input-borders"
+              placeholder="Price"
+              value={variant.price}
+              onChange={(e) =>
+                handleVariantChange(index, "price", e.target.value)
+              }
+            />
+            {errors[`price-${index}`] && (
+              <span className="error">{errors[`price-${index}`]}</span>
+            )}
+            <br />
+            <input
+              type="number"
+              className="service-input-borders"
+              placeholder="Service Time"
+              value={variant.serviceTime}
+              onChange={(e) =>
+                handleVariantChange(index, "serviceTime", e.target.value)
+              }
+            />
+            {errors[`serviceTime-${index}`] && (
+              <span className="error">{errors[`serviceTime-${index}`]}</span>
+            )}
+            <br />
+            <select
+              className="service-input-borders"
+              value={variant.metric}
+              onChange={(e) =>
+                handleVariantChange(index, "metric", e.target.value)
+              }
+            >
+              <option value="">Select Metric</option>
+              {["sqmts", "mts", "members", "quantity"].map((metric, i) => (
+                <option key={i} value={metric}>
+                  {metric}
+                </option>
+              ))}
+            </select>
+            {errors[`metric-${index}`] && (
+              <span className="error">{errors[`metric-${index}`]}</span>
+            )}
+            <br />
+            <input
+              type="number"
+              className="service-input-borders"
+              placeholder="Min"
+              min="0"
+              value={variant.min}
+              onChange={(e) =>
+                handleVariantChange(index, "min", e.target.value)
+              }
+            />
+            <input
+              type="number"
+              className="service-input-borders"
+              placeholder="Max"
+              max="100"
+              value={variant.max}
+              onChange={(e) =>
+                handleVariantChange(index, "max", e.target.value)
+              }
+            />
+            <button
+              type="button"
+              className="servermanager-cancel-icon"
+              onClick={() => handleRemoveVariant(index)}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+          </div>
+        ))}
         <button
           type="button"
-          className="submissionbutton"
-          onClick={handleSave}
-          disabled={loading}
+          className="servermanager-add-button"
+          onClick={handleAddVariant}
         >
-          {loading ? "Updating..." : "Update"}
+          <FontAwesomeIcon icon={faPlus} /> <h6>Add a new UI Variant</h6>
         </button>
-        <button
-          type="button"
-          className="submissionbutton"
-          onClick={() => {
-            if (window.confirm("Are you sure you want to cancel the edit?")) {
-              onClose();
-            }
-          }}
-        >
-          Close
-        </button>
-      </form>
-    </div>
+      </div>
+
+      <div className="servermanager-form-group">
+        <label>Locations:</label>
+        <div className="location-input-group">
+          <input
+            type="text"
+            className="service-input-borders"
+            value={locationInput}
+            onChange={(e) => setLocationInput(e.target.value)}
+            placeholder="Type a new location"
+          />
+          <button
+            type="button"
+            className="servermanager-add-button"
+            onClick={handleAddLocation}
+          >
+            <FontAwesomeIcon icon={faPlus} />{" "}
+            <h6>Click here to add the new location</h6>
+          </button>
+        </div>
+        {locations.map((location, index) => (
+          <div key={index} className="servermanager-menu-item">
+            <span>{location}</span>
+            <button
+              type="button"
+              className="servermanager-cancel-icon"
+              onClick={() => handleRemoveLocation(index)}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <div className="servermanager-form-group">
+        <label>Tax Percentage:</label>
+        <input
+          type="number"
+          className="service-input-borders"
+          value={taxPercentage}
+          onChange={(e) => setTaxPercentage(Number(e.target.value))}
+        />
+        {errors.taxPercentage && (
+          <span className="error">{errors.taxPercentage}</span>
+        )}
+      </div>
+
+      <div className="servermanager-form-group">
+        <label>Platform Commission:</label>
+        <input
+          type="number"
+          className="service-input-borders"
+          value={platformCommission}
+          onChange={(e) => setPlatformCommission(Number(e.target.value))}
+        />
+        {errors.platformCommission && (
+          <span className="error">{errors.platformCommission}</span>
+        )}
+      </div>
+
+      <div className="servermanager-form-group">
+        <label>Misc Fee:</label>
+        <input
+          type="number"
+          className="service-input-borders"
+          value={miscFee}
+          onChange={(e) => setMiscFee(Number(e.target.value))}
+        />
+        {errors.miscFee && <span className="error">{errors.miscFee}</span>}
+      </div>
+
+      <div className="servermanager-form-group">
+        <label>Service Image:</label>
+        <input
+          type="file"
+          className="service-input-borders"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+        {service.image && (
+          <div className="manageServicePreviewContainer">
+            <img
+              src={service.image}
+              alt="Service Icon"
+              className="manageServicePreviewImage"
+              onLoad={() => console.log("Image loaded successfully")}
+              onError={(e) => {
+                console.error("Error loading image:", e);
+                e.target.src = ""; // Fallback in case the image fails to load
+              }}
+            />
+          </div>
+        )}
+      </div>
+
+      <div className="servermanager-toggle-group">
+        <label>
+          Most Booked
+          <input
+            type="checkbox"
+            className="servermanager-toggle-input"
+            checked={isMostBooked}
+            onChange={() => setIsMostBooked(!isMostBooked)}
+          />
+        </label>
+        <label>
+          Tag
+          <input
+            type="checkbox"
+            className="servermanager-toggle-input"
+            checked={tag}
+            onChange={() => setTag(!tag)}
+          />
+        </label>
+        <label>
+          Cash Payment
+          <input
+            type="checkbox"
+            className="servermanager-toggle-input"
+            checked={isCash}
+            onChange={() => setIsCash(!isCash)}
+          />
+        </label>
+        <label>
+          Credit Eligibility
+          <input
+            type="checkbox"
+            className="servermanager-toggle-input"
+            checked={creditEligibility}
+            onChange={() => setCreditEligibility(!creditEligibility)}
+          />
+        </label>
+      </div>
+
+      <button type="submit" className="servermanager-submissionbutton">
+        {loading ? "Updating..." : "Update"}
+      </button>
+      <button
+        type="button"
+        className="servermanager-submissionbutton"
+        onClick={() => {
+          if (window.confirm("Are you sure you want to cancel the edit?")) {
+            onClose();
+          }
+        }}
+      >
+        Close
+      </button>
+    </form>
   );
 };
 
@@ -376,14 +522,16 @@ EditServiceForm.propTypes = {
     ),
     description: PropTypes.string,
     locations: PropTypes.array,
-    taxPercentage: PropTypes.string,
+    taxPercentage: PropTypes.number,
     isMostBooked: PropTypes.bool,
     tag: PropTypes.bool,
     isCash: PropTypes.bool,
     creditEligibility: PropTypes.bool,
-    platformCommission: PropTypes.string,
+    platformCommission: PropTypes.number,
     isActive: PropTypes.bool,
     isDeleted: PropTypes.bool,
+    image: PropTypes.string,
+    miscFee: PropTypes.number,
   }).isRequired,
   category: PropTypes.string.isRequired,
   subCategory: PropTypes.string.isRequired,

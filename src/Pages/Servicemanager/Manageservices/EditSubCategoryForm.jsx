@@ -6,12 +6,15 @@ import {
   faArrowUpFromBracket,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import toast from "react-hot-toast";
+import "./styles/manageservice.css";
 
 const EditSubCategoryForm = ({
   selectedSubCategory,
   setShowEditSubCategoryForm,
   API_BASE_URL,
-  AWS_BASE_URL,
   updateSubCategoryInParent,
   fetchServices,
   selectedCategory,
@@ -20,21 +23,10 @@ const EditSubCategoryForm = ({
   const [subCategoryIcon, setSubCategoryIcon] = useState("");
   const [subCategoryFile, setSubCategoryFile] = useState(null);
   const [subCategoryError, setSubCategoryError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  console.log("Initial props:", {
-    selectedSubCategory,
-    API_BASE_URL,
-    AWS_BASE_URL,
-    selectedCategory,
-  });
-
   useEffect(() => {
-    // Pre-fill the form with the current subcategory details
     if (selectedSubCategory) {
-      console.log("Selected sub-category:", selectedSubCategory);
       setSubCategoryName(selectedSubCategory.name || "");
       setSubCategoryIcon(selectedSubCategory.imageKey || "");
     }
@@ -42,7 +34,6 @@ const EditSubCategoryForm = ({
 
   const handleSubCategoryIconChange = (e) => {
     const file = e.target.files[0];
-    console.log("Selected file:", file);
     if (file) {
       setSubCategoryIcon(URL.createObjectURL(file));
       setSubCategoryFile(file);
@@ -50,69 +41,61 @@ const EditSubCategoryForm = ({
   };
 
   const handleEditSubCategory = () => {
-    console.log("Starting sub-category edit...");
-    console.log("Current state before edit:", {
-      subCategoryName,
-      subCategoryIcon,
-      subCategoryFile,
-    });
-
     if (!selectedSubCategory) {
-      console.log("No sub-category selected.");
       setSubCategoryError("No sub-category selected.");
       return;
     }
 
     if (subCategoryName.trim() === "") {
-      console.log("Sub-category name is required.");
       setSubCategoryError("Sub-category name is required.");
       return;
     }
 
-    if (!window.confirm("Are you sure you want to update this sub-category?")) {
-      return;
-    }
+    confirmAlert({
+      title: "Confirm",
+      message: "Are you sure you want to update this sub-category?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            setLoading(true);
+            const formData = new FormData();
+            formData.append("name", subCategoryName);
+            formData.append("isActive", true);
+            formData.append("isDeleted", false);
 
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("name", subCategoryName);
-    formData.append("isActive", true);
-    formData.append("isDeleted", false);
+            if (subCategoryFile) {
+              formData.append("image", subCategoryFile);
+            }
 
-    // Only append image if it's a new one
-    if (subCategoryFile) {
-      console.log("Appending image file to form data:", subCategoryFile);
-      formData.append("image", subCategoryFile);
-    }
-
-    console.log("Form data before sending:", formData);
-
-    axios
-      .put(
-        `${API_BASE_URL}/v1.0/core/sub-categories/${selectedSubCategory._id}`,
-        formData,
-      )
-      .then((response) => {
-        console.log("Sub-category updated successfully:", response);
-        const updatedSubCategory = response.data;
-        setSuccessMessage("Sub-category updated successfully");
-        setErrorMessage("");
-        updateSubCategoryInParent(updatedSubCategory); // Update the parent component's state
-        setShowEditSubCategoryForm(false);
-        fetchServices(selectedCategory, selectedSubCategory._id); // Fetch services after update
-      })
-      .catch((error) => {
-        const errorResponse = error.response
-          ? error.response.data
-          : "Network error";
-        console.log("Failed to update sub-category:", errorResponse);
-        setErrorMessage(`Failed to update sub-category: ${errorResponse}`);
-        setSuccessMessage("");
-      })
-      .finally(() => {
-        setLoading(false);
-        console.log("Finished sub-category edit.");
-      });
+            axios
+              .put(
+                `${API_BASE_URL}/v1.0/core/sub-categories/${selectedSubCategory._id}`,
+                formData,
+              )
+              .then((response) => {
+                const updatedSubCategory = response.data;
+                toast.success("Sub-category updated successfully.");
+                updateSubCategoryInParent(updatedSubCategory);
+                setShowEditSubCategoryForm(false);
+                fetchServices(selectedCategory, selectedSubCategory._id);
+              })
+              .catch((error) => {
+                const errorResponse = error.response
+                  ? error.response.data
+                  : "Network error";
+                toast.error(`Failed to update sub-category: ${errorResponse}`);
+              })
+              .finally(() => {
+                setLoading(false);
+              });
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
   };
 
   return (
@@ -123,25 +106,29 @@ const EditSubCategoryForm = ({
           icon={faTimes}
           className="manageServiceCancelIcon"
           onClick={() => {
-            if (window.confirm("Are you sure you want to cancel the edit?")) {
-              console.log("Closing edit sub-category form.");
-              setShowEditSubCategoryForm(false);
-            }
+            confirmAlert({
+              title: "Confirm",
+              message: "Are you sure you want to cancel the edit?",
+              buttons: [
+                {
+                  label: "Yes",
+                  onClick: () => setShowEditSubCategoryForm(false),
+                },
+                {
+                  label: "No",
+                },
+              ],
+            });
           }}
         />
       </h3>
-      {successMessage && <div className="successMessage">{successMessage}</div>}
-      {errorMessage && <div className="errorMessage">{errorMessage}</div>}
       <div className="manageServiceInputContainer">
         <label>Sub-Category Name:</label>
         <input
           type="text"
           className="manageServiceBottomBorderInput"
           value={subCategoryName}
-          onChange={(e) => {
-            console.log("Sub-category name changed:", e.target.value);
-            setSubCategoryName(e.target.value);
-          }}
+          onChange={(e) => setSubCategoryName(e.target.value)}
         />
         {subCategoryError && <span className="error">{subCategoryError}</span>}
       </div>
@@ -151,7 +138,7 @@ const EditSubCategoryForm = ({
             src={
               subCategoryIcon.startsWith("blob:")
                 ? subCategoryIcon
-                : `${AWS_BASE_URL}/${subCategoryIcon}`
+                : subCategoryIcon
             }
             alt="Sub-Category Icon"
             className="manageServicePreviewImage"
@@ -201,7 +188,6 @@ EditSubCategoryForm.propTypes = {
   }).isRequired,
   setShowEditSubCategoryForm: PropTypes.func.isRequired,
   API_BASE_URL: PropTypes.string.isRequired,
-  AWS_BASE_URL: PropTypes.string.isRequired,
   updateSubCategoryInParent: PropTypes.func.isRequired,
   fetchServices: PropTypes.func.isRequired,
   selectedCategory: PropTypes.string.isRequired,

@@ -7,6 +7,9 @@ import EditSubCategoryForm from "./EditSubCategoryForm";
 import EditServiceForm from "./EditServiceForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import toast, { Toaster } from "react-hot-toast"; // Import react-hot-toast
 import "./styles/manageservice.css";
 
 const API_BASE_URL = "https://api.coolieno1.in";
@@ -25,7 +28,7 @@ const ManageService = () => {
   const [showSubCategoryMenu, setShowSubCategoryMenu] = useState(true);
   const [showServiceVariantsMenu, setShowServiceVariantsMenu] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [subCategoriesError, setSubCategoriesError] = useState("");
+  const [subCategoriesError, setSubCategoriesError] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -33,60 +36,51 @@ const ManageService = () => {
 
   const fetchCategories = () => {
     setLoading(true);
-    console.log("Fetching categories from API...");
     axios
       .get(`${API_BASE_URL}/v1.0/core/categories`)
       .then((response) => {
-        console.log("Fetched categories:", response.data);
         setCategories(response.data);
       })
       .catch((error) => {
         console.error("Error fetching categories:", error);
-        alert("Error fetching categories.");
+        toast.error("Error fetching categories.");
       })
       .finally(() => setLoading(false));
   };
 
   const fetchSubcategories = (categoryId) => {
     setLoading(true);
-    console.log(`Fetching subcategories for category ID: ${categoryId}`);
     axios
       .get(`${API_BASE_URL}/v1.0/core/sub-categories/category/${categoryId}`)
       .then((response) => {
-        console.log("Fetched subcategories:", response.data);
         setSubCategories(response.data);
-        setSubCategoriesError("");
+        setSubCategoriesError(false);
       })
       .catch((error) => {
         console.error("Error fetching subcategories:", error);
-        setSubCategoriesError("Error fetching subcategories.");
-        alert("Error fetching subcategories.");
+        setSubCategoriesError(true);
+        toast.error("Error fetching subcategories.");
       })
       .finally(() => setLoading(false));
   };
 
   const fetchServices = (categoryId, subCategoryId) => {
     setLoading(true);
-    console.log(
-      `Fetching services for category ID: ${categoryId}, sub-category ID: ${subCategoryId}`,
-    );
     axios
       .get(
         `${API_BASE_URL}/v1.0/core/services/filter/${categoryId}/${subCategoryId}`,
       )
       .then((response) => {
-        console.log("Fetched services:", response.data.data);
         setServices(response.data.data);
       })
       .catch((error) => {
         console.error("Error fetching services:", error);
-        alert("Error fetching services.");
+        toast.error("Error fetching services.");
       })
       .finally(() => setLoading(false));
   };
 
   const updateSubCategoryInParent = (updatedSubCategory) => {
-    console.log("Updating subcategory in parent state:", updatedSubCategory);
     setSubCategories((prevSubCategories) =>
       prevSubCategories.map((subCategory) =>
         subCategory._id === updatedSubCategory._id
@@ -98,20 +92,15 @@ const ManageService = () => {
 
   useEffect(() => {
     if (showEditSubCategoryForm && selectedSubCategory) {
-      console.log(
-        `Fetching services because showEditSubCategoryForm is ${showEditSubCategoryForm} and selectedSubCategory is set`,
-      );
       fetchServices(selectedCategory._id, selectedSubCategory._id);
     }
   }, [showEditSubCategoryForm, selectedSubCategory]);
 
   const handleCloseServiceForm = () => {
-    console.log("Closing service form");
     setSelectedService(null);
   };
 
   const handleCategorySelection = (category) => {
-    console.log("Category selected:", category);
     setSelectedCategory(category);
     fetchSubcategories(category._id);
     setSubCategories([]);
@@ -125,47 +114,58 @@ const ManageService = () => {
   const handleSaveService = async (updatedService, serviceId) => {
     setLoading(true);
     try {
-      console.log(`Updating service with ID: ${serviceId}`);
       const response = await axios.put(
         `${API_BASE_URL}/v1.0/core/services/${serviceId}`,
         updatedService,
       );
-      console.log("Service updated successfully:", response.data);
-      alert("Service updated successfully.");
+      toast.success("Service updated successfully.");
       setSelectedService(null);
-      // Fetch the updated list of services
       if (selectedCategory && selectedSubCategory) {
         fetchServices(selectedCategory._id, selectedSubCategory._id);
       }
     } catch (error) {
       console.error("Error updating service:", error);
-      alert("Error updating service.");
+      toast.error("Error updating service.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeleteCategory = (categoryId) => {
-    if (window.confirm("Are you sure you want to delete this category?")) {
-      setLoading(true);
-      console.log(`Deleting category with ID: ${categoryId}`);
-      axios
-        .delete(`${API_BASE_URL}/v1.0/core/categories/${categoryId}`)
-        .then(() => {
-          setCategories((prev) => prev.filter((cat) => cat._id !== categoryId));
-          alert("Category deleted successfully.");
-          window.location.reload(); // Reload the page after deletion
-        })
-        .catch((error) => {
-          console.error("Error deleting category:", error);
-          alert("Error deleting category.");
-        })
-        .finally(() => setLoading(false));
-    }
+    confirmAlert({
+      title: "Confirm",
+      message: "Are you sure you want to delete this category?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            setLoading(true);
+            axios
+              .delete(`${API_BASE_URL}/v1.0/core/categories/${categoryId}`)
+              .then(() => {
+                setCategories((prev) =>
+                  prev.filter((cat) => cat._id !== categoryId),
+                );
+                toast.success("Category deleted successfully.");
+                window.location.reload();
+              })
+              .catch((error) => {
+                console.error("Error deleting category:", error);
+                toast.error("Error deleting category.");
+              })
+              .finally(() => setLoading(false));
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
   };
 
   return (
     <div className="manageServiceContainer">
+      <Toaster /> {/* Add Toaster component */}
       <h2>Manage Service</h2>
       {loading && <div className="loading">Loading...</div>}
       <div className="manageServiceCardContainer">
@@ -175,10 +175,7 @@ const ManageService = () => {
               <span>Select Category</span>
               <button
                 className="manageServiceHamburgerIcon"
-                onClick={() => {
-                  console.log("Toggling category menu visibility");
-                  setShowCategoryMenu(!showCategoryMenu);
-                }}
+                onClick={() => setShowCategoryMenu(!showCategoryMenu)}
               >
                 &#9776;
               </button>
@@ -201,16 +198,24 @@ const ManageService = () => {
                       icon={faEdit}
                       className="manageServiceEditIcon"
                       onClick={() => {
-                        if (
-                          window.confirm(
+                        confirmAlert({
+                          title: "Confirm",
+                          message:
                             "Are you sure you want to edit this category?",
-                          )
-                        ) {
-                          console.log("Editing category:", category);
-                          setSelectedCategory(category);
-                          fetchSubcategories(category._id);
-                          setShowEditCategoryForm(true);
-                        }
+                          buttons: [
+                            {
+                              label: "Yes",
+                              onClick: () => {
+                                setSelectedCategory(category);
+                                fetchSubcategories(category._id);
+                                setShowEditCategoryForm(true);
+                              },
+                            },
+                            {
+                              label: "No",
+                            },
+                          ],
+                        });
                       }}
                     />
                     <FontAwesomeIcon

@@ -1,8 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import axios from "axios"; // Ensure axios is imported
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import toast from "react-hot-toast";
+import "./styles/manageservice.css";
 
 const Categories = ({
   categories,
@@ -25,14 +29,32 @@ const Categories = ({
   };
 
   const handleDeleteCategory = (categoryId) => {
-    axios
-      .delete(`${API_BASE_URL}/v1.0/core/categories/${categoryId}`)
-      .then((response) => {
-        setCategories((prev) =>
-          prev.filter((category) => category._id !== categoryId),
-        );
-      })
-      .catch((error) => console.error("Error deleting category:", error));
+    confirmAlert({
+      title: "Confirm",
+      message: "Are you sure you want to delete this category?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            axios
+              .delete(`${API_BASE_URL}/v1.0/core/categories/${categoryId}`)
+              .then((response) => {
+                setCategories((prev) =>
+                  prev.filter((category) => category._id !== categoryId),
+                );
+                toast.success("Category deleted successfully.");
+              })
+              .catch((error) => {
+                console.error("Error deleting category:", error);
+                toast.error("Error deleting category.");
+              });
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
   };
 
   return (
