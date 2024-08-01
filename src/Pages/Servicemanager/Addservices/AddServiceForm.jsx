@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./styles/servicemanager.css";
 
-const AddServiceForm = ({ category, onSubmit }) => {
+const AddServiceForm = ({ category, subCategory, onSubmit }) => {
   const [serviceName, setServiceName] = useState("");
   const [description, setDescription] = useState("");
   const [locations, setLocations] = useState([]);
@@ -168,274 +168,281 @@ const AddServiceForm = ({ category, onSubmit }) => {
   };
 
   return (
-    <form className="servermanager-add-service-form" onSubmit={handleSubmit}>
-      <h3>Add Service</h3>
-      <div className="servermanager-form-group">
-        <label>Service Name:</label>
-        <input
-          type="text"
-          className="service-input-borders"
-          value={serviceName}
-          onChange={(e) => setServiceName(e.target.value)}
-        />
-        {errors.serviceName && (
-          <span className="error">{errors.serviceName}</span>
-        )}
+    <>
+      <div className="selected-category-info">
+        <h6>Category: {category?.name || "No category selected"}</h6>
+        <h6>Sub-Category: {subCategory?.name || "No sub-category selected"}</h6>
       </div>
-
-      <div className="servermanager-form-group">
-        <label>Description:</label>
-        <textarea
-          className="servermanager-textarea-input"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        ></textarea>
-        {errors.description && (
-          <span className="error">{errors.description}</span>
-        )}
-      </div>
-
-      <div className="servermanager-form-group">
-        <label>Service Variants:</label>
-        {serviceVariants.map((variant, index) => (
-          <div key={index} className="variant-input-group">
-            <select
-              className="service-input-borders"
-              value={variant.variantName}
-              onChange={(e) =>
-                handleVariantChange(index, "variantName", e.target.value)
-              }
-            >
-              <option value="">Select Service Type</option>
-              {uiVariant.map((type, i) => (
-                <option key={i} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
-            {errors[`variantName-${index}`] && (
-              <span className="error">{errors[`variantName-${index}`]}</span>
-            )}
-            <br />
-            <input
-              type="number"
-              className="service-input-borders"
-              placeholder="Price"
-              value={variant.price}
-              onChange={(e) =>
-                handleVariantChange(index, "price", e.target.value)
-              }
-            />
-            {errors[`price-${index}`] && (
-              <span className="error">{errors[`price-${index}`]}</span>
-            )}
-            <br />
-            <input
-              type="number"
-              className="service-input-borders"
-              placeholder="Service Time"
-              value={variant.serviceTime}
-              onChange={(e) =>
-                handleVariantChange(index, "serviceTime", e.target.value)
-              }
-            />
-            {errors[`serviceTime-${index}`] && (
-              <span className="error">{errors[`serviceTime-${index}`]}</span>
-            )}
-            <br />
-            <select
-              className="service-input-borders"
-              value={variant.metric}
-              onChange={(e) =>
-                handleVariantChange(index, "metric", e.target.value)
-              }
-            >
-              <option value="">Select Metric</option>
-              {["sqmts", "mts", "members", "quantity"].map((metric, i) => (
-                <option key={i} value={metric}>
-                  {metric}
-                </option>
-              ))}
-            </select>
-            {errors[`metric-${index}`] && (
-              <span className="error">{errors[`metric-${index}`]}</span>
-            )}
-            <br />
-            <input
-              type="number"
-              className="service-input-borders"
-              placeholder="Min"
-              min="0"
-              value={variant.min}
-              onChange={(e) =>
-                handleVariantChange(index, "min", e.target.value)
-              }
-            />
-            <input
-              type="number"
-              className="service-input-borders"
-              placeholder="Max"
-              max="100"
-              value={variant.max}
-              onChange={(e) =>
-                handleVariantChange(index, "max", e.target.value)
-              }
-            />
-            <button
-              type="button"
-              className="servermanager-cancel-icon"
-              onClick={() => handleRemoveVariant(index)}
-            >
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
-          </div>
-        ))}
-        <button
-          type="button"
-          className="servermanager-add-button"
-          onClick={handleAddVariant}
-        >
-          <FontAwesomeIcon icon={faPlus} /> <h6>Add a new UI Variant</h6>
-        </button>
-        {showVariantFields && serviceVariants.length > 1 && (
-          <button
-            type="button"
-            className="servermanager-cancel-icon"
-            onClick={() => setShowVariantFields(false)}
-          >
-            <FontAwesomeIcon icon={faTrash} /> Remove Last Variant
-          </button>
-        )}
-      </div>
-
-      <div className="servermanager-form-group">
-        <label>Locations:</label>
-        <div className="location-input-group">
+      <form className="servermanager-add-service-form" onSubmit={handleSubmit}>
+        <h3>Add Service</h3>
+        <div className="servermanager-form-group">
+          <label>Service Name:</label>
           <input
             type="text"
             className="service-input-borders"
-            value={locationInput}
-            onChange={(e) => setLocationInput(e.target.value)}
-            placeholder="Type a new location"
+            value={serviceName}
+            onChange={(e) => setServiceName(e.target.value)}
           />
+          {errors.serviceName && (
+            <span className="error">{errors.serviceName}</span>
+          )}
+        </div>
+
+        <div className="servermanager-form-group">
+          <label>Description:</label>
+          <textarea
+            className="servermanager-textarea-input"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          ></textarea>
+          {errors.description && (
+            <span className="error">{errors.description}</span>
+          )}
+        </div>
+
+        <div className="servermanager-form-group">
+          <label>Service Variants:</label>
+          {serviceVariants.map((variant, index) => (
+            <div key={index} className="variant-input-group">
+              <select
+                className="service-input-borders"
+                value={variant.variantName}
+                onChange={(e) =>
+                  handleVariantChange(index, "variantName", e.target.value)
+                }
+              >
+                <option value="">Select Service Type</option>
+                {uiVariant.map((type, i) => (
+                  <option key={i} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+              {errors[`variantName-${index}`] && (
+                <span className="error">{errors[`variantName-${index}`]}</span>
+              )}
+              <br />
+              <input
+                type="number"
+                className="service-input-borders"
+                placeholder="Price"
+                value={variant.price}
+                onChange={(e) =>
+                  handleVariantChange(index, "price", e.target.value)
+                }
+              />
+              {errors[`price-${index}`] && (
+                <span className="error">{errors[`price-${index}`]}</span>
+              )}
+              <br />
+              <input
+                type="number"
+                className="service-input-borders"
+                placeholder="Service Time"
+                value={variant.serviceTime}
+                onChange={(e) =>
+                  handleVariantChange(index, "serviceTime", e.target.value)
+                }
+              />
+              {errors[`serviceTime-${index}`] && (
+                <span className="error">{errors[`serviceTime-${index}`]}</span>
+              )}
+              <br />
+              <select
+                className="service-input-borders"
+                value={variant.metric}
+                onChange={(e) =>
+                  handleVariantChange(index, "metric", e.target.value)
+                }
+              >
+                <option value="">Select Metric</option>
+                {["sqmts", "mts", "members", "quantity"].map((metric, i) => (
+                  <option key={i} value={metric}>
+                    {metric}
+                  </option>
+                ))}
+              </select>
+              {errors[`metric-${index}`] && (
+                <span className="error">{errors[`metric-${index}`]}</span>
+              )}
+              <br />
+              <input
+                type="number"
+                className="service-input-borders"
+                placeholder="Min"
+                min="0"
+                value={variant.min}
+                onChange={(e) =>
+                  handleVariantChange(index, "min", e.target.value)
+                }
+              />
+              <input
+                type="number"
+                className="service-input-borders"
+                placeholder="Max"
+                max="100"
+                value={variant.max}
+                onChange={(e) =>
+                  handleVariantChange(index, "max", e.target.value)
+                }
+              />
+              <button
+                type="button"
+                className="servermanager-cancel-icon"
+                onClick={() => handleRemoveVariant(index)}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
+            </div>
+          ))}
           <button
             type="button"
             className="servermanager-add-button"
-            onClick={handleAddLocation}
+            onClick={handleAddVariant}
           >
-            <FontAwesomeIcon icon={faPlus} />{" "}
-            <h6>Click here to add the new location</h6>
+            <FontAwesomeIcon icon={faPlus} /> <h6>Add a new UI Variant</h6>
           </button>
-        </div>
-        {locations.map((location, index) => (
-          <div key={index} className="servermanager-menu-item">
-            <span>{location}</span>
+          {showVariantFields && serviceVariants.length > 1 && (
             <button
               type="button"
               className="servermanager-cancel-icon"
-              onClick={() => handleRemoveLocation(index)}
+              onClick={() => setShowVariantFields(false)}
             >
-              <FontAwesomeIcon icon={faTrash} />
+              <FontAwesomeIcon icon={faTrash} /> Remove Last Variant
+            </button>
+          )}
+        </div>
+
+        <div className="servermanager-form-group">
+          <label>Locations:</label>
+          <div className="location-input-group">
+            <input
+              type="text"
+              className="service-input-borders"
+              value={locationInput}
+              onChange={(e) => setLocationInput(e.target.value)}
+              placeholder="Type a new location"
+            />
+            <button
+              type="button"
+              className="servermanager-add-button"
+              onClick={handleAddLocation}
+            >
+              <FontAwesomeIcon icon={faPlus} />{" "}
+              <h6>Click here to add the new location</h6>
             </button>
           </div>
-        ))}
-      </div>
+          {locations.map((location, index) => (
+            <div key={index} className="servermanager-menu-item">
+              <span>{location}</span>
+              <button
+                type="button"
+                className="servermanager-cancel-icon"
+                onClick={() => handleRemoveLocation(index)}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
+            </div>
+          ))}
+        </div>
 
-      <div className="servermanager-form-group">
-        <label>Tax Percentage:</label>
-        <input
-          type="number"
-          className="service-input-borders"
-          value={taxPercentage}
-          onChange={(e) => setTaxPercentage(e.target.value)}
-        />
-        {errors.taxPercentage && (
-          <span className="error">{errors.taxPercentage}</span>
-        )}
-      </div>
-
-      <div className="servermanager-form-group">
-        <label>Platform Commission:</label>
-        <input
-          type="number"
-          className="service-input-borders"
-          value={platformCommission}
-          onChange={(e) => setPlatformCommission(e.target.value)}
-        />
-        {errors.platformCommission && (
-          <span className="error">{errors.platformCommission}</span>
-        )}
-      </div>
-
-      <div className="servermanager-form-group">
-        <label>Misc Fee:</label>
-        <input
-          type="number"
-          className="service-input-borders"
-          value={miscFee}
-          onChange={(e) => setMiscFee(e.target.value)}
-        />
-        {errors.miscFee && <span className="error">{errors.miscFee}</span>}
-      </div>
-
-      <div className="servermanager-form-group">
-        <label>Service Image:</label>
-        <input
-          type="file"
-          className="service-input-borders"
-          accept="image/*"
-          onChange={handleImageChange}
-        />
-      </div>
-
-      <div className="servermanager-toggle-group">
-        <label>
-          Most Booked
+        <div className="servermanager-form-group">
+          <label>Tax Percentage:</label>
           <input
-            type="checkbox"
-            className="servermanager-toggle-input"
-            checked={isMostBooked}
-            onChange={() => setIsMostBooked(!isMostBooked)}
+            type="number"
+            className="service-input-borders"
+            value={taxPercentage}
+            onChange={(e) => setTaxPercentage(e.target.value)}
           />
-        </label>
-        <label>
-          Tag
-          <input
-            type="checkbox"
-            className="servermanager-toggle-input"
-            checked={tag}
-            onChange={() => setTag(!tag)}
-          />
-        </label>
-        <label>
-          Cash Payment
-          <input
-            type="checkbox"
-            className="servermanager-toggle-input"
-            checked={isCash}
-            onChange={() => setIsCash(!isCash)}
-          />
-        </label>
-        <label>
-          Credit Eligibility
-          <input
-            type="checkbox"
-            className="servermanager-toggle-input"
-            checked={creditEligibility}
-            onChange={() => setCreditEligibility(!creditEligibility)}
-          />
-        </label>
-      </div>
+          {errors.taxPercentage && (
+            <span className="error">{errors.taxPercentage}</span>
+          )}
+        </div>
 
-      <button type="submit" className="servermanager-submissionbutton">
-        Submit
-      </button>
-    </form>
+        <div className="servermanager-form-group">
+          <label>Platform Commission:</label>
+          <input
+            type="number"
+            className="service-input-borders"
+            value={platformCommission}
+            onChange={(e) => setPlatformCommission(e.target.value)}
+          />
+          {errors.platformCommission && (
+            <span className="error">{errors.platformCommission}</span>
+          )}
+        </div>
+
+        <div className="servermanager-form-group">
+          <label>Misc Fee:</label>
+          <input
+            type="number"
+            className="service-input-borders"
+            value={miscFee}
+            onChange={(e) => setMiscFee(e.target.value)}
+          />
+          {errors.miscFee && <span className="error">{errors.miscFee}</span>}
+        </div>
+
+        <div className="servermanager-form-group">
+          <label>Service Image:</label>
+          <input
+            type="file"
+            className="service-input-borders"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </div>
+
+        <div className="servermanager-toggle-group">
+          <label>
+            Most Booked
+            <input
+              type="checkbox"
+              className="servermanager-toggle-input"
+              checked={isMostBooked}
+              onChange={() => setIsMostBooked(!isMostBooked)}
+            />
+          </label>
+          <label>
+            Tag
+            <input
+              type="checkbox"
+              className="servermanager-toggle-input"
+              checked={tag}
+              onChange={() => setTag(!tag)}
+            />
+          </label>
+          <label>
+            Cash Payment
+            <input
+              type="checkbox"
+              className="servermanager-toggle-input"
+              checked={isCash}
+              onChange={() => setIsCash(!isCash)}
+            />
+          </label>
+          <label>
+            Credit Eligibility
+            <input
+              type="checkbox"
+              className="servermanager-toggle-input"
+              checked={creditEligibility}
+              onChange={() => setCreditEligibility(!creditEligibility)}
+            />
+          </label>
+        </div>
+
+        <button type="submit" className="servermanager-submissionbutton">
+          Submit
+        </button>
+      </form>
+    </>
   );
 };
 
 AddServiceForm.propTypes = {
   category: PropTypes.object.isRequired,
+  subCategory: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };
 

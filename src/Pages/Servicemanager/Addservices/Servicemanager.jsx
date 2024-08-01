@@ -4,6 +4,9 @@ import AddServiceForm from "./AddServiceForm";
 import ServiceDetailCard from "./ServiceDetailCard";
 import SubCategoryForm from "./SubCategoryForm";
 import CategoryForm from "./CategoryForm";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import toast from "react-hot-toast";
 import "./styles/servicemanager.css";
 
 const Servermanager = () => {
@@ -26,6 +29,7 @@ const Servermanager = () => {
   const [services, setServices] = useState([]);
   const [reload, setReload] = useState(false);
   const [subCategoryErrorStatus, setSubCategoryErrorStatus] = useState(false);
+  const [subcategoryClicked, setSubcategoryClicked] = useState(false);
 
   const selectedCategoryRef = useRef(null);
   const selectedSubCategoryRef = useRef(null);
@@ -128,6 +132,7 @@ const Servermanager = () => {
       setShowAddCategoryForm(false);
       setShowServiceVariantsMenu(false);
       setShowServiceForm(false);
+      setSubcategoryClicked(false); // Reset the subcategory click state
     }
   };
 
@@ -145,11 +150,16 @@ const Servermanager = () => {
       setShowAddSubCategoryForm(false);
       setShowServiceVariantsMenu(true);
       setShowServiceForm(false);
+      setSubcategoryClicked(true); // Set the subcategory click state
     }
   };
 
   const handleServiceSelect = (service) => {
     if (service.name === "Add New Service") {
+      if (!selectedCategoryRef.current || !selectedSubCategoryRef.current) {
+        toast.error("Please select a category and subcategory first.");
+        return;
+      }
       setShowServiceForm(true);
       setSelectedService(null);
     } else {
@@ -167,6 +177,10 @@ const Servermanager = () => {
   };
 
   const toggleServiceForm = () => {
+    if (!selectedCategoryRef.current || !selectedSubCategoryRef.current) {
+      toast.error("Please select a category and subcategory first.");
+      return;
+    }
     setShowServiceForm((prev) => !prev);
     setSelectedService(null);
   };
@@ -262,9 +276,15 @@ const Servermanager = () => {
       setSelectedService(null);
       fetchServices(selectedSubCategoryRef.current._id);
       setReload(!reload);
+      toast.success("Service added successfully!");
     } catch (error) {
       console.error("Error during the addition of service:", error);
+      toast.error("Error adding service.");
     }
+  };
+
+  const handleSubCategoryClick = () => {
+    setShowServiceList(true);
   };
 
   return (
@@ -346,32 +366,37 @@ const Servermanager = () => {
                 </button>
               </div>
             </div>
-            <div className="servermanager-menu">
-              {subCategories.length > 0 ? (
-                subCategories.map((subCategory) => (
-                  <div
-                    key={subCategory._id}
-                    className={`servermanager-menu-item ${
-                      selectedSubCategoryRef.current &&
-                      selectedSubCategoryRef.current._id === subCategory._id
-                        ? "selected"
-                        : ""
-                    }`}
-                    onClick={() => handleSubCategorySelect(subCategory._id)}
-                  >
-                    {subCategory.name}
+            {showSubCategoryMenu && (
+              <div className="servermanager-menu">
+                {subCategories.length > 0 ? (
+                  subCategories.map((subCategory) => (
+                    <div
+                      key={subCategory._id}
+                      className={`servermanager-menu-item ${
+                        selectedSubCategoryRef.current &&
+                        selectedSubCategoryRef.current._id === subCategory._id
+                          ? "selected"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        handleSubCategorySelect(subCategory._id);
+                        handleSubCategoryClick(); // Set the service list to show when clicking a sub-category
+                      }}
+                    >
+                      {subCategory.name}
+                    </div>
+                  ))
+                ) : subCategoryErrorStatus ? (
+                  <div className="servermanager-menu-item">
+                    No subcategories available
                   </div>
-                ))
-              ) : subCategoryErrorStatus ? (
-                <div className="servermanager-menu-item">
-                  No subcategories available
-                </div>
-              ) : (
-                <div className="servermanager-menu-item">
-                  Loading subcategories...
-                </div>
-              )}
-            </div>
+                ) : (
+                  <div className="servermanager-menu-item">
+                    Loading subcategories...
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
         {showAddSubCategoryForm && (
@@ -384,55 +409,68 @@ const Servermanager = () => {
             handleAddSubCategory={handleAddSubCategory}
           />
         )}
-        {selectedSubCategoryRef.current && (
-          <div className="servermanager-card" id="service-card">
-            <div className="servermanager-form-group">
-              <div className="servermanager-category-header">
-                <span>Select Service</span>
-                <button
-                  className="servermanager-main-add-button"
-                  onClick={toggleServiceForm}
-                >
-                  +
-                </button>
-                <button
-                  className="servermanager-hamburger-icon"
-                  onClick={() =>
-                    setShowServiceVariantsMenu(!showServiceVariantsMenu)
-                  }
-                >
-                  &#9776;
-                </button>
+        {selectedSubCategoryRef.current &&
+          showSubCategoryMenu &&
+          subcategoryClicked && (
+            <div className="servermanager-card" id="service-card">
+              <div className="servermanager-form-group">
+                <div className="servermanager-category-header">
+                  <span>Select Service</span>
+                  <button
+                    className="servermanager-main-add-button"
+                    onClick={toggleServiceForm}
+                  >
+                    +
+                  </button>
+                  <button
+                    className="servermanager-hamburger-icon"
+                    onClick={() =>
+                      setShowServiceVariantsMenu(!showServiceVariantsMenu)
+                    }
+                  >
+                    &#9776;
+                  </button>
+                </div>
               </div>
+              {showServiceList && (
+                <div className="servermanager-menu">
+                  {services.length > 0 ? (
+                    services.map((service) => (
+                      <div
+                        key={service._id}
+                        className={`servermanager-menu-item ${
+                          selectedService && selectedService._id === service._id
+                            ? "selected"
+                            : ""
+                        }`}
+                        onClick={() => handleServiceSelect(service)}
+                      >
+                        {service.name}
+                        {service.serviceVariants &&
+                          service.serviceVariants.length > 0 && (
+                            <span> (₹{service.serviceVariants[0].price})</span>
+                          )}
+                      </div>
+                    ))
+                  ) : (
+                    <div>No services found</div>
+                  )}
+                </div>
+              )}
+              {services.length === 0 && (
+                <p>There is no service for this subcategory.</p>
+              )}
             </div>
-            {showServiceList && (
-              <div className="servermanager-menu">
-                {services.length > 0 ? (
-                  services.map((service) => (
-                    <div
-                      key={service._id}
-                      className={`servermanager-menu-item ${
-                        selectedService && selectedService._id === service._id
-                          ? "selected"
-                          : ""
-                      }`}
-                      onClick={() => handleServiceSelect(service)}
-                    >
-                      {service.name}
-                      {service.serviceVariants &&
-                        service.serviceVariants.length > 0 && (
-                          <span> (₹{service.serviceVariants[0].price})</span>
-                        )}
-                    </div>
-                  ))
-                ) : (
-                  <div>No services found</div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
+          )}
       </div>
+      {selectedCategoryRef.current && selectedSubCategoryRef.current && (
+        <div className="selected-category-info">
+          <h6>
+            Category: {selectedCategoryRef.current.name} | Sub-Category:{" "}
+            {selectedSubCategoryRef.current.name}
+          </h6>
+        </div>
+      )}
       {showServiceForm && (
         <AddServiceForm
           category={selectedCategoryRef.current}
