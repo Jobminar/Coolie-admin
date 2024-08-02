@@ -33,11 +33,11 @@ const CategoryForm = ({
     const selectedUiVariants = [];
 
     if (serviceTypeSelection === "Cleaning") {
-      selectedUiVariants.push("Normal cleaning", "Deep cleaning");
+      selectedUiVariants.push("Normal", "Deep");
     } else if (serviceTypeSelection === "Gender") {
       selectedUiVariants.push("Male", "Female");
     } else if (serviceTypeSelection === "Time") {
-      selectedUiVariants.push("Hour", "Daily", "Monthly");
+      selectedUiVariants.push("Hourly", "Daily", "Monthly");
     } else if (serviceTypeSelection === "None") {
       selectedUiVariants.push("None");
     }

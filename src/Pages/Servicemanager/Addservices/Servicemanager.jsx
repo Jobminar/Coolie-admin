@@ -216,7 +216,9 @@ const Servermanager = () => {
       setReload(!reload);
       selectedCategoryRef.current = newCategory;
       sessionStorage.setItem("categoryId", newCategory._id);
-      fetchSubcategories(newCategory._id); // Fetch subcategories for the new category
+
+      // Automatically select the new category
+      handleCategorySelect(newCategory._id);
     } catch (error) {
       setCategoryError(
         error.response?.data?.message || error.message || "An error occurred",
@@ -229,6 +231,7 @@ const Servermanager = () => {
     if (
       subCategoryName.trim() === "" ||
       !subCategoryIcon ||
+      !selectedCategoryRef.current ||
       !selectedCategoryRef.current._id
     ) {
       setSubCategoryError("All fields are required.");
