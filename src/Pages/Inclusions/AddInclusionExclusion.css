@@ -7,6 +7,7 @@
     background-color: #fff;
 }
 
+/* styling for form */
 .add-inclusion-form {
     display: flex;
     flex-direction: column;
