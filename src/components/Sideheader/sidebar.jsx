@@ -46,6 +46,15 @@ const Sidebar = ({ children }) => {
     setInductionDropdown(false);
   };
 
+  // Add your new items here
+  const handleInclusionsNavigation = () => {
+    handleNavigation("/inclusions-exclusions");
+  };
+
+  const handleFAQNavigation = () => {
+    handleNavigation("/faq");
+  };
+
   const toggleServiceManagerDropdown = () => {
     setServiceManagerDropdown((prev) => !prev);
     closeOtherDropdowns("serviceManager");
@@ -362,7 +371,7 @@ const Sidebar = ({ children }) => {
                 className={activeItem === "/training" ? "active" : ""}
                 onClick={() => handleNavigation("/training")}
               >
-                training
+                Training
               </div>
             </div>
           )}
@@ -410,6 +419,20 @@ const Sidebar = ({ children }) => {
               </div>
             </div>
           )}
+        </div>
+
+        {/* New Sidebar Items */}
+        <div
+          className={activeItem === "/inclusions-exclusions" ? "active" : ""}
+          onClick={handleInclusionsNavigation}
+        >
+          Inclusions & Exclusions
+        </div>
+        <div
+          className={activeItem === "/faq" ? "active" : ""}
+          onClick={handleFAQNavigation}
+        >
+          FAQ
         </div>
       </div>
       <main>
