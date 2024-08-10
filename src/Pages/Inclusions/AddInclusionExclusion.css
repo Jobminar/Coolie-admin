@@ -7,7 +7,7 @@
     background-color: #fff;
 }
 
-/* styling for form */
+/* Styling for form */
 .add-inclusion-form {
     display: flex;
     flex-direction: column;
@@ -36,7 +36,6 @@
 .add-inclusion-item-button,
 .add-inclusion-button {
     background-color: #030B33;
-    /* Navy blue color */
     color: white;
     padding: 10px;
     border: none;
@@ -49,5 +48,46 @@
 .add-inclusion-item-button:hover,
 .add-inclusion-button:hover {
     background-color: #030B33;
-    /* Slightly lighter navy blue */
+}
+
+/* Exclusion card styling */
+.exclusions-container {
+    margin-top: 10px;
+}
+
+.exclusion-card {
+    background-color: #f9f9f9;
+    /* Light background for the card */
+    border: 1px solid #ccc;
+    /* Border to define the card */
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    /* Spacing between cards */
+    display: flex;
+    align-items: center;
+}
+
+.exclusion-card label {
+    margin-right: 10px;
+    font-weight: normal;
+    /* Make label text less bold */
+}
+
+.exclusion-card input {
+    flex-grow: 1;
+    /* Make input take up remaining space */
+    margin-right: 10px;
+}
+
+.add-exclusion-icon {
+    cursor: pointer;
+    color: #030B33;
+    /* Navy blue color for the icon */
+    font-size: 18px;
+}
+
+.add-exclusion-icon:hover {
+    color: #030B33;
+    /* Keep the hover color consistent */
 }
