@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import AddInclusionExclusion from "./AddInclusionExclusion";
 import GetInclusionExclusion from "./GetInclusionExclusion";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./IEContainer.css";
 
 const IEContainer = () => {
@@ -16,6 +18,7 @@ const IEContainer = () => {
   };
 
   const handleDataAdded = () => {
+    toast.success("Inclusion/Exclusion added successfully!");
     setIsPopupOpen(false);
     setRefreshData(!refreshData); // Toggle to trigger data reload
   };
@@ -43,6 +46,7 @@ const IEContainer = () => {
           </div>
         </div>
       )}
+      <ToastContainer />
     </div>
   );
 };

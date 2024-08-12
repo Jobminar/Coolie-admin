@@ -31,69 +31,67 @@ const GetInclusionExclusion = ({ refresh }) => {
 
       {loading && <p>Loading...</p>}
       {error && <p className="error-message">{error}</p>}
-      <div className="ie-table-container">
-        {data.length > 0 ? (
-          <table className="ie-table">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Banner Image</th>
-                <th>Feature Title</th>
-                <th>Service ID</th>
-                <th>Description</th>
-                <th>Items</th>
-                <th>Exclusions</th>
+      {data.length > 0 ? (
+        <table className="ie-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Banner Image</th>
+              <th>Feature Title</th>
+              <th>Service Name</th>
+              <th>Description</th>
+              <th>Items</th>
+              <th>Exclusions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item) => (
+              <tr key={item._id}>
+                <td>{item.title}</td>
+                <td>
+                  <img
+                    src={item.bannerImage}
+                    alt={item.title}
+                    className="ie-banner-image"
+                  />
+                </td>
+                <td>{item.featureTitle}</td>
+                <td>{item.serviceId ? item.serviceId.name : "N/A"}</td>
+                <td>{item.description || "N/A"}</td>
+                <td>
+                  <ul>
+                    {item.listOfItems.map((listItem, index) => (
+                      <li key={index}>
+                        {listItem.title}
+                        {listItem.iconImage && (
+                          <img
+                            src={listItem.iconImage}
+                            alt={listItem.title}
+                            className="ie-item-image"
+                          />
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </td>
+                <td>
+                  <ul>
+                    {item.exclusions.length > 0 ? (
+                      item.exclusions.map((exclusion, exIndex) => (
+                        <li key={exIndex}>{exclusion}</li>
+                      ))
+                    ) : (
+                      <li>No Exclusions</li>
+                    )}
+                  </ul>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {data.map((item) => (
-                <tr key={item._id}>
-                  <td>{item.title}</td>
-                  <td>
-                    <img
-                      src={item.bannerImage}
-                      alt={item.title}
-                      className="ie-banner-image"
-                    />
-                  </td>
-                  <td>{item.featureTitle}</td>
-                  <td>{item.serviceId}</td>
-                  <td>{item.description || "N/A"}</td>
-                  <td>
-                    <ul>
-                      {item.listOfItems.map((listItem, index) => (
-                        <li key={index}>
-                          {listItem.title}
-                          {listItem.iconImage && (
-                            <img
-                              src={listItem.iconImage}
-                              alt={listItem.title}
-                              className="ie-item-image"
-                            />
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </td>
-                  <td>
-                    <ul>
-                      {item.exclusions.length > 0 ? (
-                        item.exclusions.map((exclusion, exIndex) => (
-                          <li key={exIndex}>{exclusion}</li>
-                        ))
-                      ) : (
-                        <li>No Exclusions</li>
-                      )}
-                    </ul>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>No Inclusions/Exclusions found.</p>
-        )}
-      </div>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>No Inclusions/Exclusions found.</p>
+      )}
     </div>
   );
 };
