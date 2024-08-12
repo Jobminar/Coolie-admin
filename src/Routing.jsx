@@ -31,8 +31,8 @@ import Header from "./components/Header/header";
 import Sidebar from "./components/Sideheader/sidebar";
 import Jobsarea from "./Pages/Jobsarea/jobsarea";
 import Servermanager from "./Pages/Servicemanager/Addservices/Servicemanager";
-import AddFAQ from "./Pages/FAQ/AddFAQ";
-import AddInclusionExclusion from "./Pages/Inclusions/AddInclusionExclusion";
+import FAQContainer from "./Pages/FAQ/FAQContainer";
+import IEContainer from "./Pages/Inclusions/IEContainer";
 
 const Routing = () => {
   return (
@@ -91,12 +91,9 @@ const Routing = () => {
             <Route path="/accounting" element={<Accounting />} />
             <Route path="/marketing" element={<Marketing />} />
             {/* Inclusions & Exclusions */}
-            <Route
-              path="/inclusions-exclusions"
-              element={<AddInclusionExclusion />}
-            />
+            <Route path="/inclusions-exclusions" element={<IEContainer />} />
             {/* FAQs */}
-            <Route path="/faq" element={<AddFAQ />} />
+            <Route path="/faq" element={<FAQContainer />} />
             {/* Default redirect */}
             <Route path="*" element={<Navigate to="/" />} />{" "}
           </Routes>

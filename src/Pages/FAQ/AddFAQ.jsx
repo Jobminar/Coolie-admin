@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./AddFAQ.css";
+
 const AddFAQ = () => {
   const [services, setServices] = useState(null); // Initialize as null
   const [serviceId, setServiceId] = useState("");
@@ -8,11 +9,14 @@ const AddFAQ = () => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState(null); // To capture and display any errors
+  const [loading, setLoading] = useState(false); // To handle loading state
+  const [successMessage, setSuccessMessage] = useState(""); // To capture success message
 
   useEffect(() => {
     // Fetch the list of services for the dropdown
+    setLoading(true);
     axios
-      .get("/api/services")
+      .get("https://api.coolieno1.in/v1.0/core/services")
       .then((response) => {
         if (Array.isArray(response.data)) {
           setServices(response.data);
@@ -25,36 +29,51 @@ const AddFAQ = () => {
         console.error("Error fetching services:", error);
         setError("Failed to load services");
         setServices([]);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccessMessage("");
+
     const newFAQ = { serviceId, customerName, question, answer };
 
     axios
-      .post("/api/faq", newFAQ)
+      .post("https://api.coolieno1.in/v1.0/users/faq", newFAQ)
       .then((response) => {
         console.log("FAQ added:", response.data);
+        setSuccessMessage("FAQ added successfully!");
         // Reset form
         setServiceId("");
         setCustomerName("");
         setQuestion("");
         setAnswer("");
       })
-      .catch((error) => console.error("Error adding FAQ:", error));
+      .catch((error) => {
+        console.error("Error adding FAQ:", error);
+        setError("Error adding FAQ. Please try again.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
     <div className="faq-add-category-form">
       <h2>Add FAQ</h2>
+      {loading && <p>Loading...</p>}
+      {error && <p className="error-message">{error}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
       <form onSubmit={handleSubmit}>
         <label htmlFor="service" className="faq-label">
           Select Service:
         </label>
-        {error ? (
-          <p className="error-message">{error}</p>
-        ) : services === null ? (
+        {services === null ? (
           <p>Loading...</p>
         ) : services.length === 0 ? (
           <p>No data available</p>
@@ -110,8 +129,8 @@ const AddFAQ = () => {
           required
         />
 
-        <button type="submit" className="faq-add-button">
-          Add
+        <button type="submit" className="faq-add-button" disabled={loading}>
+          {loading ? "Adding..." : "Add"}
         </button>
       </form>
     </div>

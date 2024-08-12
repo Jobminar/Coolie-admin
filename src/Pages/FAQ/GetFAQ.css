@@ -1,0 +1,108 @@
+/* Import Roboto Font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.get-faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.service-filter-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.faq-label {
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.faq-select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.faq-select:focus {
+    border-color: #000000;
+    outline: none;
+}
+
+.faq-scroll-container {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    scrollbar-width: thin;
+    /* For Firefox */
+    scrollbar-color: #969696 #f1f1f1;
+    /* For Firefox */
+}
+
+/* Scrollbar Styling for Webkit Browsers */
+.faq-scroll-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.faq-scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.faq-scroll-container::-webkit-scrollbar-thumb {
+    background-color: #626262;
+    border-radius: 4px;
+    border: 2px solid #f1f1f1;
+}
+
+.faq-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.faq-question {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.faq-answer {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.faq-customer {
+    font-size: 14px;
+    color: #777;
+}

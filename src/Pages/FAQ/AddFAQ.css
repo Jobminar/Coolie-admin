@@ -9,6 +9,7 @@
     /* Center the form on the page */
     background-color: #ffffff;
     /* Light background for the form */
+    box-sizing: border-box;
 
 }
 
