@@ -244,7 +244,7 @@ const AddInclusionExclusion = ({ onClose, onDataAdded }) => {
           <label>List of Items</label>
           <div className="scrollable-content">
             {listOfItems.map((item, index) => (
-              <div key={index} className="exclusion-card">
+              <div key={index} className="item-card">
                 <input
                   type="text"
                   name="title"
@@ -262,7 +262,6 @@ const AddInclusionExclusion = ({ onClose, onDataAdded }) => {
                   <img
                     src={itemImagePreviews[index]}
                     alt={`Item ${index + 1} Preview`}
-                    style={{ marginTop: "10px", maxHeight: "100px" }}
                   />
                 )}
                 {listOfItems.length > 1 && (

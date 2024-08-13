@@ -1,0 +1,94 @@
+/* Root styles for the entire modal */
+.edit-faq-modal {
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Form group container */
+.popup-form-group {
+    margin-bottom: 20px;
+}
+
+/* Label styling */
+.popup-form-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    font-size: 15px;
+    color: #444;
+}
+
+/* Input field styling */
+.popup-input {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.popup-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+/* Textarea styling */
+.popup-textarea {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    resize: none;
+}
+
+.popup-textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+/* Button styling */
+.popup-cancel-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 12px;
+    transition: background-color 0.3s ease;
+}
+
+.popup-cancel-button:hover {
+    background-color: #d32f2f;
+}
+
+.popup-update-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 12px;
+    transition: background-color 0.3s ease;
+}
+
+.popup-update-button:hover {
+    background-color: #0056b3;
+}
+
+/* Error alert styling */
+.popup-error-alert {
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1px solid #f44336;
+}
+
+.ant-btn {
+    color: #ffffff;
+    background-color: darkblue;
+}
+
+.popup-cancel-button {
+    background-color: rgb(163, 0, 0);
+}

@@ -1,13 +1,16 @@
 .get-inclusion-exclusion-container {
-    max-width: 1000px;
-    max-height: 500px;
-    margin: 0 auto;
+    max-width: 1200px;
+    /* Increase width for better data display */
+    margin: 20px auto;
+    /* Add some margin for spacing */
     padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    overflow: auto;
-    /* Allow scrolling for table */
+    background-color: #ffffff;
+    border-radius: 12px;
+    /* More rounded corners for a softer look */
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* Increase shadow for a more pronounced effect */
+    overflow: hidden;
 }
 
 .IEheader {
@@ -16,57 +19,83 @@
     left: 0;
     z-index: 10;
     width: 100%;
-    height: 5rem;
+    height: 4rem;
+    /* Slightly reduce height */
     background-color: #ffffff;
     margin: 0;
     padding: 0 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #e0e0e0;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .IEheader h2 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    /* Slightly larger font size */
     margin: 0;
     font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    color: #333;
+    /* Darker color for better readability */
 }
 
 .ie-table-container {
     max-height: 600px;
     overflow-y: auto;
     overflow-x: auto;
+    margin-top: 20px;
+    /* Add margin to separate from the header */
+    border-radius: 8px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    /* Add subtle inner shadow */
 }
 
 .ie-table {
     width: 100%;
     border-collapse: collapse;
     font-family: 'Roboto', sans-serif;
-    margin-top: 10px;
+    background-color: #fafafa;
+    /* Light background for the table */
 }
 
 .ie-table thead th {
     position: sticky;
     top: 0;
-    background-color: #f1f1f1;
+    background-color: #f5f5f5;
+    /* Softer background color for headers */
     z-index: 5;
-    /* Background color and z-index ensure the sticky header stands out */
-    padding: 12px 15px;
+    padding: 16px;
+    /* Increase padding for better touch targets */
     border: 1px solid #ddd;
     text-align: left;
     vertical-align: top;
     font-weight: bold;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    /* Optional: Add subtle shadow for depth */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+    font-size: 1.1rem;
+    /* Slightly larger font size */
+}
+
+.ie-table thead th.sortable:hover {
+    background-color: #e0e0e0;
+    color: #000;
+    /* Darken the color on hover */
 }
 
 .ie-table th,
 .ie-table td {
-    padding: 12px 15px;
+    padding: 16px;
+    /* Increase padding for all cells */
     border: 1px solid #ddd;
     text-align: left;
-    vertical-align: top;
+    vertical-align: middle;
+    /* Align text in the middle for better readability */
+    font-size: 1rem;
+    color: #555;
+    /* Darker text color */
 }
 
 .ie-table tbody tr:nth-child(even) {
@@ -78,9 +107,12 @@
 }
 
 .ie-table td img {
-    max-width: 100px;
+    max-width: 80px;
+    /* Smaller max width for images */
     height: auto;
     border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Add shadow for better visibility */
 }
 
 .ie-table ul {
@@ -93,21 +125,55 @@
     margin-bottom: 5px;
 }
 
-/* Scrollbar styling */
-.get-inclusion-exclusion-container::-webkit-scrollbar {
-    width: 10px;
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
-.get-inclusion-exclusion-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
+.error-message {
+    color: #d32f2f;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 20px;
 }
 
-.get-inclusion-exclusion-container::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
+.tooltip-text {
+    font-size: 0.9rem;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.get-inclusion-exclusion-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
+.ie-item-image {
+    max-width: 60px;
+    height: auto;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.service-dropdown {
+    width: 200px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+}
+
+.service-dropdown option {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+}
+
+.dropdown-image {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border-radius: 50%;
 }

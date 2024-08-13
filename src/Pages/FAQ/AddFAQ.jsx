@@ -1,6 +1,93 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import axios from "axios";
 import "./AddFAQ.css";
+
+// This is a simple loading component that will be displayed while data is being fetched
+const Loading = () => <div>Loading services...</div>;
+
+// The AddFAQForm component will only render once the services data has been fetched
+const AddFAQForm = ({
+  services,
+  onSubmit,
+  loading,
+  error,
+  successMessage,
+  serviceId,
+  setServiceId,
+  customerName,
+  setCustomerName,
+  question,
+  setQuestion,
+  answer,
+  setAnswer,
+}) => {
+  return (
+    <div className="faq-add-category-form">
+      <h2>Add FAQ</h2>
+      {loading && <p>Loading...</p>}
+      {error && <p className="error-message">{error}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      <form onSubmit={onSubmit}>
+        <label htmlFor="service" className="faq-label">
+          Select Service:
+        </label>
+        <select
+          id="service"
+          className="faq-select"
+          value={serviceId}
+          onChange={(e) => setServiceId(e.target.value)}
+          required
+        >
+          <option value="">Select Service</option>
+          {services.map((service) => (
+            <option key={service._id} value={service._id}>
+              {service.name}
+            </option>
+          ))}
+        </select>
+
+        <label htmlFor="customerName" className="faq-label">
+          Customer Name:
+        </label>
+        <input
+          type="text"
+          id="customerName"
+          className="faq-input"
+          value={customerName}
+          onChange={(e) => setCustomerName(e.target.value)}
+          required
+        />
+
+        <label htmlFor="question" className="faq-label">
+          Question:
+        </label>
+        <input
+          type="text"
+          id="question"
+          className="faq-input"
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          required
+        />
+
+        <label htmlFor="answer" className="faq-label">
+          Answer:
+        </label>
+        <textarea
+          id="answer"
+          className="faq-textarea"
+          value={answer}
+          onChange={(e) => setAnswer(e.target.value)}
+          required
+        />
+
+        <button type="submit" className="faq-add-button" disabled={loading}>
+          {loading ? "Adding..." : "Add"}
+        </button>
+      </form>
+    </div>
+  );
+};
 
 const AddFAQ = () => {
   const [services, setServices] = useState(null); // Initialize as null
@@ -64,76 +151,25 @@ const AddFAQ = () => {
   };
 
   return (
-    <div className="faq-add-category-form">
-      <h2>Add FAQ</h2>
-      {loading && <p>Loading...</p>}
-      {error && <p className="error-message">{error}</p>}
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="service" className="faq-label">
-          Select Service:
-        </label>
-        {services === null ? (
-          <p>Loading...</p>
-        ) : services.length === 0 ? (
-          <p>No data available</p>
-        ) : (
-          <select
-            id="service"
-            className="faq-select"
-            value={serviceId}
-            onChange={(e) => setServiceId(e.target.value)}
-            required
-          >
-            <option value="">Select Service</option>
-            {services.map((service) => (
-              <option key={service._id} value={service._id}>
-                {service.name}
-              </option>
-            ))}
-          </select>
-        )}
-
-        <label htmlFor="customerName" className="faq-label">
-          Customer Name:
-        </label>
-        <input
-          type="text"
-          id="customerName"
-          className="faq-input"
-          value={customerName}
-          onChange={(e) => setCustomerName(e.target.value)}
-          required
+    <Suspense fallback={<Loading />}>
+      {services && (
+        <AddFAQForm
+          services={services}
+          onSubmit={handleSubmit}
+          loading={loading}
+          error={error}
+          successMessage={successMessage}
+          serviceId={serviceId}
+          setServiceId={setServiceId}
+          customerName={customerName}
+          setCustomerName={setCustomerName}
+          question={question}
+          setQuestion={setQuestion}
+          answer={answer}
+          setAnswer={setAnswer}
         />
-
-        <label htmlFor="question" className="faq-label">
-          Question:
-        </label>
-        <input
-          type="text"
-          id="question"
-          className="faq-input"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          required
-        />
-
-        <label htmlFor="answer" className="faq-label">
-          Answer:
-        </label>
-        <textarea
-          id="answer"
-          className="faq-textarea"
-          value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
-          required
-        />
-
-        <button type="submit" className="faq-add-button" disabled={loading}>
-          {loading ? "Adding..." : "Add"}
-        </button>
-      </form>
-    </div>
+      )}
+    </Suspense>
   );
 };
 

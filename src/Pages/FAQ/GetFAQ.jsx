@@ -1,8 +1,55 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./CustomDropdown.css";
 import "./GetFAQ.css";
 
-const GetFAQ = ({ refresh }) => {
+// Utility function to strip HTML tags
+const stripHtmlTags = (html) => {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  return doc.body.textContent || "";
+};
+
+const CustomDropdown = ({ options, selected, onChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOptionClick = (option) => {
+    onChange(option._id);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="custom-dropdown">
+      <div
+        className="custom-dropdown-selected"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {selected
+          ? options.find((option) => option._id === selected)?.name
+          : "Select Service"}
+      </div>
+      {isOpen && (
+        <div className="custom-dropdown-options">
+          {options.map((option) => (
+            <div
+              key={option._id}
+              className="custom-dropdown-option"
+              onClick={() => handleOptionClick(option)}
+            >
+              <img
+                src={option.image}
+                alt={option.name}
+                className="dropdown-image"
+              />
+              <span>{option.name}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const GetFAQ = ({ refresh, onEditFAQClick }) => {
   const [services, setServices] = useState([]);
   const [faqs, setFaqs] = useState([]);
   const [filteredFaqs, setFilteredFaqs] = useState([]);
@@ -11,7 +58,6 @@ const GetFAQ = ({ refresh }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Fetch services and FAQs on component mount or when `refresh` changes
     setLoading(true);
     Promise.all([
       axios.get("https://api.coolieno1.in/v1.0/core/services"),
@@ -31,13 +77,14 @@ const GetFAQ = ({ refresh }) => {
       });
   }, [refresh]);
 
-  const handleServiceFilter = (e) => {
-    const serviceId = e.target.value;
+  const handleServiceFilter = (serviceId) => {
     setSelectedService(serviceId);
     if (serviceId === "") {
       setFilteredFaqs(faqs);
     } else {
-      setFilteredFaqs(faqs.filter((faq) => faq.serviceId === serviceId));
+      setFilteredFaqs(
+        faqs.filter((faq) => faq.serviceId && faq.serviceId._id === serviceId),
+      );
     }
   };
 
@@ -51,28 +98,26 @@ const GetFAQ = ({ refresh }) => {
         <label htmlFor="serviceFilter" className="faq-label">
           Filter by Service:
         </label>
-        <select
-          id="serviceFilter"
-          className="faq-select"
-          value={selectedService}
+        <CustomDropdown
+          options={services}
+          selected={selectedService}
           onChange={handleServiceFilter}
-        >
-          <option value="">All Services</option>
-          {services.map((service) => (
-            <option key={service._id} value={service._id}>
-              {service.name}
-            </option>
-          ))}
-        </select>
+        />
       </div>
 
       <div className="faq-scroll-container">
         {filteredFaqs.length > 0 ? (
           filteredFaqs.map((faq) => (
             <div key={faq._id} className="faq-card">
-              <h3 className="faq-question">{faq.question}</h3>
-              <p className="faq-answer">{faq.answer}</p>
+              <h3 className="faq-question">{stripHtmlTags(faq.question)}</h3>
+              <p className="faq-answer">{stripHtmlTags(faq.answer)}</p>
               <p className="faq-customer">Customer: {faq.customerName}</p>
+              <button
+                className="edit-faq-button"
+                onClick={() => onEditFAQClick(faq)}
+              >
+                Edit
+              </button>
             </div>
           ))
         ) : (
