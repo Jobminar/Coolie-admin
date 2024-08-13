@@ -59,7 +59,7 @@ const AddServiceForm = ({ category, subCategory, onSubmit }) => {
         serviceTime: "",
         metric: "",
         min: 0,
-        max: 100,
+        max: 1000,
       },
     ]);
   };
@@ -280,7 +280,7 @@ const AddServiceForm = ({ category, subCategory, onSubmit }) => {
                 type="number"
                 className="service-input-borders"
                 placeholder="Max"
-                max="100"
+                max="1000"
                 value={variant.max}
                 onChange={(e) =>
                   handleVariantChange(index, "max", e.target.value)
