@@ -1,7 +1,7 @@
 import React from "react";
-import { FaCheck, FaTimes } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa";
 
-const VerificationTable = ({ providers, onVerify, onReject, isLoading }) => {
+const VerificationTable = ({ providers, onRightArrowClick, isLoading }) => {
   return (
     <div className="providers-table-container-unique">
       {isLoading ? (
@@ -25,7 +25,7 @@ const VerificationTable = ({ providers, onVerify, onReject, isLoading }) => {
           <tbody>
             {providers.map((provider) => (
               <tr key={provider._id}>
-                <td>{provider.userId || "N/A"}</td>
+                <td>{provider.providerId || "N/A"}</td>
                 <td>{provider.providerName || "N/A"}</td>
                 <td>
                   {provider.image ? (
@@ -44,7 +44,7 @@ const VerificationTable = ({ providers, onVerify, onReject, isLoading }) => {
                 </td>
                 <td>{provider.age || "N/A"}</td>
                 <td>{provider.phone || "N/A"}</td>
-                <td>{provider.pincode || "N/A"}</td>
+                <td>{provider.address || "N/A"}</td>
                 <td>{provider.radius || "N/A"}</td>
                 <td>
                   {provider.work && Array.isArray(provider.work)
@@ -54,20 +54,15 @@ const VerificationTable = ({ providers, onVerify, onReject, isLoading }) => {
                 <td>
                   <div
                     className={`status-indicator-unique ${
-                      provider.status === "active" ? "online" : "offline"
+                      provider.isVerified ? "online" : "offline"
                     }`}
                   />
                 </td>
                 <td>
-                  <FaCheck
-                    color="green"
-                    style={{ cursor: "pointer", marginRight: "10px" }}
-                    onClick={() => onVerify(provider)}
-                  />
-                  <FaTimes
-                    color="red"
+                  <FaArrowRight
+                    color="blue"
                     style={{ cursor: "pointer" }}
-                    onClick={() => onReject(provider)}
+                    onClick={() => onRightArrowClick(provider)}
                   />
                 </td>
               </tr>

@@ -1,33 +1,31 @@
-import React, { useState, useEffect } from "react";
-import { Search } from "react-bootstrap-icons";
+import React, { useState, useEffect, useMemo } from "react";
 import "./usercorner.css";
 import { fetchOrderedUsers, fetchUsers } from "./api/api";
+import Header from "./Header";
+import Tabs from "./Tabs";
+import UserTable from "./UserTable";
+import OrdersPopup from "./OrdersPopup"; // Import the new popup component
 
 const UserManager = () => {
   const [selectedTab, setSelectedTab] = useState("All Users");
   const [allUsersData, setAllUsersData] = useState([]);
   const [bookedUsersData, setBookedUsersData] = useState([]);
   const [userOrdersCount, setUserOrdersCount] = useState({});
-  const [filteredUsers, setFilteredUsers] = useState([]);
   const [allUsersSearchQuery, setAllUsersSearchQuery] = useState("");
   const [bookedUsersSearchQuery, setBookedUsersSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showPopup, setShowPopup] = useState(false); // Track if popup is shown
+  const [selectedUserOrders, setSelectedUserOrders] = useState([]); // Track selected user's orders
 
-  // Fetch data function
   const fetchData = async () => {
     setLoading(true);
     setError(null);
     try {
-      console.log("Fetching data...");
-
       const [orders, users] = await Promise.all([
         fetchOrderedUsers(),
         fetchUsers(),
       ]);
-
-      console.log("Orders:", orders);
-      console.log("Users:", users);
 
       setAllUsersData(users);
 
@@ -41,177 +39,103 @@ const UserManager = () => {
 
       setUserOrdersCount(orderCount);
 
-      // Filter and set booked users data
-      if (selectedTab === "Booked Users") {
-        const bookedUserIds = orders
+      const bookedUserIds = new Set(
+        orders
           .filter((order) => order.userId && order.userId._id)
-          .map((order) => order.userId._id);
+          .map((order) => order.userId._id),
+      );
 
-        const filteredUsers = users.filter((user) =>
-          bookedUserIds.includes(user._id),
-        );
+      const filteredBookedUsers = users.filter((user) =>
+        bookedUserIds.has(user._id),
+      );
 
-        setBookedUsersData(
-          filteredUsers.length
-            ? filteredUsers
-            : [{ message: "No users booked till now" }],
-        );
-      }
+      setBookedUsersData(filteredBookedUsers);
     } catch (error) {
-      console.error("Error fetching data:", error.message);
       setError("An error occurred while fetching data.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Initial data fetch and polling setup
   useEffect(() => {
     fetchData();
+  }, []);
 
-    const interval = setInterval(() => {
-      console.log("Polling for updates...");
-      fetchData();
-    }, 10000); // Adjust interval as needed
+  const handleRowClick = async (userId) => {
+    try {
+      const orders = await fetchOrderedUsers();
+      const userOrders = orders.filter((order) => order.userId._id === userId);
+      setSelectedUserOrders(userOrders);
+      setShowPopup(true);
+    } catch (error) {
+      console.error("Failed to fetch user's orders:", error);
+    }
+  };
 
-    return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, [selectedTab]);
+  const filteredUsers = useMemo(() => {
+    if (loading || error) return [];
 
-  // Filter users based on search query
-  useEffect(() => {
-    if (loading || error) return; // Skip filtering if loading or error
-
-    const filteredData =
-      selectedTab === "All Users" ? allUsersData : bookedUsersData;
+    let filteredData = [];
+    if (selectedTab === "All Users") {
+      filteredData = allUsersData;
+    } else if (selectedTab === "Booked Users") {
+      filteredData = bookedUsersData;
+    } else if (selectedTab === "New Users") {
+      filteredData = allUsersData.filter((user) => !userOrdersCount[user._id]);
+    }
 
     const searchQuery =
       selectedTab === "All Users"
         ? allUsersSearchQuery
         : bookedUsersSearchQuery;
 
-    const searchLower = searchQuery.toLowerCase();
-
-    const results = filteredData.filter((user) => {
+    return filteredData.filter((user) => {
       const phoneString = user.phone ? user.phone.toString() : "";
-      return phoneString.toLowerCase().includes(searchLower);
+      return phoneString.toLowerCase().includes(searchQuery.toLowerCase());
     });
-
-    console.log("Filtered Results:", results); // Debugging statement
-    setFilteredUsers(results);
   }, [
     allUsersData,
     bookedUsersData,
     selectedTab,
     allUsersSearchQuery,
     bookedUsersSearchQuery,
+    userOrdersCount,
     loading,
     error,
   ]);
 
   const handleSearchChange = (event) => {
+    const value = event.target.value;
     if (selectedTab === "All Users") {
-      setAllUsersSearchQuery(event.target.value);
-    } else if (selectedTab === "Booked Users") {
-      setBookedUsersSearchQuery(event.target.value);
+      setAllUsersSearchQuery(value);
+    } else if (selectedTab === "Booked Users" || selectedTab === "New Users") {
+      setBookedUsersSearchQuery(value);
     }
   };
 
-  const data = selectedTab === "All Users" ? filteredUsers : filteredUsers;
-
   return (
     <div className="user-manager-container">
-      <div className="header">
-        <h1>User Management</h1>
-        <div className="user-search-bar">
-          <input
-            type="text"
-            className="users-search-input"
-            placeholder="Search by phone number..."
-            value={
-              selectedTab === "All Users"
-                ? allUsersSearchQuery
-                : bookedUsersSearchQuery
-            }
-            onChange={handleSearchChange}
-          />
-          <Search className="searching" />
-        </div>
-      </div>
-
-      <div className="tabs-container">
-        {[
-          "All Users",
-          "Booked Users",
-          "New Users",
-          "Bronze",
-          "Silver",
-          "Gold",
-        ].map((tab) => (
-          <button
-            key={tab}
-            className={`tab-button ${selectedTab === tab ? "active" : ""}`}
-            onClick={() => setSelectedTab(tab)}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-
-      {loading ? (
-        <div className="loading">Loading...</div>
-      ) : error ? (
-        <div className="error">{error}</div>
-      ) : (
-        <div className="user-table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email Address</th>
-                <th>Phone</th>
-                <th>Join Date</th>
-                <th>Loyalty Level / Google ID</th>
-                <th>Loyalty Points</th>
-                <th>Orders Count</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.length === 1 && data[0].message ? (
-                <tr>
-                  <td colSpan="9" className="no-users-message">
-                    {data[0].message}
-                  </td>
-                </tr>
-              ) : (
-                data.map((user, index) => (
-                  <tr key={index}>
-                    <td>{user._id || user.id}</td>
-                    <td>{user.name || user.displayName || "N/A"}</td>
-                    <td>{user.email || "N/A"}</td>
-                    <td>{user.phone || "N/A"}</td>
-                    <td>
-                      {user.joinDate || new Date().toLocaleDateString("en-US")}
-                    </td>
-                    <td>{user.level || user.providerId || "N/A"}</td>
-                    <td>{user.points !== undefined ? user.points : "N/A"}</td>
-                    <td>{userOrdersCount[user._id] || 0}</td>
-                    <td>
-                      <span
-                        className={`status-dot ${
-                          user.status === "active" || user.phoneVerified
-                            ? "active"
-                            : "inactive"
-                        }`}
-                      ></span>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+      <Header
+        searchQuery={
+          selectedTab === "All Users"
+            ? allUsersSearchQuery
+            : bookedUsersSearchQuery
+        }
+        onSearchChange={handleSearchChange}
+      />
+      <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+      <UserTable
+        data={filteredUsers}
+        loading={loading}
+        error={error}
+        userOrdersCount={userOrdersCount}
+        onRowClick={handleRowClick} // Pass the row click handler
+      />
+      {showPopup && (
+        <OrdersPopup
+          orders={selectedUserOrders}
+          onClose={() => setShowPopup(false)}
+        />
       )}
     </div>
   );

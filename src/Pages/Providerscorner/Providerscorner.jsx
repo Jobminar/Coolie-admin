@@ -8,8 +8,8 @@ import ProviderList from "./ProviderList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FilterBarContext } from "../../FilterBarContext";
-import { fetchCategories, fetchProviders } from "./api/api-services"; // Import the fetchCategories and fetchProviders functions
-import MapboxView from "./MapboxView"; // Import MapboxView
+import { fetchCategories, fetchProviders } from "./api/api-services";
+import MapboxView from "./MapboxView";
 
 const ProvidersCorner = () => {
   const { setFilterBarProps } = useContext(FilterBarContext);
@@ -18,7 +18,7 @@ const ProvidersCorner = () => {
   const [categories, setCategories] = useState([]);
   const [providers, setProviders] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -26,8 +26,8 @@ const ProvidersCorner = () => {
       try {
         const categoriesData = await fetchCategories();
         if (categoriesData) {
-          setCategories(categoriesData.map((cat) => cat.name)); // Assuming the API returns an array of objects with 'name'
-          setSelectedCategory(categoriesData[0].name); // Set initial selected category
+          setCategories(categoriesData.map((cat) => cat.name));
+          setSelectedCategory(categoriesData[0].name);
         }
 
         const providersData = await fetchProviders();
@@ -90,6 +90,11 @@ const ProvidersCorner = () => {
     }
   };
 
+  const verifiedProviders = providers.filter((provider) => provider.isVerified);
+  const providersUnderVerification = providers.filter(
+    (provider) => !provider.isVerified,
+  );
+
   return (
     <div className="birdviewProvidersContainer">
       {loading && <div className="loading">Loading...</div>}
@@ -128,9 +133,19 @@ const ProvidersCorner = () => {
         </>
       )}
 
+      {/* Render Verified Providers List */}
       {activeComponent === "list" && (
         <ProviderList
-          providers={providers}
+          providers={verifiedProviders}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+        />
+      )}
+
+      {/* Render Providers Under Verification List */}
+      {activeComponent === "verify" && (
+        <ProviderList
+          providers={providersUnderVerification}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
         />

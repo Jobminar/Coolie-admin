@@ -14,3 +14,11 @@ export const fetchUsers = async () => {
   }
   return await response.json();
 };
+
+export const fetchLoyaltyCards = async () => {
+  const response = await fetch("https://api.coolieno1.in/v1.0/admin/loyalty");
+  if (!response.ok) {
+    throw new Error("Failed to fetch loyalty cards");
+  }
+  return response.json();
+};
