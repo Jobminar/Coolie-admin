@@ -1,7 +1,7 @@
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
 
-const VerificationTable = ({ providers, onRightArrowClick, isLoading }) => {
+const VerificationTable = ({ providers, onVerifyClick, isLoading }) => {
   return (
     <div className="providers-table-container-unique">
       {isLoading ? (
@@ -19,10 +19,10 @@ const VerificationTable = ({ providers, onRightArrowClick, isLoading }) => {
               <th>Radius</th>
               <th>Categories</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th className="actions-unique">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="scrollable-td">
             {providers.map((provider) => (
               <tr key={provider._id}>
                 <td>{provider.providerId || "N/A"}</td>
@@ -58,12 +58,13 @@ const VerificationTable = ({ providers, onRightArrowClick, isLoading }) => {
                     }`}
                   />
                 </td>
-                <td>
-                  <FaArrowRight
-                    color="blue"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => onRightArrowClick(provider)}
-                  />
+                <td className="actions-unique">
+                  <button
+                    className="provider-verify-button"
+                    onClick={() => onVerifyClick(provider._id)}
+                  >
+                    Verify <FaArrowRight />
+                  </button>
                 </td>
               </tr>
             ))}

@@ -6,7 +6,7 @@ import AddProvider from "./AddProviderForm";
 import AuthenticateProvider from "./AuthenticateProvider";
 import ProviderList from "./ProviderList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"; // Import FontAwesome icons
 import { FilterBarContext } from "../../FilterBarContext";
 import { fetchCategories, fetchProviders } from "./api/api-services";
 import MapboxView from "./MapboxView";
@@ -19,6 +19,7 @@ const ProvidersCorner = () => {
   const [providers, setProviders] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [loading, setLoading] = useState(false);
+  const [providerIdForAuth, setProviderIdForAuth] = useState(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -27,7 +28,7 @@ const ProvidersCorner = () => {
         const categoriesData = await fetchCategories();
         if (categoriesData) {
           setCategories(categoriesData.map((cat) => cat.name));
-          setSelectedCategory(categoriesData[0].name);
+          setSelectedCategory(categoriesData[0]?.name || "");
         }
 
         const providersData = await fetchProviders();
@@ -49,6 +50,8 @@ const ProvidersCorner = () => {
       activeComponentState: activeComponent,
       setActiveComponentState: setActiveComponent,
     });
+
+    console.log("Active Component State:", activeComponent);
   }, [activeComponent, setFilterBarProps]);
 
   const getVisibleCategories = () => {
@@ -58,8 +61,6 @@ const ProvidersCorner = () => {
       ? categories.slice(startIndex, endIndex)
       : [...categories.slice(startIndex), ...categories.slice(0, endIndex)];
   };
-
-  const visibleCategories = getVisibleCategories();
 
   const handlePrev = () => {
     setActiveCategory(
@@ -90,14 +91,16 @@ const ProvidersCorner = () => {
     }
   };
 
-  const verifiedProviders = providers.filter((provider) => provider.isVerified);
-  const providersUnderVerification = providers.filter(
-    (provider) => !provider.isVerified,
-  );
+  const handleVerifyProvider = (providerId) => {
+    console.log("Verifying provider with ID:", providerId);
+    setProviderIdForAuth(providerId);
+    setActiveComponent("authenticate"); // Switch to the AuthenticateProvider component
+  };
 
   return (
     <div className="birdviewProvidersContainer">
       {loading && <div className="loading">Loading...</div>}
+
       {activeComponent === "view" && (
         <>
           <div className="birdviewProvidersSidebar">
@@ -105,13 +108,11 @@ const ProvidersCorner = () => {
               <FontAwesomeIcon icon={faArrowLeft} />
             </button>
             <div className="birdviewProvidersCategories">
-              {visibleCategories.map((category, index) => (
+              {getVisibleCategories().map((category, index) => (
                 <button
                   key={index}
                   className={`birdviewProvidersCategory ${
-                    category === categories[activeCategory]
-                      ? "birdviewActive"
-                      : ""
+                    category === selectedCategory ? "birdviewActive" : ""
                   }`}
                   onClick={() => handleCategoryClick(category)}
                 >
@@ -133,28 +134,22 @@ const ProvidersCorner = () => {
         </>
       )}
 
-      {/* Render Verified Providers List */}
       {activeComponent === "list" && (
         <ProviderList
-          providers={verifiedProviders}
-          handleEdit={handleEdit}
-          handleDelete={handleDelete}
-        />
-      )}
-
-      {/* Render Providers Under Verification List */}
-      {activeComponent === "verify" && (
-        <ProviderList
-          providers={providersUnderVerification}
+          providers={providers.filter((provider) => provider.isVerified)}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
         />
       )}
 
       {activeComponent === "add" && <AddProvider />}
-      {activeComponent === "manage" && <ProviderForm providers={providers} />}
+      {activeComponent === "manage" && (
+        <ProviderForm
+          onVerifyProvider={handleVerifyProvider} // Pass the handler to ProviderForm
+        />
+      )}
       {activeComponent === "authenticate" && (
-        <AuthenticateProvider providers={providers} />
+        <AuthenticateProvider providerId={providerIdForAuth} />
       )}
     </div>
   );

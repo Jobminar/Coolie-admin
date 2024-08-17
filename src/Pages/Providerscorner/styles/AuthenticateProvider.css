@@ -90,6 +90,11 @@
     border-bottom-right-radius: 10px;
 }
 
+.provider-image {
+    height: 5rem;
+    width: 5rem;
+}
+
 .status-indicator {
     width: 10px;
     height: 10px;
@@ -328,4 +333,54 @@
         padding: 4px;
         font-size: 12px;
     }
+}
+
+/* AuthenticateProvider.css */
+
+.highlight-row {
+    background-color: #f0f8ff;
+    /* Highlighted row color */
+}
+
+.highlight-row td.actions {
+    background-color: #f0f8ff !important;
+}
+
+.fade-row {
+    opacity: 0.3;
+    /* Fade effect */
+    transition: opacity 0.5s ease;
+    /* Smooth transition */
+}
+
+.status-indicator.online {
+    background-color: green;
+}
+
+.status-indicator.offline {
+    background-color: red;
+}
+
+.provider-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* Other existing styles */
+
+/* Add this CSS to AuthenticateProvider.css */
+.providers-table td.actions {
+    background-color: white;
+    position: sticky;
+    right: 0;
+    z-index: 2;
+}
+
+/* Ensure the header cell has higher z-index */
+.providers-table th.actions {
+    background-color: white;
+    position: sticky;
+    right: 0;
+    z-index: 3;
 }

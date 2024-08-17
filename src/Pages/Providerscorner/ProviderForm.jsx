@@ -4,7 +4,7 @@ import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import VerificationTable from "./VerificationTable";
 import { fetchProviderDetails } from "./api/provider-form-api";
 
-const ProviderForm = () => {
+const ProviderForm = ({ onVerifyProvider }) => {
   const [activeTab, setActiveTab] = useState("underVerification");
   const [providers, setProviders] = useState([]);
   const [filteredProviders, setFilteredProviders] = useState([]);
@@ -50,20 +50,8 @@ const ProviderForm = () => {
     setEditMode(false); // Exit edit mode when switching tabs
   };
 
-  const handleVerify = (provider) => {
-    // Implementation for handling verification
-  };
-
-  const handleReject = (provider) => {
-    // Implementation for handling rejection
-  };
-
-  const handleEdit = (provider) => {
-    // Implementation for editing provider
-  };
-
-  const handleDelete = (providerId) => {
-    // Implementation for deleting provider
+  const handleVerify = (providerId) => {
+    onVerifyProvider(providerId); // Call the verification handler
   };
 
   return (
@@ -104,8 +92,7 @@ const ProviderForm = () => {
           <VerificationTable
             isLoading={isLoading}
             providers={filteredProviders}
-            onVerify={handleVerify}
-            onReject={handleReject}
+            onVerifyClick={handleVerify} // Pass the verification handler to VerificationTable
           />
         )}
         {activeTab === "verified" && (
@@ -142,11 +129,15 @@ const ProviderForm = () => {
                     <td className="actions-unique">
                       <FaEdit
                         className="actionIcon-unique edit"
-                        onClick={() => handleEdit(provider)}
+                        onClick={() =>
+                          console.log("Edit provider:", provider._id)
+                        }
                       />
                       <FaTrash
                         className="actionIcon-unique delete"
-                        onClick={() => handleDelete(provider._id)}
+                        onClick={() =>
+                          console.log("Delete provider:", provider._id)
+                        }
                       />
                     </td>
                   </tr>
