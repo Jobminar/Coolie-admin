@@ -13,13 +13,33 @@ export const fetchCategories = async () => {
 };
 
 // Function to fetch providers from mock-provider.json
-export const fetchProviders = async () => {
+// src/api-services.js
+
+export const fetchProviderWorkDetails = async (providerId) => {
   try {
-    const response = await fetch("/mock-provider.json"); // Ensure the mock-provider.json file is available in the public directory
+    const response = await fetch(
+      `https://api.coolieno1.in/v1.0/providers/work/${providerId}`,
+    );
     if (!response.ok) throw new Error("Network response was not ok");
     return await response.json();
   } catch (error) {
-    console.error("Failed to fetch providers:", error);
+    console.error("Failed to fetch provider work details:", error);
+    return null;
+  }
+};
+
+// Function to fetch provider certificates by providerId
+export const fetchProviderCertificates = async (providerId) => {
+  try {
+    const response = await fetch(
+      `https://api.coolieno1.in/v1.0/providers/provider-certificate/${providerId}`,
+    );
+    if (!response.ok) throw new Error("Network response was not ok");
+    const data = await response.json();
+    console.log("Fetched provider certificates:", data); // Log the data to inspect it
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch provider certificates:", error);
     return null;
   }
 };

@@ -384,3 +384,34 @@
     right: 0;
     z-index: 3;
 }
+
+
+.status-button {
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 150px;
+    /* Adjust this width as needed */
+    margin: 0 10px;
+    /* Add horizontal space between buttons */
+}
+
+.status-button.pending {
+    background-color: red;
+    width: 12rem;
+}
+
+.status-button.approve {
+    background-color: green;
+}
+
+.status-button:hover {
+    opacity: 0.8;
+}
