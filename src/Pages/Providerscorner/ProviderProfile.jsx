@@ -7,68 +7,70 @@ const ProviderProfile = ({ onDocumentsClick, onBackClick, providerId }) => {
   const [providerData, setProviderData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Fetch provider details by providerId
-  const fetchProviderDetailsId = async (providerId) => {
-    console.log(
-      "Fetching provider details from the API for providerId:",
-      providerId,
-    );
-    try {
-      const response = await fetch(
-        `https://api.coolieno1.in/v1.0/providers/provider-details/${providerId}`,
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log("Provider details fetched successfully:", data);
-      return data;
-    } catch (error) {
-      console.error("Failed to fetch provider details:", error);
-      return null;
-    }
-  };
+  const [workDetails, setWorkDetails] = useState([]);
+  const [checkedServices, setCheckedServices] = useState({});
 
   useEffect(() => {
-    const getProviderData = async () => {
+    const fetchProviderDetails = async (providerId) => {
+      console.log(
+        "Fetching provider details from the API for providerId:",
+        providerId,
+      );
       try {
-        // Fetch provider details
-        const provider = await fetchProviderDetailsId(providerId);
+        const response = await fetch(
+          `https://api.coolieno1.in/v1.0/providers/provider-details/${providerId}`,
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Provider details fetched successfully:", data);
+        return data;
+      } catch (error) {
+        console.error("Failed to fetch provider details:", error);
+        return null;
+      }
+    };
 
+    const fetchProviderWorkDetails = async (providerId) => {
+      try {
+        const response = await fetch(
+          `https://api.coolieno1.in/v1.0/providers/work/${providerId}`,
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.length > 0 ? data[0].works : [];
+      } catch (error) {
+        console.error("Failed to fetch provider work details:", error);
+        return [];
+      }
+    };
+
+    const getProviderData = async () => {
+      if (!providerId) {
+        console.error("Provider ID is missing");
+        return;
+      }
+
+      try {
+        const provider = await fetchProviderDetails(providerId);
         if (!provider) {
           throw new Error("Provider not found");
         }
 
-        // Fetch provider work details
-        const workDetails = await fetch(
-          `https://api.coolieno1.in/v1.0/providers/work/${providerId}`,
-        );
-        const workData = await workDetails.json();
-        const experience =
-          workData?.length > 0 ? workData[0].works[0]?.experience : "N/A";
-        const services =
-          workData?.length > 0
-            ? workData[0].works.map((work) => [work.nameOfService])
-            : [];
+        const workData = await fetchProviderWorkDetails(providerId);
+        setWorkDetails(workData);
 
-        // Combine the data
-        const formattedData = {
-          name: provider.providerName,
-          mobile: provider.phone,
-          email: "provider@example.com", // Use actual email if available
-          address: provider.address,
-          rating: "N/A", // If rating is part of work details, replace with actual data
-          experience: experience,
-          services: services,
-          image: provider.image,
-          age: provider.age,
-          pincode: provider.pincode,
-          radius: provider.radius,
-          gender: provider.gender,
-        };
+        // Initialize checkedServices state with all services unchecked
+        const initialCheckedState = {};
+        workData.forEach((work) => {
+          initialCheckedState[work._id] = false; // All services unchecked by default
+        });
+        setCheckedServices(initialCheckedState);
 
-        setProviderData(formattedData);
+        setProviderData(provider);
       } catch (err) {
         setError(err.message);
         console.error("Failed to load provider data:", err);
@@ -77,10 +79,19 @@ const ProviderProfile = ({ onDocumentsClick, onBackClick, providerId }) => {
       }
     };
 
-    if (providerId) {
-      getProviderData();
-    }
+    getProviderData();
   }, [providerId]);
+
+  const handleServiceCheck = (serviceId) => {
+    setCheckedServices((prevChecked) => ({
+      ...prevChecked,
+      [serviceId]: !prevChecked[serviceId], // Toggle the checked state
+    }));
+  };
+
+  const handleDocumentsButtonClick = () => {
+    onDocumentsClick(providerId); // Pass the providerId back to the parent
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -107,27 +118,15 @@ const ProviderProfile = ({ onDocumentsClick, onBackClick, providerId }) => {
           <div className="user-info">
             <div className="info-item">
               <label>Name:</label>
-              <span>{providerData.name}</span>
+              <span>{providerData.providerName}</span>
             </div>
             <div className="info-item">
               <label>Mobile:</label>
-              <span>{providerData.mobile}</span>
-            </div>
-            <div className="info-item">
-              <label>Email:</label>
-              <span>{providerData.email}</span>
+              <span>{providerData.phone}</span>
             </div>
             <div className="info-item">
               <label>Address:</label>
               <span>{providerData.address}</span>
-            </div>
-            <div className="info-item">
-              <label>Rating:</label>
-              <span>{providerData.rating}</span>
-            </div>
-            <div className="info-item">
-              <label>Experience:</label>
-              <span>{providerData.experience}</span>
             </div>
             <div className="info-item">
               <label>Age:</label>
@@ -151,15 +150,18 @@ const ProviderProfile = ({ onDocumentsClick, onBackClick, providerId }) => {
       <h3>Services</h3>
       <div className="services-container">
         <div className="services">
-          {providerData.services.length > 0 ? (
-            providerData.services.map((serviceRow, index) => (
-              <div key={index} className="service-entry">
-                {serviceRow.map((service, idx) => (
-                  <label key={idx} className="service-checkbox">
-                    <input type="checkbox" />
-                    <span>{service}</span>
-                  </label>
-                ))}
+          {workDetails.length > 0 ? (
+            workDetails.map((work) => (
+              <div key={work._id} className="service-entry">
+                <label className="service-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={checkedServices[work._id] || false}
+                    onChange={() => handleServiceCheck(work._id)}
+                  />
+                  <span>{work.nameOfService}</span>
+                </label>
+                <span>Experience: {work.experience}</span>
               </div>
             ))
           ) : (
@@ -167,7 +169,7 @@ const ProviderProfile = ({ onDocumentsClick, onBackClick, providerId }) => {
           )}
         </div>
       </div>
-      <button className="documentsButton" onClick={onDocumentsClick}>
+      <button className="documentsButton" onClick={handleDocumentsButtonClick}>
         Documents
       </button>
     </div>

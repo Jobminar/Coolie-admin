@@ -38,3 +38,25 @@ export const fetchProviderDetailsId = async (providerId) => {
     return null;
   }
 };
+
+// Function to fetch providers from mock-provider.json
+
+// Function to fetch provider details from the API
+export const fetchProviders = async () => {
+  console.log("Fetching provider details from the API...");
+  try {
+    const response = await fetch(
+      "https://api.coolieno1.in/v1.0/providers/provider-details",
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log("Provider details fetched successfully:", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch provider details:", error);
+    return [];
+  }
+};
+// src/api-services.js

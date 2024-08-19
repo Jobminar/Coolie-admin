@@ -53,8 +53,9 @@ const AuthenticateProvider = ({ providerId }) => {
     if (providerId) {
       const fetchDocuments = async () => {
         try {
-          const response = await axios.get(
-            `https://api.coolieno1.in/v1.0/providers/provider-certificate/${providerId}`,
+          const response = await axios.post(
+            `https://api.coolieno1.in/v1.0/providers/provider-certificate/get`,
+            { providerId }, // Send providerId as part of the request body
           );
           console.log("Fetched provider certificates:", response.data);
           setDocuments(response.data);
@@ -75,7 +76,7 @@ const AuthenticateProvider = ({ providerId }) => {
   // Handle verification of a provider
   const handleVerify = (provider) => {
     if (window.confirm("Are you sure you want to verify this provider?")) {
-      setSelectedProvider(provider); // Set the entire provider object including _id
+      setSelectedProvider(provider); // Set the entire provider object including providerId
       setActiveComponent("ProviderProfile");
       setFilterBarProps((prev) => ({
         ...prev,
@@ -98,10 +99,26 @@ const AuthenticateProvider = ({ providerId }) => {
   };
 
   // Handle document section navigation
-  const handleDocumentsClick = () => {
+  const handleDocumentsClick = (providerId) => {
     setActiveComponent("DocumentVerification");
     toast.info("Viewing document verification");
-    console.log("Navigated to DocumentVerification");
+    console.log("Navigated to DocumentVerification", providerId);
+
+    // Fetch documents based on the providerId
+    const fetchDocuments = async () => {
+      try {
+        const response = await axios.post(
+          `https://api.coolieno1.in/v1.0/providers/provider-certificate/get`,
+          { providerId }, // Send providerId as part of the request body
+        );
+        console.log("Fetched provider certificates:", response.data);
+        setDocuments(response.data);
+      } catch (error) {
+        console.error("Error fetching provider certificates:", error);
+        toast.error("Failed to load provider documents");
+      }
+    };
+    fetchDocuments();
   };
 
   const handleDocumentApprove = (documentId) => {
@@ -293,11 +310,12 @@ const AuthenticateProvider = ({ providerId }) => {
           )}
           {activeComponent === "ProviderProfile" && selectedProvider && (
             <ProviderProfile
-              providerId={selectedProvider._id} // Pass the providerId to ProviderProfile
+              providerId={selectedProvider.providerId} // This is the correct field
               onDocumentsClick={handleDocumentsClick}
               onBackClick={handleBackClick}
             />
           )}
+
           {activeComponent === "DocumentVerification" && (
             <div className="document-verification">
               <div className="sticky-header">
@@ -311,31 +329,31 @@ const AuthenticateProvider = ({ providerId }) => {
               <div className="document-section">
                 {documents.length > 0 ? (
                   documents.map((document) => (
-                    <div key={document.id} className="document-item">
+                    <div key={document._id} className="document-item">
                       <embed
-                        src={document.file}
+                        src={`https://api.coolieno1.in/v1.0/${document.image}`}
                         type="application/pdf"
                         className="document-display"
                       />
                       <label>
-                        Status: {documentStatuses[document.id] || "Pending"}
+                        Status: {documentStatuses[document._id] || "Pending"}
                       </label>
                       <div className="button-group">
                         <button
                           className="action-button-unique approve"
-                          onClick={() => handleDocumentApprove(document.id)}
+                          onClick={() => handleDocumentApprove(document._id)}
                         >
                           Approve Doc
                         </button>
                         <button
                           className="action-button-unique reupload"
-                          onClick={() => handleDocumentReupload(document.id)}
+                          onClick={() => handleDocumentReupload(document._id)}
                         >
                           Reupload Doc
                         </button>
                         <button
                           className="action-button-unique decline"
-                          onClick={() => handleDocumentDecline(document.id)}
+                          onClick={() => handleDocumentDecline(document._id)}
                         >
                           Decline Doc
                         </button>
@@ -343,15 +361,15 @@ const AuthenticateProvider = ({ providerId }) => {
                       <div className="comment-section">
                         <textarea
                           placeholder="Comment"
-                          value={comments[document.id] || ""}
+                          value={comments[document._id] || ""}
                           onChange={(e) =>
-                            handleCommentChange(document.id, e.target.value)
+                            handleCommentChange(document._id, e.target.value)
                           }
                         ></textarea>
                         <div className="comment-footer">
                           <button
                             className="submit-button-unique"
-                            onClick={() => handleCommentSubmit(document.id)}
+                            onClick={() => handleCommentSubmit(document._id)}
                           >
                             Send Comment
                           </button>

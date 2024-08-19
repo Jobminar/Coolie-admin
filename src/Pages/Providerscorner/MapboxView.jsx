@@ -1,23 +1,43 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
-import logo from "../../assets/images/logo.png.png"; // Ensure you have the logo.png file in the correct path
+import logo from "../../assets/images/logo.png"; // Ensure you have the logo.png file in the correct path
 
 // Add your Mapbox access token
 mapboxgl.accessToken =
   "pk.eyJ1IjoiY29vbGllbm8xLWFkbWluIiwiYSI6ImNsdWZjZGR1ZzBtZHcybnJvaHBiYTd2NzMifQ.TQ6FrqUIUUWv7J7n75A3tQ";
 
-const MapboxView = ({ providers, selectedCategory }) => {
+const MapboxView = ({ providers }) => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const markersRef = useRef([]);
+  const [coordinates, setCoordinates] = useState([]);
+
+  useEffect(() => {
+    const fetchCoordinates = async () => {
+      try {
+        const response = await fetch(
+          "https://api.coolieno1.in/v1.0/providers/cordinates",
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setCoordinates(data);
+      } catch (error) {
+        console.error("Failed to fetch coordinates:", error);
+      }
+    };
+
+    fetchCoordinates();
+  }, []);
 
   useEffect(() => {
     if (!mapRef.current) {
       mapRef.current = new mapboxgl.Map({
         container: mapContainerRef.current,
         style: "mapbox://styles/mapbox/streets-v11",
-        center: [78.491684, 17.38714], // starting position [lng, lat] for Hyderabad
-        zoom: 10, // starting zoom
+        center: [78.491684, 17.38714], // Default starting position [lng, lat]
+        zoom: 10, // Default starting zoom
       });
     }
 
@@ -27,24 +47,24 @@ const MapboxView = ({ providers, selectedCategory }) => {
     markersRef.current.forEach((marker) => marker.remove());
     markersRef.current = [];
 
-    // Add markers to the map
-    if (providers && selectedCategory) {
+    // Add markers to the map based on provider details and their coordinates
+    if (providers && coordinates.length > 0) {
       providers.forEach((provider) => {
-        if (
-          provider.workDetails.some(
-            (work) => work.category === selectedCategory,
-          )
-        ) {
+        const coord = coordinates.find(
+          (coord) => coord.userId === provider.providerId,
+        );
+
+        if (coord) {
           const popupContent = `
             <div>
-              <h3>${provider.name}</h3>
-              <p><strong>Email:</strong> ${provider.email}</p>
+              <h3>${provider.providerName}</h3>
               <p><strong>Phone:</strong> ${provider.phone}</p>
-              <p><strong>Location:</strong> ${provider.location.address}</p>
-              <p><strong>Join Date:</strong> ${provider.joinDate}</p>
-              <p><strong>Package:</strong> ${provider.package}</p>
-              <p><strong>Category:</strong> ${selectedCategory}</p>
-              <p><strong>Status:</strong> ${provider.status}</p>
+              <p><strong>Location:</strong> ${provider.address}</p>
+              <p><strong>Pincode:</strong> ${provider.pincode}</p>
+              <p><strong>Radius:</strong> ${provider.radius}</p>
+              <p><strong>Status:</strong> ${
+                provider.isVerified ? "Verified" : "Not Verified"
+              }</p>
             </div>
           `;
 
@@ -57,10 +77,7 @@ const MapboxView = ({ providers, selectedCategory }) => {
           el.style.backgroundSize = "cover";
 
           const marker = new mapboxgl.Marker(el)
-            .setLngLat([
-              provider.location.longitude,
-              provider.location.latitude,
-            ])
+            .setLngLat([coord.longitude, coord.latitude])
             .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(popupContent)) // Add popups with HTML content
             .addTo(map);
 
@@ -76,7 +93,7 @@ const MapboxView = ({ providers, selectedCategory }) => {
         mapRef.current = null;
       }
     };
-  }, [providers, selectedCategory]);
+  }, [providers, coordinates]);
 
   return (
     <div

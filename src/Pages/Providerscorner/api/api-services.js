@@ -12,9 +12,6 @@ export const fetchCategories = async () => {
   }
 };
 
-// Function to fetch providers from mock-provider.json
-// src/api-services.js
-
 export const fetchProviderWorkDetails = async (providerId) => {
   try {
     const response = await fetch(
