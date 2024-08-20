@@ -102,6 +102,7 @@ const ProviderForm = ({ onVerifyProvider }) => {
                 <tr>
                   <th>ID</th>
                   <th>Provider Name</th>
+                  <th>Profile Image</th>
                   <th>Phone</th>
                   <th>Location</th>
                   <th>Age</th>
@@ -115,6 +116,17 @@ const ProviderForm = ({ onVerifyProvider }) => {
                   <tr key={provider._id}>
                     <td>{provider.providerId || "N/A"}</td>
                     <td>{provider.providerName || "N/A"}</td>
+                    <td>
+                      {provider.image ? (
+                        <img
+                          src={provider.image}
+                          alt={provider.providerName}
+                          className="provider-image-unique"
+                        />
+                      ) : (
+                        "N/A"
+                      )}
+                    </td>
                     <td>{provider.phone || "N/A"}</td>
                     <td>{provider.address || "N/A"}</td>
                     <td>{provider.age || "N/A"}</td>

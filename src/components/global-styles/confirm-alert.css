@@ -1,0 +1,43 @@
+.react-confirm-alert-overlay {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.react-confirm-alert {
+    font-family: Arial, sans-serif;
+}
+
+.react-confirm-alert-body {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    max-width: 400px;
+    margin: auto;
+}
+
+.confirm-button-yes {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.confirm-button-no {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.confirm-button-yes:hover {
+    background-color: #45a049;
+}
+
+.confirm-button-no:hover {
+    background-color: #d32f2f;
+}

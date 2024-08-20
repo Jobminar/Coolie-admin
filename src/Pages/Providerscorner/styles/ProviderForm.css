@@ -378,3 +378,15 @@
 .providers-table-unique tr.actions-unique {
     border-bottom: #ccc
 }
+
+
+.provider-image-unique {
+    width: 50px;
+    /* Adjust the width as needed */
+    height: 50px;
+    /* Adjust the height as needed */
+    border-radius: 50%;
+    /* Make it circular */
+    object-fit: cover;
+    /* Ensure the image covers the area without distortion */
+}

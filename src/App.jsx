@@ -8,10 +8,10 @@ function App() {
       <Toaster
         toastOptions={{
           success: {
-            duration: 4000,
+            duration: 3000,
           },
           error: {
-            duration: 4000,
+            duration: 3000,
           },
         }}
         limit={1}

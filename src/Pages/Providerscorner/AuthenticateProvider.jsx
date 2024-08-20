@@ -3,10 +3,17 @@ import PropTypes from "prop-types";
 import "./styles/AuthenticateProvider.css";
 import { FaFileAlt, FaTrash, FaArrowLeft, FaSearch } from "react-icons/fa";
 import ProviderProfile from "./ProviderProfile";
-import axios from "axios";
 import { FilterBarContext } from "../../FilterBarContext";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Import toastify CSS
+import { toast, Toaster } from "react-hot-toast"; // Import react-hot-toast
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import confirm alert CSS
+
+import {
+  fetchProviders,
+  fetchProviderCertificates,
+  updateProviderCertificate,
+  updateProviderDetails, // Import the new API call for updating provider details
+} from "./api/authenticate-provider.js"; // Import API calls
 
 const AuthenticateProvider = ({ providerId }) => {
   const [activeComponent, setActiveComponent] = useState("ProviderList");
@@ -29,187 +36,277 @@ const AuthenticateProvider = ({ providerId }) => {
 
   // Fetch providers when the component mounts
   useEffect(() => {
-    const fetchProviders = async () => {
+    const loadProviders = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          "https://api.coolieno1.in/v1.0/providers/provider-details",
-        );
-        setProviders(response.data);
-        console.log("Fetched providers:", response.data);
+        const data = await fetchProviders();
+        console.log("Fetched providers successfully:", data);
+        setProviders(data);
       } catch (error) {
-        setError(error.message);
         console.error("Error fetching providers:", error.message);
-        toast.error("Failed to load providers");
+        setError(error.message);
+        toast.error(error.message);
       } finally {
         setLoading(false);
       }
     };
-    fetchProviders();
+    loadProviders();
   }, []);
 
   // Fetch provider certificates when providerId changes
   useEffect(() => {
     if (providerId) {
-      const fetchDocuments = async () => {
+      const loadDocuments = async () => {
         try {
-          const response = await axios.post(
-            `https://api.coolieno1.in/v1.0/providers/provider-certificate/get`,
-            { providerId }, // Send providerId as part of the request body
-          );
-          console.log("Fetched provider certificates:", response.data);
-          setDocuments(response.data);
+          const data = await fetchProviderCertificates(providerId);
+          console.log("Fetched provider certificates successfully:", data);
+          setDocuments(data);
         } catch (error) {
-          console.error("Error fetching provider certificates:", error);
-          toast.error("Failed to load provider documents");
+          if (error.response && error.response.status === 404) {
+            console.error("No certificates found for this provider.");
+            setDocuments([]); // Clear documents state if 404 error occurs
+          } else {
+            console.error(
+              "Error fetching provider certificates:",
+              error.message,
+            );
+            toast.error("Failed to load provider documents");
+          }
         }
       };
-      fetchDocuments();
+      loadDocuments();
     }
   }, [providerId]);
 
   // Handle table row click to remove fade effect
   const handleTableClick = () => {
+    console.log("Table row clicked");
     setIsRowClicked(true);
   };
 
   // Handle verification of a provider
   const handleVerify = (provider) => {
-    if (window.confirm("Are you sure you want to verify this provider?")) {
-      setSelectedProvider(provider); // Set the entire provider object including providerId
-      setActiveComponent("ProviderProfile");
-      setFilterBarProps((prev) => ({
-        ...prev,
-        showProviderButtons: false,
-      }));
-      toast.success("Please verify provider docs");
-      console.log("Provider verified:", provider);
-    }
+    confirmAlert({
+      title: "Confirm to verify",
+      message: "Are you sure you want to verify this provider?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            console.log("Provider selected for verification:", provider);
+            setSelectedProvider(provider); // Set the entire provider object including providerId
+            setActiveComponent("ProviderProfile");
+            setFilterBarProps((prev) => ({
+              ...prev,
+              showProviderButtons: false,
+            }));
+            toast.success("Please verify provider docs");
+          },
+        },
+        {
+          label: "No",
+          onClick: () => console.log("Verification canceled"),
+        },
+      ],
+    });
   };
 
   // Handle back button click
   const handleBackClick = () => {
+    console.log("Navigating back to ProviderList");
     setActiveComponent("ProviderList");
     setFilterBarProps((prev) => ({
       ...prev,
       showProviderButtons: true,
     }));
-    toast.info("Returning to provider list");
-    console.log("Navigated back to ProviderList");
+    toast("Returning to provider list", { icon: "🔙" });
   };
 
   // Handle document section navigation
   const handleDocumentsClick = (providerId) => {
+    console.log(
+      "Navigating to DocumentVerification for providerId:",
+      providerId,
+    );
     setActiveComponent("DocumentVerification");
-    toast.info("Viewing document verification");
-    console.log("Navigated to DocumentVerification", providerId);
+    toast("Viewing document verification", { icon: "📄" });
 
     // Fetch documents based on the providerId
-    const fetchDocuments = async () => {
+    const loadDocuments = async () => {
       try {
-        const response = await axios.post(
-          `https://api.coolieno1.in/v1.0/providers/provider-certificate/get`,
-          { providerId }, // Send providerId as part of the request body
-        );
-        console.log("Fetched provider certificates:", response.data);
-        setDocuments(response.data);
+        const data = await fetchProviderCertificates(providerId);
+        console.log("Fetched provider certificates successfully:", data);
+        setDocuments(data);
       } catch (error) {
-        console.error("Error fetching provider certificates:", error);
-        toast.error("Failed to load provider documents");
+        console.error("Error fetching provider certificates:", error.message);
+        toast.error(error.message);
       }
     };
-    fetchDocuments();
+    loadDocuments();
   };
 
-  const handleDocumentApprove = (documentId) => {
-    if (window.confirm("Are you sure you want to approve this document?")) {
-      setDocumentStatuses((prevStatuses) => ({
-        ...prevStatuses,
-        [documentId]: "Approved",
-      }));
-      toast.success("Please verify provider docs");
-      console.log("Document approved:", documentId);
-    }
-  };
-
-  const handleDocumentReupload = (documentId) => {
-    if (
-      window.confirm(
-        "Are you sure you want to request a reupload for this document?",
-      )
-    ) {
-      setDocumentStatuses((prevStatuses) => ({
-        ...prevStatuses,
-        [documentId]: "Reupload",
-      }));
-      toast.warning("Please verify provider docs");
-      console.log("Reupload requested for document:", documentId);
-    }
-  };
-
-  const handleDocumentDecline = (documentId) => {
-    if (window.confirm("Are you sure you want to decline this document?")) {
-      setDocumentStatuses((prevStatuses) => ({
-        ...prevStatuses,
-        [documentId]: "Declined",
-      }));
-      toast.error("Please verify provider docs");
-      console.log("Document declined:", documentId);
-    }
-  };
-
+  // Handle comment change
   const handleCommentChange = (documentId, value) => {
+    console.log(`Updating comment for documentId ${documentId}:`, value);
     setComments((prevComments) => ({
       ...prevComments,
       [documentId]: value,
     }));
-    console.log("Comment updated for document:", documentId);
   };
 
-  const handleCommentSubmit = (documentId) => {
-    toast.info("Please verify provider docs");
-    console.log("Comment sent for document:", documentId, comments[documentId]);
-    setComments((prevComments) => ({
-      ...prevComments,
-      [documentId]: "",
-    }));
+  // Handle document update based on action type
+  const handleDocumentUpdate = async (documentId, actionType) => {
+    const customMessage = comments[documentId]?.trim();
+    if (!customMessage && actionType !== "approve") {
+      toast.error("Please enter a custom message before submitting.");
+      return null; // Return null if no custom message is provided
+    }
+
+    let updateData = {
+      isVerified: false,
+      message: "",
+    };
+
+    if (actionType === "approve") {
+      updateData.isVerified = true;
+      updateData.message = `Document verified: ${customMessage || ""}`;
+    } else if (actionType === "reupload" || actionType === "pending") {
+      updateData.message = `Please reupload document: ${customMessage}`;
+    } else if (actionType === "decline") {
+      updateData.message = `Your document was declined: ${customMessage}`;
+    }
+
+    const toastId = toast.loading("Updating document status...");
+    try {
+      const updatedDocument = await updateProviderCertificate(
+        documentId,
+        updateData,
+      );
+      console.log(
+        `Document ${documentId} updated successfully:`,
+        updatedDocument,
+      );
+      toast.success("Document status updated successfully.", {
+        id: toastId,
+      });
+
+      // Update local state to reflect the changes
+      setDocumentStatuses((prevStatuses) => ({
+        ...prevStatuses,
+        [documentId]: actionType === "approve" ? "Approved" : "Pending",
+      }));
+      setComments((prevComments) => ({
+        ...prevComments,
+        [documentId]: "",
+      }));
+
+      // Re-fetch provider certificates after update
+      await fetchProviderCertificates(providerId);
+
+      // If the action was approve, also update the provider's isVerified status
+      if (actionType === "approve") {
+        const providerId = updatedDocument.providerId;
+        await updateProviderDetails(providerId, { isVerified: true });
+        console.log(`Provider ${providerId} updated to isVerified: true`);
+        toast.success(`Provider ${providerId} has been verified.`);
+      }
+
+      return updatedDocument; // Return the updated document to get the providerId and associated providerDetails _id
+    } catch (error) {
+      toast.error("Failed to update document status.", { id: toastId });
+      console.error("Error updating document:", error.message);
+      return null; // Return null in case of error
+    }
   };
 
+  // Handle approving all documents
   const handleApproveAll = () => {
-    if (window.confirm("Are you sure you want to approve all documents?")) {
-      const newStatuses = {};
-      documents.forEach((doc) => {
-        newStatuses[doc.id] = "Approved";
-      });
-      setDocumentStatuses(newStatuses);
-      setOverallStatus("Approved");
-      toast.success("Please verify provider docs");
-      console.log("All documents approved");
-    }
+    confirmAlert({
+      title: "Confirm to approve all",
+      message: "Are you sure you want to approve all documents?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            const providerDetailsMap = new Map(); // Map to store providerId and providerDetails _id
+            for (const doc of documents) {
+              const updatedDocument = await handleDocumentUpdate(
+                doc._id,
+                "approve",
+              );
+              if (updatedDocument) {
+                const providerId = updatedDocument.providerId;
+                providerDetailsMap.set(providerId, updatedDocument._id);
+              }
+            }
+            setOverallStatus("Approved");
+
+            // Update provider details for all associated providers
+            for (const [providerId] of providerDetailsMap) {
+              try {
+                await updateProviderDetails(providerId, {
+                  isVerified: true,
+                });
+                console.log(
+                  `Provider ${providerId} updated to isVerified: true`,
+                );
+                toast.success(`Provider ${providerId} has been verified.`);
+              } catch (error) {
+                console.error(
+                  `Failed to update provider ${providerId}:`,
+                  error.message,
+                );
+                toast.error(`Failed to update provider ${providerId}.`);
+              }
+            }
+          },
+        },
+        {
+          label: "No",
+          onClick: () => console.log("Approval canceled"),
+        },
+      ],
+    });
   };
 
+  // Handle marking all documents as pending
   const handlePendingAll = () => {
-    if (
-      window.confirm("Are you sure you want to mark all documents as pending?")
-    ) {
-      const newStatuses = {};
-      documents.forEach((doc) => {
-        newStatuses[doc.id] = "Pending";
-      });
-      setDocumentStatuses(newStatuses);
-      setOverallStatus("Pending");
-      toast.info("Please verify provider docs");
-      console.log("All documents marked as pending");
-    }
+    confirmAlert({
+      title: "Confirm to mark all as pending",
+      message: "Are you sure you want to mark all documents as pending?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            for (const doc of documents) {
+              await handleDocumentUpdate(doc._id, "reupload");
+            }
+            setOverallStatus("Pending");
+
+            // Refetch provider certificates after marking all as pending
+            await fetchProviderCertificates(providerId);
+            toast.success(
+              "All documents have been marked as pending. Please request reupload.",
+            );
+          },
+        },
+        {
+          label: "No",
+          onClick: () => console.log("Mark as pending canceled"),
+        },
+      ],
+    });
   };
 
-  const filteredProviders = providers.filter((provider) =>
-    provider.phone.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredProviders = providers.filter(
+    (provider) =>
+      provider.phone.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      !provider.isVerified, // Only show providers where isVerified is false
   );
 
   return (
     <div className="authenticate-provider">
-      <ToastContainer />
+      <Toaster position="top-right" reverseOrder={false} />
       {loading ? (
         <div className="loading">Loading...</div>
       ) : error ? (
@@ -326,77 +423,97 @@ const AuthenticateProvider = ({ providerId }) => {
                 <span className="status-Bar">Status: {overallStatus}</span>
                 <span className="document-heading">Documents</span>
               </div>
-              <div className="document-section">
-                {documents.length > 0 ? (
-                  documents.map((document) => (
+
+              {documents.length > 0 ? (
+                <div className="document-section">
+                  {documents.map((document) => (
                     <div key={document._id} className="document-item">
                       <embed
-                        src={`https://api.coolieno1.in/v1.0/${document.image}`}
+                        src={document.image}
                         type="application/pdf"
                         className="document-display"
                       />
                       <label>
-                        Status: {documentStatuses[document._id] || "Pending"}
+                        Status: {document.isVerified ? "Approved" : "Pending"}
                       </label>
                       <div className="button-group">
-                        <button
-                          className="action-button-unique approve"
-                          onClick={() => handleDocumentApprove(document._id)}
-                        >
-                          Approve Doc
-                        </button>
-                        <button
-                          className="action-button-unique reupload"
-                          onClick={() => handleDocumentReupload(document._id)}
-                        >
-                          Reupload Doc
-                        </button>
-                        <button
-                          className="action-button-unique decline"
-                          onClick={() => handleDocumentDecline(document._id)}
-                        >
-                          Decline Doc
-                        </button>
+                        {document.isVerified ? (
+                          <p>Document approved</p>
+                        ) : (
+                          <>
+                            <button
+                              className="action-button-unique approve"
+                              onClick={() =>
+                                handleDocumentUpdate(document._id, "approve")
+                              }
+                            >
+                              Approve Doc
+                            </button>
+                            <button
+                              className="action-button-unique reupload"
+                              onClick={() =>
+                                handleDocumentUpdate(document._id, "reupload")
+                              }
+                            >
+                              Reupload Doc
+                            </button>
+                            <button
+                              className="action-button-unique decline"
+                              onClick={() =>
+                                handleDocumentUpdate(document._id, "decline")
+                              }
+                            >
+                              Decline Doc
+                            </button>
+                          </>
+                        )}
                       </div>
                       <div className="comment-section">
                         <textarea
-                          placeholder="Comment"
+                          placeholder="Convey the reason or message"
                           value={comments[document._id] || ""}
                           onChange={(e) =>
                             handleCommentChange(document._id, e.target.value)
                           }
+                          disabled={document.isVerified} // Disable if document is already verified
                         ></textarea>
                         <div className="comment-footer">
                           <button
                             className="submit-button-unique"
-                            onClick={() => handleCommentSubmit(document._id)}
+                            onClick={() =>
+                              handleDocumentUpdate(document._id, "message")
+                            }
+                            disabled={document.isVerified} // Disable if document is already verified
                           >
-                            Send Comment
+                            Add Comment
                           </button>
                         </div>
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <div className="no-certificates">
-                    No certificates available
-                  </div>
-                )}
-              </div>
-              <div className="global-status-buttons">
-                <button
-                  className="status-button pending"
-                  onClick={handlePendingAll}
-                >
-                  Mark all as Pending
-                </button>
-                <button
-                  className="status-button approve"
-                  onClick={handleApproveAll}
-                >
-                  Approve All
-                </button>
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="no-certificates">
+                  No certificates available for this provider.
+                </div>
+              )}
+
+              {documents.length > 0 && (
+                <div className="global-status-buttons">
+                  <button
+                    className="status-button pending"
+                    onClick={handlePendingAll}
+                  >
+                    Mark all as Pending
+                  </button>
+                  <button
+                    className="status-button approve"
+                    onClick={handleApproveAll}
+                  >
+                    Approve All
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </>

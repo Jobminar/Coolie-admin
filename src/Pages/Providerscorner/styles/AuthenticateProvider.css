@@ -415,3 +415,8 @@
 .status-button:hover {
     opacity: 0.8;
 }
+
+.global-status-buttons {
+    box-sizing: border-box;
+    padding: 0.5rem;
+}
