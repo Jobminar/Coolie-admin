@@ -58,7 +58,7 @@ const ProviderForm = ({ onVerifyProvider }) => {
     <div className="provider-form-unique">
       {isLoading && <div className="loading">Loading...</div>}
       <div className="provider-form-header">
-        <h2>Provider Management</h2>
+        <h2>All Providers</h2>
         <div className="provider-tabs-unique">
           <button
             className={`provider-tab-unique ${

@@ -8,8 +8,7 @@ import ProviderList from "./ProviderList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"; // Import FontAwesome icons
 import { FilterBarContext } from "../../FilterBarContext";
-import { fetchCategories } from "./api/api-services";
-import { fetchProviders } from "./api/provider-form-api";
+import { fetchCategories, fetchProviders } from "./api/api-services";
 import MapboxView from "./MapboxView";
 
 const ProvidersCorner = () => {
@@ -135,7 +134,7 @@ const ProvidersCorner = () => {
         </>
       )}
 
-      {activeComponent === "list" && (
+      {activeComponent === "manage" && (
         <ProviderList
           providers={providers.filter((provider) => provider.isVerified)}
           handleEdit={handleEdit}
@@ -144,8 +143,9 @@ const ProvidersCorner = () => {
       )}
 
       {activeComponent === "add" && <AddProvider />}
-      {activeComponent === "manage" && (
+      {activeComponent === "list" && (
         <ProviderForm
+          providers={providers} // Pass providers to ProviderForm
           onVerifyProvider={handleVerifyProvider} // Pass the handler to ProviderForm
         />
       )}

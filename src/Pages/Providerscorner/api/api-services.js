@@ -1,5 +1,5 @@
 // src/api-services.js
-
+import axios from "axios";
 // Function to fetch categories from categories.json
 export const fetchCategories = async () => {
   try {
@@ -38,5 +38,18 @@ export const fetchProviderCertificates = async (providerId) => {
   } catch (error) {
     console.error("Failed to fetch provider certificates:", error);
     return null;
+  }
+};
+
+export const fetchProviders = async () => {
+  try {
+    const response = await axios.get(
+      "https://api.coolieno1.in/v1.0/providers/provider-details",
+    );
+    console.log("Fetched providers:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching providers:", error.message);
+    throw new Error("Failed to load providers");
   }
 };
