@@ -29,6 +29,9 @@ const AuthenticateProvider = ({ providerId }) => {
   const [error, setError] = useState(null);
   const [isRowClicked, setIsRowClicked] = useState(false); // Track row click
 
+  // Flag to trigger re-fetching after update
+  const [shouldFetchDocuments, setShouldFetchDocuments] = useState(false);
+
   // Log providerId whenever it changes
   useEffect(() => {
     console.log("Received providerId:", providerId);
@@ -53,10 +56,11 @@ const AuthenticateProvider = ({ providerId }) => {
     loadProviders();
   }, []);
 
-  // Fetch provider certificates when providerId changes
+  // Fetch provider certificates when providerId changes or when shouldFetchDocuments flag is toggled
   useEffect(() => {
     if (providerId) {
       const loadDocuments = async () => {
+        setLoading(true);
         try {
           const data = await fetchProviderCertificates(providerId);
           console.log("Fetched provider certificates successfully:", data);
@@ -72,11 +76,13 @@ const AuthenticateProvider = ({ providerId }) => {
             );
             toast.error("Failed to load provider documents");
           }
+        } finally {
+          setLoading(false);
         }
       };
       loadDocuments();
     }
-  }, [providerId]);
+  }, [providerId, shouldFetchDocuments]); // Add shouldFetchDocuments to dependency array
 
   // Handle table row click to remove fade effect
   const handleTableClick = () => {
@@ -200,8 +206,8 @@ const AuthenticateProvider = ({ providerId }) => {
         [documentId]: "",
       }));
 
-      // Re-fetch provider certificates after update
-      await fetchProviderCertificates(providerId);
+      // Trigger re-fetching of documents
+      setShouldFetchDocuments((prev) => !prev);
 
       // If the action was approve, also update the provider's isVerified status
       if (actionType === "approve") {
@@ -259,6 +265,9 @@ const AuthenticateProvider = ({ providerId }) => {
                 toast.error(`Failed to update provider ${providerId}.`);
               }
             }
+
+            // Trigger re-fetching of documents
+            setShouldFetchDocuments((prev) => !prev);
           },
         },
         {
@@ -283,8 +292,9 @@ const AuthenticateProvider = ({ providerId }) => {
             }
             setOverallStatus("Pending");
 
-            // Refetch provider certificates after marking all as pending
-            await fetchProviderCertificates(providerId);
+            // Trigger re-fetching of documents
+            setShouldFetchDocuments((prev) => !prev);
+
             toast.success(
               "All documents have been marked as pending. Please request reupload.",
             );
