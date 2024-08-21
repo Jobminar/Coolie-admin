@@ -157,62 +157,60 @@ const Mostbookedservices = () => {
     <>
       <div className="select-option">
         {fetchService.length > 0 ? (
-        <select value={selectedServiceId} onChange={handleSelectChange}>
-          <option value="">Select a service</option>
-          {fetchService.map((service) => (
-            <option key={service._id} value={service._id}>
-              {service.name}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <p>No services found.</p>
-      )}
+          <select value={selectedServiceId} onChange={handleSelectChange}>
+            <option value="">Select a service</option>
+            {fetchService.map((service) => (
+              <option key={service._id} value={service._id}>
+                {service.name}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <p>No services found.</p>
+        )}
 
-      <div className="mostbookedform">
-        {selectedService && selectedService.name ? (
-          <form onSubmit={handleSubmit}>
-            <div className="most-booked-form">
-              <input
-                type="file"
-                id="hiddenFileInput"
-                className="file-input"
-                onChange={handleFileChange}
-                style={{ display: "none" }}
-              />
-              <button
-                type="button"
-                className="custom-button"
-                onClick={handleButtonClick}
-              >
-                Upload Banner image
+        <div className="mostbookedform">
+          {selectedService && selectedService.name ? (
+            <form onSubmit={handleSubmit}>
+              <div className="most-booked-form">
+                <input
+                  type="file"
+                  id="hiddenFileInput"
+                  className="file-input"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <button
+                  type="button"
+                  className="custom-button"
+                  onClick={handleButtonClick}
+                >
+                  Upload Banner image
+                </button>
+                {image && <p>Selected file: {image.name}</p>}
+              </div>
+              <button type="submit" className="most-button">
+                Submit
               </button>
-              {image && <p>Selected file: {image.name}</p>}
-            </div>
-            <button type="submit" className="most-button">Submit</button>
-          </form>
-        ) : (
-          <p>Please select a service to see details.</p>
-        )}
-      </div>
+            </form>
+          ) : (
+            <p>Please select a service to see details.</p>
+          )}
+        </div>
 
-      <div className="getmbs-con">
-        {mostBookedData.length > 0 ? (
-          mostBookedData.map((item, index) => <div key={index}></div>)
-        ) : (
-          <p>No most booked services found.</p>
-        )}
+        <div className="getmbs-con">
+          {mostBookedData.length > 0 ? (
+            mostBookedData.map((item, index) => <div key={index}></div>)
+          ) : (
+            <p>No most booked services found.</p>
+          )}
+        </div>
       </div>
-
-      </div>
-           <div className="main-banners">
+      <div className="main-banners">
         <div className="banner-con">
           {mostBookedData.map((banner) => (
             <div className="banner-sub-con" key={banner._id}>
-              <img
-                src={`https://coolie1-dev.s3.ap-south-1.amazonaws.com/${banner.image}`}
-                alt={banner.name}
-              />
+              <img src={banner.image} alt={banner.name} />
               <p className="title">{banner.name}</p>
               <div className="edit-button" onClick={() => handleEdit(banner)}>
                 <EditOutlinedIcon />

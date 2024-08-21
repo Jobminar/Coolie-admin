@@ -117,6 +117,7 @@ const Sidebar = ({ children }) => {
       "/loyality-cards",
       "/user-banners",
       "/provider-banners",
+      "/reels",
       "/popup-banners",
       "/promotionsDropdown",
       "/user-promotion",
@@ -248,7 +249,8 @@ const Sidebar = ({ children }) => {
           }`}
         >
           <div onClick={toggleBannersDropdown}>
-            Banners <FaCaretDown />
+            Banners & Reels
+            <FaCaretDown />
           </div>
           {bannersDropdown && (
             <div className="dropdown-menu">
@@ -281,6 +283,14 @@ const Sidebar = ({ children }) => {
                 }
               >
                 Popup Banner
+              </div>
+              <div
+                className={`dropdown-item ${
+                  activeDropdownItem === "reels" ? "active" : ""
+                }`}
+                onClick={() => handleNavigation("/reels", "Reels")}
+              >
+                Reels
               </div>
             </div>
           )}

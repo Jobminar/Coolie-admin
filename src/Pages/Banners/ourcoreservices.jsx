@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useNavigate } from "react-router-dom";
+import "./banners.css"; // Ensure this CSS file is correctly linked
 
 const OurCoreServices = () => {
   const navigate = useNavigate();
   const [fetchService, setFetchService] = useState([]);
   const [selectedServiceId, setSelectedServiceId] = useState("");
   const [selectedService, setSelectedService] = useState(null);
-  const [coreservices, setcoreservices] = useState("");
+  const [coreservices, setcoreservices] = useState([]);
   const [formData, setFormData] = useState({
     serviceName: "",
     description: "",
@@ -118,7 +119,6 @@ const OurCoreServices = () => {
   }, []);
 
   const handleEdit = (banner) => {
-    console.log(banner, "editbanner");
     navigate("/editbanner", {
       state: { banner, apiEndpoint: "our-core-services" },
     });
@@ -159,18 +159,20 @@ const OurCoreServices = () => {
   return (
     <>
       <h1>Our Core Services</h1>
-      {fetchService.length > 0 ? (
-        <select value={selectedServiceId} onChange={handleSelectChange}>
-          <option value="">Select a service</option>
-          {fetchService.map((service) => (
-            <option key={service._id} value={service._id}>
-              {service.name}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <p>No services found.</p>
-      )}
+      <div className="select-option">
+        {fetchService.length > 0 ? (
+          <select value={selectedServiceId} onChange={handleSelectChange}>
+            <option value="">Select a service</option>
+            {fetchService.map((service) => (
+              <option key={service._id} value={service._id}>
+                {service.name}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <p>No services found.</p>
+        )}
+      </div>
 
       <div className="core-services-form">
         {selectedService && selectedService.name ? (

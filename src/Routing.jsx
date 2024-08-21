@@ -33,6 +33,7 @@ import Jobsarea from "./Pages/Jobsarea/jobsarea";
 import Servermanager from "./Pages/Servicemanager/Addservices/Servicemanager";
 import FAQContainer from "./Pages/FAQ/FAQContainer";
 import IEContainer from "./Pages/Inclusions/IEContainer";
+import Reels from "./Pages/Banners/Reels/Reels";
 
 const Routing = () => {
   return (
@@ -57,6 +58,7 @@ const Routing = () => {
             <Route path="/provider-banners" element={<Providerbanners />} />
             <Route path="/popup-banners" element={<Popupbanners />} />
             <Route path="/edit-banner" element={<EditBanner />} />
+            <Route path="/reels" element={<Reels />} />
             {/* promotions */}
             <Route path="/user-promotion" element={<Userpromotions />} />
             <Route

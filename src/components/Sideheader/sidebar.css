@@ -22,7 +22,7 @@
     padding: 1px;
     padding-bottom: 1px;
     width: 100%;
-    height: 52px;
+    height: 55px;
     border-radius: 50px;
     font-family: Roboto, sans-serif;
     font-size: 18px;
@@ -86,7 +86,7 @@
 .dropdown-menu {
     display: flex;
     flex-direction: column;
-    margin-top: 25px;
+    margin-top: 50px;
     z-index: 0;
     border: none;
 }
@@ -132,8 +132,14 @@
 .dropdown.promotionsDropdown.active,
 .dropdown.marketingDropdown.active,
 .dropdown.packagesDropdown.active,
-.dropdown.bannersDropdown.active,
+
 .dropdown.inductionDropdown.active {
-    height: 210px;
+    height: 220px;
     /* Adjusted height for potentially multiple items */
+}
+
+
+.dropdown.bannersDropdown.active {
+    margin-top: 0px;
+    height: 280px;
 }

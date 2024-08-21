@@ -1,0 +1,158 @@
+.reels-container {
+    max-width: 900px;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+.reels-heading {
+    font-size: 1.2rem;
+    color: #333;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.reels-upload-section {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.reels-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    text-align: center;
+}
+
+.reels-card h4 {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.reels-file-upload-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #030b33;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.reels-preview {
+    margin-top: 10px;
+}
+
+.reels-preview video,
+.reels-preview img {
+    max-width: 100%;
+    border-radius: 5px;
+
+}
+
+.reels-submit-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #030b33;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+}
+
+.reels-submit-button:hover {
+    background-color: #020826;
+}
+
+.reels-divider {
+    margin: 40px 0;
+    border: none;
+    border-top: 2px solid #ddd;
+}
+
+.reels-media-scroll {
+    overflow-x: auto;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.reels-media-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.reels-media-scroll::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+}
+
+.reels-media-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+.reels-media-gallery {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    white-space: nowrap;
+    align-items: flex-start;
+    /* Ensure all items align at the top */
+}
+
+.reels-media-item {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex: 0 0 200px;
+}
+
+
+.reels-media-item video {
+    width: 560px;
+    /* Set a fixed width to maintain consistency */
+    height: 320px;
+    /* Set a fixed height to maintain consistency */
+    object-fit: cover;
+    /* Maintain aspect ratio */
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin: 1rem
+}
+
+.reels-media-item img {
+    width: 180px;
+    /* Set a fixed width to maintain consistency */
+    height: 180px;
+    /* Set a fixed height to maintain consistency */
+    object-fit: cover;
+    /* Maintain aspect ratio */
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin: 1rem
+}
+
+.reels-delete-button {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    /* Center the delete button */
+}
+
+.reels-delete-button:hover {
+    background-color: #c82333;
+}
