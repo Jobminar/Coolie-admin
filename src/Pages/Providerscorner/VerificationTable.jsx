@@ -19,6 +19,7 @@ const VerificationTable = ({ providers, onVerifyClick, isLoading }) => {
               <th>Radius</th>
               <th>Categories</th>
               <th>Status</th>
+              <th>Approval</th> {/* New Approval column */}
               <th className="actions-unique">Actions</th>
             </tr>
           </thead>
@@ -58,6 +59,8 @@ const VerificationTable = ({ providers, onVerifyClick, isLoading }) => {
                     }`}
                   />
                 </td>
+                <td>{provider.isVerified ? "Approved" : "Pending"}</td>{" "}
+                {/* Approval status */}
                 <td className="actions-unique">
                   <button
                     className="provider-verify-button"

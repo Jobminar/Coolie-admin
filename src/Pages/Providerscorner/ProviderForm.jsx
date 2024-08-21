@@ -108,6 +108,7 @@ const ProviderForm = ({ onVerifyProvider }) => {
                   <th>Age</th>
                   <th>Radius</th>
                   <th>Status</th>
+                  <th>Approval</th> {/* New Approval column */}
                   <th className="actions-unique">Actions</th>
                 </tr>
               </thead>
@@ -138,6 +139,8 @@ const ProviderForm = ({ onVerifyProvider }) => {
                         }`}
                       ></div>
                     </td>
+                    <td>{provider.isVerified ? "Approved" : "Pending"}</td>{" "}
+                    {/* Approval status */}
                     <td className="actions-unique">
                       <FaEdit
                         className="actionIcon-unique edit"

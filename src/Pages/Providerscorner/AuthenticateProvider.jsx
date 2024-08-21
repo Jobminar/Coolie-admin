@@ -341,6 +341,7 @@ const AuthenticateProvider = ({ providerId }) => {
                       <th>Gender</th>
                       <th>Radius</th>
                       <th>Status</th>
+                      <th>Approval</th> {/* New Approval column */}
                       <th className="actions">Actions</th>
                     </tr>
                   </thead>
@@ -379,6 +380,9 @@ const AuthenticateProvider = ({ providerId }) => {
                               }`}
                             ></div>
                           </td>
+                          <td>
+                            {provider.isVerified ? "Approved" : "Pending"}
+                          </td>
                           <td className="actions">
                             <FaFileAlt
                               className="actionIcon doc"
@@ -395,7 +399,7 @@ const AuthenticateProvider = ({ providerId }) => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="10" className="no-data">
+                        <td colSpan="11" className="no-data">
                           No providers available
                         </td>
                       </tr>
