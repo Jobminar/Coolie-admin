@@ -7,7 +7,7 @@ import Accounting from "./Pages/Accounting/Accounting";
 import Marketing from "./Pages/Marketing/Marketing";
 import Subadmin from "./Pages/Subadmin/Subadmin";
 import UserManager from "./Pages/Usercorner/Usercorner";
-import Inductionmain from "./Pages/Induction/inductionmain";
+
 import Addsubadmin from "./Pages/Subadmin/Addsubadmin";
 import EditBanner from "./Pages/Banners/Editbanner";
 import Editloyalitycards from "./Pages/Loyalitycards/editloyalitycards";
@@ -25,7 +25,7 @@ import Viewadmin from "./Pages/Subadmin/view-admin";
 import Addadmin from "./Pages/Subadmin/Addsubadmin";
 import { FilterBarProvider } from "./FilterBarContext";
 import Popupbanners from "./Pages/Banners/Popupbanners";
-import TrainingMain from "./Pages/Induction/trainingmain";
+
 import Managesubadmin from "./Pages/Subadmin/managesubadmin";
 import Header from "./components/Header/header";
 import Sidebar from "./components/Sideheader/sidebar";
@@ -34,6 +34,8 @@ import Servermanager from "./Pages/Servicemanager/Addservices/Servicemanager";
 import FAQContainer from "./Pages/FAQ/FAQContainer";
 import IEContainer from "./Pages/Inclusions/IEContainer";
 import Reels from "./Pages/Banners/Reels/Reels";
+import Inductionmain from "./Pages/Induction/inductionmain";
+import Trainingmain from "./Pages/Induction/trainingmain";
 
 const Routing = () => {
   return (
@@ -83,7 +85,7 @@ const Routing = () => {
             <Route path="/edit-user-package" element={<EditUserPackage />} />
             {/* Induction & Training */}
             <Route path="/induction" element={<Inductionmain />} />
-            <Route path="/training" element={<TrainingMain />} />
+            <Route path="/training" element={<Trainingmain />} />
             {/* subadmin */}
             <Route path="/subadmin" element={<Subadmin />} />
             <Route path="/add-subadmin" element={<Addsubadmin />} />

@@ -1,189 +1,306 @@
-.induction-con{
-    /* border: 1px solid black; */
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    gap: 5rem;
-    font-family: Roboto;
-    font-size: 24px;
-    font-weight: 500;
-    line-height: 28.13px;
-    text-align: left;
-    margin: 2rem;
-}
-.add-induction-form{
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    border: 1px solid black;
-    font-family: Roboto;
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 28.13px;
-    text-align: left;
-    height: 20rem;
-}
-.dropdown{
-    width: 15rem;
-    height: 3rem;
-    font-family: Roboto;
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 28.13px;
-    text-align: left;
-}
-.title{
-    width: 14rem;
-    height: 3rem;
-    font-family: Roboto;
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 28.13px;
-    text-align: left;
-}
-.file-input{
-    /* border: 1px solid black; */
-    width: 14rem;
-    
-}
-.induction-form{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* border: 1px solid black; */
-    margin: 3rem;
-    row-gap: 2rem;
-    font-family: Roboto;
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 28.13px;
-    text-align: left;
-    
-}
-.ITinputs{
-    margin-bottom: 0.5rem;
-    width: 20rem;
-    height: 2rem;
+/* General Container Styling */
+.induction-main-container,
+.training-main-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-
-.ITinputs .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-    border-color: black;
-  }
-  
-  /* Border color on hover */
-  .ITinputs .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-    border-color: black;
-  }
-  
-  /* Border color when focused/clicked */
-  .ITinputs .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: black;
-  }
-  
-  /* Label color when focused */
-  .ITinputs .MuiFormLabel-root.Mui-focused {
-    color: black;
-  }
-  
-  /* Label color */
-  .ITinputs .MuiFormLabel-root {
-    color: black;
-  }
-  
-  /* Ensuring the background remains white */
-  .ITinputs .MuiOutlinedInput-root .MuiOutlinedInput-input {
-    background-color: white;
-  }
-  
-  /* Ensuring the background remains white on hover */
-  .ITinputs .MuiOutlinedInput-root:hover .MuiOutlinedInput-input {
-    background-color: white;
-  }
-  
-  /* Ensuring the background remains white when focused/clicked */
-  .ITinputs .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input {
-    background-color: white;
-  }
-
-  .ITinputs .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-  border-color: black;
+.induction-con,
+.add-training-section {
+  margin-bottom: 20px;
 }
 
-/* Border color on hover */
-.ITinputs .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: black;
+.divider-line {
+  border: 0;
+  height: 1px;
+  background: #ccc;
+  margin: 40px 0;
 }
 
-/* Border color when focused/clicked */
-.ITinputs .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: black;
+/* Headings */
+.manage-induction-heading,
+.manage-training-heading,
+.IThead {
+  font-family: Roboto, sans-serif;
+  font-weight: 400;
+  text-align: center;
+  color: #ffc107;
+  margin-right: 7.5rem;
 }
 
-/* Label color when focused */
-.ITinputs .MuiFormLabel-root.Mui-focused {
-  color: black;
+.manage-induction-heading,
+.manage-training-heading {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
-/* Label color */
-.ITinputs .MuiFormLabel-root {
-  color: black;
+.IThead {
+  font-size: 35px;
+  line-height: 42px;
+  margin-bottom: 20px;
 }
 
-/* Ensuring the background remains white */
-.ITinputs .MuiOutlinedInput-root .MuiOutlinedInput-input {
-  background-color: white;
+/* Form Styling */
+.induction-form,
+.add-induction-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 0.25rem 0;
 }
 
-/* Ensuring the background remains white on hover */
-.ITinputs .MuiOutlinedInput-root:hover .MuiOutlinedInput-input {
-  background-color: white;
+.ITinputs,
+.dropdown,
+.title,
+.file-input,
+.induction-button,
+.IT-button,
+.profession-select {
+  width: 100%;
+  max-width: 400px;
 }
 
-/* Ensuring the background remains white when focused/clicked */
-.ITinputs .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input {
-  background-color: white;
-}
-.skip{
-    width: 1rem;
-    height: 1rem;
+.ITinputs {
+  margin-bottom: 0.5rem;
 }
 
-.induction-button{
-    border: 1px solid black;
-    width: 20rem;
-    height: 2.5rem;
-    background-color: yellow;
-    border-radius: 10px;
-    
-}
-
-.profession-select{
-  width: 20rem;
-}
-.induction-form{
-  
-}
-.IT-button{
-  width: 15rem;
-  height: 2.5rem;
-  background-color: #FFC107;
-  border: none;
-  font-family: Roboto;
+.dropdown,
+.title,
+.profession-select {
+  height: 3rem;
+  font-family: Roboto, sans-serif;
   font-size: 24px;
   font-weight: 400;
-  line-height: 28.13px;
+  text-align: left;
+}
+
+.induction-button,
+.IT-button {
+  border: 1px solid black;
+  height: 2.5rem;
+  background-color: #ffc107;
+  border-radius: 10px;
+  font-family: Roboto, sans-serif;
+  font-size: 24px;
+  color: black;
   text-align: center;
+  cursor: pointer;
+}
+
+.induction-button {
+  background-color: yellow;
+}
+
+.IT-button {
+  font-size: 18px;
   color: white;
 }
-.IThead{
-  font-family: Roboto;
-  font-size: 35px;
-  font-weight: 400;
-  line-height: 28.13px;
+
+/* Checkbox Styling */
+.skip,
+.quick-link {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 20px;
+  width: auto;
+  text-align: left;
+}
+
+.skip input,
+.quick-link input {
+  margin-right: 10px;
+}
+
+/* MUI Input Overrides */
+.MuiOutlinedInput-root .MuiInputBase-input::placeholder {
+  color: black !important;
+  opacity: 1;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: black !important;
+}
+
+.MuiFormLabel-root.Mui-focused {
+  color: black !important;
+}
+
+/* Carousel and Video Section */
+.carousel,
+.induction-video-gallery {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.carousel-inner {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+}
+
+.carousel-item {
+  min-width: 100%;
+  transition: opacity 0.5s ease-in-out;
+  opacity: 0;
+  display: none;
+}
+
+.carousel-item.active {
+  opacity: 1;
+  display: block;
+}
+
+.carousel-control {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0 10px;
+  z-index: 10;
+}
+
+.carousel-control.prev {
+  left: 10px;
+}
+
+.carousel-control.next {
+  right: 10px;
+}
+
+.react-player {
+  background-color: black;
+}
+
+/* Video Info */
+.video-info {
+  padding: 10px;
   text-align: center;
-  color: #FFC107;
+  color: #333;
+}
+
+.video-info h3 {
+  margin: 5px 0;
+  font-size: 1.5rem;
+}
+
+.video-info p {
+  margin: 0;
+  font-size: 1rem;
+  color: #777;
+}
+
+/* Video Wrapper */
+.video-wrapper {
+  position: relative;
+}
+
+.delete-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: red;
+  cursor: pointer;
+  font-size: large;
+  height: auto;
+  width: 2rem;
+}
+
+.delete-button:hover {
+  background: rgba(118, 118, 118, 0.6);
+}
+
+/* Button Column for Video Selection */
+.induction-content,
+.training-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.button-column {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+}
+
+.video-button {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+  width: 150px;
+  /* Adjust width as necessary */
+  text-align: left;
+  border-radius: 5px;
+}
+
+.video-button.active {
+  background-color:
+    #030b33;
+  color: white;
+}
+
+/* Loader */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.loader-container p {
+  margin-top: 10px;
+  font-family: Roboto, sans-serif;
+  font-size: 1rem;
+  color: #777;
+}
+
+/* Improved Button Styles */
+.induction-button:hover,
+.IT-button:hover {
+  background-color: #f0a500;
+  color: black;
+  border: 1px solid #f0a500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+
+  .induction-main-container,
+  .training-main-container {
+    padding: 10px;
+  }
+
+  .carousel,
+  .induction-video-gallery {
+    max-width: 100%;
+  }
+
+  .button-column {
+    margin-right: 10px;
+  }
+
+  .video-button {
+    width: 100%;
+    padding: 8px;
+  }
 }

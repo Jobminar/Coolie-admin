@@ -1,47 +1,21 @@
-import React, { useState } from 'react';
-import './induction.css'
-import Addinduction from './addinduction';
-import Manageinduction from './Manageinduction';
+import React from "react";
+import "./induction.css";
+import AddInduction from "./addinduction";
+import ManageInduction from "./Manageinduction";
 
-const Inductionmain = () => {
-  const [activeTab, setActiveTab] = useState('addinduction');
-
-  const renderSelectedComponent = () => {
-    switch (activeTab) {
-      case 'addinduction':
-        return <Addinduction/>
-      case 'manageinduction':
-        return <Manageinduction/>;
-      default:
-        return null;
-    }
-  };
-
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
-
+const InductionMain = () => {
   return (
-    <div  className='induction-main-container'>
-  
+    <div className="induction-main-container">
       <div className="induction-con">
-        {/* <div
-          className={`tab ${activeTab === 'addinduction' && 'active'}`}
-          onClick={() => handleTabClick('addinduction')}
-        >
-         Add Induction
-        </div> */}
-        {/* <div
-          className={`tab ${activeTab === 'training' && 'active'}`}
-          onClick={() => handleTabClick('training')}
-        >
-          
-          Manage Induction
-        </div> */}
+        <AddInduction />
       </div>
-      {renderSelectedComponent()}
+      <hr className="divider-line" />
+      <div className="video-section">
+        <h3 className="manage-induction-heading">Manage Induction</h3>
+        <ManageInduction />
+      </div>
     </div>
   );
 };
 
-export default Inductionmain;
+export default InductionMain;

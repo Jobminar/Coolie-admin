@@ -4,7 +4,7 @@ import { Search } from "react-bootstrap-icons";
 const Header = ({ searchQuery, onSearchChange }) => {
   return (
     <div className="header">
-      <h1>User Management</h1>
+      <h3>User Management</h3>
       <div className="user-search-bar">
         <input
           type="text"

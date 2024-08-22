@@ -6,8 +6,8 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { ThreeDots } from "react-loader-spinner";
 import "./induction.css"; // Import custom CSS for styling
 
-export default function ManageInduction() {
-  const [inductionVideos, setInductionVideos] = useState([]);
+export default function ManageTraining() {
+  const [trainingVideos, setTrainingVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -16,36 +16,48 @@ export default function ManageInduction() {
   const baseUrl = `https://${bucketName}.s3.${region}.amazonaws.com/`;
 
   useEffect(() => {
-    const fetchInductionVideos = async () => {
+    const fetchTrainingVideos = async () => {
       try {
         const response = await axios.get(
-          "https://api.coolieno1.in/v1.0/admin/induction"
+          "https://api.coolieno1.in/v1.0/admin/training",
         );
         const videoData = response.data.map((video) => ({
           ...video,
           videoUrl: `${baseUrl}${video.videoKey}`,
         }));
-        setInductionVideos(videoData);
+        setTrainingVideos(videoData);
       } catch (error) {
-        console.error("Error fetching induction videos:", error);
+        console.error("Error fetching training videos:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchInductionVideos();
+    fetchTrainingVideos();
   }, []);
 
   const handleButtonClick = (index) => {
     setCurrentIndex(index);
   };
 
+  const handlePrevClick = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? trainingVideos.length - 1 : prevIndex - 1,
+    );
+  };
+
+  const handleNextClick = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === trainingVideos.length - 1 ? 0 : prevIndex + 1,
+    );
+  };
+
   const handleDeleteClick = (id) => {
-    const updatedVideos = inductionVideos.filter((video) => video._id !== id);
-    setInductionVideos(updatedVideos);
+    const updatedVideos = trainingVideos.filter((video) => video._id !== id);
+    setTrainingVideos(updatedVideos);
 
     axios
-      .delete(`https://api.coolieno1.in/v1.0/admin/induction/${id}`)
+      .delete(`https://api.coolieno1.in/v1.0/admin/training/${id}`)
       .then(() => {
         console.log("Video deleted successfully");
       })
@@ -55,16 +67,16 @@ export default function ManageInduction() {
   };
 
   return (
-    <div className="induction-video-gallery">
+    <div className="training-video-gallery">
       {loading ? (
         <div className="loader-container">
           <ThreeDots color="#00BFFF" height={100} width={100} />
-          <p>Your videos are loading, please wait...</p>
+          <p>Videos are loading, please wait...</p>
         </div>
       ) : (
-        <div className="induction-content">
+        <div className="training-content">
           <div className="button-column">
-            {inductionVideos.map((video, index) => (
+            {trainingVideos.map((video, index) => (
               <button
                 key={video._id}
                 className={`video-button ${
@@ -72,14 +84,17 @@ export default function ManageInduction() {
                 }`}
                 onClick={() => handleButtonClick(index)}
               >
-                {video.profession}
+                {video.job}
               </button>
             ))}
           </div>
 
           <div className="carousel">
+            <button className="carousel-control prev" onClick={handlePrevClick}>
+              &lt;
+            </button>
             <div className="carousel-inner">
-              {inductionVideos.map((video, index) => (
+              {trainingVideos.map((video, index) => (
                 <div
                   key={video._id}
                   className={`carousel-item ${
@@ -107,11 +122,14 @@ export default function ManageInduction() {
                   </div>
                   <div className="video-info">
                     <h3>{video.title}</h3>
-                    <p>{video.profession}</p>
+                    <p>{video.job}</p>
                   </div>
                 </div>
               ))}
             </div>
+            <button className="carousel-control next" onClick={handleNextClick}>
+              &gt;
+            </button>
           </div>
         </div>
       )}

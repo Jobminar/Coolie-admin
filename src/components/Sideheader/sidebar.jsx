@@ -249,7 +249,7 @@ const Sidebar = ({ children }) => {
           }`}
         >
           <div onClick={toggleBannersDropdown}>
-            Banners & Reels
+            Banners
             <FaCaretDown />
           </div>
           {bannersDropdown && (
@@ -283,14 +283,6 @@ const Sidebar = ({ children }) => {
                 }
               >
                 Popup Banner
-              </div>
-              <div
-                className={`dropdown-item ${
-                  activeDropdownItem === "reels" ? "active" : ""
-                }`}
-                onClick={() => handleNavigation("/reels", "Reels")}
-              >
-                Reels
               </div>
             </div>
           )}
@@ -385,6 +377,12 @@ const Sidebar = ({ children }) => {
               </div>
             </div>
           )}
+        </div>
+        <div
+          className={activeItem === "/reels" ? "active" : ""}
+          onClick={() => handleNavigation("/reels")}
+        >
+          Reels
         </div>
         <div
           className={activeItem === "/subadmin" ? "active" : ""}

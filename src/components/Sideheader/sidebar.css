@@ -6,28 +6,31 @@
 }
 
 .sidebar {
-    padding: 2rem 1rem;
+    padding: 1rem 1rem;
     border-right: 1px solid #030B33;
     border-bottom: 1px solid #030B33;
-    height: 1650px;
-    width: 220px;
+    height: auto;
+    width: 13.75rem;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
+    /* Slightly reduce gap for better spacing */
     justify-content: flex-start;
     align-items: center;
 }
 
 .sidebar div {
-    padding: 1px;
-    padding-bottom: 1px;
+    padding: 0.5rem 0;
     width: 100%;
-    height: 55px;
-    border-radius: 50px;
+    height: 3rem;
+    /* Reduce height for a more compact look */
+    border-radius: 2rem;
+    /* Slightly reduce border-radius */
     font-family: Roboto, sans-serif;
-    font-size: 18px;
+    font-size: 1rem;
+    /* Slightly reduce font-size for better fit */
     font-weight: 400;
-    line-height: 25px;
+    line-height: 2rem;
     text-align: center;
     cursor: pointer;
     display: flex;
@@ -50,27 +53,35 @@
 .dropdown-menu div.active {
     background-color: #030B33;
     color: white;
-    border-radius: 30px;
+    border-radius: 1.5rem;
+    /* Further reduced border-radius for a cleaner look */
 }
 
 .dropdown {
-    width: 200px;
-    transition: height 0.3s ease;
+    width: 100%;
+    /* Use 100% to fill the width of the sidebar */
+    transition: height 0.3s ease, transform 0.3s ease;
+    /* Add transition for transform */
     overflow: hidden;
+    position: relative;
+    /* Ensure dropdown contents stack correctly */
 }
 
 .dropdown-header {
-    padding: 10px 10px;
+    padding: 0.5rem 0.625rem;
     cursor: pointer;
     background-color: #030B33;
     color: white;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s ease, z-index 0.3s ease;
+    /* Add transition for transform and z-index */
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 0;
-    height: 30px;
-    line-height: 1;
+    height: auto;
+    /* Allow the height to be dynamic */
+    line-height: 1.2;
+    /* Adjust line-height for better text alignment */
     z-index: 1;
     border: none;
 }
@@ -83,21 +94,31 @@
     outline: none;
 }
 
+.dropdown.active .dropdown-header {
+    transform: translateY(-50%);
+    /* Move the header up by 50% when active */
+    z-index: 2;
+    /* Bring the header to the front */
+}
+
 .dropdown-menu {
     display: flex;
     flex-direction: column;
-    margin-top: 50px;
-    z-index: 0;
+    margin-top: 2rem;
+    /* Reduce the gap between header and items */
+    z-index: 1;
+    /* Ensure the menu is behind the header */
     border: none;
 }
 
 .dropdown-menu div {
     background-color: #030B33;
     color: white;
-    padding: 10px;
+    padding: 1rem 0.75rem;
+    /* Slightly reduced padding for compactness */
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 0.625rem 0.625rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -120,7 +141,8 @@
 .dropdown.active {
     background-color: #030B33;
     color: white;
-    border-radius: 10px;
+    border-radius: 0.5rem;
+    /* Adjusted to a smaller radius */
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -128,18 +150,42 @@
     border: none;
 }
 
-.dropdown.serviceManagerDropdown.active,
-.dropdown.promotionsDropdown.active,
-.dropdown.marketingDropdown.active,
-.dropdown.packagesDropdown.active,
-
-.dropdown.inductionDropdown.active {
-    height: 220px;
-    /* Adjusted height for potentially multiple items */
+.dropdown.serviceManagerDropdown.active {
+    height: 13rem;
+    max-height: 20rem;
 }
 
+.dropdown.promotionsDropdown.active {
+    height: 12rem;
+    max-height: 18rem;
+}
+
+.dropdown.marketingDropdown.active {
+    height: 14rem;
+    max-height: 14rem;
+    transform: translateY(-10%);
+}
+
+.dropdown.packagesDropdown.active {
+    height: 12rem;
+    max-height: 22rem;
+}
+
+.dropdown.inductionDropdown.active {
+    height: 12rem;
+    max-height: 17rem;
+}
 
 .dropdown.bannersDropdown.active {
-    margin-top: 0px;
-    height: 280px;
+    height: 12rem;
+    /* Adjusted to match other dropdowns */
+    max-height: 21rem;
+    margin-top: 0;
+    margin-bottom: 0.625rem;
+    line-height: 3.125rem;
+    /* Maintain consistency in line-height */
+}
+
+.dropdown.bannersDropdown.active .dropdown-item {
+    transform: translateY(1.3125rem);
 }
