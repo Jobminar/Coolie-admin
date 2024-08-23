@@ -238,6 +238,32 @@
   display: flex;
   flex-direction: column;
   margin-right: 20px;
+  max-height: 200px;
+  width: 14rem;
+  /* Limits the height of the column */
+  overflow-y: auto;
+  /* Enables vertical scrolling */
+  overflow-x: hidden;
+  /* Disables horizontal scrolling */
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* Custom Scrollbar for Y-Direction */
+.button-column::-webkit-scrollbar {
+  width: 8px;
+  /* Width of the vertical scrollbar */
+}
+
+.button-column::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+.button-column::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+  border-radius: 10px;
 }
 
 .video-button {
@@ -247,14 +273,12 @@
   border: none;
   cursor: pointer;
   width: 150px;
-  /* Adjust width as necessary */
   text-align: left;
   border-radius: 5px;
 }
 
 .video-button.active {
-  background-color:
-    #030b33;
+  background-color: #030b33;
   color: white;
 }
 
