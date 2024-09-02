@@ -4,12 +4,10 @@ import AddServiceForm from "./AddServiceForm";
 import ServiceDetailCard from "./ServiceDetailCard";
 import SubCategoryForm from "./SubCategoryForm";
 import CategoryForm from "./CategoryForm";
-import { confirmAlert } from "react-confirm-alert";
-import "react-confirm-alert/src/react-confirm-alert.css";
 import toast from "react-hot-toast";
 import "./styles/servicemanager.css";
 
-const Servermanager = () => {
+const ServiceManager = () => {
   const [showServiceList, setShowServiceList] = useState(false);
   const [showCategoryMenu, setShowCategoryMenu] = useState(true);
   const [showSubCategoryMenu, setShowSubCategoryMenu] = useState(true);
@@ -33,22 +31,21 @@ const Servermanager = () => {
 
   const selectedCategoryRef = useRef(null);
   const selectedSubCategoryRef = useRef(null);
+  const lastCategoryIdRef = useRef(null);
+
   const [selectedService, setSelectedService] = useState(null);
 
   useEffect(() => {
     api
       .fetchCategories()
       .then((response) => {
-        setCategories(response.data);
-        const lastCategoryId = sessionStorage.getItem("categoryId");
-        if (lastCategoryId) {
-          const lastCategory = response.data.find(
-            (cat) => cat._id === lastCategoryId,
-          );
-          if (lastCategory) {
-            selectedCategoryRef.current = lastCategory;
-            fetchSubcategories(lastCategoryId);
-          }
+        const categories = response.data;
+        setCategories(categories);
+
+        if (categories.length > 0) {
+          lastCategoryIdRef.current = categories[categories.length - 1]._id;
+        } else {
+          console.warn("No categories found");
         }
       })
       .catch((error) => console.error("Error fetching categories:", error));
@@ -62,6 +59,23 @@ const Servermanager = () => {
     }
   }, [reload]);
 
+  useEffect(() => {
+    if (!selectedCategoryRef.current && lastCategoryIdRef.current) {
+      api
+        .fetchCategoryById(lastCategoryIdRef.current)
+        .then((response) => {
+          selectedCategoryRef.current = response.data;
+          setReload(!reload); // Trigger a re-render
+          // Now fetch the subcategories for this category
+          fetchSubcategories(lastCategoryIdRef.current);
+          setShowSubCategoryMenu(true); // Ensure the subcategory menu is shown
+        })
+        .catch((error) =>
+          console.error("Error fetching last category:", error),
+        );
+    }
+  }, [lastCategoryIdRef.current]);
+
   const fetchSubcategories = useMemo(
     () => (categoryId) => {
       if (!categoryId) return;
@@ -70,11 +84,13 @@ const Servermanager = () => {
         .then((response) => {
           setSubCategories(response.data);
           setSubCategoryErrorStatus(false);
-          const selectedCategory = categories.find(
-            (cat) => cat._id === categoryId,
-          );
-          selectedCategoryRef.current = selectedCategory;
-          sessionStorage.setItem("categoryId", categoryId);
+
+          if (selectedCategoryRef.current?._id !== categoryId) {
+            selectedCategoryRef.current = categories.find(
+              (cat) => cat._id === categoryId,
+            );
+            sessionStorage.setItem("categoryId", categoryId);
+          }
 
           const lastSubCategoryId = sessionStorage.getItem("subCategoryId");
           if (lastSubCategoryId) {
@@ -93,11 +109,6 @@ const Servermanager = () => {
           if (error.response && error.response.status === 404) {
             setSubCategoryErrorStatus(true);
             setSubCategories([]);
-            const selectedCategory = categories.find(
-              (cat) => cat._id === categoryId,
-            );
-            selectedCategoryRef.current = selectedCategory;
-            sessionStorage.setItem("categoryId", categoryId);
             setServices([]);
           }
         });
@@ -127,13 +138,28 @@ const Servermanager = () => {
   const handleCategorySelect = (categoryId) => {
     if (categoryId === "Add new category") {
       setShowAddCategoryForm(true);
-    } else {
-      fetchSubcategories(categoryId);
-      setShowAddCategoryForm(false);
-      setShowServiceVariantsMenu(false);
-      setShowServiceForm(false);
-      setSubcategoryClicked(false); // Reset the subcategory click state
+      setShowSubCategoryMenu(false); // Hide subcategory list
+      return;
     }
+
+    const selectedCategory = categories.find((cat) => cat._id === categoryId);
+
+    if (selectedCategory) {
+      selectedCategoryRef.current = selectedCategory;
+      lastCategoryIdRef.current = categoryId;
+      sessionStorage.setItem("categoryId", categoryId);
+      fetchSubcategories(categoryId);
+      setShowSubCategoryMenu(true);
+    } else {
+      selectedCategoryRef.current = null;
+      sessionStorage.removeItem("categoryId");
+      setShowSubCategoryMenu(false);
+    }
+
+    setShowAddCategoryForm(false);
+    setShowServiceVariantsMenu(false);
+    setShowServiceForm(false);
+    setSubcategoryClicked(false);
   };
 
   const handleSubCategorySelect = (subCategoryId) => {
@@ -141,17 +167,26 @@ const Servermanager = () => {
       setShowAddSubCategoryForm(true);
       setShowServiceVariantsMenu(false);
       setShowServiceForm(false);
-    } else {
-      fetchServices(subCategoryId);
-      const selectedSubCategory = subCategories.find(
-        (subCat) => subCat._id === subCategoryId,
-      );
+      return;
+    }
+
+    fetchServices(subCategoryId);
+    const selectedSubCategory = subCategories.find(
+      (subCat) => subCat._id === subCategoryId,
+    );
+
+    if (selectedSubCategory) {
       selectedSubCategoryRef.current = selectedSubCategory;
-      setShowAddSubCategoryForm(false);
+      sessionStorage.setItem("subCategoryId", subCategoryId);
       setShowServiceVariantsMenu(true);
       setShowServiceForm(false);
-      setSubcategoryClicked(true); // Set the subcategory click state
+      setSubcategoryClicked(true);
+    } else {
+      selectedSubCategoryRef.current = null;
+      sessionStorage.removeItem("subCategoryId");
     }
+
+    setShowAddSubCategoryForm(false);
   };
 
   const handleServiceSelect = (service) => {
@@ -171,8 +206,10 @@ const Servermanager = () => {
       const selectedSubCategory = subCategories.find(
         (subCat) => subCat._id === service.subCategoryId._id,
       );
-      selectedCategoryRef.current = selectedCategory;
-      selectedSubCategoryRef.current = selectedSubCategory;
+
+      if (selectedCategory) selectedCategoryRef.current = selectedCategory;
+      if (selectedSubCategory)
+        selectedSubCategoryRef.current = selectedSubCategory;
     }
   };
 
@@ -209,16 +246,17 @@ const Servermanager = () => {
     try {
       const response = await api.addCategory(formData);
       const newCategory = response.data;
+
+      selectedCategoryRef.current = newCategory;
+      lastCategoryIdRef.current = newCategory._id;
+      sessionStorage.setItem("categoryId", newCategory._id);
+      handleCategorySelect(newCategory._id);
+
       setShowAddSubCategoryForm(true);
       setShowAddCategoryForm(false);
       setCategoryName("");
       setCategoryIcon(null);
       setReload(!reload);
-      selectedCategoryRef.current = newCategory;
-      sessionStorage.setItem("categoryId", newCategory._id);
-
-      // Automatically select the new category
-      handleCategorySelect(newCategory._id);
     } catch (error) {
       setCategoryError(
         error.response?.data?.message || error.message || "An error occurred",
@@ -226,15 +264,27 @@ const Servermanager = () => {
     }
   };
 
-  const handleAddSubCategory = async () => {
+  const handleAddSubCategory = async (selectedVariant) => {
+    console.log("handleAddSubcategory");
     setSubCategoryError("");
-    if (
-      subCategoryName.trim() === "" ||
-      !subCategoryIcon ||
-      !selectedCategoryRef.current ||
-      !selectedCategoryRef.current._id
-    ) {
-      setSubCategoryError("All fields are required.");
+
+    if (subCategoryName.trim() === "") {
+      setSubCategoryError("Sub-category name is required.");
+      return;
+    }
+
+    if (!subCategoryIcon) {
+      setSubCategoryError("Sub-category icon is required.");
+      return;
+    }
+
+    if (!selectedCategoryRef.current || !selectedCategoryRef.current._id) {
+      setSubCategoryError("No category selected.");
+      return;
+    }
+
+    if (!selectedVariant) {
+      setSubCategoryError("Variant name is required.");
       return;
     }
 
@@ -242,8 +292,14 @@ const Servermanager = () => {
     formData.append("name", subCategoryName);
     formData.append("image", subCategoryIcon);
     formData.append("categoryId", selectedCategoryRef.current._id);
+    formData.append("variantName", selectedVariant);
     formData.append("isActive", true);
     formData.append("isDeleted", false);
+
+    console.log("Sub-Category FormData:");
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
 
     try {
       const response = await api.addSubCategory(formData);
@@ -253,7 +309,9 @@ const Servermanager = () => {
       setReload(!reload);
       selectedSubCategoryRef.current = newSubCategory;
       sessionStorage.setItem("subCategoryId", newSubCategory._id);
-      fetchServices(newSubCategory._id); // Fetch services for the new subcategory
+
+      // Immediately fetch subcategories after adding the subcategory
+      fetchSubcategories(selectedCategoryRef.current._id);
     } catch (error) {
       setSubCategoryError(error.message || "An error occurred");
     }
@@ -265,16 +323,19 @@ const Servermanager = () => {
       return;
     }
 
-    if (selectedCategoryRef.current) {
+    // Append categoryId and subCategoryId if not already present in formData
+    if (!formData.has("categoryId") && selectedCategoryRef.current) {
       formData.append("categoryId", selectedCategoryRef.current._id);
     }
 
-    if (selectedSubCategoryRef.current) {
+    if (!formData.has("subCategoryId") && selectedSubCategoryRef.current) {
       formData.append("subCategoryId", selectedSubCategoryRef.current._id);
     }
 
     try {
       const response = await api.addService(formData);
+      console.log("Service added successfully:", response.data);
+
       setShowServiceForm(false);
       setSelectedService(null);
       fetchServices(selectedSubCategoryRef.current._id);
@@ -282,6 +343,20 @@ const Servermanager = () => {
       toast.success("Service added successfully!");
     } catch (error) {
       console.error("Error during the addition of service:", error);
+
+      if (error.response) {
+        // Server responded with a status other than 2xx
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        console.error("Response headers:", error.response.headers);
+      } else if (error.request) {
+        // Request was made but no response was received
+        console.error("Request data:", error.request);
+      } else {
+        // Something else happened in setting up the request
+        console.error("Error message:", error.message);
+      }
+
       toast.error("Error adding service.");
     }
   };
@@ -300,7 +375,10 @@ const Servermanager = () => {
               <span>Select Category</span>
               <button
                 className="servermanager-main-add-button"
-                onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}
+                onClick={() => {
+                  setShowAddCategoryForm(!showAddCategoryForm);
+                  setShowSubCategoryMenu(false); // Hide subcategory list
+                }}
               >
                 +
               </button>
@@ -315,20 +393,44 @@ const Servermanager = () => {
           {showCategoryMenu && (
             <div className="servermanager-menu">
               {categories.length > 0 ? (
-                categories.map((category) => (
+                <>
+                  {/* Display the last category first */}
                   <div
-                    key={category._id}
+                    key={categories[categories.length - 1]._id}
                     className={`servermanager-menu-item ${
                       selectedCategoryRef.current &&
-                      selectedCategoryRef.current._id === category._id
+                      selectedCategoryRef.current._id ===
+                        categories[categories.length - 1]._id
                         ? "selected"
                         : ""
                     }`}
-                    onClick={() => handleCategorySelect(category._id)}
+                    onClick={() =>
+                      handleCategorySelect(
+                        categories[categories.length - 1]._id,
+                      )
+                    }
                   >
-                    {category.name}
+                    {categories[categories.length - 1].name}
                   </div>
-                ))
+
+                  {/* Display the rest of the categories */}
+                  {categories
+                    .slice(0, categories.length - 1)
+                    .map((category) => (
+                      <div
+                        key={category._id}
+                        className={`servermanager-menu-item ${
+                          selectedCategoryRef.current &&
+                          selectedCategoryRef.current._id === category._id
+                            ? "selected"
+                            : ""
+                        }`}
+                        onClick={() => handleCategorySelect(category._id)}
+                      >
+                        {category.name}
+                      </div>
+                    ))}
+                </>
               ) : (
                 <div>No data</div>
               )}
@@ -348,60 +450,57 @@ const Servermanager = () => {
             }}
           />
         )}
-        {selectedCategoryRef.current && (
-          <div className="servermanager-card" id="subcategory-card">
-            <div className="servermanager-form-group">
-              <div className="servermanager-category-header">
-                <span>Select Sub-Category</span>
-                <button
-                  className="servermanager-main-add-button"
-                  onClick={() =>
-                    setShowAddSubCategoryForm(!showAddSubCategoryForm)
-                  }
-                >
-                  +
-                </button>
-                <button
-                  className="servermanager-hamburger-icon"
-                  onClick={() => setShowSubCategoryMenu(!showSubCategoryMenu)}
-                >
-                  &#9776;
-                </button>
+        {selectedCategoryRef.current &&
+          selectedCategoryRef.current._id &&
+          showSubCategoryMenu && (
+            <div className="servermanager-card" id="subcategory-card">
+              <div className="servermanager-form-group">
+                <div className="servermanager-category-header">
+                  <span>Select Sub-Category</span>
+                  <button
+                    className="servermanager-main-add-button"
+                    onClick={() =>
+                      setShowAddSubCategoryForm(!showAddSubCategoryForm)
+                    }
+                  >
+                    +
+                  </button>
+                  <button
+                    className="servermanager-hamburger-icon"
+                    onClick={() => setShowSubCategoryMenu(!showSubCategoryMenu)}
+                  >
+                    &#9776;
+                  </button>
+                </div>
               </div>
+              {showSubCategoryMenu && (
+                <div className="servermanager-menu">
+                  {subCategories.length > 0 ? (
+                    subCategories.map((subCategory) => (
+                      <div
+                        key={subCategory._id}
+                        className={`servermanager-menu-item ${
+                          selectedSubCategoryRef.current &&
+                          selectedSubCategoryRef.current._id === subCategory._id
+                            ? "selected"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          handleSubCategorySelect(subCategory._id);
+                          handleSubCategoryClick();
+                        }}
+                      >
+                        {subCategory.name}
+                      </div>
+                    ))
+                  ) : (
+                    <div>No subcategories available</div>
+                  )}
+                </div>
+              )}
             </div>
-            {showSubCategoryMenu && (
-              <div className="servermanager-menu">
-                {subCategories.length > 0 ? (
-                  subCategories.map((subCategory) => (
-                    <div
-                      key={subCategory._id}
-                      className={`servermanager-menu-item ${
-                        selectedSubCategoryRef.current &&
-                        selectedSubCategoryRef.current._id === subCategory._id
-                          ? "selected"
-                          : ""
-                      }`}
-                      onClick={() => {
-                        handleSubCategorySelect(subCategory._id);
-                        handleSubCategoryClick(); // Set the service list to show when clicking a sub-category
-                      }}
-                    >
-                      {subCategory.name}
-                    </div>
-                  ))
-                ) : subCategoryErrorStatus ? (
-                  <div className="servermanager-menu-item">
-                    No subcategories available
-                  </div>
-                ) : (
-                  <div className="servermanager-menu-item">
-                    Loading subcategories...
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
+          )}
+
         {showAddSubCategoryForm && (
           <SubCategoryForm
             subCategoryName={subCategoryName}
@@ -410,6 +509,7 @@ const Servermanager = () => {
             handleSubCategoryIconChange={handleSubCategoryIconChange}
             subCategoryIcon={subCategoryIcon}
             handleAddSubCategory={handleAddSubCategory}
+            lastCategoryId={lastCategoryIdRef.current}
           />
         )}
         {selectedSubCategoryRef.current &&
@@ -476,8 +576,15 @@ const Servermanager = () => {
       )}
       {showServiceForm && (
         <AddServiceForm
-          category={selectedCategoryRef.current}
+          category={
+            selectedCategoryRef.current || { _id: lastCategoryIdRef.current }
+          }
           subCategory={selectedSubCategoryRef.current}
+          subCategoryId={
+            selectedSubCategoryRef.current
+              ? selectedSubCategoryRef.current._id
+              : null
+          }
           onSubmit={handleAddService}
         />
       )}
@@ -496,4 +603,4 @@ const Servermanager = () => {
   );
 };
 
-export default Servermanager;
+export default ServiceManager;

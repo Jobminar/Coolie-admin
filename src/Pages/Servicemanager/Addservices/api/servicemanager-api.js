@@ -17,44 +17,49 @@ export const fetchServices = (categoryId, subCategoryId) => {
   );
 };
 
-export const addCategory = (formData) => {
+export const addCategory = async (formData) => {
   const loadingToast = toast.loading("Adding category...");
-  return axios
-    .post(`${API_BASE_URL}/categories`, formData, {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/categories`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    })
-    .then((response) => {
-      toast.dismiss(loadingToast);
-      toast.success("Category added successfully!");
-      return response;
-    })
-    .catch((error) => {
-      toast.dismiss(loadingToast);
-      toast.error("Failed to add category");
-      throw error;
     });
+    toast.dismiss(loadingToast);
+    toast.success("Category added successfully!");
+    return response;
+  } catch (error) {
+    toast.dismiss(loadingToast);
+    toast.error("Failed to add category");
+    throw error;
+  }
 };
 
-export const addSubCategory = (formData) => {
+export const addSubCategory = async (formData) => {
+  console.log("API addSubCategory FormData:");
+  for (let [key, value] of formData.entries()) {
+    console.log(`${key}: ${value}`);
+  }
+
   const loadingToast = toast.loading("Adding subcategory...");
-  return axios
-    .post(`${API_BASE_URL}/sub-categories`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/sub-categories`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       },
-    })
-    .then((response) => {
-      toast.dismiss(loadingToast);
-      toast.success("Subcategory added successfully!");
-      return response;
-    })
-    .catch((error) => {
-      toast.dismiss(loadingToast);
-      toast.error("Failed to add subcategory");
-      throw error;
-    });
+    );
+    toast.dismiss(loadingToast);
+    toast.success("Subcategory added successfully!");
+    return response;
+  } catch (error) {
+    toast.dismiss(loadingToast);
+    toast.error("Failed to add subcategory");
+    throw error;
+  }
 };
 
 export const addService = (formData) => {
@@ -86,34 +91,43 @@ export const addService = (formData) => {
     });
 };
 
-export const updateService = (serviceId, updatedService) => {
+export const updateService = async (serviceId, updatedService) => {
   const loadingToast = toast.loading("Updating service...");
-  return axios
-    .put(`${API_BASE_URL}/services/${serviceId}`, updatedService)
-    .then((response) => {
-      toast.dismiss(loadingToast);
-      toast.success("Service updated successfully!");
-      return response;
-    })
-    .catch((error) => {
-      toast.dismiss(loadingToast);
-      toast.error("Failed to update service");
-      throw error;
-    });
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/services/${serviceId}`,
+      updatedService,
+    );
+    toast.dismiss(loadingToast);
+    toast.success("Service updated successfully!");
+    return response;
+  } catch (error) {
+    toast.dismiss(loadingToast);
+    toast.error("Failed to update service");
+    throw error;
+  }
 };
 
-export const deleteCategory = (categoryId) => {
+export const deleteCategory = async (categoryId) => {
   const loadingToast = toast.loading("Deleting category...");
-  return axios
-    .delete(`${API_BASE_URL}/categories/${categoryId}`)
-    .then((response) => {
-      toast.dismiss(loadingToast);
-      toast.success("Category deleted successfully!");
-      return response;
-    })
-    .catch((error) => {
-      toast.dismiss(loadingToast);
-      toast.error("Failed to delete category");
-      throw error;
-    });
+  try {
+    const response = await axios.delete(
+      `${API_BASE_URL}/categories/${categoryId}`,
+    );
+    toast.dismiss(loadingToast);
+    toast.success("Category deleted successfully!");
+    return response;
+  } catch (error) {
+    toast.dismiss(loadingToast);
+    toast.error("Failed to delete category");
+    throw error;
+  }
+};
+// get categories by id
+export const fetchCategoryById = (categoryId) => {
+  return axios.get(`${API_BASE_URL}/categories/${categoryId}`);
+};
+
+export const fetchSubcategoryDetails = (subCategoryId) => {
+  return axios.get(`${API_BASE_URL}/sub-categories/details/${subCategoryId}`);
 };

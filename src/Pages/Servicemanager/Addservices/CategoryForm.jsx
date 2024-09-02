@@ -16,8 +16,7 @@ const CategoryForm = ({
   const [imageError, setImageError] = useState("");
 
   const handleServiceTypeChange = (e) => {
-    const { value } = e.target;
-    setServiceTypeSelection(value);
+    setServiceTypeSelection(e.target.value);
   };
 
   const handleFileChange = (e) => {
@@ -32,14 +31,24 @@ const CategoryForm = ({
     e.preventDefault();
     const selectedUiVariants = [];
 
-    if (serviceTypeSelection === "Cleaning") {
-      selectedUiVariants.push("Normal", "Deep");
-    } else if (serviceTypeSelection === "Gender") {
-      selectedUiVariants.push("Male", "Female");
-    } else if (serviceTypeSelection === "Time") {
-      selectedUiVariants.push("Hourly", "Daily", "Monthly");
-    } else if (serviceTypeSelection === "None") {
-      selectedUiVariants.push("None");
+    switch (serviceTypeSelection) {
+      case "Cleaning":
+        selectedUiVariants.push("Normal", "Deep");
+        break;
+      case "Gender":
+        selectedUiVariants.push("Male", "Female");
+        break;
+      case "Time":
+        selectedUiVariants.push("Hourly", "Daily", "Monthly");
+        break;
+      case "Cloth":
+        selectedUiVariants.push("Men", "Women", "Kids");
+        break;
+      case "None":
+        selectedUiVariants.push("None");
+        break;
+      default:
+        break;
     }
 
     setUiVariants(selectedUiVariants);
@@ -123,7 +132,17 @@ const CategoryForm = ({
                 checked={serviceTypeSelection === "Time"}
                 onChange={handleServiceTypeChange}
               />
-              Time (Hour/Daily/Monthly)
+              Time (Hourly/Daily/Monthly)
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="serviceType"
+                value="Cloth"
+                checked={serviceTypeSelection === "Cloth"}
+                onChange={handleServiceTypeChange}
+              />
+              Cloth (Men/Women/Kids)
             </label>
             <label>
               <input

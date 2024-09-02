@@ -1,82 +1,31 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import * as api from "./api/servicemanager-api"; // Import your API functions
 import "./styles/servicemanager.css";
 
-const AddServiceForm = ({ category, subCategory, onSubmit }) => {
+const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
   const [serviceName, setServiceName] = useState("");
   const [description, setDescription] = useState("");
-  const [locations, setLocations] = useState([]);
-  const [locationInput, setLocationInput] = useState("");
-  const [taxPercentage, setTaxPercentage] = useState("");
   const [isMostBooked, setIsMostBooked] = useState(false);
-  const [tag, setTag] = useState(false);
-  const [isCash, setIsCash] = useState(false);
-  const [creditEligibility, setCreditEligibility] = useState(false);
-  const [platformCommission, setPlatformCommission] = useState("");
-  const [miscFee, setMiscFee] = useState("");
-  const [serviceVariants, setServiceVariants] = useState([
-    { variantName: "", price: "", serviceTime: "", metric: "", min: 0, max: 1 },
-  ]);
-  const [showVariantFields, setShowVariantFields] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [uiVariant, setUiVariant] = useState([]);
   const [imageFile, setImageFile] = useState(null);
+  const [variantName, setVariantName] = useState(""); // To store fetched variantName
+  const [errors, setErrors] = useState({});
 
-  const fetchUiVariant = async (category) => {
-    const API_BASE_URL = "https://api.coolieno1.in/v1.0/core";
-    const response = await fetch(`${API_BASE_URL}/categories/${category._id}`);
-    const data = await response.json();
-    return data.uiVariant;
-  };
-
+  // Fetch the subcategory details and set the variantName using the provided API
   useEffect(() => {
-    if (category) {
-      fetchUiVariant(category).then((data) => setUiVariant(data));
+    if (subCategoryId) {
+      api
+        .fetchSubcategoryDetails(subCategoryId) // Use the new API to fetch subcategory details
+        .then((response) => {
+          if (response.data) {
+            setVariantName(response.data.variantName);
+          }
+        })
+        .catch((error) =>
+          console.error("Error fetching subcategory details:", error),
+        );
     }
-  }, [category]);
-
-  const handleAddLocation = () => {
-    if (locationInput.trim() !== "") {
-      setLocations([...locations, locationInput.trim()]);
-      setLocationInput("");
-    }
-  };
-
-  const handleRemoveLocation = (index) => {
-    const newLocations = locations.filter((_, i) => i !== index);
-    setLocations(newLocations);
-  };
-
-  const handleAddVariant = () => {
-    setShowVariantFields(true);
-    setServiceVariants([
-      ...serviceVariants,
-      {
-        variantName: "",
-        price: "",
-        serviceTime: "",
-        metric: "",
-        min: 0,
-        max: 1000,
-      },
-    ]);
-  };
-
-  const handleRemoveVariant = (index) => {
-    if (serviceVariants.length > 1) {
-      const newVariants = serviceVariants.filter((_, i) => i !== index);
-      setServiceVariants(newVariants);
-    }
-  };
-
-  const handleVariantChange = (index, field, value) => {
-    const newVariants = serviceVariants.map((variant, i) =>
-      i === index ? { ...variant, [field]: value } : variant,
-    );
-    setServiceVariants(newVariants);
-  };
+  }, [subCategoryId]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -92,29 +41,9 @@ const AddServiceForm = ({ category, subCategory, onSubmit }) => {
     if (!description.trim()) {
       newErrors.description = "Description is required.";
     }
-    if (!taxPercentage.trim() || isNaN(taxPercentage)) {
-      newErrors.taxPercentage = "Valid Tax Percentage is required.";
+    if (!imageFile) {
+      newErrors.image = "Service image is required.";
     }
-    if (!platformCommission.trim() || isNaN(platformCommission)) {
-      newErrors.platformCommission = "Valid Platform Commission is required.";
-    }
-    if (!miscFee.trim() || isNaN(miscFee)) {
-      newErrors.miscFee = "Valid Misc Fee is required.";
-    }
-    serviceVariants.forEach((variant, index) => {
-      if (!variant.variantName.trim()) {
-        newErrors[`variantName-${index}`] = "Variant Name is required.";
-      }
-      if (!variant.price.trim() || isNaN(variant.price)) {
-        newErrors[`price-${index}`] = "Valid Price is required.";
-      }
-      if (!variant.serviceTime.trim() || isNaN(variant.serviceTime)) {
-        newErrors[`serviceTime-${index}`] = "Valid Service Time is required.";
-      }
-      if (!variant.metric.trim()) {
-        newErrors[`metric-${index}`] = "Metric is required.";
-      }
-    });
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -128,42 +57,24 @@ const AddServiceForm = ({ category, subCategory, onSubmit }) => {
     }
 
     const formData = new FormData();
+
+    // Add the fields corresponding to the servicesSchema
+    formData.append("image", imageFile);
     formData.append("name", serviceName);
     formData.append("description", description);
-    formData.append("taxPercentage", taxPercentage);
-    formData.append("platformCommission", platformCommission);
-    formData.append("miscFee", miscFee);
+    formData.append("categoryId", category._id);
+    formData.append("subCategoryId", subCategoryId); // Add subCategoryId
+    formData.append("variantName", variantName); // Directly set the variantName from subcategory
     formData.append("isMostBooked", isMostBooked);
-    formData.append("tag", tag);
-    formData.append("isCash", isCash);
-    formData.append("creditEligibility", creditEligibility);
     formData.append("isActive", true);
     formData.append("isDeleted", false);
 
-    serviceVariants.forEach((variant, index) => {
-      formData.append(
-        `serviceVariants[${index}][variantName]`,
-        variant.variantName,
-      );
-      formData.append(`serviceVariants[${index}][price]`, variant.price);
-      formData.append(
-        `serviceVariants[${index}][serviceTime]`,
-        variant.serviceTime,
-      );
-      formData.append(`serviceVariants[${index}][metric]`, variant.metric);
-      formData.append(`serviceVariants[${index}][min]`, variant.min);
-      formData.append(`serviceVariants[${index}][max]`, variant.max);
-    });
-
-    locations.forEach((location, index) => {
-      formData.append(`locations[${index}]`, location);
-    });
-
-    if (imageFile) {
-      formData.append("image", imageFile);
+    // Log formData for debugging purposes
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
     }
-
-    console.log("Payload to be sent:", formData); // Logging the payload for debugging
+    console.log(formData);
+    // Submit the form data
     onSubmit(formData);
   };
 
@@ -201,186 +112,13 @@ const AddServiceForm = ({ category, subCategory, onSubmit }) => {
         </div>
 
         <div className="servermanager-form-group">
-          <label>Service Variants:</label>
-          {serviceVariants.map((variant, index) => (
-            <div key={index} className="variant-input-group">
-              <select
-                className="service-input-borders"
-                value={variant.variantName}
-                onChange={(e) =>
-                  handleVariantChange(index, "variantName", e.target.value)
-                }
-              >
-                <option value="">Select Service Type</option>
-                {uiVariant.map((type, i) => (
-                  <option key={i} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-              {errors[`variantName-${index}`] && (
-                <span className="error">{errors[`variantName-${index}`]}</span>
-              )}
-              <br />
-              <input
-                type="number"
-                className="service-input-borders"
-                placeholder="Price"
-                value={variant.price}
-                onChange={(e) =>
-                  handleVariantChange(index, "price", e.target.value)
-                }
-              />
-              {errors[`price-${index}`] && (
-                <span className="error">{errors[`price-${index}`]}</span>
-              )}
-              <br />
-              <input
-                type="number"
-                className="service-input-borders"
-                placeholder="Service Time"
-                value={variant.serviceTime}
-                onChange={(e) =>
-                  handleVariantChange(index, "serviceTime", e.target.value)
-                }
-              />
-              {errors[`serviceTime-${index}`] && (
-                <span className="error">{errors[`serviceTime-${index}`]}</span>
-              )}
-              <br />
-              <select
-                className="service-input-borders"
-                value={variant.metric}
-                onChange={(e) =>
-                  handleVariantChange(index, "metric", e.target.value)
-                }
-              >
-                <option value="">Select Metric</option>
-                {["sqmts", "mts", "members", "quantity"].map((metric, i) => (
-                  <option key={i} value={metric}>
-                    {metric}
-                  </option>
-                ))}
-              </select>
-              {errors[`metric-${index}`] && (
-                <span className="error">{errors[`metric-${index}`]}</span>
-              )}
-              <br />
-              <input
-                type="number"
-                className="service-input-borders"
-                placeholder="Min"
-                min="0"
-                value={variant.min}
-                onChange={(e) =>
-                  handleVariantChange(index, "min", e.target.value)
-                }
-              />
-              <input
-                type="number"
-                className="service-input-borders"
-                placeholder="Max"
-                max="1000"
-                value={variant.max}
-                onChange={(e) =>
-                  handleVariantChange(index, "max", e.target.value)
-                }
-              />
-              <button
-                type="button"
-                className="servermanager-cancel-icon"
-                onClick={() => handleRemoveVariant(index)}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            className="servermanager-add-button"
-            onClick={handleAddVariant}
-          >
-            <FontAwesomeIcon icon={faPlus} /> <h6>Add a new UI Variant</h6>
-          </button>
-          {showVariantFields && serviceVariants.length > 1 && (
-            <button
-              type="button"
-              className="servermanager-cancel-icon"
-              onClick={() => setShowVariantFields(false)}
-            >
-              <FontAwesomeIcon icon={faTrash} /> Remove Last Variant
-            </button>
-          )}
-        </div>
-
-        <div className="servermanager-form-group">
-          <label>Locations:</label>
-          <div className="location-input-group">
-            <input
-              type="text"
-              className="service-input-borders"
-              value={locationInput}
-              onChange={(e) => setLocationInput(e.target.value)}
-              placeholder="Type a new location"
-            />
-            <button
-              type="button"
-              className="servermanager-add-button"
-              onClick={handleAddLocation}
-            >
-              <FontAwesomeIcon icon={faPlus} />{" "}
-              <h6>Click here to add the new location</h6>
-            </button>
-          </div>
-          {locations.map((location, index) => (
-            <div key={index} className="servermanager-menu-item">
-              <span>{location}</span>
-              <button
-                type="button"
-                className="servermanager-cancel-icon"
-                onClick={() => handleRemoveLocation(index)}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            </div>
-          ))}
-        </div>
-
-        <div className="servermanager-form-group">
-          <label>Tax Percentage:</label>
+          <label>Variant Name:</label>
           <input
-            type="number"
+            type="text"
             className="service-input-borders"
-            value={taxPercentage}
-            onChange={(e) => setTaxPercentage(e.target.value)}
+            value={variantName}
+            readOnly
           />
-          {errors.taxPercentage && (
-            <span className="error">{errors.taxPercentage}</span>
-          )}
-        </div>
-
-        <div className="servermanager-form-group">
-          <label>Platform Commission:</label>
-          <input
-            type="number"
-            className="service-input-borders"
-            value={platformCommission}
-            onChange={(e) => setPlatformCommission(e.target.value)}
-          />
-          {errors.platformCommission && (
-            <span className="error">{errors.platformCommission}</span>
-          )}
-        </div>
-
-        <div className="servermanager-form-group">
-          <label>Misc Fee:</label>
-          <input
-            type="number"
-            className="service-input-borders"
-            value={miscFee}
-            onChange={(e) => setMiscFee(e.target.value)}
-          />
-          {errors.miscFee && <span className="error">{errors.miscFee}</span>}
         </div>
 
         <div className="servermanager-form-group">
@@ -391,6 +129,7 @@ const AddServiceForm = ({ category, subCategory, onSubmit }) => {
             accept="image/*"
             onChange={handleImageChange}
           />
+          {errors.image && <span className="error">{errors.image}</span>}
         </div>
 
         <div className="servermanager-toggle-group">
@@ -401,33 +140,6 @@ const AddServiceForm = ({ category, subCategory, onSubmit }) => {
               className="servermanager-toggle-input"
               checked={isMostBooked}
               onChange={() => setIsMostBooked(!isMostBooked)}
-            />
-          </label>
-          <label>
-            Tag
-            <input
-              type="checkbox"
-              className="servermanager-toggle-input"
-              checked={tag}
-              onChange={() => setTag(!tag)}
-            />
-          </label>
-          <label>
-            Cash Payment
-            <input
-              type="checkbox"
-              className="servermanager-toggle-input"
-              checked={isCash}
-              onChange={() => setIsCash(!isCash)}
-            />
-          </label>
-          <label>
-            Credit Eligibility
-            <input
-              type="checkbox"
-              className="servermanager-toggle-input"
-              checked={creditEligibility}
-              onChange={() => setCreditEligibility(!creditEligibility)}
             />
           </label>
         </div>
@@ -443,6 +155,7 @@ const AddServiceForm = ({ category, subCategory, onSubmit }) => {
 AddServiceForm.propTypes = {
   category: PropTypes.object.isRequired,
   subCategory: PropTypes.object.isRequired,
+  subCategoryId: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };
 

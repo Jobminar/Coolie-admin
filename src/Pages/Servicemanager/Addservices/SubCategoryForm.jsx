@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpFromBracket } from "@fortawesome/free-solid-svg-icons";
+import * as api from "./api/servicemanager-api";
 
 const SubCategoryForm = ({
   subCategoryName,
@@ -10,27 +11,47 @@ const SubCategoryForm = ({
   handleSubCategoryIconChange,
   subCategoryIcon,
   handleAddSubCategory,
+  lastCategoryId,
 }) => {
-  useEffect(() => {
-    console.log("Component mounted");
-    return () => {
-      console.log("Component unmounted");
-    };
-  }, []);
+  const [variants, setVariants] = useState([]);
+  const [selectedVariant, setSelectedVariant] = useState("");
 
   useEffect(() => {
-    console.log("subCategoryName changed:", subCategoryName);
-  }, [subCategoryName]);
+    if (lastCategoryId) {
+      api
+        .fetchCategoryById(lastCategoryId)
+        .then((response) => {
+          setVariants(response.data.uiVariant || []);
+        })
+        .catch((error) => {
+          console.error("Error fetching category uiVariant:", error);
+        });
+    }
+  }, [lastCategoryId]);
 
-  useEffect(() => {
-    console.log("subCategoryError changed:", subCategoryError);
-  }, [subCategoryError]);
+  const handleVariantChange = (e) => {
+    setSelectedVariant(e.target.value);
+  };
 
-  useEffect(() => {
-    console.log("subCategoryIcon changed:", subCategoryIcon);
-  }, [subCategoryIcon]);
+  const handleSubmit = () => {
+    // Add detailed error logging to identify which field is missing
+    if (subCategoryName.trim() === "") {
+      console.error("Sub-category name is missing.");
+    }
+    if (!subCategoryIcon) {
+      console.error("Sub-category icon is missing.");
+    }
+    if (!selectedVariant) {
+      console.error("Sub-category variant is missing.");
+    }
 
-  console.log("Rendering SubCategoryForm");
+    if (subCategoryName.trim() === "" || !subCategoryIcon || !selectedVariant) {
+      console.error("All fields are required.");
+      return;
+    }
+
+    handleAddSubCategory(selectedVariant);
+  };
 
   return (
     <div className="servermanager-card servermanager-add-sub-category-form">
@@ -42,27 +63,16 @@ const SubCategoryForm = ({
           id="subCategoryName"
           className="servermanager-bottom-border-input"
           value={subCategoryName}
-          onChange={(e) => {
-            console.log("Sub-category name input changed:", e.target.value);
-            setSubCategoryName(e.target.value);
-          }}
+          onChange={(e) => setSubCategoryName(e.target.value)}
           aria-label="Sub-Category Name"
         />
-        {subCategoryError && (
-          <span className="error">
-            {console.log("Displaying subCategoryError:", subCategoryError)}
-            {subCategoryError}
-          </span>
-        )}
+        {subCategoryError && <span className="error">{subCategoryError}</span>}
       </div>
       <div className="servermanageruploadcontainer">
         <input
           type="file"
           id="subCategoryIcon"
-          onChange={(e) => {
-            console.log("File input changed:", e.target.files[0]);
-            handleSubCategoryIconChange(e);
-          }}
+          onChange={handleSubCategoryIconChange}
           className="servermanager-file-upload"
           aria-label="Sub-Category Icon"
         />
@@ -84,12 +94,27 @@ const SubCategoryForm = ({
           />
         )}
       </div>
+      <div className="servermanagerinputcontainer">
+        <label htmlFor="variantSelect">Select Variant:</label>
+        <select
+          id="variantSelect"
+          value={selectedVariant}
+          onChange={handleVariantChange}
+          aria-label="Variant Name"
+        >
+          <option value="" disabled>
+            Select a variant
+          </option>
+          {variants.map((variant, index) => (
+            <option key={index} value={variant}>
+              {variant}
+            </option>
+          ))}
+        </select>
+      </div>
       <button
         className="servermanager-submit-button"
-        onClick={() => {
-          console.log("Add Sub-Category button clicked");
-          handleAddSubCategory();
-        }}
+        onClick={handleSubmit}
         aria-label="Add Sub-Category"
       >
         Add
@@ -105,6 +130,7 @@ SubCategoryForm.propTypes = {
   handleSubCategoryIconChange: PropTypes.func.isRequired,
   subCategoryIcon: PropTypes.instanceOf(File),
   handleAddSubCategory: PropTypes.func.isRequired,
+  lastCategoryId: PropTypes.string.isRequired,
 };
 
 export default SubCategoryForm;
