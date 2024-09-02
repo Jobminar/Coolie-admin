@@ -52,88 +52,90 @@ const CategoryForm = ({
       onSubmit={handleSubmit}
     >
       <h3>Add Category</h3>
-      <div className="servermanagerinputcontainer">
-        <label htmlFor="categoryName">Category Name:</label>
-        <input
-          type="text"
-          id="categoryName"
-          className="servermanager-bottom-border-input"
-          value={categoryName}
-          onChange={(e) => setCategoryName(e.target.value)}
-          aria-label="Category Name"
-        />
-        {categoryError && <span className="error">{categoryError}</span>}
-      </div>
-      <div className="servermanageruploadcontainer">
-        <input
-          type="file"
-          id="categoryIcon"
-          onChange={handleFileChange}
-          className="servermanager-file-upload"
-          aria-label="Category Icon"
-        />
-        <label
-          htmlFor="categoryIcon"
-          className="servermanager-upload-icon-label"
-        >
-          Choose Icon
-          <FontAwesomeIcon
-            icon={faArrowUpFromBracket}
-            className="servermanager-upload-icon"
+      <div className="servermanagerinput-wrapper">
+        <div className="servermanagerinputcontainer">
+          <label htmlFor="categoryName">Category Name:</label>
+          <input
+            type="text"
+            id="categoryName"
+            className="servermanager-bottom-border-input"
+            value={categoryName}
+            onChange={(e) => setCategoryName(e.target.value)}
+            aria-label="Category Name"
           />
-        </label>
-        {imageError && <span className="error">{imageError}</span>}
-        {categoryIcon && (
-          <img
-            src={URL.createObjectURL(categoryIcon)}
-            alt="Category Icon Preview"
-            className="servermanager-upload-preview"
+          {categoryError && <span className="error">{categoryError}</span>}
+        </div>
+        <div className="servermanageruploadcontainer">
+          <input
+            type="file"
+            id="categoryIcon"
+            onChange={handleFileChange}
+            className="servermanager-file-upload"
+            aria-label="Category Icon"
           />
-        )}
-      </div>
-      <div className="servermanagerinputcontainer">
-        <label>Service Types:</label>
-        <div className="radio-group">
-          <label>
-            <input
-              type="radio"
-              name="serviceType"
-              value="Cleaning"
-              checked={serviceTypeSelection === "Cleaning"}
-              onChange={handleServiceTypeChange}
+          <label
+            htmlFor="categoryIcon"
+            className="servermanager-upload-icon-label"
+          >
+            Choose Icon
+            <FontAwesomeIcon
+              icon={faArrowUpFromBracket}
+              className="servermanager-upload-icon"
             />
-            Cleaning (Normal/Deep)
           </label>
-          <label>
-            <input
-              type="radio"
-              name="serviceType"
-              value="Gender"
-              checked={serviceTypeSelection === "Gender"}
-              onChange={handleServiceTypeChange}
+          {imageError && <span className="error">{imageError}</span>}
+          {categoryIcon && (
+            <img
+              src={URL.createObjectURL(categoryIcon)}
+              alt="Category Icon Preview"
+              className="servermanager-upload-preview"
             />
-            Gender (Male/Female)
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="serviceType"
-              value="Time"
-              checked={serviceTypeSelection === "Time"}
-              onChange={handleServiceTypeChange}
-            />
-            Time (Hour/Daily/Monthly)
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="serviceType"
-              value="None"
-              checked={serviceTypeSelection === "None"}
-              onChange={handleServiceTypeChange}
-            />
-            None
-          </label>
+          )}
+        </div>
+        <div className="servermanagerinputcontainer">
+          <label>Service Types:</label>
+          <div className="radio-group">
+            <label>
+              <input
+                type="radio"
+                name="serviceType"
+                value="Cleaning"
+                checked={serviceTypeSelection === "Cleaning"}
+                onChange={handleServiceTypeChange}
+              />
+              Cleaning (Normal/Deep)
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="serviceType"
+                value="Gender"
+                checked={serviceTypeSelection === "Gender"}
+                onChange={handleServiceTypeChange}
+              />
+              Gender (Male/Female)
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="serviceType"
+                value="Time"
+                checked={serviceTypeSelection === "Time"}
+                onChange={handleServiceTypeChange}
+              />
+              Time (Hour/Daily/Monthly)
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="serviceType"
+                value="None"
+                checked={serviceTypeSelection === "None"}
+                onChange={handleServiceTypeChange}
+              />
+              None
+            </label>
+          </div>
         </div>
       </div>
       <button

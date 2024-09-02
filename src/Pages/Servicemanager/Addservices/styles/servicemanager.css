@@ -127,6 +127,16 @@
     box-sizing: border-box;
 }
 
+.servermanagerinput-wrapper {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    max-height: 204px;
+    /* Adjust the maximum height as needed */
+    overflow-y: scroll;
+}
+
 .servermanager-add-category-form h3,
 .servermanager-add-sub-category-form h3 {
     margin: 0;
@@ -629,8 +639,7 @@
     transition: background-color 0.3s;
 }
 
-.servermanager-main-add-button
-{   
+.servermanager-main-add-button {
     background: none;
     border: 1px solid black;
     border-radius: 5px;
@@ -646,14 +655,15 @@
     transition: background-color 0.3s;
 }
 
-.servermanager-cancel-icon{
-    color:#580000;
-    border:none;
+.servermanager-cancel-icon {
+    color: #580000;
+    border: none;
     background-color: transparent;
 }
 
 .servermanager-add-button {
-    color: #556b2f; /* Dark mud green color for add button */
+    color: #556b2f;
+    /* Dark mud green color for add button */
 }
 
 .servermanager-add-button:hover {
@@ -661,7 +671,8 @@
 }
 
 .servermanager-delete-button {
-    color: #000; /* Black color for delete button */
+    color: #000;
+    /* Black color for delete button */
 }
 
 .servermanager-delete-button:hover {
@@ -677,6 +688,7 @@
 
 /* Responsive Styles */
 @media (max-width: 768px) {
+
     .servermanager-add-service-form,
     .add-service-form,
     .edit-service-form {
@@ -685,6 +697,7 @@
 }
 
 @media (max-width: 480px) {
+
     .servermanager-add-service-form,
     .add-service-form,
     .edit-service-form {
@@ -696,4 +709,3 @@
         width: 100%;
     }
 }
-
