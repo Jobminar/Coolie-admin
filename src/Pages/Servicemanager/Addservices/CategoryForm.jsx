@@ -36,7 +36,7 @@ const CategoryForm = ({
         selectedUiVariants.push("Normal", "Deep");
         break;
       case "Gender":
-        selectedUiVariants.push("Male", "Female");
+        selectedUiVariants.push("Female", "Male");
         break;
       case "Time":
         selectedUiVariants.push("Hourly", "Daily", "Monthly");
