@@ -24,13 +24,30 @@ const EditSubCategoryForm = ({
   const [subCategoryFile, setSubCategoryFile] = useState(null);
   const [subCategoryError, setSubCategoryError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [uiVariants, setUiVariants] = useState([]);
+  const [selectedVariantName, setSelectedVariantName] = useState("");
 
   useEffect(() => {
     if (selectedSubCategory) {
       setSubCategoryName(selectedSubCategory.name || "");
       setSubCategoryIcon(selectedSubCategory.imageKey || "");
+      setSelectedVariantName(selectedSubCategory.variantName || "");
     }
   }, [selectedSubCategory]);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      axios
+        .get(`${API_BASE_URL}/v1.0/core/categories/${selectedCategory}`)
+        .then((response) => {
+          setUiVariants(response.data.uiVariant || []);
+        })
+        .catch((error) => {
+          console.error("Error fetching category uiVariants:", error);
+          toast.error("Failed to load category variants.");
+        });
+    }
+  }, [selectedCategory, API_BASE_URL]);
 
   const handleSubCategoryIconChange = (e) => {
     const file = e.target.files[0];
@@ -51,6 +68,11 @@ const EditSubCategoryForm = ({
       return;
     }
 
+    if (selectedVariantName.trim() === "") {
+      setSubCategoryError("Variant name is required.");
+      return;
+    }
+
     confirmAlert({
       title: "Confirm",
       message: "Are you sure you want to update this sub-category?",
@@ -61,6 +83,7 @@ const EditSubCategoryForm = ({
             setLoading(true);
             const formData = new FormData();
             formData.append("name", subCategoryName);
+            formData.append("variantName", selectedVariantName);
             formData.append("isActive", true);
             formData.append("isDeleted", false);
 
@@ -132,6 +155,24 @@ const EditSubCategoryForm = ({
         />
         {subCategoryError && <span className="error">{subCategoryError}</span>}
       </div>
+      <div className="manageServiceInputContainer">
+        <label>Variant Name:</label>
+        <select
+          className="manageServiceBottomBorderInput"
+          value={selectedVariantName}
+          onChange={(e) => setSelectedVariantName(e.target.value)}
+        >
+          <option value="" disabled>
+            Select a variant
+          </option>
+          {uiVariants.map((variant) => (
+            <option key={variant} value={variant}>
+              {variant}
+            </option>
+          ))}
+        </select>
+        {subCategoryError && <span className="error">{subCategoryError}</span>}
+      </div>
       {subCategoryIcon && (
         <div className="manageServicePreviewContainer">
           <img
@@ -185,6 +226,7 @@ EditSubCategoryForm.propTypes = {
     _id: PropTypes.string.isRequired,
     name: PropTypes.string,
     imageKey: PropTypes.string,
+    variantName: PropTypes.string, // Added variantName prop type
   }).isRequired,
   setShowEditSubCategoryForm: PropTypes.func.isRequired,
   API_BASE_URL: PropTypes.string.isRequired,
