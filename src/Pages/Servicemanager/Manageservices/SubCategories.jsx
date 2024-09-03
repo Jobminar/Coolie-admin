@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,7 +19,10 @@ const SubCategories = ({
   API_BASE_URL,
   selectedCategory,
   subCategoriesError,
+  uiVariants,
 }) => {
+  const [selectedUiVariant, setSelectedUiVariant] = useState("None");
+
   const handleSubCategorySelect = (subCategory) => {
     setSelectedSubCategory(subCategory);
     fetchServices(selectedCategory, subCategory._id);
@@ -75,6 +78,18 @@ const SubCategories = ({
     });
   };
 
+  const handleUiVariantChange = (event) => {
+    setSelectedUiVariant(event.target.value);
+  };
+
+  // Filter subcategories based on selectedUiVariant
+  const filteredSubCategories =
+    selectedUiVariant === "None"
+      ? subCategories
+      : subCategories.filter(
+          (subCategory) => subCategory.variantName === selectedUiVariant,
+        );
+
   return (
     <div className="manageServiceCard" id="subCategoryCard">
       <div className="manageServiceFormGroup">
@@ -87,6 +102,22 @@ const SubCategories = ({
             &#9776;
           </button>
         </div>
+        <select
+          className="uiVariantDropdown"
+          value={selectedUiVariant}
+          onChange={handleUiVariantChange}
+        >
+          <option value="None">None</option>
+          {uiVariants && uiVariants.length > 0 && (
+            <>
+              {uiVariants.map((variant, index) => (
+                <option key={index} value={variant}>
+                  {variant}
+                </option>
+              ))}
+            </>
+          )}
+        </select>
       </div>
 
       {showSubCategoryMenu && (
@@ -95,8 +126,8 @@ const SubCategories = ({
             <div className="manageServiceMenuItem">
               No available subcategories
             </div>
-          ) : subCategories.length > 0 ? (
-            subCategories.map((subCategory) => (
+          ) : filteredSubCategories.length > 0 ? (
+            filteredSubCategories.map((subCategory) => (
               <div
                 key={subCategory._id}
                 className={`manageServiceMenuItem ${
@@ -141,6 +172,7 @@ SubCategories.propTypes = {
   API_BASE_URL: PropTypes.string.isRequired,
   selectedCategory: PropTypes.string.isRequired,
   subCategoriesError: PropTypes.bool.isRequired,
+  uiVariants: PropTypes.array, // Add uiVariants prop
 };
 
 export default SubCategories;

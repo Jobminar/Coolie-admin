@@ -13,10 +13,6 @@ const EditServiceForm = ({
   const [serviceName, setServiceName] = useState(service.name || "");
   const [description, setDescription] = useState(service.description || "");
   const [variantName] = useState(service.variantName || ""); // Display as text, not editable
-  const [isMostBooked, setIsMostBooked] = useState(
-    service.isMostBooked || false,
-  );
-  const [tag, setTag] = useState(service.tag || false);
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -51,8 +47,7 @@ const EditServiceForm = ({
     formData.append("name", serviceName);
     formData.append("description", description);
     formData.append("variantName", variantName); // Directly using variantName from backend data
-    formData.append("isMostBooked", isMostBooked);
-    formData.append("tag", tag);
+
     formData.append("isActive", true);
     formData.append("isDeleted", false);
 
@@ -139,27 +134,6 @@ const EditServiceForm = ({
         )}
       </div>
 
-      <div className="servermanager-toggle-group">
-        <label>
-          Most Booked
-          <input
-            type="checkbox"
-            className="servermanager-toggle-input"
-            checked={isMostBooked}
-            onChange={() => setIsMostBooked(!isMostBooked)}
-          />
-        </label>
-        <label>
-          Tag
-          <input
-            type="checkbox"
-            className="servermanager-toggle-input"
-            checked={tag}
-            onChange={() => setTag(!tag)}
-          />
-        </label>
-      </div>
-
       <button type="submit" className="servermanager-submissionbutton">
         {loading ? "Updating..." : "Update"}
       </button>
@@ -184,8 +158,6 @@ EditServiceForm.propTypes = {
     name: PropTypes.string,
     description: PropTypes.string,
     variantName: PropTypes.string,
-    isMostBooked: PropTypes.bool,
-    tag: PropTypes.bool,
     image: PropTypes.string,
   }).isRequired,
   category: PropTypes.string.isRequired,

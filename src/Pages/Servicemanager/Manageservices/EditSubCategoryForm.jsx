@@ -145,69 +145,75 @@ const EditSubCategoryForm = ({
           }}
         />
       </h3>
-      <div className="manageServiceInputContainer">
-        <label>Sub-Category Name:</label>
-        <input
-          type="text"
-          className="manageServiceBottomBorderInput"
-          value={subCategoryName}
-          onChange={(e) => setSubCategoryName(e.target.value)}
-        />
-        {subCategoryError && <span className="error">{subCategoryError}</span>}
-      </div>
-      <div className="manageServiceInputContainer">
-        <label>Variant Name:</label>
-        <select
-          className="manageServiceBottomBorderInput"
-          value={selectedVariantName}
-          onChange={(e) => setSelectedVariantName(e.target.value)}
-        >
-          <option value="" disabled>
-            Select a variant
-          </option>
-          {uiVariants.map((variant) => (
-            <option key={variant} value={variant}>
-              {variant}
-            </option>
-          ))}
-        </select>
-        {subCategoryError && <span className="error">{subCategoryError}</span>}
-      </div>
-      {subCategoryIcon && (
-        <div className="manageServicePreviewContainer">
-          <img
-            src={
-              subCategoryIcon.startsWith("blob:")
-                ? subCategoryIcon
-                : subCategoryIcon
-            }
-            alt="Sub-Category Icon"
-            className="manageServicePreviewImage"
-            onLoad={() => console.log("Image loaded successfully")}
-            onError={(e) => {
-              console.error("Error loading image:", e);
-              e.target.src = ""; // Fallback in case the image fails to load
-            }}
+      <div className="manageServiceInputWrapper">
+        <div className="manageServiceInputContainer">
+          <label>Sub-Category Name:</label>
+          <input
+            type="text"
+            className="manageServiceBottomBorderInput"
+            value={subCategoryName}
+            onChange={(e) => setSubCategoryName(e.target.value)}
           />
+          {subCategoryError && (
+            <span className="error">{subCategoryError}</span>
+          )}
         </div>
-      )}
-      <div className="manageServiceUploadContainer">
-        <input
-          type="file"
-          id="subCategoryIcon"
-          onChange={handleSubCategoryIconChange}
-          className="manageServiceFileUpload"
-        />
-        <label
-          htmlFor="subCategoryIcon"
-          className="manageServiceUploadIconLabel"
-        >
-          Choose Icon
-          <FontAwesomeIcon
-            icon={faArrowUpFromBracket}
-            className="manageServiceUploadIcon"
+        <div className="manageServiceInputContainer">
+          <label>Variant Name:</label>
+          <select
+            className="manageServiceBottomBorderInput"
+            value={selectedVariantName}
+            onChange={(e) => setSelectedVariantName(e.target.value)}
+          >
+            <option value="" disabled>
+              Select a variant
+            </option>
+            {uiVariants.map((variant) => (
+              <option key={variant} value={variant}>
+                {variant}
+              </option>
+            ))}
+          </select>
+          {subCategoryError && (
+            <span className="error">{subCategoryError}</span>
+          )}
+        </div>
+        {subCategoryIcon && (
+          <div className="manageServicePreviewContainer">
+            <img
+              src={
+                subCategoryIcon.startsWith("blob:")
+                  ? subCategoryIcon
+                  : subCategoryIcon
+              }
+              alt="Sub-Category Icon"
+              className="manageServicePreviewImage"
+              onLoad={() => console.log("Image loaded successfully")}
+              onError={(e) => {
+                console.error("Error loading image:", e);
+                e.target.src = ""; // Fallback in case the image fails to load
+              }}
+            />
+          </div>
+        )}
+        <div className="manageServiceUploadContainer">
+          <input
+            type="file"
+            id="subCategoryIcon"
+            onChange={handleSubCategoryIconChange}
+            className="manageServiceFileUpload"
           />
-        </label>
+          <label
+            htmlFor="subCategoryIcon"
+            className="manageServiceUploadIconLabel"
+          >
+            Choose Icon
+            <FontAwesomeIcon
+              icon={faArrowUpFromBracket}
+              className="manageServiceUploadIcon"
+            />
+          </label>
+        </div>
       </div>
       <button
         id="manageServiceUpdateSubCategoryButton"

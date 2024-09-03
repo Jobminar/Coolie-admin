@@ -7,9 +7,9 @@ import EditSubCategoryForm from "./EditSubCategoryForm";
 import EditServiceForm from "./EditServiceForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-import toast, { Toaster } from "react-hot-toast"; // Import react-hot-toast
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import toast, { Toaster } from "react-hot-toast";
 import "./styles/manageservice.css";
 
 const API_BASE_URL = "https://api.coolieno1.in";
@@ -29,6 +29,10 @@ const ManageService = () => {
   const [showServiceVariantsMenu, setShowServiceVariantsMenu] = useState(true);
   const [loading, setLoading] = useState(false);
   const [subCategoriesError, setSubCategoriesError] = useState(false);
+
+  // New states to manage uiVariants and selected UiVariant
+  const [uiVariantFilters, setUiVariantFilters] = useState([]);
+  const [selectedUiVariant, setSelectedUiVariant] = useState("");
 
   useEffect(() => {
     fetchCategories();
@@ -91,22 +95,24 @@ const ManageService = () => {
   };
 
   useEffect(() => {
-    if (showEditSubCategoryForm && selectedSubCategory) {
+    if (selectedSubCategory) {
       fetchServices(selectedCategory._id, selectedSubCategory._id);
     }
-  }, [showEditSubCategoryForm, selectedSubCategory]);
+  }, [selectedSubCategory]);
 
   const handleCloseServiceForm = () => {
     setSelectedService(null);
   };
 
   const handleCategorySelection = (category) => {
+    console.log("Selected Category:", category); // Log the selected category
     setSelectedCategory(category);
     fetchSubcategories(category._id);
     setSubCategories([]);
     setServices([]);
     setSelectedSubCategory(null);
     setSelectedService(null);
+    setShowEditCategoryForm(false);
     setShowEditSubCategoryForm(false);
     setShowServiceVariantsMenu(false);
   };
@@ -169,111 +175,116 @@ const ManageService = () => {
       <h2>Manage Service</h2>
       {loading && <div className="loading">Loading...</div>}
       <div className="manageServiceCardContainer">
-        <div className="manageServiceCard" id="categoryCard">
-          <div className="manageServiceFormGroup">
-            <div className="manageServiceCategoryHeader">
-              <span>Select Category</span>
-              <button
-                className="manageServiceHamburgerIcon"
-                onClick={() => setShowCategoryMenu(!showCategoryMenu)}
-              >
-                &#9776;
-              </button>
-            </div>
-          </div>
-          {showCategoryMenu && (
-            <div className="manageServiceMenu">
-              {categories.map((category) => (
-                <div
-                  key={category._id}
-                  className={`manageServiceMenuItem ${
-                    selectedCategory?._id === category._id ? "selected" : ""
-                  }`}
+        <div className="manageServiceRowWrapper">
+          <div className="manageServiceCard" id="categoryCard">
+            <div className="manageServiceFormGroup">
+              <div className="manageServiceCategoryHeader">
+                <span>Select Category</span>
+                <button
+                  className="manageServiceHamburgerIcon"
+                  onClick={() => setShowCategoryMenu(!showCategoryMenu)}
                 >
-                  <span onClick={() => handleCategorySelection(category)}>
-                    {category.name}
-                  </span>
-                  <div className="manageServiceIconGroup">
-                    <FontAwesomeIcon
-                      icon={faEdit}
-                      className="manageServiceEditIcon"
-                      onClick={() => {
-                        confirmAlert({
-                          title: "Confirm",
-                          message:
-                            "Are you sure you want to edit this category?",
-                          buttons: [
-                            {
-                              label: "Yes",
-                              onClick: () => {
-                                setSelectedCategory(category);
-                                fetchSubcategories(category._id);
-                                setShowEditCategoryForm(true);
-                              },
-                            },
-                            {
-                              label: "No",
-                            },
-                          ],
-                        });
-                      }}
-                    />
-                    <FontAwesomeIcon
-                      icon={faTrash}
-                      className="manageServiceDeleteIcon"
-                      onClick={() => handleDeleteCategory(category._id)}
-                    />
-                  </div>
-                </div>
-              ))}
+                  &#9776;
+                </button>
+              </div>
             </div>
+            {showCategoryMenu && (
+              <div className="manageServiceMenu">
+                {categories.map((category) => (
+                  <div
+                    key={category._id}
+                    className={`manageServiceMenuItem ${
+                      selectedCategory?._id === category._id ? "selected" : ""
+                    }`}
+                  >
+                    <span onClick={() => handleCategorySelection(category)}>
+                      {category.name}
+                    </span>
+                    <div className="manageServiceIconGroup">
+                      <FontAwesomeIcon
+                        icon={faEdit}
+                        className="manageServiceEditIcon"
+                        onClick={() => {
+                          confirmAlert({
+                            title: "Confirm",
+                            message:
+                              "Are you sure you want to edit this category?",
+                            buttons: [
+                              {
+                                label: "Yes",
+                                onClick: () => {
+                                  setSelectedCategory(category);
+                                  fetchSubcategories(category._id);
+                                  setShowEditCategoryForm(true);
+                                },
+                              },
+                              {
+                                label: "No",
+                              },
+                            ],
+                          });
+                        }}
+                      />
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        className="manageServiceDeleteIcon"
+                        onClick={() => handleDeleteCategory(category._id)}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          {showEditCategoryForm && selectedCategory && (
+            <EditCategoryForm
+              selectedCategory={selectedCategory}
+              setShowEditCategoryForm={setShowEditCategoryForm}
+              API_BASE_URL={API_BASE_URL}
+              AWS_BASE_URL={AWS_BASE_URL}
+            />
+          )}
+
+          {selectedCategory && (
+            <SubCategories
+              subCategories={subCategories}
+              subCategoriesError={subCategoriesError}
+              selectedSubCategory={selectedSubCategory}
+              setSelectedSubCategory={setSelectedSubCategory}
+              setShowEditSubCategoryForm={setShowEditSubCategoryForm}
+              setShowSubCategoryMenu={setShowSubCategoryMenu}
+              showSubCategoryMenu={showSubCategoryMenu}
+              setSubCategories={setSubCategories}
+              fetchServices={fetchServices}
+              API_BASE_URL={API_BASE_URL}
+              selectedCategory={selectedCategory._id}
+              uiVariants={selectedCategory.uiVariant || []} // Pass uiVariant here
+            />
+          )}
+
+          {showEditSubCategoryForm && selectedSubCategory && (
+            <>
+              <EditSubCategoryForm
+                selectedSubCategory={selectedSubCategory}
+                setShowEditSubCategoryForm={setShowEditSubCategoryForm}
+                API_BASE_URL={API_BASE_URL}
+                AWS_BASE_URL={AWS_BASE_URL}
+                updateSubCategoryInParent={updateSubCategoryInParent}
+                fetchServices={fetchServices}
+                selectedCategory={selectedCategory._id}
+              />
+              <Services
+                services={services}
+                selectedService={selectedService}
+                setSelectedService={setSelectedService}
+                setServices={setServices}
+                setShowServiceVariantsMenu={setShowServiceVariantsMenu}
+                showServiceVariantsMenu={showServiceVariantsMenu}
+                API_BASE_URL={API_BASE_URL}
+              />
+            </>
           )}
         </div>
-        {showEditCategoryForm && selectedCategory && (
-          <EditCategoryForm
-            selectedCategory={selectedCategory}
-            setShowEditCategoryForm={setShowEditCategoryForm}
-            API_BASE_URL={API_BASE_URL}
-            AWS_BASE_URL={AWS_BASE_URL}
-          />
-        )}
-        {selectedCategory && (
-          <SubCategories
-            subCategories={subCategories}
-            subCategoriesError={subCategoriesError}
-            selectedSubCategory={selectedSubCategory}
-            setSelectedSubCategory={setSelectedSubCategory}
-            setShowEditSubCategoryForm={setShowEditSubCategoryForm}
-            setShowSubCategoryMenu={setShowSubCategoryMenu}
-            showSubCategoryMenu={showSubCategoryMenu}
-            setSubCategories={setSubCategories}
-            fetchServices={fetchServices}
-            API_BASE_URL={API_BASE_URL}
-            selectedCategory={selectedCategory._id}
-          />
-        )}
-        {showEditSubCategoryForm && selectedSubCategory && (
-          <EditSubCategoryForm
-            selectedSubCategory={selectedSubCategory}
-            setShowEditSubCategoryForm={setShowEditSubCategoryForm}
-            API_BASE_URL={API_BASE_URL}
-            AWS_BASE_URL={AWS_BASE_URL}
-            updateSubCategoryInParent={updateSubCategoryInParent}
-            fetchServices={fetchServices}
-            selectedCategory={selectedCategory._id}
-          />
-        )}
-        {selectedSubCategory && (
-          <Services
-            services={services}
-            selectedService={selectedService}
-            setSelectedService={setSelectedService}
-            setServices={setServices}
-            setShowServiceVariantsMenu={setShowServiceVariantsMenu}
-            showServiceVariantsMenu={showServiceVariantsMenu}
-            API_BASE_URL={API_BASE_URL}
-          />
-        )}
         {selectedService && (
           <EditServiceForm
             service={selectedService}

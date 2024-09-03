@@ -66,10 +66,6 @@ const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
     formData.append("categoryId", category._id);
     formData.append("subCategoryId", subCategoryId); // Add subCategoryId
     formData.append("variantName", variantName); // Directly set the variantName from subcategory
-    formData.append("isMostBooked", isMostBooked);
-    formData.append("isActive", true);
-    formData.append("isDeleted", false);
-    formData.append("tag", tag); // Add tag to the form data
 
     // Log formData for debugging purposes
     for (let [key, value] of formData.entries()) {
@@ -132,30 +128,6 @@ const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
             onChange={handleImageChange}
           />
           {errors.image && <span className="error">{errors.image}</span>}
-        </div>
-
-        <div className="servermanager-toggle-group">
-          <label>
-            Most Booked
-            <input
-              type="checkbox"
-              className="servermanager-toggle-input"
-              checked={isMostBooked}
-              onChange={() => setIsMostBooked(!isMostBooked)}
-            />
-          </label>
-        </div>
-
-        <div className="servermanager-toggle-group">
-          <label>
-            Tag
-            <input
-              type="checkbox"
-              className="servermanager-toggle-input"
-              checked={tag}
-              onChange={() => setTag(!tag)}
-            />
-          </label>
         </div>
 
         <button type="submit" className="servermanager-submissionbutton">

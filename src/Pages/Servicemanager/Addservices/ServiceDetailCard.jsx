@@ -8,10 +8,6 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
     name: service.name,
     description: service.description,
     variantName: service.variantName,
-    isMostBooked: service.isMostBooked,
-    isActive: service.isActive,
-    isDeleted: service.isDeleted,
-    tag: service.tag, // Added tag field
   });
 
   useEffect(() => {
@@ -20,10 +16,6 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
       name: service.name,
       description: service.description,
       variantName: service.variantName,
-      isMostBooked: service.isMostBooked,
-      isActive: service.isActive,
-      isDeleted: service.isDeleted,
-      tag: service.tag, // Added tag field
     });
   }, [service]);
 
@@ -126,10 +118,6 @@ ServiceDetailCard.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     variantName: PropTypes.string.isRequired,
-    isMostBooked: PropTypes.bool,
-    isActive: PropTypes.bool,
-    isDeleted: PropTypes.bool,
-    tag: PropTypes.bool.isRequired, // Added tag prop type
   }).isRequired,
   category: PropTypes.shape({
     _id: PropTypes.string,

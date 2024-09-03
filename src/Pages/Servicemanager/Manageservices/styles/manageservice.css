@@ -1,7 +1,26 @@
+.manageServiceRowWrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    overflow-x: auto;
+    /* Allows horizontal scrolling */
+    padding: 2px;
+    max-width: 100%;
+    /* Ensure it takes up full available width */
+}
+
+.manageServiceCard {
+    flex: 0 0 auto;
+    /* Prevents cards from shrinking */
+    width: 300px;
+    /* Consistent width for each card */
+}
+
+
 .manageServiceContainer {
     font-family: Roboto, sans-serif;
     padding: 20px;
-    width: 100%
+    width: 100%;
 }
 
 .manageServiceCardContainer {
@@ -74,7 +93,7 @@
 .manageServiceMenu {
     border: 1px solid #000000;
     border-radius: 5px;
-    margin-top: 10px;
+    margin-top: 0px;
     padding: 5px;
     max-height: 200px;
     overflow-y: auto;
@@ -118,7 +137,18 @@
     border-radius: 5px;
     display: flex;
     flex-direction: column;
-    padding: 0;
+    align-items: center;
+    padding: 10px;
+    max-height: 284px;
+}
+
+.manageServiceInputWrapper {
+    max-height: 200px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    border-radius: 5px;
 }
 
 .manageServiceEditCategoryForm h3,
@@ -136,14 +166,13 @@
 }
 
 .manageServiceInputContainer {
-    border-top: 1px solid #000000;
     border-bottom: 1px solid #000000;
     border-left: none;
     border-right: none;
     border-radius: 0px;
     margin-bottom: 10px;
     padding: 10px;
-    width: 92.9%;
+    width: 99.9%;
 }
 
 .manageServiceUploadContainer {
@@ -157,7 +186,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 92.9%;
+    width: 99.9%;
 }
 
 .manageServiceUploadIconLabel {
@@ -345,12 +374,7 @@
     background-color: #444;
 }
 
-.manageServiceEditCategoryForm,
-.manageServiceEditSubCategoryForm {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+
 
 .manageServicePreviewContainer {
     text-align: center;
@@ -373,4 +397,12 @@
 
 .hidden {
     display: none;
+}
+
+.uiVariantDropdown {
+    background-color: white;
+    padding: 1px;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: -2rem 6.5rem;
 }

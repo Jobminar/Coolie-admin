@@ -4,7 +4,6 @@ import AddServiceForm from "./AddServiceForm";
 import ServiceDetailCard from "./ServiceDetailCard";
 import SubCategoryForm from "./SubCategoryForm";
 import CategoryForm from "./CategoryForm";
-import toast from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./styles/servicemanager.css";
@@ -21,12 +20,12 @@ const ServiceManager = () => {
   const [subCategoryName, setSubCategoryName] = useState("");
   const [categoryError, setCategoryError] = useState("");
   const [subCategoryError, setSubCategoryError] = useState("");
-  const [uiVariants, setUiVariants] = useState([]);
+  // const [uiVariants, setUiVariants] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [services, setServices] = useState([]);
   const [reload, setReload] = useState(false);
-  const [subCategoryErrorStatus, setSubCategoryErrorStatus] = useState(false);
+  // const [subCategoryErrorStatus, setSubCategoryErrorStatus] = useState(false);
   const [subcategoryClicked, setSubcategoryClicked] = useState(false);
 
   const selectedCategoryRef = useRef(null);
@@ -189,7 +188,7 @@ const ServiceManager = () => {
   const handleServiceSelect = (service) => {
     if (service.name === "Add New Service") {
       if (!selectedCategoryRef.current || !selectedSubCategoryRef.current) {
-        toast.error("Please select a category and subcategory first.");
+        console.error("Please select a category and subcategory first.");
         return;
       }
       setShowServiceForm(true);
@@ -212,7 +211,7 @@ const ServiceManager = () => {
 
   const toggleServiceForm = () => {
     if (!selectedCategoryRef.current || !selectedSubCategoryRef.current) {
-      toast.error("Please select a category and subcategory first.");
+      console.error("Please select a category and subcategory first.");
       return;
     }
     setShowServiceForm((prev) => !prev);
@@ -337,7 +336,7 @@ const ServiceManager = () => {
       setSelectedService(null);
       fetchServices(selectedSubCategoryRef.current._id);
       setReload(!reload);
-      toast.success("Service added successfully!");
+      console.success("Service added successfully!");
     } catch (error) {
       console.error("Error during the addition of service:", error);
 
@@ -354,7 +353,7 @@ const ServiceManager = () => {
         console.error("Error message:", error.message);
       }
 
-      toast.error("Error adding service.");
+      console.error("Error adding service.");
     }
   };
 

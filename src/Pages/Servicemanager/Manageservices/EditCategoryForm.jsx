@@ -121,40 +121,47 @@ const EditCategoryForm = ({
           }}
         />
       </h3>
-      <div className="manageServiceInputContainer">
-        <label htmlFor="categoryName">Category Name:</label>
-        <input
-          type="text"
-          id="categoryName"
-          className="manageServiceBottomBorderInput"
-          value={categoryName}
-          onChange={(e) => setCategoryName(e.target.value)}
-        />
-        {categoryError && <span className="error">{categoryError}</span>}
-      </div>
-      {categoryIcon && (
-        <div className="manageServicePreviewContainer">
-          <img
-            src={categoryIcon.startsWith("blob:") ? categoryIcon : categoryIcon}
-            alt="Category Icon"
-            className="manageServicePreviewImage"
+      <div className="manageServiceInputWrapper">
+        <div className="manageServiceInputContainer">
+          <label htmlFor="categoryName">Category Name:</label>
+          <input
+            type="text"
+            id="categoryName"
+            className="manageServiceBottomBorderInput"
+            value={categoryName}
+            onChange={(e) => setCategoryName(e.target.value)}
           />
+          {categoryError && <span className="error">{categoryError}</span>}
         </div>
-      )}
-      <div className="manageServiceUploadContainer">
-        <input
-          type="file"
-          id="categoryIcon"
-          onChange={handleCategoryIconChange}
-          className="manageServiceFileUpload"
-        />
-        <label htmlFor="categoryIcon" className="manageServiceUploadIconLabel">
-          Choose Icon
-          <FontAwesomeIcon
-            icon={faArrowUpFromBracket}
-            className="manageServiceUploadIcon"
+        {categoryIcon && (
+          <div className="manageServicePreviewContainer">
+            <img
+              src={
+                categoryIcon.startsWith("blob:") ? categoryIcon : categoryIcon
+              }
+              alt="Category Icon"
+              className="manageServicePreviewImage"
+            />
+          </div>
+        )}
+        <div className="manageServiceUploadContainer">
+          <input
+            type="file"
+            id="categoryIcon"
+            onChange={handleCategoryIconChange}
+            className="manageServiceFileUpload"
           />
-        </label>
+          <label
+            htmlFor="categoryIcon"
+            className="manageServiceUploadIconLabel"
+          >
+            Choose Icon
+            <FontAwesomeIcon
+              icon={faArrowUpFromBracket}
+              className="manageServiceUploadIcon"
+            />
+          </label>
+        </div>
       </div>
       <button
         id="manageServiceUpdateCategoryButton"
