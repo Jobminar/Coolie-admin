@@ -5,13 +5,13 @@ import ServiceDetailCard from "./ServiceDetailCard";
 import SubCategoryForm from "./SubCategoryForm";
 import CategoryForm from "./CategoryForm";
 import toast from "react-hot-toast";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./styles/servicemanager.css";
 
 const ServiceManager = () => {
   const [showServiceList, setShowServiceList] = useState(false);
-  const [showCategoryMenu, setShowCategoryMenu] = useState(true);
   const [showSubCategoryMenu, setShowSubCategoryMenu] = useState(true);
-  const [showServiceVariantsMenu, setShowServiceVariantsMenu] = useState(false);
   const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
   const [showAddSubCategoryForm, setShowAddSubCategoryForm] = useState(false);
   const [showServiceForm, setShowServiceForm] = useState(false);
@@ -157,7 +157,6 @@ const ServiceManager = () => {
     }
 
     setShowAddCategoryForm(false);
-    setShowServiceVariantsMenu(false);
     setShowServiceForm(false);
     setSubcategoryClicked(false);
   };
@@ -165,7 +164,6 @@ const ServiceManager = () => {
   const handleSubCategorySelect = (subCategoryId) => {
     if (subCategoryId === "Add new sub-category") {
       setShowAddSubCategoryForm(true);
-      setShowServiceVariantsMenu(false);
       setShowServiceForm(false);
       return;
     }
@@ -178,7 +176,6 @@ const ServiceManager = () => {
     if (selectedSubCategory) {
       selectedSubCategoryRef.current = selectedSubCategory;
       sessionStorage.setItem("subCategoryId", subCategoryId);
-      setShowServiceVariantsMenu(true);
       setShowServiceForm(false);
       setSubcategoryClicked(true);
     } else {
@@ -365,6 +362,10 @@ const ServiceManager = () => {
     setShowServiceList(true);
   };
 
+  const handleCloseSubCategoryForm = () => {
+    setShowAddSubCategoryForm(false);
+  };
+
   return (
     <div className="servermanager-container">
       <h2>Add Service</h2>
@@ -382,60 +383,49 @@ const ServiceManager = () => {
               >
                 +
               </button>
-              <button
-                className="servermanager-hamburger-icon"
-                onClick={() => setShowCategoryMenu(!showCategoryMenu)}
-              >
-                &#9776;
-              </button>
             </div>
           </div>
-          {showCategoryMenu && (
-            <div className="servermanager-menu">
-              {categories.length > 0 ? (
-                <>
-                  {/* Display the last category first */}
+
+          <div className="servermanager-menu">
+            {categories.length > 0 ? (
+              <>
+                {/* Display the last category first */}
+                <div
+                  key={categories[categories.length - 1]._id}
+                  className={`servermanager-menu-item ${
+                    selectedCategoryRef.current &&
+                    selectedCategoryRef.current._id ===
+                      categories[categories.length - 1]._id
+                      ? "selected"
+                      : ""
+                  }`}
+                  onClick={() =>
+                    handleCategorySelect(categories[categories.length - 1]._id)
+                  }
+                >
+                  {categories[categories.length - 1].name}
+                </div>
+
+                {/* Display the rest of the categories */}
+                {categories.slice(0, categories.length - 1).map((category) => (
                   <div
-                    key={categories[categories.length - 1]._id}
+                    key={category._id}
                     className={`servermanager-menu-item ${
                       selectedCategoryRef.current &&
-                      selectedCategoryRef.current._id ===
-                        categories[categories.length - 1]._id
+                      selectedCategoryRef.current._id === category._id
                         ? "selected"
                         : ""
                     }`}
-                    onClick={() =>
-                      handleCategorySelect(
-                        categories[categories.length - 1]._id,
-                      )
-                    }
+                    onClick={() => handleCategorySelect(category._id)}
                   >
-                    {categories[categories.length - 1].name}
+                    {category.name}
                   </div>
-
-                  {/* Display the rest of the categories */}
-                  {categories
-                    .slice(0, categories.length - 1)
-                    .map((category) => (
-                      <div
-                        key={category._id}
-                        className={`servermanager-menu-item ${
-                          selectedCategoryRef.current &&
-                          selectedCategoryRef.current._id === category._id
-                            ? "selected"
-                            : ""
-                        }`}
-                        onClick={() => handleCategorySelect(category._id)}
-                      >
-                        {category.name}
-                      </div>
-                    ))}
-                </>
-              ) : (
-                <div>No data</div>
-              )}
-            </div>
-          )}
+                ))}
+              </>
+            ) : (
+              <div>No data</div>
+            )}
+          </div>
         </div>
         {showAddCategoryForm && (
           <CategoryForm
@@ -466,10 +456,10 @@ const ServiceManager = () => {
                     +
                   </button>
                   <button
-                    className="servermanager-hamburger-icon"
-                    onClick={() => setShowSubCategoryMenu(!showSubCategoryMenu)}
+                    className="servermanager-close-icon"
+                    onClick={() => setShowSubCategoryMenu(false)}
                   >
-                    &#9776;
+                    <FontAwesomeIcon icon={faTimes} />
                   </button>
                 </div>
               </div>
@@ -510,6 +500,7 @@ const ServiceManager = () => {
             subCategoryIcon={subCategoryIcon}
             handleAddSubCategory={handleAddSubCategory}
             lastCategoryId={lastCategoryIdRef.current}
+            onClose={handleCloseSubCategoryForm} // Passing the close handler
           />
         )}
         {selectedSubCategoryRef.current &&
@@ -526,12 +517,10 @@ const ServiceManager = () => {
                     +
                   </button>
                   <button
-                    className="servermanager-hamburger-icon"
-                    onClick={() =>
-                      setShowServiceVariantsMenu(!showServiceVariantsMenu)
-                    }
+                    className="servermanager-close-icon"
+                    onClick={() => setShowServiceList(false)}
                   >
-                    &#9776;
+                    <FontAwesomeIcon icon={faTimes} />
                   </button>
                 </div>
               </div>

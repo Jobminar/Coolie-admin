@@ -3,123 +3,51 @@ import PropTypes from "prop-types";
 import "./styles/servicemanager.css";
 
 const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
-  const [categoryName, setCategoryName] = useState(category?.name || "");
-  const [subCategoryName, setSubCategoryName] = useState(
-    subCategory?.name || "",
-  );
-
   const [serviceData, setServiceData] = useState({
+    image: service.image,
     name: service.name,
-    serviceType: service.serviceVariants[0]?.variantName || "",
-    price: service.serviceVariants[0]?.price || 0,
-    serviceTime: service.serviceVariants[0]?.serviceTime || 0,
-    metric: service.serviceVariants[0]?.metric || "",
-    min: service.serviceVariants[0]?.min || "",
-    max: service.serviceVariants[0]?.max || "",
     description: service.description,
-    locations: service.locations,
-    taxPercentage: service.taxPercentage,
+    variantName: service.variantName,
     isMostBooked: service.isMostBooked,
-    tag: service.tag,
-    isCash: service.isCash,
-    creditEligibility: service.creditEligibility,
-    platformCommission: service.platformCommission,
     isActive: service.isActive,
     isDeleted: service.isDeleted,
+    tag: service.tag, // Added tag field
   });
 
   useEffect(() => {
-    setCategoryName(category?.name || "");
-    setSubCategoryName(subCategory?.name || "");
     setServiceData({
+      image: service.image,
       name: service.name,
-      serviceType: service.serviceVariants[0]?.variantName || "",
-      price: service.serviceVariants[0]?.price || 0,
-      serviceTime: service.serviceVariants[0]?.serviceTime || 0,
-      metric: service.serviceVariants[0]?.metric || "",
-      min: service.serviceVariants[0]?.min || "",
-      max: service.serviceVariants[0]?.max || "",
       description: service.description,
-      locations: service.locations,
-      taxPercentage: service.taxPercentage,
+      variantName: service.variantName,
       isMostBooked: service.isMostBooked,
-      tag: service.tag,
-      isCash: service.isCash,
-      creditEligibility: service.creditEligibility,
-      platformCommission: service.platformCommission,
       isActive: service.isActive,
       isDeleted: service.isDeleted,
+      tag: service.tag, // Added tag field
     });
-  }, [service, category, subCategory]);
+  }, [service]);
 
   return (
     <div className="service-detail-card">
-      <div className="service-detail-header">
-        <h6>Category: {categoryName}</h6>
-        <h6>Sub-Category: {subCategoryName}</h6>
-        <h6>Service: {serviceData.name}</h6>
-      </div>
       <form className="add-service-form">
+        <button
+          type="button"
+          className="servermanager-close-icon"
+          onClick={onClose}
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+          }}
+        >
+          &times;
+        </button>
         <div className="form-group">
           <label>Service Name:</label>
           <input
             type="text"
             className="service-input-borders"
             value={serviceData.name}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label>Service Type:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.serviceType}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label>Service Price:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.price}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label>Total Service Time:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.serviceTime}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label>Metric:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.metric}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label>Min:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.min}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label>Max:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.max}
             readOnly
           />
         </div>
@@ -132,35 +60,24 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           ></textarea>
         </div>
         <div className="form-group">
-          <label>Locations:</label>
+          <label>Variant Name:</label>
           <input
             type="text"
             className="service-input-borders"
-            value={serviceData.locations.join(", ")}
+            value={serviceData.variantName}
             readOnly
           />
         </div>
         <div className="form-group">
-          <label>Tax Percentage:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.taxPercentage}
-            readOnly
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Platform Commission:</label>
-          <input
-            type="text"
-            className="service-input-borders"
-            value={serviceData.platformCommission}
-            readOnly
+          <label>Service Image:</label>
+          <img
+            src={serviceData.image}
+            alt={serviceData.name}
+            className="service-image-preview"
           />
         </div>
         <div className="form-group toggle-group">
-          <label>Add to most booked service</label>
+          <label>Most Booked:</label>
           <input
             type="checkbox"
             className="toggle-input"
@@ -169,34 +86,7 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           />
         </div>
         <div className="form-group toggle-group">
-          <label>TAG</label>
-          <input
-            type="checkbox"
-            className="toggle-input"
-            checked={serviceData.tag}
-            readOnly
-          />
-        </div>
-        <div className="form-group toggle-group">
-          <label>Cash After Service</label>
-          <input
-            type="checkbox"
-            className="toggle-input"
-            checked={serviceData.isCash}
-            readOnly
-          />
-        </div>
-        <div className="form-group toggle-group">
-          <label>Credit Eligibility</label>
-          <input
-            type="checkbox"
-            className="toggle-input"
-            checked={serviceData.creditEligibility}
-            readOnly
-          />
-        </div>
-        <div className="form-group toggle-group">
-          <label>Active</label>
+          <label>Active:</label>
           <input
             type="checkbox"
             className="toggle-input"
@@ -205,11 +95,20 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
           />
         </div>
         <div className="form-group toggle-group">
-          <label>Deleted</label>
+          <label>Deleted:</label>
           <input
             type="checkbox"
             className="toggle-input"
             checked={serviceData.isDeleted}
+            readOnly
+          />
+        </div>
+        <div className="form-group toggle-group">
+          <label>Tag:</label>
+          <input
+            type="checkbox"
+            className="toggle-input"
+            checked={serviceData.tag}
             readOnly
           />
         </div>
@@ -223,28 +122,14 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
 
 ServiceDetailCard.propTypes = {
   service: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string,
-    serviceVariants: PropTypes.arrayOf(
-      PropTypes.shape({
-        variantName: PropTypes.string,
-        price: PropTypes.number,
-        serviceTime: PropTypes.number,
-        metric: PropTypes.string,
-        min: PropTypes.number,
-        max: PropTypes.number,
-      }),
-    ),
-    description: PropTypes.string,
-    locations: PropTypes.array,
-    taxPercentage: PropTypes.string,
+    image: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    variantName: PropTypes.string.isRequired,
     isMostBooked: PropTypes.bool,
-    tag: PropTypes.bool,
-    isCash: PropTypes.bool,
-    creditEligibility: PropTypes.bool,
-    platformCommission: PropTypes.string,
     isActive: PropTypes.bool,
     isDeleted: PropTypes.bool,
+    tag: PropTypes.bool.isRequired, // Added tag prop type
   }).isRequired,
   category: PropTypes.shape({
     _id: PropTypes.string,

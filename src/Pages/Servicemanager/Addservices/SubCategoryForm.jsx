@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpFromBracket } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowUpFromBracket,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 import * as api from "./api/servicemanager-api";
 
 const SubCategoryForm = ({
@@ -12,6 +15,7 @@ const SubCategoryForm = ({
   subCategoryIcon,
   handleAddSubCategory,
   lastCategoryId,
+  onClose, // Close handler passed as a prop
 }) => {
   const [variants, setVariants] = useState([]);
   const [selectedVariant, setSelectedVariant] = useState("");
@@ -34,7 +38,6 @@ const SubCategoryForm = ({
   };
 
   const handleSubmit = () => {
-    // Add detailed error logging to identify which field is missing
     if (subCategoryName.trim() === "") {
       console.error("Sub-category name is missing.");
     }
@@ -55,7 +58,14 @@ const SubCategoryForm = ({
 
   return (
     <div className="servermanager-card servermanager-add-sub-category-form">
-      <h3>Add Sub-Category</h3>
+      <div className="servermanager-form-group">
+        <div className="servermanager-category-header">
+          <span>Add Sub-Category</span>
+          <button className="servermanager-close-icon" onClick={onClose}>
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+        </div>
+      </div>
       <div className="servermanagerinputcontainer">
         <label htmlFor="subCategoryName">Sub-Category Name:</label>
         <input
@@ -131,6 +141,7 @@ SubCategoryForm.propTypes = {
   subCategoryIcon: PropTypes.instanceOf(File),
   handleAddSubCategory: PropTypes.func.isRequired,
   lastCategoryId: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired, // Adding propTypes for onClose
 };
 
 export default SubCategoryForm;

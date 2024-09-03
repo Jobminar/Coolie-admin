@@ -89,9 +89,16 @@ const Services = ({
                     : ""
                 }`}
               >
-                <span onClick={() => setSelectedService(service)}>
-                  {service.name}
-                </span>
+                <div onClick={() => setSelectedService(service)}>
+                  <span>{service.name}</span>
+                  {service.image && (
+                    <img
+                      src={service.image}
+                      alt={service.name}
+                      className="service-image-preview"
+                    />
+                  )}
+                </div>
                 <div className="manageServiceIconGroup">
                   <FontAwesomeIcon
                     icon={faEdit}

@@ -9,6 +9,7 @@ const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
   const [isMostBooked, setIsMostBooked] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [variantName, setVariantName] = useState(""); // To store fetched variantName
+  const [tag, setTag] = useState(false); // To manage the tag state
   const [errors, setErrors] = useState({});
 
   // Fetch the subcategory details and set the variantName using the provided API
@@ -68,12 +69,13 @@ const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
     formData.append("isMostBooked", isMostBooked);
     formData.append("isActive", true);
     formData.append("isDeleted", false);
+    formData.append("tag", tag); // Add tag to the form data
 
     // Log formData for debugging purposes
     for (let [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
-    console.log(formData);
+
     // Submit the form data
     onSubmit(formData);
   };
@@ -140,6 +142,18 @@ const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
               className="servermanager-toggle-input"
               checked={isMostBooked}
               onChange={() => setIsMostBooked(!isMostBooked)}
+            />
+          </label>
+        </div>
+
+        <div className="servermanager-toggle-group">
+          <label>
+            Tag
+            <input
+              type="checkbox"
+              className="servermanager-toggle-input"
+              checked={tag}
+              onChange={() => setTag(!tag)}
             />
           </label>
         </div>

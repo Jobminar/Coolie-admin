@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpFromBracket } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowUpFromBracket,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 
 const CategoryForm = ({
   categoryName,
@@ -11,6 +14,7 @@ const CategoryForm = ({
   categoryIcon,
   handleAddCategory,
   setUiVariants,
+  onClose, // Close handler passed as a prop
 }) => {
   const [serviceTypeSelection, setServiceTypeSelection] = useState("");
   const [imageError, setImageError] = useState("");
@@ -42,7 +46,7 @@ const CategoryForm = ({
         selectedUiVariants.push("Hourly", "Daily", "Monthly");
         break;
       case "Cloth":
-        selectedUiVariants.push("Men", "Women", "Kids");
+        selectedUiVariants.push("Men", "Women", "Kids", "Households");
         break;
       case "None":
         selectedUiVariants.push("None");
@@ -60,7 +64,18 @@ const CategoryForm = ({
       className="servermanager-card servermanager-add-category-form"
       onSubmit={handleSubmit}
     >
-      <h3>Add Category</h3>
+      <div className="servermanager-form-group">
+        <div className="servermanager-category-header">
+          <span>Add Category</span>
+          <button
+            type="button"
+            className="servermanager-close-icon"
+            onClick={onClose}
+          >
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+        </div>
+      </div>
       <div className="servermanagerinput-wrapper">
         <div className="servermanagerinputcontainer">
           <label htmlFor="categoryName">Category Name:</label>
@@ -104,7 +119,10 @@ const CategoryForm = ({
         <div className="servermanagerinputcontainer">
           <label>Service Types:</label>
           <div className="radio-group">
-            <label>
+            <label
+              className="servermanager-radio-label"
+              style={{ fontSize: "12px" }} // Inline styling for smaller font size
+            >
               <input
                 type="radio"
                 name="serviceType"
@@ -114,7 +132,10 @@ const CategoryForm = ({
               />
               Cleaning (Normal/Deep)
             </label>
-            <label>
+            <label
+              className="servermanager-radio-label"
+              style={{ fontSize: "12px" }} // Inline styling for smaller font size
+            >
               <input
                 type="radio"
                 name="serviceType"
@@ -122,9 +143,12 @@ const CategoryForm = ({
                 checked={serviceTypeSelection === "Gender"}
                 onChange={handleServiceTypeChange}
               />
-              Gender (Male/Female)
+              Gender (Female/Male)
             </label>
-            <label>
+            <label
+              className="servermanager-radio-label"
+              style={{ fontSize: "12px" }} // Inline styling for smaller font size
+            >
               <input
                 type="radio"
                 name="serviceType"
@@ -134,7 +158,10 @@ const CategoryForm = ({
               />
               Time (Hourly/Daily/Monthly)
             </label>
-            <label>
+            <label
+              className="servermanager-radio-label"
+              style={{ fontSize: "12px" }} // Inline styling for smaller font size
+            >
               <input
                 type="radio"
                 name="serviceType"
@@ -142,9 +169,12 @@ const CategoryForm = ({
                 checked={serviceTypeSelection === "Cloth"}
                 onChange={handleServiceTypeChange}
               />
-              Cloth (Men/Women/Kids)
+              Cloth (Men/Women/Kids/Households)
             </label>
-            <label>
+            <label
+              className="servermanager-radio-label"
+              style={{ fontSize: "12px" }} // Inline styling for smaller font size
+            >
               <input
                 type="radio"
                 name="serviceType"
@@ -176,6 +206,7 @@ CategoryForm.propTypes = {
   categoryIcon: PropTypes.instanceOf(File),
   handleAddCategory: PropTypes.func.isRequired,
   setUiVariants: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired, // Adding propTypes for onClose
 };
 
 export default CategoryForm;
