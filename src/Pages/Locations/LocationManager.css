@@ -5,6 +5,8 @@
     background-color: #f8f9fa;
     max-width: 800px;
     margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
 }
 
 /* Tier section styling */
@@ -188,17 +190,31 @@
     color: #495057;
 }
 
-/* Locations List */
+/* Scrollable Locations List */
 .locations-list {
     margin-top: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 10px;
     background-color: white;
-    max-height: 300px;
+    max-height: 250px;
+    /* Adjusted max-height */
     overflow-y: auto;
 }
 
+/* Scrollable section for API-loaded locations */
+.locations-list-api {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: white;
+    max-height: 300px;
+    /* Adjusted max-height for scroll */
+    overflow-y: auto;
+}
+
+/* Location Cards */
 .location-card {
     padding: 15px;
     border-bottom: 1px solid #e0e0e0;

@@ -87,7 +87,7 @@ const LocationManager = () => {
   };
 
   return (
-    <div className="location-manager">
+    <div className="location-manager-container">
       {/* Tier Name Input */}
       <div className="tier-section">
         <label htmlFor="tier-name" className="tier-label">
@@ -102,6 +102,7 @@ const LocationManager = () => {
           className="tier-input"
         />
       </div>
+
       {/* Bordered Container */}
       <div className="location-container">
         {/* Group Toggle */}
@@ -172,27 +173,34 @@ const LocationManager = () => {
             <strong>Selected File:</strong> {csvFile.name}
           </div>
         )}
+        <div className="manually-added-locations">
+          <h3>Manually Added Locations</h3>
+          <div className="locations-scrollable">
+            {locations.length > 0 ? (
+              locations.map((location, index) => (
+                <div className="location-card" key={index}>
+                  <span>{`${location.pincode} / ${location.location} - ${
+                    location.tierName || "N/A"
+                  }`}</span>
+                  <FaTrashAlt
+                    className="delete-icon"
+                    onClick={() => handleDeleteLocation(index)}
+                  />
+                </div>
+              ))
+            ) : (
+              <p>No locations added manually</p>
+            )}
+          </div>
+        </div>
+
+        {/* Scrollable Section for LocationsList from API */}
+        <div className="locations-list-api">
+          <LocationsList /> {/* Added the LocationsList component here */}
+        </div>
       </div>
-      {/* Display Manually Added Location Cards */}
-      <div className="locations-list">
-        {locations.length > 0 ? (
-          locations.map((location, index) => (
-            <div className="location-card" key={index}>
-              <span>{`${location.pincode} / ${location.location} - ${
-                location.tierName || "N/A"
-              }`}</span>
-              <FaTrashAlt
-                className="delete-icon"
-                onClick={() => handleDeleteLocation(index)}
-              />
-            </div>
-          ))
-        ) : (
-          <p>No locations added manually</p>
-        )}
-      </div>
-      {/* LocationsList Component for displaying locations from API */}
-      <LocationsList /> {/* Added the LocationsList component here */}
+
+      {/* Scrollable Section for Manually Added Locations */}
     </div>
   );
 };
