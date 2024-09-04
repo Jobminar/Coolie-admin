@@ -9,7 +9,7 @@ import { FilterBarContext } from "../../FilterBarContext";
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { filterBarProps, setFilterBarProps } = useContext(FilterBarContext);
+  const { filterBarProps } = useContext(FilterBarContext);
   const [activeItem, setActiveItem] = useState(location.pathname);
   const [serviceManagerDropdown, setServiceManagerDropdown] = useState(false);
   const [promotionsDropdown, setPromotionsDropdown] = useState(false);
@@ -17,6 +17,7 @@ const Sidebar = ({ children }) => {
   const [marketingDropdown, setMarketingDropdown] = useState(false);
   const [bannersDropdown, setBannersDropdown] = useState(false);
   const [inductionDropdown, setInductionDropdown] = useState(false);
+  const [locationsDropdown, setLocationsDropdown] = useState(false); // New state for Locations and Pricing
   const [activeDropdownItem, setActiveDropdownItem] = useState("");
 
   useEffect(() => {
@@ -30,7 +31,6 @@ const Sidebar = ({ children }) => {
     } else {
       setActiveDropdownItem("");
     }
-    // Only close dropdowns if navigating to a non-dropdown item
     if (!dropdownItem) {
       closeAllDropdowns();
     }
@@ -44,63 +44,7 @@ const Sidebar = ({ children }) => {
     setMarketingDropdown(false);
     setBannersDropdown(false);
     setInductionDropdown(false);
-  };
-
-  // Add your new items here
-  const handleInclusionsNavigation = () => {
-    handleNavigation("/inclusions-exclusions");
-  };
-
-  const handleFAQNavigation = () => {
-    handleNavigation("/faq");
-  };
-
-  const toggleServiceManagerDropdown = () => {
-    setServiceManagerDropdown((prev) => !prev);
-    closeOtherDropdowns("serviceManager");
-    if (!serviceManagerDropdown) {
-      handleNavigation("/addservice", "Add Service");
-    }
-  };
-
-  const togglePromotionsDropdown = () => {
-    setPromotionsDropdown((prev) => !prev);
-    closeOtherDropdowns("promotions");
-    if (!promotionsDropdown) {
-      handleNavigation("/user-promotion", "User Promotions");
-    }
-  };
-
-  const togglePackagesDropdown = () => {
-    setPackagesDropdown((prev) => !prev);
-    closeOtherDropdowns("packages");
-    if (!packagesDropdown) {
-      handleNavigation("/user-packages", "User Packages");
-    }
-  };
-
-  const toggleMarketingDropdown = () => {
-    setMarketingDropdown((prev) => !prev);
-    closeOtherDropdowns("marketing");
-    if (!marketingDropdown) {
-      handleNavigation("/user", "User");
-    }
-  };
-
-  const toggleBannersDropdown = () => {
-    setBannersDropdown((prev) => !prev);
-    closeOtherDropdowns("banners");
-    if (!bannersDropdown) {
-      handleNavigation("/user-banners", "User Banners");
-    }
-  };
-
-  const toggleInductionDropdown = () => {
-    setInductionDropdown((prev) => !prev);
-    closeOtherDropdowns("induction");
-    if (!inductionDropdown) {
-      handleNavigation("/induction", "Induction");
-    }
+    setLocationsDropdown(false); // Close Locations & Pricing dropdown
   };
 
   const closeOtherDropdowns = (activeDropdown) => {
@@ -110,6 +54,20 @@ const Sidebar = ({ children }) => {
     if (activeDropdown !== "marketing") setMarketingDropdown(false);
     if (activeDropdown !== "banners") setBannersDropdown(false);
     if (activeDropdown !== "induction") setInductionDropdown(false);
+    if (activeDropdown !== "locations") setLocationsDropdown(false); // Close Locations & Pricing dropdown
+  };
+
+  const toggleLocationsDropdown = () => {
+    setLocationsDropdown((prev) => !prev);
+    closeOtherDropdowns("locations");
+  };
+
+  const handleInclusionsNavigation = () => {
+    handleNavigation("/inclusions-exclusions");
+  };
+
+  const handleFAQNavigation = () => {
+    handleNavigation("/faq");
   };
 
   const renderFilterBar = () => {
@@ -194,12 +152,45 @@ const Sidebar = ({ children }) => {
         >
           Jobs Area
         </div>
+        {/* Locations Dropdown */}
+        <div
+          className={`dropdown locationsDropdown ${
+            locationsDropdown ? "active" : ""
+          }`}
+        >
+          <div onClick={toggleLocationsDropdown}>
+            Locations & Pricing <FaCaretDown />
+          </div>
+          {locationsDropdown && (
+            <div className="dropdown-menu">
+              <div
+                className={`dropdown-item ${
+                  activeDropdownItem === "locations" ? "active" : ""
+                }`}
+                onClick={() => handleNavigation("/locations", "Locations")}
+              >
+                Locations
+              </div>
+              <div
+                className={`dropdown-item ${
+                  activeDropdownItem === "pricing" ? "active" : ""
+                }`}
+                onClick={() => handleNavigation("/pricing", "Pricing")}
+              >
+                Pricing
+              </div>
+            </div>
+          )}
+        </div>
+
         <div
           className={`dropdown serviceManagerDropdown ${
             serviceManagerDropdown ? "active" : ""
           }`}
         >
-          <div onClick={toggleServiceManagerDropdown}>
+          <div
+            onClick={() => setServiceManagerDropdown(!serviceManagerDropdown)}
+          >
             Service Manager <FaCaretDown />
           </div>
           {serviceManagerDropdown && (
@@ -225,32 +216,35 @@ const Sidebar = ({ children }) => {
             </div>
           )}
         </div>
+
         <div
           className={activeItem === "/usercorner" ? "active" : ""}
           onClick={() => handleNavigation("/usercorner")}
         >
           User Corner
         </div>
+
         <div
           className={activeItem === "/providersrcorner" ? "active" : ""}
           onClick={() => handleNavigation("/providersrcorner")}
         >
           Providers Corner
         </div>
+
         <div
           className={activeItem === "/loyality-cards" ? "active" : ""}
           onClick={() => handleNavigation("/loyality-cards")}
         >
           Loyalty Cards
         </div>
+
         <div
           className={`dropdown bannersDropdown ${
             bannersDropdown ? "active" : ""
           }`}
         >
-          <div onClick={toggleBannersDropdown}>
-            Banners
-            <FaCaretDown />
+          <div onClick={() => setBannersDropdown(!bannersDropdown)}>
+            Banners <FaCaretDown />
           </div>
           {bannersDropdown && (
             <div className="dropdown-menu">
@@ -267,7 +261,8 @@ const Sidebar = ({ children }) => {
               <div
                 className={`dropdown-item ${
                   activeDropdownItem === "provider-banners" ? "active" : ""
-                }`}
+                }
+                `}
                 onClick={() =>
                   handleNavigation("/provider-banners", "Provider Banners")
                 }
@@ -277,7 +272,8 @@ const Sidebar = ({ children }) => {
               <div
                 className={`dropdown-item ${
                   activeDropdownItem === "popup-banners" ? "active" : ""
-                }`}
+                }
+                `}
                 onClick={() =>
                   handleNavigation("/popup-banners", "Popup Banner")
                 }
@@ -287,12 +283,13 @@ const Sidebar = ({ children }) => {
             </div>
           )}
         </div>
+
         <div
           className={`dropdown promotionsDropdown ${
             promotionsDropdown ? "active" : ""
           }`}
         >
-          <div onClick={togglePromotionsDropdown}>
+          <div onClick={() => setPromotionsDropdown(!promotionsDropdown)}>
             Promotions <FaCaretDown />
           </div>
           {promotionsDropdown && (
@@ -310,7 +307,8 @@ const Sidebar = ({ children }) => {
               <div
                 className={`dropdown-item ${
                   activeDropdownItem === "provider-promotion" ? "active" : ""
-                }`}
+                }
+                `}
                 onClick={() =>
                   handleNavigation("/provider-promotion", "Provider Promotions")
                 }
@@ -320,12 +318,13 @@ const Sidebar = ({ children }) => {
             </div>
           )}
         </div>
+
         <div
           className={`dropdown packagesDropdown ${
             packagesDropdown ? "active" : ""
           }`}
         >
-          <div onClick={togglePackagesDropdown}>
+          <div onClick={() => setPackagesDropdown(!packagesDropdown)}>
             Packages <FaCaretDown />
           </div>
           {packagesDropdown && (
@@ -343,7 +342,8 @@ const Sidebar = ({ children }) => {
               <div
                 className={`dropdown-item ${
                   activeDropdownItem === "provider-packages" ? "active" : ""
-                }`}
+                }
+                `}
                 onClick={() =>
                   handleNavigation("/provider-packages", "Provider Packages")
                 }
@@ -353,12 +353,13 @@ const Sidebar = ({ children }) => {
             </div>
           )}
         </div>
+
         <div
           className={`dropdown inductionDropdown ${
             inductionDropdown ? "active" : ""
           }`}
         >
-          <div onClick={toggleInductionDropdown}>
+          <div onClick={() => setInductionDropdown(!inductionDropdown)}>
             Induction & training <FaCaretDown />
           </div>
           {inductionDropdown && (
@@ -378,12 +379,14 @@ const Sidebar = ({ children }) => {
             </div>
           )}
         </div>
+
         <div
           className={activeItem === "/reels" ? "active" : ""}
           onClick={() => handleNavigation("/reels")}
         >
           Reels
         </div>
+
         <div
           className={activeItem === "/subadmin" ? "active" : ""}
           onClick={() => handleNavigation("/subadmin")}
@@ -396,7 +399,7 @@ const Sidebar = ({ children }) => {
             marketingDropdown ? "active" : ""
           }`}
         >
-          <div onClick={toggleMarketingDropdown}>
+          <div onClick={() => setMarketingDropdown(!marketingDropdown)}>
             Marketing <FaCaretDown />
           </div>
           {marketingDropdown && (
@@ -412,7 +415,8 @@ const Sidebar = ({ children }) => {
               <div
                 className={`dropdown-item ${
                   activeDropdownItem === "provider" ? "active" : ""
-                }`}
+                }
+                `}
                 onClick={() => handleNavigation("/provider", "Provider")}
               >
                 Provider
@@ -420,7 +424,8 @@ const Sidebar = ({ children }) => {
               <div
                 className={`dropdown-item ${
                   activeDropdownItem === "non-user" ? "active" : ""
-                }`}
+                }
+                `}
                 onClick={() => handleNavigation("/non-user", "Non-User")}
               >
                 Non-User
@@ -429,13 +434,13 @@ const Sidebar = ({ children }) => {
           )}
         </div>
 
-        {/* New Sidebar Items */}
         <div
           className={activeItem === "/inclusions-exclusions" ? "active" : ""}
           onClick={handleInclusionsNavigation}
         >
           Inclusions & Exclusions
         </div>
+
         <div
           className={activeItem === "/faq" ? "active" : ""}
           onClick={handleFAQNavigation}
@@ -443,6 +448,7 @@ const Sidebar = ({ children }) => {
           FAQ
         </div>
       </div>
+
       <main>
         {renderFilterBar()}
         {children}

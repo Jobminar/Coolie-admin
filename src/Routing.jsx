@@ -7,7 +7,6 @@ import Accounting from "./Pages/Accounting/Accounting";
 import Marketing from "./Pages/Marketing/Marketing";
 import Subadmin from "./Pages/Subadmin/Subadmin";
 import UserManager from "./Pages/Usercorner/Usercorner";
-
 import Addsubadmin from "./Pages/Subadmin/Addsubadmin";
 import EditBanner from "./Pages/Banners/Editbanner";
 import Editloyalitycards from "./Pages/Loyalitycards/editloyalitycards";
@@ -36,6 +35,8 @@ import IEContainer from "./Pages/Inclusions/IEContainer";
 import Reels from "./Pages/Banners/Reels/Reels";
 import Inductionmain from "./Pages/Induction/inductionmain";
 import Trainingmain from "./Pages/Induction/trainingmain";
+import Locations from "./Pages/Locations/Locations";
+import Pricing from "./Pages/Locations/Pricing";
 
 const Routing = () => {
   return (
@@ -98,6 +99,9 @@ const Routing = () => {
             <Route path="/inclusions-exclusions" element={<IEContainer />} />
             {/* FAQs */}
             <Route path="/faq" element={<FAQContainer />} />
+            {/*Location and pricing*/}
+            <Route path="/locations" element={<Locations />} />
+            <Route path="/pricing" element={<Pricing />} />
             {/* Default redirect */}
             <Route path="*" element={<Navigate to="/" />} />{" "}
           </Routes>

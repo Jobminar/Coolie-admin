@@ -1,0 +1,256 @@
+/* General layout */
+.location-manager {
+    padding: 20px;
+    font-family: "Poppins", sans-serif;
+    background-color: #f8f9fa;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+/* Tier section styling */
+.tier-section {
+    margin-bottom: 20px;
+}
+
+.tier-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.tier-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 20%;
+    font-size: 14px;
+}
+
+/* Container with border */
+.location-container {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+}
+
+/* Group Toggle */
+.group-toggle {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.group-btn {
+    padding: 8px 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #e0e0e0;
+    color: #666;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+    width: 120px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.group-btn.active {
+    background-color: #ababab;
+    color: rgb(0, 0, 0);
+}
+
+/* Location Actions */
+.location-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.location-inputs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+/* CSV Upload Input with custom styling */
+.csv-upload-container {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    width: 30%;
+    /* Adjusted width */
+}
+
+/* Hide default file input */
+.csv-upload-input {
+    display: none;
+}
+
+/* Custom label for file input */
+.csv-upload-label {
+    display: inline-block;
+    padding: 0.475rem 2.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #495057;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    white-space: nowrap;
+    text-align: center;
+    width: 100%;
+}
+
+/* File upload name will be displayed separately */
+.file-upload-name {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #495057;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Input fields with icons */
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.input-with-icon input {
+    flex: 1;
+    padding-right: 30px;
+    font-size: 0.9rem;
+    /* Smaller font size */
+}
+
+/* General styling for input fields */
+
+.search-input {
+    width: 60%;
+    /* Reduced width */
+    padding: 0.375rem 0.75rem;
+    font-size: 0.9rem;
+    /* Smaller font size */
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.pincode-input {
+    width: 60%;
+    /* Reduced width */
+    padding: 0.275rem 0.75rem;
+    font-size: 0.9rem;
+    /* Smaller font size */
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Hover and focus effects for inputs */
+.pincode-input:focus,
+.search-input:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.input-with-icon .icon-button {
+    position: absolute;
+    right: 10px;
+    top: 55%;
+    transform: translateY(-50%);
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+.input-with-icon .icon-button:hover {
+    color: #495057;
+}
+
+/* Locations List */
+.locations-list {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: white;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.location-card {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.location-card:hover {
+    background-color: #f0f0f0;
+}
+
+.delete-icon {
+    cursor: pointer;
+    color: #000000;
+    font-size: 1.2rem;
+}
+
+/* Save Button */
+.save-button {
+    padding: 10px 20px;
+    background-color: #000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.save-button:hover {
+    background-color: #333;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+    .location-inputs {
+        flex-direction: column;
+    }
+
+    .pincode-input,
+    .search-input,
+    .csv-upload-container {
+        width: 100%;
+    }
+
+    .group-btn {
+        margin: 10px 0;
+    }
+}

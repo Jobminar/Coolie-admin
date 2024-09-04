@@ -150,6 +150,11 @@
     border: none;
 }
 
+.dropdown.locationsDropdown.active {
+    height: 12rem;
+    max-height: 20rem;
+}
+
 .dropdown.serviceManagerDropdown.active {
     height: 13rem;
     max-height: 20rem;
