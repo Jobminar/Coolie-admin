@@ -243,7 +243,7 @@ const LocationManager = () => {
 
         {/* Scrollable Section for LocationsList from API */}
         <div className="locations-list-api">
-          <LocationsList group={group} />{" "}
+          <LocationsList group={group} tierName={tierName} />{" "}
           {/* Added the LocationsList component here */}
         </div>
       </div>
