@@ -3,7 +3,8 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { FaTrash, FaEdit } from "react-icons/fa"; // Import icons for delete and edit
 
-const LocationsList = () => {
+const LocationsList = ({ group }) => {
+  // Accept group as a prop
   const [locations, setLocations] = useState([]);
 
   // Fetch locations from the API when the component mounts
@@ -13,30 +14,30 @@ const LocationsList = () => {
         const response = await axios.get(
           "https://api.coolieno1.in/v1.0/core/locations",
         );
-        console.log("Fetched locations:", response.data); // Log full response to see structure
+        console.log("the response from api get locations", response.data);
         if (response.data && Array.isArray(response.data)) {
-          setLocations(response.data); // Updated this line
+          // Filter the locations based on the passed group value
+          const filteredLocations = response.data.filter(
+            (location) => location.group === group,
+          );
+          setLocations(filteredLocations);
         } else {
-          console.error("Locations data is not an array or undefined");
           toast.error("Failed to load locations.");
         }
       } catch (error) {
-        console.error("Error fetching locations:", error);
         toast.error("Failed to fetch locations.");
       }
     };
 
     fetchLocations();
-  }, []);
+  }, [group]); // Re-fetch when group changes
 
   const handleDelete = (id) => {
-    // Function to handle delete logic (you can integrate an API call here)
     setLocations(locations.filter((location) => location._id !== id));
     toast.success("Location deleted successfully.");
   };
 
   const handleEdit = (id, field) => {
-    // Function to handle edit logic for each field (open a modal or input field for editing)
     toast.success(`Edit ${field} for location with ID: ${id}`);
   };
 
@@ -44,11 +45,37 @@ const LocationsList = () => {
     return <p>No locations available</p>;
   }
 
+  const formatPrice = (price) => {
+    if (typeof price === "string") {
+      try {
+        const parsedPrice = JSON.parse(price);
+        if (typeof parsedPrice === "object") {
+          return Object.entries(parsedPrice)
+            .map(([key, value]) => `${key}: ${value}`)
+            .join(", ");
+        }
+        return price;
+      } catch (error) {
+        return price; // If parsing fails, return as-is
+      }
+    } else if (typeof price === "object") {
+      return Object.entries(price)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(", ");
+    }
+    return price;
+  };
+
   return (
-    <div className="locations-container">
-      {" "}
-      {/* Added border box container */}
-      <h3>Locations List</h3>
+    <div className="table-info">
+      {/* Display the number of records */}
+      <div className="record-count">
+        <h4>
+          Total Records for {group}: {locations.length}
+        </h4>
+      </div>
+
+      {/* Table with records */}
       <div className="table-wrapper">
         <table className="locations-table">
           <thead>
@@ -61,9 +88,6 @@ const LocationsList = () => {
               <th>Subcategory</th>
               <th>Service</th>
               <th>Price</th>
-              <th>Material</th>
-              <th>Warranty</th>
-              <th>Installation Time</th>
               <th>Min Units</th>
               <th>Max Units</th>
               <th>Credit Eligibility</th>
@@ -71,47 +95,21 @@ const LocationsList = () => {
               <th>Misc Fee</th>
               <th>Platform Commission</th>
               <th>Cash Payment</th>
+              <th>Group</th> {/* Add Group column */}
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {locations.map((location) => (
               <tr key={location._id}>
-                <td>
-                  {location.location}
-                  <FaEdit
-                    className="edit-icon"
-                    onClick={() => handleEdit(location._id, "location")}
-                  />
-                </td>
-                <td>
-                  {location.pincode}
-                  <FaEdit
-                    className="edit-icon"
-                    onClick={() => handleEdit(location._id, "pincode")}
-                  />
-                </td>
-                <td>
-                  {location.district}
-                  <FaEdit
-                    className="edit-icon"
-                    onClick={() => handleEdit(location._id, "district")}
-                  />
-                </td>
-                <td>
-                  {location.state}
-                  <FaEdit
-                    className="edit-icon"
-                    onClick={() => handleEdit(location._id, "state")}
-                  />
-                </td>
+                <td>{location.location}</td>
+                <td>{location.pincode}</td>
+                <td>{location.district}</td>
+                <td>{location.state}</td>
                 <td>{location.category}</td>
                 <td>{location.subcategory}</td>
                 <td>{location.servicename}</td>
-                <td>{location.price}</td>
-                <td>{location.variants?.material || "N/A"}</td>
-                <td>{location.variants?.warranty || "N/A"}</td>
-                <td>{location.variants?.installationTime || "N/A"}</td>
+                <td>{formatPrice(location.price)}</td> {/* Format the price */}
                 <td>{location.min}</td>
                 <td>{location.max}</td>
                 <td>{location.creditEligibility ? "Yes" : "No"}</td>
@@ -119,7 +117,12 @@ const LocationsList = () => {
                 <td>{location.miscFee}</td>
                 <td>{location.platformCommission}%</td>
                 <td>{location.isCash ? "Yes" : "No"}</td>
+                <td>{location.group}</td> {/* Display the group value */}
                 <td>
+                  <FaEdit
+                    className="edit-icon"
+                    onClick={() => handleEdit(location._id, "location")}
+                  />
                   <FaTrash
                     className="delete-icon"
                     onClick={() => handleDelete(location._id)}

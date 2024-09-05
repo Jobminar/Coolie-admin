@@ -37,6 +37,16 @@
     background-color: #fff;
 }
 
+.location-wrapper {
+    padding: 10px;
+    font-family: "Poppins", sans-serif;
+    background-color: #ffffff;
+    max-width: 800px;
+    margin: 0;
+    border: 1px solid #000000;
+    border-radius: 8px;
+}
+
 /* Group Toggle */
 .group-toggle {
     display: flex;
@@ -218,6 +228,7 @@
 .location-card {
     padding: 15px;
     border-bottom: 1px solid #e0e0e0;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     display: flex;
     justify-content: space-between;
     align-items: center;

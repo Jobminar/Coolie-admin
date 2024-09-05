@@ -1,25 +1,28 @@
-/* Wrapper for the locations table inside a border box */
-.locations-container {
+.table-info {
+    margin-top: 20px;
+}
+
+.record-count {
+    padding: 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.record-count h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.table-wrapper {
     max-width: 100%;
     margin: 20px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Table wrapper for scroll functionality */
-.table-wrapper {
-    max-height: 400px;
-    overflow-y: auto;
     overflow-x: auto;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
 }
 
-/* Table styling */
 .locations-table {
     width: 100%;
     border-collapse: collapse;
@@ -35,41 +38,29 @@
 .locations-table th {
     background-color: #f4f4f4;
     font-weight: bold;
+    cursor: pointer;
+    user-select: none;
 }
 
-.locations-table tbody tr:hover {
-    background-color: #f9f9f9;
+.locations-table th:active {
+    background-color: #e0e0e0;
 }
 
-/* Edit and delete icon styling */
-.edit-icon,
-.delete-icon {
+.locations-table td {
+    position: relative;
+}
+
+.edit-icon {
     margin-left: 10px;
     cursor: pointer;
-    color: #007bff;
+    color: #000000;
 }
 
 .delete-icon {
-    color: #dc3545;
+    color: #4d4d4d;
+    cursor: pointer;
 }
 
-.edit-icon:hover,
 .delete-icon:hover {
-    color: #0056b3;
-}
-
-/* Scrollable table for smaller screens */
-@media (max-width: 768px) {
-    .table-wrapper {
-        overflow-x: auto;
-    }
-
-    .locations-table {
-        width: 1000px;
-    }
-
-    .locations-table th,
-    .locations-table td {
-        white-space: nowrap;
-    }
+    color: #000000;
 }

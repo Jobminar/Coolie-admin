@@ -15,58 +15,80 @@ const LocationManager = () => {
   // Handle group toggle
   const handleGroupToggle = (groupType) => {
     setGroup(groupType);
+    console.log(`Group toggled to: ${groupType}`);
   };
 
   // Handle manual pincode addition with Mapbox API
   const handlePincodeAdd = async () => {
-    if (!pincode) return;
+    if (!pincode) {
+      toast.error("Please enter a valid pincode.");
+      return;
+    }
+
+    console.log(`Adding pincode: ${pincode} for group: ${group}`);
 
     try {
       const mapboxToken =
-        "pk.eyJ1IjoiY29vbGllbm8xLWFkbWluIiwiYSI6ImNsdWZjZGR1ZzBtZHcybnJvaHBiYTd2NzMifQ.TQ6FrqUIUUWv7J7n75A3tQ";
+        "pk.eyJ1IjoiY29vbGllbm8xLWFkbWluIiwiYSI6ImNsdWZjZGR1ZzBtZHcybnJvaHBiYTd2NzMifQ.TQ6FrqUIUUWv7J7n75A3tQ"; // Replace with your Mapbox token
       const mapboxUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${pincode}.json?access_token=${mapboxToken}`;
 
       const response = await axios.get(mapboxUrl);
-      const place = response.data.features[0];
-      const newLocation = {
-        pincode,
-        location: place.place_name || "N/A",
-        district: "Some District",
-        state: "Some State",
-        category: "Some Category",
-        subcategory: "Some Subcategory",
-        servicename: "Some Service",
-        price: {
-          base: "100",
-          premium: "150",
-        },
-        group: group,
-        tierName: tierName,
-      };
+      if (
+        response.data &&
+        response.data.features &&
+        response.data.features.length > 0
+      ) {
+        const place = response.data.features[0];
+        const newLocation = {
+          pincode,
+          location: place.place_name || "N/A",
+          district: "Some District",
+          state: "Some State",
+          category: "Some Category",
+          subcategory: "Some Subcategory",
+          servicename: "Some Service",
+          price: {
+            base: "100",
+            premium: "150",
+          },
+          group: group, // Set group to either "default" or "custom"
+          tierName: tierName,
+        };
 
-      setLocations([...locations, newLocation]);
-      setPincode(""); // Reset pincode field
+        console.log("New location added:", newLocation);
+        setLocations([...locations, newLocation]);
+        setPincode(""); // Reset pincode field
+        toast.success("Location added successfully.");
+      } else {
+        toast.error("No location found for this pincode.");
+      }
     } catch (error) {
       console.error("Error adding location:", error);
+      toast.error("Error fetching location from Mapbox.");
     }
   };
 
-  // Handle deletion of a manually added location
-  const handleDeleteLocation = (index) => {
-    const updatedLocations = locations.filter((_, i) => i !== index);
-    setLocations(updatedLocations);
-    toast.success("Location removed.");
-  };
-
-  // Handle CSV file upload
-  const handleCsvUpload = async (event) => {
+  // Handle CSV file selection
+  const handleCsvSelect = (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
     setCsvFile(file); // Update the state with the chosen file
+    console.log("CSV file selected:", file.name);
+  };
+
+  // Handle CSV file upload with group value
+  const handleCsvUpload = async () => {
+    if (!csvFile) {
+      toast.error("Please choose a CSV file before uploading.");
+      return;
+    }
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", csvFile); // Attach CSV file
+    formData.append("group", group); // Append group value (default or custom)
+
+    console.log("Uploading CSV with group:", group);
 
     try {
       await axios.post(
@@ -80,10 +102,18 @@ const LocationManager = () => {
       );
 
       toast.success("CSV file has been uploaded successfully.");
+      console.log("CSV file uploaded successfully.");
     } catch (error) {
       console.error("Error uploading CSV:", error);
       toast.error("Failed to upload CSV file.");
     }
+  };
+
+  // Handle deletion of a manually added location
+  const handleDeleteLocation = (index) => {
+    const updatedLocations = locations.filter((_, i) => i !== index);
+    setLocations(updatedLocations);
+    toast.success("Location removed.");
   };
 
   return (
@@ -103,27 +133,27 @@ const LocationManager = () => {
         />
       </div>
 
-      {/* Bordered Container */}
-      <div className="location-container">
-        {/* Group Toggle */}
-        <div className="group-toggle">
-          <button
-            className={`group-btn ${group === "default" ? "active" : ""}`}
-            onClick={() => handleGroupToggle("default")}
-          >
-            Default
-          </button>
-          <button
-            className={`group-btn ${group === "custom" ? "active" : ""}`}
-            onClick={() => handleGroupToggle("custom")}
-          >
-            Custom
-          </button>
-        </div>
+      {/* Group Toggle */}
+      <div className="group-toggle">
+        <button
+          className={`group-btn ${group === "default" ? "active" : ""}`}
+          onClick={() => handleGroupToggle("default")}
+        >
+          Default
+        </button>
+        <button
+          className={`group-btn ${group === "custom" ? "active" : ""}`}
+          onClick={() => handleGroupToggle("custom")}
+        >
+          Custom
+        </button>
+      </div>
 
-        {/* Location Inputs */}
+      {/* Location Inputs */}
+      <div className="location-wrapper">
         <div className="location-actions">
           <div className="location-inputs">
+            {/* Pincode Input */}
             <div className="input-with-icon">
               <input
                 type="text"
@@ -137,6 +167,7 @@ const LocationManager = () => {
               </button>
             </div>
 
+            {/* CSV Upload Input */}
             <div className="input-with-icon file-upload-container">
               <label htmlFor="csv-upload" className="csv-upload-label">
                 Choose File
@@ -145,13 +176,14 @@ const LocationManager = () => {
                 type="file"
                 id="csv-upload"
                 className="csv-upload-input"
-                onChange={handleCsvUpload}
+                onChange={handleCsvSelect} // Handle CSV selection
               />
-              <button className="icon-button">
+              <button className="icon-button" onClick={handleCsvUpload}>
                 <FaUpload />
               </button>
             </div>
 
+            {/* Pincode Search Input */}
             <div className="input-with-icon">
               <input
                 type="text"
@@ -173,15 +205,17 @@ const LocationManager = () => {
             <strong>Selected File:</strong> {csvFile.name}
           </div>
         )}
+
+        {/* Manually Added Locations */}
         <div className="manually-added-locations">
           <h3>Manually Added Locations</h3>
           <div className="locations-scrollable">
             {locations.length > 0 ? (
               locations.map((location, index) => (
                 <div className="location-card" key={index}>
-                  <span>{`${location.pincode} / ${location.location} - ${
-                    location.tierName || "N/A"
-                  }`}</span>
+                  <span>
+                    <strong>{location.pincode}</strong> / {location.location}
+                  </span>
                   <FaTrashAlt
                     className="delete-icon"
                     onClick={() => handleDeleteLocation(index)}
@@ -196,11 +230,9 @@ const LocationManager = () => {
 
         {/* Scrollable Section for LocationsList from API */}
         <div className="locations-list-api">
-          <LocationsList /> {/* Added the LocationsList component here */}
+          <LocationsList group={group} /> {/* Pass group as prop */}
         </div>
       </div>
-
-      {/* Scrollable Section for Manually Added Locations */}
     </div>
   );
 };
