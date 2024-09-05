@@ -265,6 +265,10 @@
     background-color: #333;
 }
 
+.add-icon {
+    color: green;
+}
+
 /* Responsive adjustments for mobile */
 @media (max-width: 768px) {
     .location-inputs {

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaPlus, FaSearch, FaUpload, FaTrashAlt } from "react-icons/fa";
+import { saveLocations } from "./api/Locations-api"; // Import the saveLocations API function
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import "./LocationManager.css";
@@ -15,80 +16,47 @@ const LocationManager = () => {
   // Handle group toggle
   const handleGroupToggle = (groupType) => {
     setGroup(groupType);
-    console.log(`Group toggled to: ${groupType}`);
   };
 
   // Handle manual pincode addition with Mapbox API
   const handlePincodeAdd = async () => {
-    if (!pincode) {
-      toast.error("Please enter a valid pincode.");
-      return;
-    }
-
-    console.log(`Adding pincode: ${pincode} for group: ${group}`);
+    if (!pincode) return;
 
     try {
       const mapboxToken =
-        "pk.eyJ1IjoiY29vbGllbm8xLWFkbWluIiwiYSI6ImNsdWZjZGR1ZzBtZHcybnJvaHBiYTd2NzMifQ.TQ6FrqUIUUWv7J7n75A3tQ"; // Replace with your Mapbox token
+        "pk.eyJ1IjoiY29vbGllbm8xLWFkbWluIiwiYSI6ImNsdWZjZGR1ZzBtZHcybnJvaHBiYTd2NzMifQ.TQ6FrqUIUUWv7J7n75A3tQ";
       const mapboxUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${pincode}.json?access_token=${mapboxToken}`;
 
       const response = await axios.get(mapboxUrl);
-      if (
-        response.data &&
-        response.data.features &&
-        response.data.features.length > 0
-      ) {
-        const place = response.data.features[0];
-        const newLocation = {
-          pincode,
-          location: place.place_name || "N/A",
-          district: "Some District",
-          state: "Some State",
-          category: "Some Category",
-          subcategory: "Some Subcategory",
-          servicename: "Some Service",
-          price: {
-            base: "100",
-            premium: "150",
-          },
-          group: group, // Set group to either "default" or "custom"
-          tierName: tierName,
-        };
+      const place = response.data.features[0];
+      const newLocation = {
+        pincode,
+        location: place.place_name || "N/A",
+      };
 
-        console.log("New location added:", newLocation);
-        setLocations([...locations, newLocation]);
-        setPincode(""); // Reset pincode field
-        toast.success("Location added successfully.");
-      } else {
-        toast.error("No location found for this pincode.");
-      }
+      setLocations([...locations, newLocation]);
+      setPincode(""); // Reset pincode field
     } catch (error) {
       console.error("Error adding location:", error);
-      toast.error("Error fetching location from Mapbox.");
     }
   };
 
-  // Handle CSV file selection
-  const handleCsvSelect = (event) => {
+  // Handle deletion of a manually added location
+  const handleDeleteLocation = (index) => {
+    const updatedLocations = locations.filter((_, i) => i !== index);
+    setLocations(updatedLocations);
+    toast.success("Location removed.");
+  };
+
+  // Handle CSV file upload
+  const handleCsvUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
     setCsvFile(file); // Update the state with the chosen file
-    console.log("CSV file selected:", file.name);
-  };
-
-  // Handle CSV file upload with group value
-  const handleCsvUpload = async () => {
-    if (!csvFile) {
-      toast.error("Please choose a CSV file before uploading.");
-      return;
-    }
 
     const formData = new FormData();
-    formData.append("file", csvFile); // Attach CSV file
-    formData.append("group", group); // Append group value (default or custom)
-
-    console.log("Uploading CSV with group:", group);
+    formData.append("file", file);
 
     try {
       await axios.post(
@@ -102,18 +70,60 @@ const LocationManager = () => {
       );
 
       toast.success("CSV file has been uploaded successfully.");
-      console.log("CSV file uploaded successfully.");
     } catch (error) {
       console.error("Error uploading CSV:", error);
       toast.error("Failed to upload CSV file.");
     }
   };
 
-  // Handle deletion of a manually added location
-  const handleDeleteLocation = (index) => {
-    const updatedLocations = locations.filter((_, i) => i !== index);
-    setLocations(updatedLocations);
-    toast.success("Location removed.");
+  // Function to format locations for the API request
+
+  const formatLocationsForApi = (locations) => {
+    return locations.map((location) => {
+      const fullLocation = location.location || "N/A";
+      const splitLocation = fullLocation.split(",").map((part) => part.trim());
+
+      // Extract location details
+      const pincode = location.pincode || "N/A";
+      const city = splitLocation[1] || "N/A"; // Second part of the split is expected to be the city
+      const state = splitLocation[2] || "Andhra Pradesh"; // Third part is expected to be the state
+
+      return {
+        location: city,
+        pincode: pincode,
+        // city extracted from split
+        district: location.district || "N/A", // Default to "N/A"
+        state: state, // Use extracted state or default to "Andhra Pradesh"
+        category: location.category || "N/A", // Default to "N/A"
+        subcategory: location.subcategory || "N/A", // Default to "N/A"
+        servicename: location.servicename || "N/A", // Default to "N/A"
+        price: location.price || {}, // Default to empty object if no price is provided
+        min: location.min || 0, // Default to 0 if not provided
+        max: location.max || 0, // Default to 0 if not provided
+        metric: location.metric || 0, // Default to 0 if not provided
+        creditEligibility: location.creditEligibility || false, // Default to false
+        taxPercentage: location.taxPercentage || 0, // Default to 0
+        miscFee: location.miscFee || 0, // Default to 0 if not provided
+        platformCommission: location.platformCommission || 0, // Default to 0
+        isCash: location.isCash || false, // Default to false
+        group: group || "default", // Default to "default"
+        tierName: location.tierName || "", // Default to empty string if no tierName
+      };
+    });
+  };
+
+  // Handle saving manually added locations
+  const handleSaveLocations = async () => {
+    try {
+      const formattedLocations = formatLocationsForApi(locations); // Format locations
+
+      await saveLocations(formattedLocations); // Call API to save locations
+      toast.success("Locations saved successfully.");
+      setLocations([]); // Clear locations after saving
+    } catch (error) {
+      console.error("Error saving locations:", error);
+      toast.error("Failed to save locations.");
+    }
   };
 
   return (
@@ -133,27 +143,27 @@ const LocationManager = () => {
         />
       </div>
 
-      {/* Group Toggle */}
-      <div className="group-toggle">
-        <button
-          className={`group-btn ${group === "default" ? "active" : ""}`}
-          onClick={() => handleGroupToggle("default")}
-        >
-          Default
-        </button>
-        <button
-          className={`group-btn ${group === "custom" ? "active" : ""}`}
-          onClick={() => handleGroupToggle("custom")}
-        >
-          Custom
-        </button>
-      </div>
+      {/* Bordered Container */}
+      <div className="location-container">
+        {/* Group Toggle */}
+        <div className="group-toggle">
+          <button
+            className={`group-btn ${group === "default" ? "active" : ""}`}
+            onClick={() => handleGroupToggle("default")}
+          >
+            Default
+          </button>
+          <button
+            className={`group-btn ${group === "custom" ? "active" : ""}`}
+            onClick={() => handleGroupToggle("custom")}
+          >
+            Custom
+          </button>
+        </div>
 
-      {/* Location Inputs */}
-      <div className="location-wrapper">
+        {/* Location Inputs */}
         <div className="location-actions">
           <div className="location-inputs">
-            {/* Pincode Input */}
             <div className="input-with-icon">
               <input
                 type="text"
@@ -167,7 +177,6 @@ const LocationManager = () => {
               </button>
             </div>
 
-            {/* CSV Upload Input */}
             <div className="input-with-icon file-upload-container">
               <label htmlFor="csv-upload" className="csv-upload-label">
                 Choose File
@@ -176,14 +185,13 @@ const LocationManager = () => {
                 type="file"
                 id="csv-upload"
                 className="csv-upload-input"
-                onChange={handleCsvSelect} // Handle CSV selection
+                onChange={handleCsvUpload}
               />
-              <button className="icon-button" onClick={handleCsvUpload}>
+              <button className="icon-button">
                 <FaUpload />
               </button>
             </div>
 
-            {/* Pincode Search Input */}
             <div className="input-with-icon">
               <input
                 type="text"
@@ -213,9 +221,7 @@ const LocationManager = () => {
             {locations.length > 0 ? (
               locations.map((location, index) => (
                 <div className="location-card" key={index}>
-                  <span>
-                    <strong>{location.pincode}</strong> / {location.location}
-                  </span>
+                  <span>{`${location.pincode} / ${location.location}`}</span>
                   <FaTrashAlt
                     className="delete-icon"
                     onClick={() => handleDeleteLocation(index)}
@@ -228,9 +234,17 @@ const LocationManager = () => {
           </div>
         </div>
 
+        {/* Save Locations Button */}
+        {locations.length > 0 && (
+          <button className="save-locations-btn" onClick={handleSaveLocations}>
+            Save Locations
+          </button>
+        )}
+
         {/* Scrollable Section for LocationsList from API */}
         <div className="locations-list-api">
-          <LocationsList group={group} /> {/* Pass group as prop */}
+          <LocationsList group={group} />{" "}
+          {/* Added the LocationsList component here */}
         </div>
       </div>
     </div>
