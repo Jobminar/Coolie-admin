@@ -1,199 +1,190 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { FaTrashAlt, FaArrowUp } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { FaTrash, FaEdit } from "react-icons/fa";
-import "./LocationList.css"; // Import icons for delete and edit
+import "./LocationList.css";
 
-const LocationsList = ({ group, tierName }) => {
+const LocationList = ({ group, tierName }) => {
   const [locations, setLocations] = useState([]);
-  const [selectedLocations, setSelectedLocations] = useState([]); // Track selected locations
+  const [groupedLocations, setGroupedLocations] = useState({});
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const stripCardsRef = useRef(null);
 
-  // Fetch locations from the API when the component mounts
+  // Fetch locations from the API using the group as a query param
   useEffect(() => {
     const fetchLocations = async () => {
       try {
         const response = await axios.get(
           "https://api.coolieno1.in/v1.0/core/locations",
+          {
+            params: { group: group }, // Send group as a query param
+          },
         );
-        console.log("the response from api get locations", response.data);
-        if (response.data && Array.isArray(response.data)) {
-          // Filter the locations based on the passed group and tierName
-          const filteredLocations = response.data.filter(
-            (location) => location.group === group,
-          );
-          setLocations(filteredLocations);
 
-          // Set all location IDs as selected by default
-          const allLocationIds = filteredLocations.map(
-            (location) => location._id,
+        // Log the response data from the API
+        console.log("API Response Data:", response.data);
+
+        if (response.data && Array.isArray(response.data)) {
+          // Filter locations based on the active group and exclude those with a non-empty tierName
+          const filteredLocations = response.data.filter(
+            (location) => location.group === group && location.tierName === "",
           );
-          setSelectedLocations(allLocationIds);
+
+          // Log the filtered locations
+          console.log("Filtered Locations:", filteredLocations);
+
+          // Group locations by `location`
+          setLocations(filteredLocations);
+          groupLocationsByLocation(filteredLocations);
         } else {
           toast.error("Failed to load locations.");
         }
       } catch (error) {
         toast.error("Failed to fetch locations.");
+        console.error("Error fetching locations:", error);
       }
     };
 
     fetchLocations();
-  }, [group]); // Re-fetch when group or tierName changes
+  }, [group]);
 
-  const handleDelete = (id) => {
-    setLocations(locations.filter((location) => location._id !== id));
-    toast.success("Location deleted successfully.");
+  // Group locations by the `location` property
+  const groupLocationsByLocation = (locations) => {
+    const grouped = locations.reduce((acc, location) => {
+      if (!acc[location.location]) {
+        acc[location.location] = [];
+      }
+      acc[location.location].push(location);
+      return acc;
+    }, {});
+    setGroupedLocations(grouped);
   };
 
-  const handleEdit = (id, field) => {
-    toast.success(`Edit ${field} for location with ID: ${id}`);
-  };
+  // Handle scroll event for scroll-to-top button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (stripCardsRef.current && stripCardsRef.current.scrollTop > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
 
-  const handleLocationSelect = (id) => {
-    if (selectedLocations.includes(id)) {
-      setSelectedLocations(
-        selectedLocations.filter((locationId) => locationId !== id),
-      );
-    } else {
-      setSelectedLocations([...selectedLocations, id]);
+    if (stripCardsRef.current) {
+      stripCardsRef.current.addEventListener("scroll", handleScroll);
     }
+
+    return () => {
+      if (stripCardsRef.current) {
+        stripCardsRef.current.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
+
+  const handleDeleteLocation = (locationName) => {
+    const updatedLocations = locations.filter(
+      (location) => location.location !== locationName,
+    );
+    setLocations(updatedLocations);
+    groupLocationsByLocation(updatedLocations);
+    toast.success(`All locations named "${locationName}" removed.`);
   };
 
   const handleAddTier = async () => {
+    // Check if a tier name is provided
     if (!tierName) {
-      toast.error("Please enter a tier name.");
-      return;
-    }
-    if (selectedLocations.length === 0) {
-      toast.error("Please select at least one location.");
+      toast.error("Please enter a Tier Name before adding.");
       return;
     }
 
-    const payload = {
-      tierName,
-      locationIds: selectedLocations,
-    };
+    // Collect all the location IDs with an empty `tierName`
+    const locationIds = locations.map((location) => location._id);
+
+    if (locationIds.length === 0) {
+      toast.error("No locations available to update.");
+      return;
+    }
 
     try {
-      await axios.post("https://api.coolieno1.in/v1.0/core/tier", payload);
-      toast.success("Tier added successfully.");
-      setSelectedLocations([]); // Reset selected locations after saving
+      // Make PUT request to update the tier name for all displayed locations
+      const response = await axios.put(
+        "https://api.coolieno1.in/v1.0/core/locations/update-tiername",
+        {
+          ids: locationIds, // Array of location IDs
+          newTierName: tierName, // The new tier name
+        },
+      );
+
+      // Log full response in success case
+      console.log("Response:", response);
+      console.log("Response Data:", response.data);
+
+      toast.success("Tier name updated successfully!");
+      // Optionally, refetch locations to reflect the updated tier names
+      setLocations((prevLocations) =>
+        prevLocations.map((location) =>
+          locationIds.includes(location._id)
+            ? { ...location, tierName }
+            : location,
+        ),
+      );
     } catch (error) {
-      console.error("Error adding tier:", error);
-      toast.error("Failed to add tier.");
+      // Log error response in case of failure
+      if (error.response) {
+        console.error("Error Response:", error.response);
+        console.error("Error Data:", error.response.data);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Error:", error.message);
+      }
+
+      toast.error("Failed to update tier name.");
     }
   };
 
-  if (!locations || locations.length === 0) {
-    return <p>No locations available</p>;
-  }
-
-  const formatPrice = (price) => {
-    if (typeof price === "string") {
-      try {
-        const parsedPrice = JSON.parse(price);
-        if (typeof parsedPrice === "object") {
-          return Object.entries(parsedPrice)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join(", ");
-        }
-        return price;
-      } catch (error) {
-        return price; // If parsing fails, return as-is
-      }
-    } else if (typeof price === "object") {
-      return Object.entries(price)
-        .map(([key, value]) => `${key}: ${value}`)
-        .join(", ");
+  const handleScrollToTop = () => {
+    if (stripCardsRef.current) {
+      stripCardsRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
-    return price;
   };
 
   return (
-    <div className="table-card">
-      <div className="table-info">
-        <div className="record-count">
-          <h4>
-            Total Records for {group} and {tierName}: {locations.length}
-          </h4>
+    <div className="location-list-container">
+      {/* Display the strips of available locations */}
+      <div className="locations-list-api">
+        <h3>Available Locations in {group} Group</h3>
+        <div className="strip-cards-scrollable" ref={stripCardsRef}>
+          {Object.keys(groupedLocations).length > 0 ? (
+            Object.keys(groupedLocations).map((locationName, index) => (
+              <div className="location-strip-card" key={index}>
+                <span>{`${locationName} (${groupedLocations[locationName].length} locations)`}</span>
+                <FaTrashAlt
+                  className="strip-delete-icon"
+                  onClick={() => handleDeleteLocation(locationName)}
+                />
+              </div>
+            ))
+          ) : (
+            <p>No locations available</p>
+          )}
         </div>
-
-        <div className="table-wrapper">
-          <table className="locations-table">
-            <thead>
-              <tr>
-                <th>Select</th> {/* Add select column */}
-                <th>Location</th>
-                <th>Pincode</th>
-                <th>District</th>
-                <th>State</th>
-                <th>Category</th>
-                <th>Subcategory</th>
-                <th>Service</th>
-                <th>Price</th>
-                <th>Min Units</th>
-                <th>Max Units</th>
-                <th>Credit Eligibility</th>
-                <th>Tax %</th>
-                <th>Misc Fee</th>
-                <th>Platform Commission</th>
-                <th>Cash Payment</th>
-                <th>Group</th>
-                <th>Tier Name</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {locations.map((location) => (
-                <tr key={location._id}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={selectedLocations.includes(location._id)} // Checked by default
-                      onChange={() => handleLocationSelect(location._id)}
-                    />
-                  </td>
-                  <td>{location.location}</td>
-                  <td>{location.pincode}</td>
-                  <td>{location.district}</td>
-                  <td>{location.state}</td>
-                  <td>{location.category}</td>
-                  <td>{location.subcategory}</td>
-                  <td>{location.servicename}</td>
-                  <td>{formatPrice(location.price)}</td>
-                  <td>{location.min}</td>
-                  <td>{location.max}</td>
-                  <td>{location.creditEligibility ? "Yes" : "No"}</td>
-                  <td>{location.taxPercentage}%</td>
-                  <td>{location.miscFee}</td>
-                  <td>{location.platformCommission}%</td>
-                  <td>{location.isCash ? "Yes" : "No"}</td>
-                  <td>{location.group}</td>
-                  <td>{location.tierName}</td>
-                  <td>
-                    <FaEdit
-                      className="edit-icon"
-                      onClick={() => handleEdit(location._id, "location")}
-                    />
-                    <FaTrash
-                      className="delete-icon"
-                      onClick={() => handleDelete(location._id)}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Add Tier Button */}
       </div>
-      {selectedLocations.length > 0 && (
+
+      {/* Sticky footer with Add Tier button and Scroll to Top button */}
+      <div className="sticky-footer">
         <button className="add-tier-btn" onClick={handleAddTier}>
           Add Tier
         </button>
-      )}
+        <button
+          className={`scroll-top-btn ${showScrollTop ? "active" : ""}`}
+          onClick={handleScrollToTop}
+        >
+          <FaArrowUp />
+        </button>
+      </div>
     </div>
   );
 };
 
-export default LocationsList;
+export default LocationList;

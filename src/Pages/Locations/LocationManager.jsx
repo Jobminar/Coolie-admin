@@ -49,6 +49,7 @@ const LocationManager = () => {
   };
 
   // Handle CSV file upload
+  // Handle CSV file upload
   const handleCsvUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -57,7 +58,8 @@ const LocationManager = () => {
 
     const formData = new FormData();
     formData.append("file", file);
-
+    formData.append("group", group); // Append the group value to FormData
+    console.log("the formadata", formData);
     try {
       await axios.post(
         "https://api.coolieno1.in/v1.0/core/locations/upload",
