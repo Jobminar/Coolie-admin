@@ -90,6 +90,24 @@
     background-color: #d16007;
 }
 
+
+.back-to-loc {
+    background-color: #ff8c00;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-bottom: 1rem
+}
+
+.back-to-loc:hover {
+    background-color: #d16007;
+}
+
 /* Scrollable area for strips */
 .strip-cards-scrollable {
     max-height: 600px;
@@ -107,7 +125,7 @@
 
 /* Strip Cards Styling */
 .location-strip-card {
-    background-color: #f5f5f5;
+    background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 15px;
@@ -118,7 +136,7 @@
     width: 100%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 }
 
 .location-strip-card:hover {
@@ -136,32 +154,23 @@
 
 /* Scroll to top button */
 .scroll-top-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     background-color: #ff8c00;
     color: white;
+    padding: 12px;
     border: none;
     border-radius: 50%;
-    padding: 15px;
     cursor: pointer;
-    z-index: 3;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-}
-
-.scroll-top-btn.active {
-    opacity: 1;
-    visibility: visible;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .scroll-top-btn:hover {
-    background-color: #d16007;
+    background-color: #ff9b21;
+    transition: background-color 0.3s ease-in-out;
 }
 
-.scroll-top-btn svg {
-    font-size: 16px;
-}
 
 /* Table styling */
 .locations-table {
@@ -214,11 +223,11 @@
 }
 
 .delete-icon {
-    color: #c40000;
+    color: #000000;
 }
 
 .delete-icon:hover {
-    color: #ff0000;
+    color: #000000;
 }
 
 /* Back Button Styling */
@@ -246,26 +255,37 @@
     margin-right: 8px;
 }
 
+
 /* Filtered Table Styling */
-.filtered-table-container {
-    margin-top: 20px;
-}
-
-.filtered-table-card {
-    width: 100%;
-}
-
-.filtered-table-info {
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
+/* Ensure the table wrapper is scrollable */
 .filtered-table-wrapper {
-    overflow-x: auto;
+    max-height: 400px;
+    /* Adjust as needed */
+    overflow-y: scroll;
+    position: relative;
+    /* Important for button positioning */
 }
 
+/* Scroll to Top Button */
+.scroll-top-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff8c00;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.scroll-top-btn:hover {
+    background-color: #ff9b21;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Ensure the table styling */
 .filtered-locations-table {
     width: 100%;
     border-collapse: collapse;
@@ -278,43 +298,17 @@
     border-bottom: 1px solid #ddd;
 }
 
-.filtered-locations-table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-    text-align: left;
-}
-
-.filtered-locations-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.filtered-locations-table tr:hover {
-    background-color: #f1f1f1;
-}
 
 /* For mobile responsiveness */
 @media (max-width: 768px) {
 
-    .locations-table th,
-    .locations-table td,
     .filtered-locations-table th,
     .filtered-locations-table td {
         padding: 10px;
     }
 
-    .add-tier-btn {
-        width: 100%;
-        font-size: 14px;
-        padding: 8px;
-    }
-
     .record-count h4 {
         font-size: 18px;
-    }
-
-    .sticky-footer {
-        flex-direction: column;
-        padding: 15px;
     }
 
     .scroll-top-btn {

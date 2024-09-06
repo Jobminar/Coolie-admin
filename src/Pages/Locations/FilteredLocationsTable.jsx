@@ -1,9 +1,39 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { FaArrowUp } from "react-icons/fa";
 import "./LocationList.css"; // Assuming this contains styles for the table
 
 const FilteredLocationsTable = ({ locationFilter }) => {
-  // locationFilter will now be an array of locations
   const filteredLocations = locationFilter || [];
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const tableRef = useRef(null);
+
+  // Handle scroll-to-top button visibility based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      if (tableRef.current && tableRef.current.scrollTop > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    if (tableRef.current) {
+      tableRef.current.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (tableRef.current) {
+        tableRef.current.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
+
+  // Handle scroll to top
+  const handleScrollToTop = () => {
+    if (tableRef.current) {
+      tableRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="filtered-table-card">
@@ -15,7 +45,7 @@ const FilteredLocationsTable = ({ locationFilter }) => {
           </h4>
         </div>
 
-        <div className="filtered-table-wrapper">
+        <div className="filtered-table-wrapper" ref={tableRef}>
           <table className="filtered-locations-table">
             <thead>
               <tr>
@@ -70,6 +100,13 @@ const FilteredLocationsTable = ({ locationFilter }) => {
               ))}
             </tbody>
           </table>
+
+          {/* Scroll to Top Button */}
+          {showScrollTop && (
+            <button className="scroll-top-btn" onClick={handleScrollToTop}>
+              <FaArrowUp />
+            </button>
+          )}
         </div>
       </div>
     </div>
