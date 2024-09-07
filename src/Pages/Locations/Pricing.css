@@ -7,30 +7,46 @@
     box-sizing: border-box;
     border: 1px solid #eaeaea;
     border-radius: 5px;
+    background-color: #f4f6f9;
 }
 
 /* Tier Name Section */
-.tier-name-container {
+.pricing-tier-name-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
 }
 
-.tier-name-container h2 {
+.pricing-tier-name-container h2 {
     font-size: 20px;
     margin: 0;
     display: inline-block;
 }
 
-.edit-icon {
+.pricing-edit-icon {
     cursor: pointer;
     margin-left: 10px;
     color: #000;
 }
 
+/* Edit button */
+.pricing-edit-button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.pricing-edit-button:hover {
+    background-color: #0056b3;
+}
+
 /* Checklist groups for categories, subcategories, services */
-.categories-subcategories-services {
+.pricing-sections-container {
     display: flex;
     justify-content: space-between;
     gap: 20px;
@@ -38,7 +54,7 @@
 }
 
 /* Common checklist item styles */
-.checklist-group {
+.pricing-checklist-group {
     border: 1px solid #000;
     padding: 10px;
     border-radius: 5px;
@@ -48,18 +64,18 @@
     overflow-y: auto;
 }
 
-.checklist-item {
+.pricing-checklist-item {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
 }
 
-.checklist-item input {
+.pricing-checklist-item input {
     margin-right: 10px;
 }
 
 /* Styling the labels in checklist */
-.checklist-item label {
+.pricing-checklist-item label {
     font-size: 16px;
 }
 
@@ -70,24 +86,24 @@
     border-radius: 10px;
     margin-top: 20px;
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     background-color: #fff;
 }
 
 /* Pricing card fields */
-.field-container {
+.pricing-field-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 15px;
 }
 
-.field-container label {
+.pricing-field-container label {
     font-size: 16px;
     width: 40%;
 }
 
-.field-container p {
+.pricing-field-container p {
     font-size: 16px;
     width: 50%;
     margin: 0;
@@ -97,18 +113,12 @@
     background-color: #f9f9f9;
 }
 
-.field-container input {
+.pricing-field-container input {
     width: 50%;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 3px;
     font-size: 16px;
-}
-
-.field-container .edit-icon {
-    cursor: pointer;
-    margin-left: 10px;
-    color: #000;
 }
 
 /* Dropdown for pricing options */
@@ -121,9 +131,11 @@
     border: 1px solid #ccc;
 }
 
-/* Update button */
-.update-button {
-    display: inline-block;
+/* Update button centered */
+.pricing-update-button {
+    display: block;
+    margin: 20px auto;
+    /* Center the button */
     background-color: #28a745;
     color: white;
     padding: 10px 20px;
@@ -131,14 +143,15 @@
     border: none;
     cursor: pointer;
     font-size: 16px;
+    width: 50%
 }
 
-.update-button:hover {
+.pricing-update-button:hover {
     background-color: #218838;
 }
 
 /* Close button */
-.close-button {
+.pricing-close-button {
     display: inline-block;
     background-color: #dc3545;
     color: white;
@@ -150,6 +163,95 @@
     margin-left: 10px;
 }
 
-.close-button:hover {
+.pricing-close-button:hover {
     background-color: #c82333;
+}
+
+/* Toggle Switch Styling */
+.pricing-toggle-switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Add space between the toggle and text */
+    width: 100%;
+}
+
+.pricing-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.pricing-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.pricing-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 20px;
+    width: 2.5rem
+}
+
+.pricing-slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.pricing-switch input:checked+.pricing-slider {
+    background-color: #28a745;
+}
+
+.pricing-switch input:checked+.pricing-slider:before {
+    transform: translateX(20px);
+}
+
+/* Scrollable checklist group */
+.pricing-categories-group,
+.pricing-subcategories-group,
+.pricing-services-group {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+    width: 220px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Selected items for checklist */
+.selected-category,
+.selected-subcategory,
+.selected-service {
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+
+/* Hover effect on checklist items */
+.pricing-checklist-item:hover {
+    background-color: #e9ecef;
+    border-radius: 5px;
+}
+
+/* Center toggle labels and switch */
+.pricing-toggle-label {
+    flex-grow: 1;
+    /* Ensure label takes space evenly */
 }
