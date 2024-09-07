@@ -171,7 +171,7 @@
 .pricing-toggle-switch {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     /* Add space between the toggle and text */
     width: 100%;
 }

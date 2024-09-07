@@ -222,12 +222,6 @@ const Pricing = ({ tierName, group }) => {
             onClick={handleEditTierNameClick}
           />
         </h2>
-        <button
-          className="pricing-edit-button"
-          onClick={handleEditTierNameClick}
-        >
-          {isTierNameEditable ? "Save" : "Edit Tier Name"}
-        </button>
       </div>
 
       <div className="pricing-sections-container">
@@ -384,7 +378,6 @@ const Pricing = ({ tierName, group }) => {
                   />
                   <span className="pricing-slider round"></span>
                 </label>
-                <span>{creditEligibility ? "Yes" : "No"}</span>
               </div>
             </div>
 
@@ -399,7 +392,6 @@ const Pricing = ({ tierName, group }) => {
                   />
                   <span className="pricing-slider round"></span>
                 </label>
-                <span>{isCash ? "Yes" : "No"}</span>
               </div>
             </div>
 
