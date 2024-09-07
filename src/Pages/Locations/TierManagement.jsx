@@ -1,193 +1,182 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { FaArrowUp, FaSearch } from "react-icons/fa";
-import "./TierManagement.css"; // Make sure you have the correct styles
+import { FaArrowUp } from "react-icons/fa";
+import "./TierManagement.css"; // Ensure this CSS file is correctly linked
 
-const TierManagement = () => {
+const TierManagement = ({ showTierDetails }) => {
   const [locations, setLocations] = useState([]);
-  const [filteredLocations, setFilteredLocations] = useState([]);
-  const [tierNames, setTierNames] = useState([]);
-  const [selectedTier, setSelectedTier] = useState("All");
-  const [pincodeFilter, setPincodeFilter] = useState("");
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const tableRef = useRef(null);
+  const [groupedTiers, setGroupedTiers] = useState([]);
+  const [loading, setLoading] = useState(true); // State to show the loader
+  const [showScrollTop, setShowScrollTop] = useState(false); // State to manage scroll-to-top button
+  const tableRef = useRef(null); // To manage scrolling within the table
 
-  // Fetch locations data from the API and filter out empty tier names
+  // Fetch locations data from the API and group them by tier name
   useEffect(() => {
     const fetchLocations = async () => {
       try {
+        setLoading(true); // Start loader before API call
         const response = await axios.get(
           "https://api.coolieno1.in/v1.0/core/locations",
         );
         const locationsData = response.data;
 
-        // Extract unique tier names, excluding empty ones
-        const uniqueTierNames = [
-          ...new Set(locationsData.map((loc) => loc.tierName).filter(Boolean)),
-        ];
-        setTierNames(["All", ...uniqueTierNames]); // Add 'All' option to dropdown
-        setLocations(locationsData);
-        setFilteredLocations(locationsData); // Set initial filtered locations
+        // Grouping records by tier name
+        const grouped = groupByTierName(locationsData);
+        setGroupedTiers(grouped); // Set grouped tier data
+        setLoading(false); // End loader after successful API call
       } catch (error) {
-        toast.error("Failed to fetch locations data.");
+        toast.error("Failed to fetch locations data."); // Show error message on failure
         console.error("Error fetching locations:", error);
+        setLoading(false); // End loader on error
       }
     };
 
     fetchLocations();
-  }, []);
+  }, []); // Empty dependency array to ensure it only runs once on component mount
 
-  // Handle filtering when the tier name or pincode is changed
-  useEffect(() => {
-    let filteredData = locations;
+  // Function to group data by tier name and count unique pincodes
+  const groupByTierName = (locationsData) => {
+    const tierMap = {};
 
-    if (selectedTier !== "All") {
-      filteredData = filteredData.filter(
-        (loc) => loc.tierName === selectedTier,
-      );
-    }
+    locationsData.forEach((location) => {
+      const {
+        tierName,
+        location: locName,
+        state,
+        district,
+        pincode,
+        group,
+        _id, // Capture location's unique ID
+      } = location;
 
-    if (pincodeFilter) {
-      filteredData = filteredData.filter((loc) =>
-        loc.pincode.includes(pincodeFilter),
-      );
-    }
-
-    setFilteredLocations(filteredData);
-  }, [selectedTier, pincodeFilter, locations]);
-
-  // Handle scroll event for scroll-to-top button
-  useEffect(() => {
-    const handleScroll = () => {
-      if (tableRef.current && tableRef.current.scrollTop > 300) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
+      // Initialize each tier entry in the map if it doesn't exist
+      if (!tierMap[tierName]) {
+        tierMap[tierName] = {
+          tierName: tierName || "N/A", // Handle missing tier names
+          locations: [], // List of locations for the tier
+          uniquePincodes: new Set(), // Ensure unique pincodes
+          defaultGroupPincodes: new Set(), // Set for default group pincodes
+          customGroupPincodes: new Set(), // Set for custom group pincodes
+          state: state || "N/A", // Assume all records in the same tier have the same state and district
+          district: district || "N/A",
+          locationIds: [], // Store unique location record IDs
+        };
       }
-    };
 
-    if (tableRef.current) {
-      tableRef.current.addEventListener("scroll", handleScroll);
-    }
+      // Add location details to the array of locations under the tier
+      tierMap[tierName].locations.push(locName);
+      tierMap[tierName].locationIds.push(_id); // Store location IDs for each tier
 
-    return () => {
-      if (tableRef.current) {
-        tableRef.current.removeEventListener("scroll", handleScroll);
+      // Add pincodes to unique, default, or custom group based on `group`
+      tierMap[tierName].uniquePincodes.add(pincode);
+      if (group === "default") {
+        tierMap[tierName].defaultGroupPincodes.add(pincode);
+      } else if (group === "custom") {
+        tierMap[tierName].customGroupPincodes.add(pincode);
       }
-    };
-  }, []);
+    });
+
+    // Convert sets back to arrays and calculate total pincodes
+    return Object.values(tierMap).map((tier) => ({
+      ...tier,
+      locations: Array.from(new Set(tier.locations)), // Ensure unique locations
+      defaultGroupPincodes: Array.from(tier.defaultGroupPincodes), // Convert Set to Array for default pincodes
+      customGroupPincodes: Array.from(tier.customGroupPincodes), // Convert Set to Array for custom pincodes
+      totalPincodes: tier.uniquePincodes.size, // Count the number of unique pincodes
+    }));
+  };
 
   // Handle scroll-to-top button click
   const handleScrollToTop = () => {
     if (tableRef.current) {
-      tableRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      tableRef.current.scrollTo({ top: 0, behavior: "smooth" }); // Smooth scroll to top
     }
   };
 
   return (
-    <div className="Tier-management-container">
+    <div className="tier-management-container">
       <h2>Tier Management</h2>
 
-      {/* Filters Section */}
-      <div className="Tier-filters-section">
-        <div className="Tier-filter">
-          <label htmlFor="tierName-select">Filter by Tier Name:</label>
-          <select
-            id="tierName-select"
-            value={selectedTier}
-            onChange={(e) => setSelectedTier(e.target.value)}
-          >
-            {tierNames.map((tier, index) => (
-              <option key={index} value={tier}>
-                {tier}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="Tier-filter pincode-filter-wrapper">
-          <label htmlFor="pincode">Search by Pincode:</label>
-          <div className="pincode-input-container">
-            <FaSearch className="pincode-search-icon" />
-            <input
-              id="pincode"
-              type="text"
-              value={pincodeFilter}
-              onChange={(e) => setPincodeFilter(e.target.value)}
-              placeholder="Enter Pincode"
-            />
+      {/* Show loading animation while data is being fetched */}
+      {loading ? (
+        <div className="loading-container">
+          {/* Bootstrap progress bar for loading */}
+          <div className="progress" style={{ height: "30px" }}>
+            <div
+              className="progress-bar progress-bar-striped progress-bar-animated"
+              role="progressbar"
+              style={{ width: "100%" }}
+              aria-valuenow="100"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              Arranging all your data, please hold on, this won't take long!
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Locations Table */}
-      <div className="Tier-table-container" ref={tableRef}>
-        <table className="Tier-locations-table">
-          <thead>
-            <tr>
-              <th>Location</th>
-              <th>Pincode</th>
-              <th>District</th>
-              <th>State</th>
-              <th>Category</th>
-              <th>Subcategory</th>
-              <th>Service</th>
-              <th>Price</th>
-              <th>Min Units</th>
-              <th>Max Units</th>
-              <th>Credit Eligibility</th>
-              <th>Tax %</th>
-              <th>Misc Fee</th>
-              <th>Platform Commission</th>
-              <th>Cash Payment</th>
-              <th>Group</th>
-              <th>Tier Name</th>
-              <th className="Tier-actions-column">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredLocations.length > 0 ? (
-              filteredLocations.map((location, index) => (
-                <tr key={index}>
-                  <td>{location.location || "N/A"}</td>
-                  <td>{location.pincode || "N/A"}</td>
-                  <td>{location.district || "N/A"}</td>
-                  <td>{location.state || "N/A"}</td>
-                  <td>{location.category.join(", ") || "N/A"}</td>
-                  <td>{location.subcategory.join(", ") || "N/A"}</td>
-                  <td>{location.servicename.join(", ") || "N/A"}</td>
-                  <td>
-                    {location.price ? JSON.stringify(location.price) : "N/A"}
-                  </td>
-                  <td>{location.min || "N/A"}</td>
-                  <td>{location.max || "N/A"}</td>
-                  <td>{location.creditEligibility ? "Yes" : "No"}</td>
-                  <td>{location.taxPercentage || "0"}%</td>
-                  <td>{location.miscFee || "N/A"}</td>
-                  <td>{location.platformCommission || "0"}%</td>
-                  <td>{location.isCash ? "Yes" : "No"}</td>
-                  <td>{location.group || "N/A"}</td>
-                  <td>{location.tierName || "N/A"}</td>
-                  <td className="Tier-actions-column">
-                    <button className="Tier-know-more-btn">Know More</button>
-                  </td>
-                </tr>
-              ))
-            ) : (
+      ) : (
+        <div className="tier-table-container" ref={tableRef}>
+          <table className="tier-locations-table">
+            <thead>
               <tr>
-                <td colSpan="18">No locations found</td>
+                <th>S.No</th>
+                <th>Tier Name</th>
+                <th>State</th>
+                <th>District</th>
+                <th>Total No. of Pincodes</th>
+                <th>Locations</th>
+                <th>Default Pincodes</th>
+                <th>Custom Pincodes</th>
+                <th className="tier-actions-column">Know More</th>
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {groupedTiers.length > 0 ? (
+                groupedTiers.map((tier, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{tier.tierName || "N/A"}</td>
+                    <td>{tier.state}</td>
+                    <td>{tier.district}</td>
+                    <td>{tier.totalPincodes}</td>
+                    <td>{tier.locations.join(", ") || "N/A"}</td>
+                    <td>
+                      {tier.defaultGroupPincodes.length > 0
+                        ? tier.defaultGroupPincodes.join(", ")
+                        : "N/A"}
+                    </td>
+                    <td>
+                      {tier.customGroupPincodes.length > 0
+                        ? tier.customGroupPincodes.join(", ")
+                        : "N/A"}
+                    </td>
+                    <td className="tier-actions-column">
+                      {/* When clicked, pass the tier data to the parent component */}
+                      <button
+                        className="tier-know-more-btn"
+                        onClick={() => showTierDetails(tier)}
+                      >
+                        Click here
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="9">No data available</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
 
-      {/* Scroll to Top Button */}
-      {showScrollTop && (
-        <button className="Tier-scroll-top-btn" onClick={handleScrollToTop}>
-          <FaArrowUp />
-        </button>
+          {/* Scroll to Top Button */}
+          {showScrollTop && (
+            <button className="tier-scroll-top-btn" onClick={handleScrollToTop}>
+              <FaArrowUp />
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

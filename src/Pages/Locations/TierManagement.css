@@ -1,51 +1,30 @@
-.Tier-management-container {
+.tier-management-container {
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.Tier-filters-section {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-    gap: 20px;
+/* Loading Bar */
+.loading-container {
+    text-align: center;
+    margin: 50px 0;
 }
 
-.Tier-filter {
-    display: flex;
-    flex-direction: column;
-    min-width: 150px;
+.progress {
+    background-color: #f0f0f0;
 }
 
-.pincode-filter-wrapper {
-    position: relative;
+.progress-bar {
+    background-color: #007bff;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
 }
 
-.pincode-input-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-
-}
-
-.pincode-search-icon {
-    position: absolute;
-    right: 10px;
-    color: #6c757d;
-}
-
-.pincode-input-container input {
-    padding-left: 35px;
-    padding: 5px 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    border: 1px rgba(129, 129, 129, 0.636) solid;
-    width: 100%;
-}
-
-/* Table container for scrolling */
-.Tier-table-container {
+/* Table Container for scrolling */
+.tier-table-container {
     position: relative;
     overflow-x: auto;
     overflow-y: auto;
@@ -54,22 +33,22 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Table styling */
-.Tier-locations-table {
+/* Table Styling */
+.tier-locations-table {
     width: 100%;
     border-collapse: collapse;
     min-width: 1200px;
 }
 
-.Tier-locations-table th,
-.Tier-locations-table td {
+.tier-locations-table th,
+.tier-locations-table td {
     border: 1px solid #ddd;
     padding: 12px 16px;
     text-align: left;
     font-size: 14px;
 }
 
-.Tier-locations-table th {
+.tier-locations-table th {
     background-color: #f4f4f4;
     font-weight: bold;
     position: sticky;
@@ -77,15 +56,14 @@
     z-index: 2;
 }
 
-/* Sticky actions column */
-.Tier-actions-column {
+.tier-actions-column {
     position: sticky;
     right: 0;
     background-color: #f4f4f4;
     z-index: 1;
 }
 
-.Tier-know-more-btn {
+.tier-know-more-btn {
     background-color: transparent;
     color: #d07200;
     padding: 5px 15px;
@@ -94,7 +72,8 @@
     cursor: pointer;
 }
 
-.Tier-scroll-top-btn {
+/* Scroll to Top Button */
+.tier-scroll-top-btn {
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -106,32 +85,6 @@
     cursor: pointer;
 }
 
-.Tier-scroll-top-btn:hover {
+.tier-scroll-top-btn:hover {
     background-color: #ff9b21;
-}
-
-.Tier-filter label {
-    font-size: 16px;
-    margin-right: 10px;
-    color: #333;
-}
-
-.Tier-filter select {
-    padding: 5px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.Tier-filter select:hover {
-    border-color: #ff5900;
-}
-
-.Tier-filter select:focus {
-    outline: none;
-    border-color: #ff5e00;
-    box-shadow: 0 0 5px rgba(255, 111, 0, 0.5);
 }
