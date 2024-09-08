@@ -98,20 +98,20 @@
     background-color: #ff9b21;
 }
 
-/* Dropdown styles */
-.tier-detail-dropdown-section {
+/* dropdowns styles */
+.tier-detail-dropdowns-section {
     margin-top: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.tier-detail-dropdown-section label {
+.tier-detail-dropdowns-section label {
     margin-right: 10px;
     font-weight: bold;
 }
 
-.tier-detail-styled-dropdown {
+.tier-detail-styled-dropdowns {
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ccc;

@@ -1,0 +1,106 @@
+.allot-services__container {
+    background-color: #ffffff;
+    /* Black background */
+    color: #000000;
+    /* White text */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.allot-services__header {
+    color: #ff6600;
+    /* Orange header */
+    font-size: 24px;
+    /* Medium font size */
+    margin-bottom: 20px;
+}
+
+.allot-services__filter {
+    margin-bottom: 20px;
+}
+
+.allot-services__label {
+    color: #ff6600;
+    /* Orange label */
+    font-size: 14px;
+}
+
+.allot-services__select {
+    background-color: #ffffff;
+    /* Dark dropdown */
+    color: rgb(0, 0, 0);
+    border: 1px solid #ff6600;
+    /* Orange border */
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.allot-services__add-btn {
+    background-color: #ff6600;
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.allot-services__add-btn:hover {
+    background-color: #ff9933;
+}
+
+.allot-services__list {
+    margin-top: 20px;
+}
+
+.allot-services__subheader {
+    font-size: 20px;
+    color: #ff6600;
+    margin-bottom: 10px;
+}
+
+.allot-services__cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.allot-services__card {
+    background-color: #ffffff;
+    color: #000000;
+    /* Dark card */
+    padding: 15px;
+    border: 1px solid #ff6600;
+    /* Orange border */
+    border-radius: 8px;
+    flex-basis: 30%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.allot-services__card-title {
+    font-size: 18px;
+    color: #ff9933;
+    /* Light orange for title */
+}
+
+.allot-services__card-text {
+    font-size: 14px;
+    margin: 5px 0;
+    color: #000000;
+}
+
+.allot-services__edit-btn {
+    background-color: #ff6600;
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.allot-services__edit-btn:hover {
+    background-color: #ff9933;
+}

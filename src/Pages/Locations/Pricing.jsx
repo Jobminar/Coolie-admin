@@ -3,7 +3,7 @@ import axios from "axios";
 import { FaEdit } from "react-icons/fa"; // For edit icons
 import "./Pricing.css"; // Import the relevant styles
 
-const Pricing = ({ tierName, group }) => {
+const Pricing = ({ tierName, group, onUpdateTier }) => {
   const [locationsData, setLocationsData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
@@ -204,6 +204,15 @@ const Pricing = ({ tierName, group }) => {
 
   return (
     <div className="pricing-container">
+      <div className="pricing-tier-header">
+        <h2>Pricing for {tierName}</h2>
+        <button className="pricing-tier-update-button" onClick={onUpdateTier}>
+          Add services to Tier
+        </button>
+      </div>
+
+      {/* Add a button to go to UpdateTier component */}
+
       <div className="pricing-tier-name-container">
         <h2>
           {isTierNameEditable ? (

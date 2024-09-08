@@ -1,0 +1,109 @@
+/* Container styling for the UpdateTier component */
+.tiger-update-tier__container {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Header styling */
+.tiger-update-tier__container h2 {
+    font-size: 24px;
+    color: #ff6f00;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Form group styling */
+.tiger-form-group {
+    margin-bottom: 20px;
+}
+
+/* Label styling */
+.tiger-form-group label {
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Form control (dropdown) styling */
+.tiger-form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: #fff5e6;
+    font-size: 14px;
+    color: #333;
+    transition: border-color 0.3s ease;
+}
+
+.tiger-form-control:hover,
+.tiger-form-control:focus {
+    border-color: #ff6f00;
+    outline: none;
+}
+
+/* Selected category/subcategory service styling */
+.tiger-form-control option {
+    padding: 10px;
+    background-color: #fff;
+    color: #333;
+    font-size: 14px;
+}
+
+/* Error message styling (if any error handling is added) */
+.tiger-error-message {
+    color: red;
+    font-size: 14px;
+}
+
+/* Button styling */
+.tiger-button-primary {
+    background-color: #ff6f00;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+.tiger-button-primary:hover {
+    background-color: #e65a00;
+}
+
+/* ServiceForm container card */
+.tiger-service-form__container {
+    background-color: #fff5e6;
+    padding: 20px;
+    border: 2px solid #ff6f00;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .tiger-update-tier__container {
+        padding: 15px;
+    }
+
+    .tiger-update-tier__container h2 {
+        font-size: 20px;
+    }
+
+    .tiger-form-control {
+        font-size: 12px;
+    }
+
+    .tiger-service-form__container {
+        padding: 15px;
+    }
+}

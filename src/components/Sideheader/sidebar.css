@@ -14,7 +14,6 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    /* Slightly reduce gap for better spacing */
     justify-content: flex-start;
     align-items: center;
 }
@@ -23,12 +22,9 @@
     padding: 0.5rem 0;
     width: 100%;
     height: 3rem;
-    /* Reduce height for a more compact look */
     border-radius: 2rem;
-    /* Slightly reduce border-radius */
     font-family: Roboto, sans-serif;
     font-size: 1rem;
-    /* Slightly reduce font-size for better fit */
     font-weight: 400;
     line-height: 2rem;
     text-align: center;
@@ -54,17 +50,13 @@
     background-color: #030B33;
     color: white;
     border-radius: 1.5rem;
-    /* Further reduced border-radius for a cleaner look */
 }
 
 .dropdown {
     width: 100%;
-    /* Use 100% to fill the width of the sidebar */
     transition: height 0.3s ease, transform 0.3s ease;
-    /* Add transition for transform */
     overflow: hidden;
     position: relative;
-    /* Ensure dropdown contents stack correctly */
 }
 
 .dropdown-header {
@@ -72,17 +64,14 @@
     cursor: pointer;
     background-color: #030B33;
     color: white;
-    transition: background-color 0.3s, color 0.3s, transform 0.3s ease, z-index 0.3s ease;
-    /* Add transition for transform and z-index */
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 0;
     height: auto;
-    /* Allow the height to be dynamic */
     line-height: 1.2;
-    /* Adjust line-height for better text alignment */
-    z-index: 1;
+    z-index: 10;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s ease;
     border: none;
 }
 
@@ -96,18 +85,14 @@
 
 .dropdown.active .dropdown-header {
     transform: translateY(-50%);
-    /* Move the header up by 50% when active */
     z-index: 2;
-    /* Bring the header to the front */
 }
 
 .dropdown-menu {
     display: flex;
     flex-direction: column;
     margin-top: 2rem;
-    /* Reduce the gap between header and items */
     z-index: 1;
-    /* Ensure the menu is behind the header */
     border: none;
 }
 
@@ -115,7 +100,6 @@
     background-color: #030B33;
     color: white;
     padding: 1rem 0.75rem;
-    /* Slightly reduced padding for compactness */
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     border-radius: 0 0 0.625rem 0.625rem;
@@ -142,7 +126,6 @@
     background-color: #030B33;
     color: white;
     border-radius: 0.5rem;
-    /* Adjusted to a smaller radius */
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -183,12 +166,10 @@
 
 .dropdown.bannersDropdown.active {
     height: 12rem;
-    /* Adjusted to match other dropdowns */
     max-height: 21rem;
     margin-top: 0;
     margin-bottom: 0.625rem;
     line-height: 3.125rem;
-    /* Maintain consistency in line-height */
 }
 
 .dropdown.bannersDropdown.active .dropdown-item {

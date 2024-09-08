@@ -121,19 +121,6 @@ const LocationManager = () => {
     setIsModalOpen(false); // Close the modal
   };
 
-  // Handle deletion of a location
-  const handleDeleteLocation = async (locationId) => {
-    try {
-      await deleteLocationById(locationId); // Call the delete API
-      setLocations((prevLocations) =>
-        prevLocations.filter((location) => location.id !== locationId),
-      ); // Remove location from state after successful deletion
-      toast.success("Location deleted successfully.");
-    } catch (error) {
-      toast.error("Failed to delete location.");
-    }
-  };
-
   return (
     <div className="location-manager-container">
       {/* Tier input */}

@@ -1,0 +1,104 @@
+/* Tiger theme colors: Orange, Black, White */
+.tiger-service-form__container {
+    background-color: #f9f4e0;
+    border: 2px solid #ff6f00;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.tiger-form-header {
+    color: #ff6f00;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 20px;
+}
+
+.tiger-form-group {
+    margin-bottom: 15px;
+}
+
+.tiger-form-label {
+    display: block;
+    font-weight: bold;
+    color: #333;
+}
+
+.tiger-form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.tiger-pricing-header {
+    color: #ff6f00;
+    font-weight: bold;
+}
+
+.tiger-dynamic-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tiger-add-price-field {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.tiger-form-checkbox-group {
+    display: flex;
+    align-items: center;
+}
+
+.tiger-error-message {
+    color: red;
+    font-size: 14px;
+}
+
+.tiger-btn-remove,
+.tiger-btn-add,
+.tiger-btn-submit,
+.tiger-btn-close {
+    background-color: #ff6f00;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+.tiger-btn-remove:hover,
+.tiger-btn-add:hover,
+.tiger-btn-submit:hover,
+.tiger-btn-close:hover {
+    background-color: #e65a00;
+}
+
+.tiger-btn-remove {
+    margin-left: 10px;
+    background-color: #ff3d00;
+}
+
+.tiger-btn-remove:hover {
+    background-color: #cc3200;
+}
+
+.tiger-form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.tiger-btn-close {
+    background-color: #333;
+}
+
+.tiger-btn-close:hover {
+    background-color: #222;
+}

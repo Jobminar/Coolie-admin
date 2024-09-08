@@ -117,11 +117,11 @@ const TierDetails = ({ tierData, onShowPricing }) => {
       </div>
 
       {/* Dropdown to switch between Categories and Locations */}
-      <div className="tier-detail-dropdown-section">
+      <div className="tier-detail-dropdowns-section">
         <label htmlFor="tier-detail-data-select">Show:</label>
         <select
           id="tier-detail-data-select"
-          className="tier-detail-styled-dropdown"
+          className="tier-detail-styled-dropdowns"
           value={activeComponent} // Set the dropdown to show the active component
           onChange={handleDropdownChange} // Handle dropdown changes
         >

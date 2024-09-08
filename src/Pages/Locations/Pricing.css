@@ -255,3 +255,50 @@
     flex-grow: 1;
     /* Ensure label takes space evenly */
 }
+
+
+.pricing-tier-update-button {
+    position: relative;
+    left: 25%;
+    top: 0;
+    display: block;
+    margin: 20px auto;
+    /* Center the button */
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    width: 12rem;
+}
+
+.pricing-tier-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* To vertically center both the button and the heading */
+    padding: 10px;
+}
+
+.pricing-tier-update-button {
+    background-color: #4caf50;
+    /* Example background color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.pricing-tier-update-button:hover {
+    background-color: #45a049;
+}
+
+.pricing-tier-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
