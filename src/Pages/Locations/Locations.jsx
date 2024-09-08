@@ -11,7 +11,7 @@ const Locations = () => {
   const [showTierManagement, setShowTierManagement] = useState(false); // Track the toggle between LocationManager and TierManagement
   const [tierData, setTierData] = useState(null); // State to hold the data to show in TierDetails
   const [showPricing, setShowPricing] = useState(false); // Track if the Pricing component is displayed
-
+  const [pricingGroup, setPricingGroup] = useState("default"); // Track the active group for pricing
   // Function to toggle between LocationManager and TierManagement views
   const toggleView = () => {
     console.log("Toggling view between LocationManager and TierManagement");
@@ -35,8 +35,9 @@ const Locations = () => {
   };
 
   // Function to show the Pricing component from TierDetails
-  const handleShowPricing = () => {
-    console.log("Navigating to Pricing component");
+  // Modify to accept the group from TierDetails
+  const handleShowPricing = (group) => {
+    setPricingGroup(group); // Set the group for pricing
     setShowPricing(true); // Show Pricing component
   };
 
@@ -92,7 +93,7 @@ const Locations = () => {
             showPricing ? (
               <Pricing
                 tierName={tierData.tierName}
-                group="default" // Pass tierData to Pricing
+                group={pricingGroup} // Pass the group to Pricing
               />
             ) : (
               <TierDetails

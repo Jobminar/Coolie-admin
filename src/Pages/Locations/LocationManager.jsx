@@ -1,104 +1,82 @@
 import React, { useState } from "react";
-import { FaPlus, FaSearch, FaUpload, FaTrashAlt } from "react-icons/fa";
-import { saveLocations } from "./api/Locations-api"; // Import the API function to save locations
-import axios from "axios";
-import { toast } from "react-hot-toast"; // For showing toast messages
-import "./LocationManager.css"; // Import CSS for styling
-import LocationsList from "./LocationsList"; // Component to display the locations list
+import { FaPlus, FaSearch, FaUpload } from "react-icons/fa";
+import {
+  saveLocations,
+  fetchPincodeLocation,
+  uploadCsvFile,
+} from "./api/Locations-api"; // Import API functions
+import { toast } from "react-hot-toast";
+import "./LocationManager.css";
+import LocationsList from "./LocationsList";
 
 const LocationManager = () => {
-  const [group, setGroup] = useState("default"); // State to track the selected group (default or custom)
-  const [pincode, setPincode] = useState(""); // State to track the entered pincode
-  const [csvFile, setCsvFile] = useState(null); // State to track the uploaded CSV file
-  const [tierName, setTierName] = useState(""); // State to track the entered tier name
-  const [locations, setLocations] = useState([]); // State to track the manually added locations
-  const [reloadLocations, setReloadLocations] = useState(false); // State to trigger reload of the LocationsList component
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to track if the modal is open or not
+  const [group, setGroup] = useState("default");
+  const [pincode, setPincode] = useState("");
+  const [csvFile, setCsvFile] = useState(null);
+  const [tierName, setTierName] = useState("");
+  const [locations, setLocations] = useState([]);
+  const [reloadLocations, setReloadLocations] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchPincode, setSearchPincode] = useState(""); // Search pincode for filtering locations
 
   // Handle group toggle between 'default' and 'custom'
   const handleGroupToggle = (groupType) => {
-    setGroup(groupType); // Set the group based on the clicked button
+    setGroup(groupType);
   };
 
   // Function to add a pincode using the Mapbox API
   const handlePincodeAdd = async () => {
-    if (!pincode) return; // If no pincode is entered, do nothing
+    if (!pincode) {
+      toast.error("Please enter a pincode.");
+      return;
+    }
 
     try {
-      const mapboxToken =
-        "pk.eyJ1IjoiY29vbGllbm8xLWFkbWluIiwiYSI6ImNsdWZjZGR1ZzBtZHcybnJvaHBiYTd2NzMifQ.TQ6FrqUIUUWv7J7n75A3tQ"; // Mapbox API token
-      const mapboxUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${pincode}.json?access_token=${mapboxToken}`; // API endpoint to get location data
-
-      // Make the request to Mapbox API
-      const response = await axios.get(mapboxUrl);
-      const place = response.data.features[0];
+      const place = await fetchPincodeLocation(pincode); // Fetch location data using API function
       const newLocation = {
         pincode,
-        location: place.place_name || "N/A", // Set location or fallback to 'N/A'
+        location: place.place_name || "Unknown location",
       };
 
-      // Add the new location to the list of manually added locations
       setLocations((prevLocations) => [...prevLocations, newLocation]);
-      setPincode(""); // Reset the pincode field
-
-      // Show the modal after successfully adding a location
-      setIsModalOpen(true);
+      setPincode(""); // Reset the pincode input field
+      setIsModalOpen(true); // Show the modal after adding the location
     } catch (error) {
-      console.error("Error adding location:", error);
-      toast.error("Failed to add the location.");
+      toast.error(error.message);
     }
   };
 
-  // Handle deletion of a manually added location by index
-  // const handleDeleteLocation = (index) => {
-  //   const updatedLocations = locations.filter((_, i) => i !== index); // Remove the location at the specified index
-  //   setLocations(updatedLocations); // Update the state with the remaining locations
-  //   toast.success("Location removed."); // Show success message
-  // };
-
   // Handle CSV file upload
   const handleCsvUpload = async (event) => {
-    const file = event.target.files[0]; // Get the uploaded file
+    const file = event.target.files[0];
     if (!file) return;
 
-    setCsvFile(file); // Update the state with the selected file
-
-    const formData = new FormData();
-    formData.append("file", file); // Append the file to FormData
-    formData.append("group", group); // Append the selected group to FormData
+    setCsvFile(file);
 
     try {
-      // Send the CSV file to the API
-      await axios.post(
-        "https://api.coolieno1.in/v1.0/core/locations/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        },
-      );
-
-      toast.success("CSV file has been uploaded successfully."); // Show success message
-      setReloadLocations((prev) => !prev); // Trigger reload of the LocationsList component
+      await uploadCsvFile(file, group); // Upload CSV using API function
+      toast.success("CSV file has been uploaded successfully.");
+      setReloadLocations((prev) => !prev);
     } catch (error) {
-      console.error("Error uploading CSV:", error);
-      toast.error("Failed to upload CSV file."); // Show error message
+      toast.error(error.message);
     }
+  };
+
+  // Handle searching locations by pincode
+  const handleSearchChange = (e) => {
+    setSearchPincode(e.target.value); // Update searchPincode state on input change
   };
 
   // Format the manually added locations to send to the API
   const formatLocationsForApi = (locations) => {
     return locations.map((location) => {
-      const fullLocation = location.location || "N/A";
+      const fullLocation = location.location || "Unknown location";
       const splitLocation = fullLocation.split(",").map((part) => part.trim());
 
-      // Extract pincode, city, and state from the split location data
       const pincode = location.pincode || "N/A";
-      const city = splitLocation[1] || "N/A"; // Second part of the split is expected to be the city
-      const state = splitLocation[2] || "Andhra Pradesh"; // Third part is expected to be the state
+      const city = splitLocation[1] || "N/A"; // Assume city is the second part
+      const state = splitLocation[2] || "Andhra Pradesh"; // Assume state is the third part
 
-      // Return formatted location object
       return {
         location: city,
         pincode: pincode,
@@ -125,16 +103,34 @@ const LocationManager = () => {
   // Handle saving manually added locations
   const handleSaveLocations = async () => {
     try {
-      const formattedLocations = formatLocationsForApi(locations); // Format locations
-      await saveLocations(formattedLocations); // Send formatted locations to the API
+      const formattedLocations = formatLocationsForApi(locations);
+      await saveLocations(formattedLocations); // Save locations using API function
 
-      toast.success("Locations saved successfully."); // Show success message
-      setReloadLocations((prev) => !prev); // Trigger reload of the LocationsList component
+      toast.success("Locations saved successfully.");
+      setReloadLocations((prev) => !prev);
       setLocations([]); // Clear the manually added locations after saving
       setIsModalOpen(false); // Close the modal after saving
     } catch (error) {
-      console.error("Error saving locations:", error);
-      toast.error("Failed to save locations."); // Show error message
+      toast.error(error.message);
+    }
+  };
+
+  // Handle closing the modal
+  const handleCloseModal = () => {
+    setLocations([]); // Clear locations when modal is closed
+    setIsModalOpen(false); // Close the modal
+  };
+
+  // Handle deletion of a location
+  const handleDeleteLocation = async (locationId) => {
+    try {
+      await deleteLocationById(locationId); // Call the delete API
+      setLocations((prevLocations) =>
+        prevLocations.filter((location) => location.id !== locationId),
+      ); // Remove location from state after successful deletion
+      toast.success("Location deleted successfully.");
+    } catch (error) {
+      toast.error("Failed to delete location.");
     }
   };
 
@@ -206,8 +202,8 @@ const LocationManager = () => {
             <div className="input-with-icon">
               <input
                 type="text"
-                value={pincode}
-                onChange={(e) => setPincode(e.target.value)}
+                value={searchPincode}
+                onChange={handleSearchChange} // Track search input changes
                 placeholder="Search a Pincode"
                 className="search-input"
               />
@@ -231,6 +227,7 @@ const LocationManager = () => {
             group={group}
             tierName={tierName}
             reload={reloadLocations}
+            searchPincode={searchPincode} // Pass search pincode to LocationsList
           />
         </div>
 
@@ -244,10 +241,6 @@ const LocationManager = () => {
                   locations.map((location, index) => (
                     <div className="modal-location-strip-card" key={index}>
                       <span>{`${location.pincode} / ${location.location}`}</span>
-                      {/* <FaTrashAlt
-                        className="modal-strip-delete-icon"
-                        onClick={() => handleDeleteLocation(index)}
-                      /> */}
                     </div>
                   ))
                 ) : (
@@ -261,10 +254,7 @@ const LocationManager = () => {
               >
                 Save Locations
               </button>
-              <button
-                className="modal-cancel-btn"
-                onClick={() => setIsModalOpen(false)}
-              >
+              <button className="modal-cancel-btn" onClick={handleCloseModal}>
                 Cancel
               </button>
             </div>

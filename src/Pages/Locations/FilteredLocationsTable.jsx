@@ -78,7 +78,15 @@ const FilteredLocationsTable = ({ locationFilter }) => {
                   <td>{location.category || "N/A"}</td>
                   <td>{location.subcategory || "N/A"}</td>
                   <td>{location.servicename || "N/A"}</td>
-                  <td>{location.price ? location.price.toString() : "N/A"}</td>
+                  <td>
+                    {location.price && Object.keys(location.price).length > 0
+                      ? Object.entries(location.price).map(
+                          ([variant, price], idx) => (
+                            <span key={idx}>{`${variant}: ${price}`}</span>
+                          ),
+                        )
+                      : "N/A"}
+                  </td>
                   <td>{location.min || "N/A"}</td>
                   <td>{location.max || "N/A"}</td>
                   <td>{location.creditEligibility ? "Yes" : "No"}</td>

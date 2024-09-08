@@ -4,9 +4,11 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import FilteredLocationsTable from "./FilteredLocationsTable"; // Import the table component
 import "./LocationList.css";
+import { deleteLocation } from "./api/Locations-api"; // Import the deleteLocation function
 
-const LocationList = ({ group, tierName, reload }) => {
+const LocationList = ({ group, tierName, reload, searchPincode }) => {
   const [locations, setLocations] = useState([]);
+  const [filteredLocations, setFilteredLocations] = useState([]); // Track filtered locations based on pincode
   const [groupedLocations, setGroupedLocations] = useState({});
   const [selectedLocation, setSelectedLocation] = useState(null); // Track selected location
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -27,6 +29,7 @@ const LocationList = ({ group, tierName, reload }) => {
           (location) => location.group === group && location.tierName === "",
         );
         setLocations(filteredLocations);
+        setFilteredLocations(filteredLocations); // Initialize filtered locations
         groupLocationsByLocation(filteredLocations);
       } else {
         toast.error("Failed to load locations.");
@@ -36,6 +39,20 @@ const LocationList = ({ group, tierName, reload }) => {
       console.error("Error fetching locations:", error);
     }
   };
+
+  // Filter locations by pincode whenever `searchPincode` changes
+  useEffect(() => {
+    if (searchPincode) {
+      const filtered = locations.filter((location) =>
+        location.pincode.includes(searchPincode),
+      );
+      setFilteredLocations(filtered); // Update filtered locations based on search
+      groupLocationsByLocation(filtered); // Update grouping with filtered locations
+    } else {
+      setFilteredLocations(locations); // If no search term, show all locations
+      groupLocationsByLocation(locations); // Update grouping with all locations
+    }
+  }, [searchPincode, locations]);
 
   // Refetch locations when group changes or reload prop changes
   useEffect(() => {
@@ -59,6 +76,22 @@ const LocationList = ({ group, tierName, reload }) => {
     setSelectedLocation(groupedLocations[locationName]); // Set the selected location
   };
 
+  // Handle delete location
+  const handleDeleteLocation = async (locationId, locationName) => {
+    try {
+      await deleteLocation(locationId); // Call the API to delete the location from backend
+      const updatedLocations = locations.filter(
+        (location) => location._id !== locationId,
+      );
+      setLocations(updatedLocations);
+      setFilteredLocations(updatedLocations); // Update filtered locations after deletion
+      groupLocationsByLocation(updatedLocations); // Update grouping
+      toast.success(`Location "${locationName}" removed successfully.`);
+    } catch (error) {
+      toast.error(`Failed to delete location: ${error.message}`);
+    }
+  };
+
   // Handle scroll event for scroll-to-top button
   useEffect(() => {
     const handleScroll = () => {
@@ -80,22 +113,14 @@ const LocationList = ({ group, tierName, reload }) => {
     };
   }, []);
 
-  const handleDeleteLocation = (locationName) => {
-    const updatedLocations = locations.filter(
-      (location) => location.location !== locationName,
-    );
-    setLocations(updatedLocations);
-    groupLocationsByLocation(updatedLocations);
-    toast.success(`All locations named "${locationName}" removed.`);
-  };
-
+  // Handle adding the tier
   const handleAddTier = async () => {
     if (!tierName) {
       toast.error("Please enter a Tier Name before adding.");
       return;
     }
 
-    const locationIds = locations.map((location) => location._id);
+    const locationIds = filteredLocations.map((location) => location._id); // Use filtered locations
 
     if (locationIds.length === 0) {
       toast.error("No locations available to update.");
@@ -120,6 +145,7 @@ const LocationList = ({ group, tierName, reload }) => {
     }
   };
 
+  // Scroll to top functionality
   const handleScrollToTop = () => {
     if (stripCardsRef.current) {
       stripCardsRef.current.scrollTo({ top: 0, behavior: "smooth" });
@@ -133,19 +159,19 @@ const LocationList = ({ group, tierName, reload }) => {
           <div className="locations-list-api">
             <h3>Available Locations in {group} Group</h3>
             <div className="strip-cards-scrollable" ref={stripCardsRef}>
-              {Object.keys(groupedLocations).length > 0 ? (
-                Object.keys(groupedLocations).map((locationName, index) => (
+              {filteredLocations.length > 0 ? (
+                filteredLocations.map((location, index) => (
                   <div
                     className="location-strip-card"
                     key={index}
-                    onClick={() => handleSelectLocation(locationName)}
+                    onClick={() => handleSelectLocation(location.location)}
                   >
-                    <span>{`${locationName} (${groupedLocations[locationName].length} locations)`}</span>
+                    <span>{`${location.location} (${location.pincode})`}</span>
                     <FaTrashAlt
                       className="strip-delete-icon"
                       onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteLocation(locationName);
+                        e.stopPropagation(); // Prevent triggering click on the location card
+                        handleDeleteLocation(location._id, location.location);
                       }}
                     />
                   </div>

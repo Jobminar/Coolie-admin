@@ -28,26 +28,106 @@ export const saveLocations = async (locations) => {
 
     return { message: "All locations saved successfully." };
   } catch (error) {
+    handleError(error);
+  }
+};
+
+/**
+ * Function to add a pincode using the Mapbox API
+ * @param {string} pincode - The pincode to search for
+ */
+export const fetchPincodeLocation = async (pincode) => {
+  const mapboxToken =
+    "pk.eyJ1IjoiY29vbGllbm8xLWFkbWluIiwiYSI6ImNsdWZjZGR1ZzBtZHcybnJvaHBiYTd2NzMifQ.TQ6FrqUIUUWv7J7n75A3tQ"; // Replace with your token
+  const mapboxUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${pincode}.json?access_token=${mapboxToken}`;
+
+  try {
+    const response = await axios.get(mapboxUrl);
+    if (!response.data.features || response.data.features.length === 0) {
+      throw new Error("No location found for the given pincode.");
+    }
+    return response.data.features[0]; // Return the first result
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+/**
+ * Function to upload CSV file to the server
+ * @param {File} file - The CSV file to upload
+ * @param {string} group - The selected group for the file
+ */
+export const uploadCsvFile = async (file, group) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("group", group);
+
+  try {
+    const response = await axios.post(
+      "https://api.coolieno1.in/v1.0/core/locations/upload",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+/**
+ * Utility function to handle API errors
+ * @param {Error} error - The error thrown by the API
+ */
+const handleError = (error) => {
+  if (error.response) {
+    console.error("API Error Response:", error.response.data);
+    console.error("Status Code:", error.response.status);
+    console.error("Headers:", error.response.headers);
+    throw new Error(
+      `Failed to complete the request. Status: ${error.response.status} - ${
+        error.response.data.message || "Unknown error"
+      }`,
+    );
+  } else if (error.request) {
+    console.error("No Response received:", error.request);
+    throw new Error("No response received from server.");
+  } else {
+    console.error("Error in setting up the request:", error.message);
+    throw new Error("Request setup error.");
+  }
+};
+
+/**
+ * Function to delete a location by its ID
+ * @param {string} id - The ID of the location to delete
+ */
+export const deleteLocation = async (id) => {
+  try {
+    const response = await axios.delete(
+      `https://api.coolieno1.in/v1.0/core/locations/delete/${id}`,
+    );
+    return response.data;
+  } catch (error) {
     if (error.response) {
-      // The request was made, and the server responded with a status code outside the range of 2xx
-      console.error("API Error Response:", error.response.data);
-      console.error("Status Code:", error.response.status);
-      console.error("Headers:", error.response.headers);
+      console.error("Error deleting location:", error.response.data);
       throw new Error(
-        `Failed to save location. Status: ${error.response.status} - ${
+        `Failed to delete location. Status: ${error.response.status} - ${
           error.response.data.message || "Unknown error"
         }`,
       );
     } else if (error.request) {
-      // The request was made but no response was received
-      console.error("No Response received:", error.request);
-      throw new Error(
-        "Failed to save location. No response received from server.",
+      console.error(
+        "No response received while deleting location:",
+        error.request,
       );
+      throw new Error("No response received from server.");
     } else {
-      // Something happened in setting up the request that triggered an Error
-      console.error("Error in setting up the request:", error.message);
-      throw new Error("Failed to save location. Request setup error.");
+      console.error("Error in deleting request:", error.message);
+      throw new Error("Request setup error.");
     }
   }
 };

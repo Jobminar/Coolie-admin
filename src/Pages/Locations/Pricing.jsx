@@ -5,26 +5,26 @@ import "./Pricing.css"; // Import the relevant styles
 
 const Pricing = ({ tierName, group }) => {
   const [locationsData, setLocationsData] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null); // Track selected category
-  const [selectedSubcategory, setSelectedSubcategory] = useState(null); // Track selected subcategory
-  const [selectedService, setSelectedService] = useState(null); // Track selected service
-  const [selectedPriceOption, setSelectedPriceOption] = useState(""); // Track selected price option
-  const [priceDetails, setPriceDetails] = useState({}); // Store pricing details for the selected service
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
+  const [selectedPriceOption, setSelectedPriceOption] = useState("");
+  const [priceDetails, setPriceDetails] = useState({});
 
   // Editable states for price, min, max, etc.
-  const [isEditable, setIsEditable] = useState(false); // Edit mode for pricing details
-  const [min, setMin] = useState(""); // Minimum value for the selected service
-  const [max, setMax] = useState(""); // Maximum value for the selected service
-  const [metric, setMetric] = useState(""); // Metric for the selected service
-  const [creditEligibility, setCreditEligibility] = useState(false); // Boolean for credit eligibility
-  const [taxPercentage, setTaxPercentage] = useState(0); // Tax percentage
-  const [miscFee, setMiscFee] = useState(""); // Miscellaneous fee
-  const [platformCommission, setPlatformCommission] = useState(0); // Platform commission
-  const [isCash, setIsCash] = useState(false); // Boolean for cash after service
+  const [isEditable, setIsEditable] = useState(false);
+  const [min, setMin] = useState("");
+  const [max, setMax] = useState("");
+  const [metric, setMetric] = useState("");
+  const [creditEligibility, setCreditEligibility] = useState(false);
+  const [taxPercentage, setTaxPercentage] = useState(0);
+  const [miscFee, setMiscFee] = useState("");
+  const [platformCommission, setPlatformCommission] = useState(0);
+  const [isCash, setIsCash] = useState(false);
 
   // Prefilled state for tier name
-  const [tierNameEditable, setTierNameEditable] = useState(tierName); // Track tier name
-  const [isTierNameEditable, setIsTierNameEditable] = useState(false); // Edit mode for tier name
+  const [tierNameEditable, setTierNameEditable] = useState(tierName);
+  const [isTierNameEditable, setIsTierNameEditable] = useState(false);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -45,7 +45,6 @@ const Pricing = ({ tierName, group }) => {
   }, [tierName, group]);
 
   const handleUpdatePricing = async () => {
-    // Save the changes via API without toggling the edit mode
     try {
       const updatedData = {
         service: selectedService,
@@ -72,13 +71,12 @@ const Pricing = ({ tierName, group }) => {
     }
   };
 
-  // This is the function that toggles between edit and view modes
   const handleEditPricingClick = () => {
-    setIsEditable(!isEditable); // Toggle edit mode for pricing details
+    setIsEditable(!isEditable);
   };
 
   const handleEditTierNameClick = () => {
-    setIsTierNameEditable(!isTierNameEditable); // Toggle edit mode for tier name
+    setIsTierNameEditable(!isTierNameEditable);
   };
 
   const handleToggleCreditEligibility = () => {
@@ -95,7 +93,7 @@ const Pricing = ({ tierName, group }) => {
     const currentItem = locationsData.find(
       (item) =>
         item.servicename === service &&
-        item.subcategory.includes(selectedSubcategory),
+        item.subcategory === selectedSubcategory,
     );
 
     if (currentItem) {
@@ -113,7 +111,7 @@ const Pricing = ({ tierName, group }) => {
 
   const renderCategories = () => {
     const uniqueCategories = [
-      ...new Set(locationsData.map((item) => item.category).flat()),
+      ...new Set(locationsData.map((item) => item.category)),
     ];
 
     return (
@@ -126,12 +124,12 @@ const Pricing = ({ tierName, group }) => {
             }`}
           >
             <input
-              type="checkbox"
+              type="radio"
               checked={selectedCategory === category}
               onChange={() => {
                 setSelectedCategory(category);
-                setSelectedSubcategory(null); // Reset subcategory when category changes
-                setSelectedService(null); // Reset service when category changes
+                setSelectedSubcategory(null);
+                setSelectedService(null);
               }}
             />
             <label>{category}</label>
@@ -142,12 +140,12 @@ const Pricing = ({ tierName, group }) => {
   };
 
   const renderSubcategories = () => {
-    const categoryItems = locationsData.filter((item) =>
-      item.category.includes(selectedCategory),
+    const categoryItems = locationsData.filter(
+      (item) => item.category === selectedCategory,
     );
 
     const uniqueSubcategories = [
-      ...new Set(categoryItems.map((item) => item.subcategory).flat()),
+      ...new Set(categoryItems.map((item) => item.subcategory)),
     ];
 
     return (
@@ -160,11 +158,11 @@ const Pricing = ({ tierName, group }) => {
             }`}
           >
             <input
-              type="checkbox"
+              type="radio"
               checked={selectedSubcategory === subcategory}
               onChange={() => {
                 setSelectedSubcategory(subcategory);
-                setSelectedService(null); // Reset service when subcategory changes
+                setSelectedService(null);
               }}
             />
             <label>{subcategory}</label>
@@ -175,8 +173,8 @@ const Pricing = ({ tierName, group }) => {
   };
 
   const renderServices = () => {
-    const subcategoryItems = locationsData.filter((item) =>
-      item.subcategory.includes(selectedSubcategory),
+    const subcategoryItems = locationsData.filter(
+      (item) => item.subcategory === selectedSubcategory,
     );
 
     const uniqueServices = [
@@ -193,7 +191,7 @@ const Pricing = ({ tierName, group }) => {
             }`}
           >
             <input
-              type="checkbox"
+              type="radio"
               checked={selectedService === service}
               onChange={() => handleServiceSelect(service)}
             />
@@ -266,7 +264,6 @@ const Pricing = ({ tierName, group }) => {
             ))}
           </select>
 
-          {/* Input field to update the selected price option */}
           {selectedPriceOption && (
             <div className="pricing-field-container">
               <label>Price for {selectedPriceOption}:</label>
@@ -292,7 +289,7 @@ const Pricing = ({ tierName, group }) => {
               <label>Min:</label>
               {isEditable ? (
                 <input
-                  type="text"
+                  type="number"
                   value={min}
                   onChange={(e) => setMin(e.target.value)}
                 />
@@ -305,7 +302,7 @@ const Pricing = ({ tierName, group }) => {
               <label>Max:</label>
               {isEditable ? (
                 <input
-                  type="text"
+                  type="number"
                   value={max}
                   onChange={(e) => setMax(e.target.value)}
                 />
@@ -366,7 +363,6 @@ const Pricing = ({ tierName, group }) => {
               )}
             </div>
 
-            {/* Fix layout for the toggle switches */}
             <div className="pricing-field-container toggle-container">
               <label>Credit Eligibility:</label>
               <div className="pricing-toggle-switch">

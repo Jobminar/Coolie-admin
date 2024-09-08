@@ -7,7 +7,8 @@ const ListofCategories = ({ tierName, group }) => {
   const [selectedCategory, setSelectedCategory] = useState(null); // Track selected category
   const [selectedSubcategory, setSelectedSubcategory] = useState(null); // Track selected subcategory
   const [priceOptions, setPriceOptions] = useState([]); // Track price options
-  const [activePriceOption, setActivePriceOption] = useState(null); // Track active price option
+  const [activePriceOption, setActivePriceOption] = useState("none"); // Track active price option, default to "none"
+  const [hasError, setHasError] = useState(false); // Track if there is an error
 
   useEffect(() => {
     // Fetch categories, subcategories, and services based on group (default/custom) and tierName
@@ -20,30 +21,36 @@ const ListofCategories = ({ tierName, group }) => {
         const filteredData = response.data.filter(
           (item) => item.tierName === tierName,
         );
-        setCategoriesData(filteredData);
+        if (filteredData.length === 0) {
+          setHasError(true); // Set error state if no data is found
+        } else {
+          setCategoriesData(filteredData);
 
-        // Extract the price options from the price object
-        const allPrices = filteredData.flatMap((item) =>
-          Object.keys(item.price || {}),
-        );
-        const uniquePriceOptions = [...new Set(allPrices)];
-        setPriceOptions(uniquePriceOptions); // Set the unique price options (like "normal", "deep")
+          // Extract the price options from the price object
+          const allPrices = filteredData.flatMap((item) =>
+            Object.keys(item.price || {}),
+          );
+          const uniquePriceOptions = [...new Set(["none", ...allPrices])]; // Add "none" as the first option
+          setPriceOptions(uniquePriceOptions); // Set the unique price options
+          setActivePriceOption(uniquePriceOptions[0]); // Set the first price option as active
+          setHasError(false); // Reset error state if data is successfully fetched
+        }
       } catch (error) {
         console.error("Failed to fetch categories data:", error);
+        setHasError(true); // Set error state on API failure
       }
     };
 
     fetchCategories();
   }, [tierName, group]);
 
-  // Merge duplicate categories, subcategories, and services
-  const getUniqueItems = (array) => Array.from(new Set(array));
+  // Helper function to get unique items from strings
+  const getUniqueItems = (items) => [...new Set(items)];
 
   // Handle when a category is clicked
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
     setSelectedSubcategory(null); // Reset the subcategory selection
-    setActivePriceOption(null); // Reset price option on category change
   };
 
   // Handle when a subcategory is clicked
@@ -60,7 +67,7 @@ const ListofCategories = ({ tierName, group }) => {
   // Render the list of categories
   const renderCategories = () => {
     const uniqueCategories = getUniqueItems(
-      categoriesData.flatMap((item) => item.category),
+      categoriesData.map((item) => item.category), // Treat category as a string
     );
 
     return (
@@ -82,19 +89,22 @@ const ListofCategories = ({ tierName, group }) => {
 
   // Render the subcategories and services
   const renderSubcategories = () => {
-    const categoryItems = categoriesData.filter((item) =>
-      item.category.includes(selectedCategory),
+    const categoryItems = categoriesData.filter(
+      (item) => item.category === selectedCategory, // Compare as string
     );
 
-    // Filter subcategories based on selected price option
-    const uniqueSubcategories = getUniqueItems(
-      categoryItems
-        .filter((item) => {
-          // Only return subcategories that have the selected price option
-          return item.price && item.price[activePriceOption];
-        })
-        .flatMap((item) => item.subcategory),
-    );
+    // If priceOption is "none", do not filter by price
+    const uniqueSubcategories =
+      activePriceOption === "none"
+        ? getUniqueItems(categoryItems.map((item) => item.subcategory))
+        : getUniqueItems(
+            categoryItems
+              .filter((item) => {
+                // Only return subcategories that have the selected price option
+                return item.price && item.price[activePriceOption];
+              })
+              .map((item) => item.subcategory), // Treat subcategory as a string
+          );
 
     return (
       <div className="subcategory-container">
@@ -110,7 +120,7 @@ const ListofCategories = ({ tierName, group }) => {
               }`}
               onClick={() => handlePriceOptionClick(priceOption)}
             >
-              {priceOption}
+              {priceOption === "none" ? "Show All" : priceOption}
             </button>
           ))}
         </div>
@@ -143,10 +153,10 @@ const ListofCategories = ({ tierName, group }) => {
     const servicesInSubcategory = categoryItems
       .filter(
         (item) =>
-          item.subcategory.includes(selectedSubcategory) &&
-          item.price[activePriceOption],
+          item.subcategory === selectedSubcategory && // Compare as string
+          (activePriceOption === "none" || item.price[activePriceOption]), // Skip filtering by price if "none"
       )
-      .flatMap((item) => item.servicename);
+      .map((item) => item.servicename); // Treat servicename as a string
 
     const uniqueServices = getUniqueItems(servicesInSubcategory);
 
@@ -157,14 +167,14 @@ const ListofCategories = ({ tierName, group }) => {
           {uniqueServices.map((service, index) => (
             <div key={index} className="service-link">
               {service} {/* Display the price */}
-              {activePriceOption && (
+              {activePriceOption !== "none" && (
                 <span>
                   - {activePriceOption}:{" "}
                   {categoryItems
                     .filter(
                       (item) =>
-                        item.servicename.includes(service) &&
-                        item.subcategory.includes(selectedSubcategory),
+                        item.servicename === service &&
+                        item.subcategory === selectedSubcategory,
                     )
                     .map((item) => item.price[activePriceOption] || "N/A")}
                 </span>
@@ -183,9 +193,16 @@ const ListofCategories = ({ tierName, group }) => {
         {group.charAt(0).toUpperCase() + group.slice(1)})
       </h3>
 
-      {renderCategories()}
+      {/* Display a message if no data is available */}
+      {hasError ? (
+        <p>No Category data available.</p>
+      ) : (
+        <>
+          {renderCategories()}
 
-      {selectedCategory && renderSubcategories()}
+          {selectedCategory && renderSubcategories()}
+        </>
+      )}
     </div>
   );
 };

@@ -30,7 +30,7 @@ const TierDetails = ({ tierData, onShowPricing }) => {
 
   // Function to handle the "Manage Services" button (navigate to Pricing component)
   const handleManageServices = () => {
-    onShowPricing(); // Call the prop function to show Pricing component
+    onShowPricing(activeGroup); // Pass activeGroup when calling onShowPricing
   };
 
   return (
