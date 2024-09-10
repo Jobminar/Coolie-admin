@@ -1,365 +1,334 @@
-/* General layout */
-.location-manager {
-    padding: 20px;
-    font-family: "Poppins", sans-serif;
-    background-color: #f8f9fa;
-    max-width: 800px;
-    margin: 20px auto;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
-
-/* Tier section styling */
-.tier-section {
-    margin-bottom: 20px;
-}
-
-.tier-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 8px;
-    font-size: 16px;
-}
-
-.tier-input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 20%;
-    font-size: 14px;
-}
-
-/* Container with border */
-.location-container {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    background-color: #fff;
-}
-
-.location-wrapper {
-    padding: 10px;
-    font-family: "Poppins", sans-serif;
+/* Container Styles */
+.tiger-location-manager {
     background-color: #ffffff;
-    max-width: 800px;
-    margin: 0;
-    border: 1px solid #000000;
-    border-radius: 8px;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid black
 }
 
-/* Group Toggle */
-.group-toggle {
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 20px;
-}
-
-.group-btn {
-    padding: 8px 16px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    background-color: #e0e0e0;
-    color: #666;
-    cursor: pointer;
-    font-size: 14px;
-    margin-right: 10px;
-    width: 120px;
+/* Header */
+.tiger-header {
+    color: #000000;
     text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Upload Section */
+.tiger-upload-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.tiger-file-label {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid #ff6f00;
+    background-color: white;
+    color: #ff6f00;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-.group-btn.active {
-    background-color: #ababab;
-    color: rgb(0, 0, 0);
+.tiger-file-label:hover {
+    background-color: #ffe0b3;
 }
 
-/* Location Actions */
-.location-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-}
-
-.location-inputs {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-/* CSV Upload Input with custom styling */
-.csv-upload-container {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-    width: 30%;
-    /* Adjusted width */
-}
-
-/* Hide default file input */
-.csv-upload-input {
-    display: none;
-}
-
-/* Custom label for file input */
-.csv-upload-label {
-    display: inline-block;
-    padding: 0.475rem 2.75rem;
-    border: 1px solid #ced4da;
-    border-radius: 0.375rem;
-    background-color: #fff;
+/* Upload Button Styles */
+.tiger-upload-btn {
+    background-color: #ff6f00;
+    color: white;
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 0.9rem;
-    color: #495057;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    white-space: nowrap;
-    text-align: center;
-    width: 100%;
+    transition: background-color 0.3s ease;
 }
 
-/* File upload name will be displayed separately */
-.file-upload-name {
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: #495057;
+.tiger-upload-btn:hover {
+    background-color: #e65a00;
+}
+
+/* Search Input */
+.tiger-search-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.tiger-search-input {
+    padding: 10px;
+    width: 250px;
+    border: 1px solid #ff6f00;
+    border-radius: 8px;
+}
+
+/* Table Wrapper for Scroll */
+.tiger-locations-table-wrapper {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styles */
+.tiger-locations-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+    min-width: 1000px;
+}
+
+.tiger-locations-table th,
+.tiger-locations-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* Input fields with icons */
-.input-with-icon {
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.input-with-icon input {
-    flex: 1;
-    padding-right: 30px;
-    font-size: 0.9rem;
-    /* Smaller font size */
-}
-
-/* General styling for input fields */
-
-.search-input {
-    width: 60%;
-    /* Reduced width */
-    padding: 0.375rem 0.75rem;
-    font-size: 0.9rem;
-    /* Smaller font size */
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: 0.375rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.pincode-input {
-    width: 60%;
-    /* Reduced width */
-    padding: 0.275rem 0.75rem;
-    font-size: 0.9rem;
-    /* Smaller font size */
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: 0.375rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-/* Hover and focus effects for inputs */
-.pincode-input:focus,
-.search-input:focus {
-    border-color: #80bdff;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.input-with-icon .icon-button {
-    position: absolute;
-    right: 10px;
-    top: 55%;
-    transform: translateY(-50%);
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: #6c757d;
-}
-
-.input-with-icon .icon-button:hover {
-    color: #495057;
-}
-
-/* Scrollable Locations List */
-.locations-list {
-    margin-top: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    background-color: white;
-    max-height: 250px;
-    /* Adjusted max-height */
-    overflow-y: auto;
-}
-
-/* Scrollable section for API-loaded locations */
-.locations-list-api {
-    margin-top: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    background-color: white;
-    max-height: 300px;
-    /* Adjusted max-height for scroll */
-    overflow-y: auto;
-}
-
-/* Location Cards */
-.location-card {
-    padding: 15px;
-    border-bottom: 1px solid #e0e0e0;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #fff;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    transition: background-color 0.3s ease;
-}
-
-.location-card:hover {
-    background-color: #f0f0f0;
-}
-
-.delete-icon {
-    cursor: pointer;
-    color: #000000;
-    font-size: 1.2rem;
-}
-
-/* Save Button */
-
-.save-locations-btn {
-    background-color: #ff8c00;
+.tiger-locations-table th {
+    background-color: #ff9500;
     color: white;
-    padding: 10px 20px;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.tiger-locations-table td {
+    background-color: #fff5e6;
+}
+
+.tiger-locations-table tr:hover {
+    background-color: #ffe0b3;
+}
+
+/* Sticky Column for Actions */
+.sticky-col {
+    position: sticky;
+    right: 0;
+    background-color: #ffffff;
+    z-index: 1;
+    box-shadow: -1px 0 5px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+}
+
+/* Action Button Styles */
+.tiger-edit-btn,
+.tiger-delete-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
-
-.save-button {
-    padding: 10px 20px;
-    background-color: #000;
+.tiger-edit-btn {
+    background-color: #000000;
     color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.tiger-edit-btn:hover {
+    background-color: #000000;
+}
+
+.tiger-delete-btn {
+    background-color: #e60000;
+    color: white;
+}
+
+.tiger-delete-btn:hover {
+    background-color: #cc0000;
+}
+
+/* Pagination (optional) */
+.tiger-pagination {
     display: flex;
-    align-items: center;
+    justify-content: center;
     margin-top: 20px;
 }
 
-.save-button:hover {
-    background-color: #333;
-}
-
-.add-icon {
-    color: green;
-}
-
-/* Responsive adjustments for mobile */
-@media (max-width: 768px) {
-    .location-inputs {
-        flex-direction: column;
-    }
-
-    .pincode-input,
-    .search-input,
-    .csv-upload-container {
-        width: 100%;
-    }
-
-    .group-btn {
-        margin: 10px 0;
-    }
-}
-
-
-
-
-/* Modal Styles */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-}
-
-.modal-content {
-    background-color: white;
-    padding: 20px;
+.tiger-pagination-btn {
+    background-color: #000000;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    margin: 0 5px;
     border-radius: 8px;
-    max-width: 500px;
-    width: 100%;
-    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
-    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.modal-locations-scrollable {
-    max-height: 200px;
-    overflow-y: auto;
-    margin: 10px 0;
+.tiger-pagination-btn:hover {
+    background-color: #000000;
 }
 
-.modal-location-strip-card {
+/* Toggle Switch */
+.tiger-actions-toggle {
     display: flex;
     justify-content: space-between;
-    padding: 10px;
-    background: #f9f9f9;
-    margin-bottom: 5px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
+    align-items: center;
+    margin-bottom: 20px;
+    height: 2rem;
 }
 
-.modal-strip-delete-icon {
-    cursor: pointer;
-    color: red;
+.tiger-toggle-label {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    margin-right: 15px;
+    margin-top: 0.2rem;
 }
 
-.modal-save-locations-btn,
-.modal-cancel-btn {
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    background-color: #4caf50;
+.tiger-toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.tiger-toggle-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 24px;
+}
+
+.tiger-toggle-input:checked+.tiger-toggle-slider {
+    background-color: #000000;
+    margin-bottom: 0.1rem;
+}
+
+.tiger-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.tiger-toggle-input:checked+.tiger-toggle-slider:before {
+    transform: translateX(26px);
+}
+
+/* Delete All Button */
+.tiger-delete-all-btn {
+    background-color: #ff3d00;
     color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
-    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
-.modal-cancel-btn {
-    background-color: #f44336;
-    border-radius: 5px;
+.tiger-delete-all-btn:hover {
+    background-color: #cc3200;
+}
+
+/* Sticky column */
+.sticky-col {
+    position: -webkit-sticky;
+    position: sticky;
+    right: 0;
+    background-color: #f0f0f0;
+    z-index: 2;
+}
+
+
+.custom-file-input {
+    display: none;
+}
+
+
+/* Style the label to look like a button */
+.custom-file-label {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 2px solid #ff6f00;
+    /* Custom orange border */
+    color: #ff6f00;
+    /* Custom orange text */
+    background-color: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.3s ease;
+}
+
+.custom-file-label:hover {
+    background-color: #ff6f00;
+    color: white;
+}
+
+
+/* Hide the default file input */
+.custom-file-input {
+    display: none;
+}
+
+/* Style the label to look like a button */
+.custom-file-label {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 2px solid #ff6f00;
+    /* Custom orange border */
+    color: #ff6f00;
+    /* Custom orange text */
+    background-color: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.3s ease;
+}
+
+.custom-file-label:hover {
+    background-color: #ff6f00;
+    color: white;
+}
+
+/* File name display styles */
+.file-name {
+    margin-top: 10px;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    font-size: 14px;
+}
+
+/* Upload Button Styles */
+.tiger-upload-btn {
+    background-color: #ff6f00;
+    color: white;
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tiger-upload-btn:hover {
+    background-color: #e65a00;
 }

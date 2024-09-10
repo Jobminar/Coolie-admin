@@ -1,0 +1,54 @@
+/* Container for Add Service Form */
+.add-service-form__container {
+    background-color: #ffffff;
+    /* Light background */
+
+    /* Tiger orange */
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+
+    /* Light shadow */
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Add Service Form Header */
+.add-service-form__header {
+    color: #000000;
+    /* Tiger orange */
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Pricing Field Animation */
+.add-service-form__pricing-field {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    animation: slideInUp 0.4s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

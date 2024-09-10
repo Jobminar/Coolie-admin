@@ -1,104 +1,155 @@
-/* Tiger theme colors: Orange, Black, White */
+/* Service Form Container */
 .tiger-service-form__container {
-    background-color: #f9f4e0;
-    border: 2px solid #ff6f00;
+    background-color: #ffffff;
+    /* Light tiger background */
+    border: 2px solid #ffdbbf;
+    /* Tiger orange border */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+    animation: fadeInUp 0.5s ease-out;
 }
 
+/* Form Header */
 .tiger-form-header {
-    color: #ff6f00;
+    font-size: 22px;
+    color: #000000;
+    /* Tiger orange */
     text-align: center;
-    font-family: 'Poppins', sans-serif;
     margin-bottom: 20px;
 }
 
+/* Form Group */
 .tiger-form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .tiger-form-label {
-    display: block;
     font-weight: bold;
     color: #333;
+    /* Dark tiger stripe */
+    display: block;
+    margin-bottom: 5px;
 }
 
-.tiger-form-input {
+.tiger-form-control {
     width: 100%;
     padding: 10px;
     border: 1px solid #333;
-    border-radius: 5px;
-    margin-top: 5px;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
 }
 
-.tiger-pricing-header {
-    color: #ff6f00;
-    font-weight: bold;
+.tiger-form-control:focus {
+    outline: none;
+    border-color: #ffdbbf;
+    /* Tiger orange */
+    box-shadow: 0 0 8px rgba(255, 111, 0, 0.4);
 }
 
-.tiger-dynamic-field {
+/* Checkbox Group */
+.tiger-form-checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Dynamic Pricing Field */
+.tiger-service-form__dynamic-field {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
+/* Add New Price Field */
 .tiger-add-price-field {
     display: flex;
     justify-content: space-between;
     gap: 10px;
 }
 
-.tiger-form-checkbox-group {
-    display: flex;
-    align-items: center;
-}
-
+/* Error Message */
 .tiger-error-message {
     color: red;
     font-size: 14px;
 }
 
-.tiger-btn-remove,
-.tiger-btn-add,
-.tiger-btn-submit,
-.tiger-btn-close {
-    background-color: #ff6f00;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-}
-
-.tiger-btn-remove:hover,
-.tiger-btn-add:hover,
-.tiger-btn-submit:hover,
-.tiger-btn-close:hover {
-    background-color: #e65a00;
-}
-
-.tiger-btn-remove {
-    margin-left: 10px;
-    background-color: #ff3d00;
-}
-
-.tiger-btn-remove:hover {
-    background-color: #cc3200;
-}
-
-.tiger-form-actions {
+/* Form Actions */
+.tiger-service-form__actions {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
 }
 
+/* Buttons */
+.tiger-btn-submit,
+.tiger-btn-close,
+.tiger-btn-add,
+.tiger-btn-remove {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+/* Submit Button */
+.tiger-btn-submit {
+    background-color: #4caf50;
+    /* Green button */
+}
+
+.tiger-btn-submit:hover {
+    background-color: #45a049;
+    /* Darker green on hover */
+}
+
+/* Close Button */
 .tiger-btn-close {
     background-color: #333;
+    color: white;
+    /* Dark tiger stripe */
 }
 
 .tiger-btn-close:hover {
     background-color: #222;
+    /* Darker on hover */
+}
+
+/* Add Button */
+.tiger-btn-add {
+    background-color: #ffdbbf;
+    /* Tiger orange */
+}
+
+.tiger-btn-add:hover {
+    background-color: #e65a00;
+    /* Darker orange on hover */
+}
+
+/* Remove Button */
+.tiger-btn-remove {
+    background-color: #ff3d00;
+    /* Red remove button */
+}
+
+.tiger-btn-remove:hover {
+    background-color: #cc3200;
+    /* Darker red on hover */
+}
+
+/* Fade-in Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

@@ -1,24 +1,29 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./ServiceForm.css"; // Tiger theme CSS for styling
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import "./ServiceForm.css"; // Import Tiger theme CSS for styling
 
 const ServiceForm = ({
-  group,
-  tierName, // Tier name (mandatory)
-  categoryName, // Category name to be sent to the API
-  subcategoryName, // Subcategory name to be sent to the API
-  serviceName, // Service name to be sent to the API
-  pincode, // Pincode (mandatory)
+  categoryName,
+  subcategoryName,
+  serviceName,
+  pincode,
   location,
   district,
   state,
   onClose,
 }) => {
-  // State for handling dynamic form inputs
-  const [pricingDetails, setPricingDetails] = useState({});
-  const [newPriceKey, setNewPriceKey] = useState(""); // Key for a new price field
-  const [newPriceValue, setNewPriceValue] = useState(""); // Value for a new price field
+  const [pricingDetails, setPricingDetails] = useState({}); // Store dynamic pricing fields
+  const [newPriceKey, setNewPriceKey] = useState(""); // Key for new price field
+  const [newPriceValue, setNewPriceValue] = useState(""); // Value for new price field
   const [miscFee, setMiscFee] = useState(""); // Miscellaneous fees
+  const [minPrice, setMinPrice] = useState(""); // Minimum price
+  const [maxPrice, setMaxPrice] = useState(""); // Maximum price
+  const [metric, setMetric] = useState(""); // Metric (e.g., kg, piece)
+  const [creditEligibility, setCreditEligibility] = useState(false); // Credit eligibility
+  const [taxPercentage, setTaxPercentage] = useState(0); // Tax percentage
+  const [platformCommission, setPlatformCommission] = useState(0); // Platform commission
   const [isCashOnDelivery, setIsCashOnDelivery] = useState(false); // Cash on delivery option
   const [errors, setErrors] = useState({}); // Error state for validation
 
@@ -27,9 +32,8 @@ const ServiceForm = ({
     e.preventDefault();
 
     // Validate mandatory fields
-    if (!tierName || !pincode) {
+    if (!pincode) {
       setErrors({
-        tierName: !tierName ? "Tier Name is required" : "",
         pincode: !pincode ? "Pincode is required" : "",
       });
       return;
@@ -37,8 +41,6 @@ const ServiceForm = ({
 
     // Prepare the data to send to the API
     const newLocationData = {
-      group,
-      tierName,
       category: categoryName,
       subcategory: subcategoryName,
       servicename: serviceName,
@@ -46,8 +48,14 @@ const ServiceForm = ({
       pincode,
       district,
       state,
-      price: pricingDetails, // All key-value pairs for pricing
+      price: pricingDetails,
       miscFee,
+      min: minPrice,
+      max: maxPrice,
+      metric,
+      creditEligibility,
+      taxPercentage,
+      platformCommission,
       isCash: isCashOnDelivery,
     };
 
@@ -85,16 +93,12 @@ const ServiceForm = ({
 
   return (
     <div className="tiger-service-form__container">
-      <h4 className="tiger-form-header">Add New Service</h4>
+      <h4 className="tiger-form-header">Service Pricing</h4>
       <form onSubmit={handleFormSubmit} className="tiger-service-form">
         {/* Display validation errors */}
-        {errors.tierName && (
-          <div className="tiger-error-message">{errors.tierName}</div>
-        )}
         {errors.pincode && (
           <div className="tiger-error-message">{errors.pincode}</div>
         )}
-
         {/* Location Details */}
         <div className="tiger-form-group">
           <label className="tiger-form-label">Location:</label>
@@ -105,7 +109,6 @@ const ServiceForm = ({
             readOnly
           />
         </div>
-
         <div className="tiger-form-group">
           <label className="tiger-form-label">Pincode:</label>
           <input
@@ -115,7 +118,6 @@ const ServiceForm = ({
             readOnly
           />
         </div>
-
         <div className="tiger-form-group">
           <label className="tiger-form-label">District:</label>
           <input
@@ -125,7 +127,6 @@ const ServiceForm = ({
             readOnly
           />
         </div>
-
         <div className="tiger-form-group">
           <label className="tiger-form-label">State:</label>
           <input
@@ -135,12 +136,11 @@ const ServiceForm = ({
             readOnly
           />
         </div>
-
         {/* Dynamic Pricing Fields */}
         <div className="tiger-form-group">
           <h4>Pricing Details</h4>
           {Object.keys(pricingDetails).map((key) => (
-            <div key={key} className="tiger-dynamic-field">
+            <div key={key} className="tiger-service-form__dynamic-field">
               <label>{key}:</label>
               <span>{pricingDetails[key]}</span>
               <button
@@ -148,7 +148,7 @@ const ServiceForm = ({
                 className="tiger-btn-remove"
                 onClick={() => handleRemovePriceField(key)}
               >
-                Remove
+                <FontAwesomeIcon icon={faTrashAlt} /> Remove
               </button>
             </div>
           ))}
@@ -174,11 +174,10 @@ const ServiceForm = ({
               className="tiger-btn-add"
               onClick={handleAddPriceField}
             >
-              Add Pricing Field
+              <FontAwesomeIcon icon={faPlus} /> Add Pricing Field
             </button>
           </div>
         </div>
-
         {/* Misc Fee */}
         <div className="tiger-form-group">
           <label className="tiger-form-label">Misc Fee:</label>
@@ -190,8 +189,70 @@ const ServiceForm = ({
             placeholder="Enter misc fee"
           />
         </div>
-
-        {/* Cash on Delivery Checkbox */}
+        {/* Min and Max Price */}
+        <div className="tiger-form-group">
+          <label className="tiger-form-label">Min Price:</label>
+          <input
+            type="number"
+            className="tiger-form-control tiger-form-input"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            placeholder="Enter minimum price"
+          />
+        </div>
+        <div className="tiger-form-group">
+          <label className="tiger-form-label">Max Price:</label>
+          <input
+            type="number"
+            className="tiger-form-control tiger-form-input"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            placeholder="Enter maximum price"
+          />
+        </div>
+        {/* Metric */}
+        <div className="tiger-form-group">
+          <label className="tiger-form-label">Metric (e.g., kg, piece):</label>
+          <input
+            type="text"
+            className="tiger-form-control tiger-form-input"
+            value={metric}
+            onChange={(e) => setMetric(e.target.value)}
+            placeholder="Enter metric"
+          />
+        </div>
+        {/* Credit Eligibility */}
+        <div className="tiger-form-group tiger-form-checkbox-group">
+          <label className="tiger-form-label">Credit Eligibility:</label>
+          <input
+            type="checkbox"
+            checked={creditEligibility}
+            onChange={() => setCreditEligibility(!creditEligibility)}
+          />
+        </div>
+        {/* Tax Percentage */}
+        <div className="tiger-form-group">
+          <label className="tiger-form-label">Tax Percentage (%):</label>
+          <input
+            type="number"
+            className="tiger-form-control tiger-form-input"
+            value={taxPercentage}
+            onChange={(e) => setTaxPercentage(e.target.value)}
+            placeholder="Enter tax percentage"
+          />
+        </div>
+        {/* Platform Commission */}
+        <div className="tiger-form-group">
+          <label className="tiger-form-label">Platform Commission (%):</label>
+          <input
+            type="number"
+            className="tiger-form-control tiger-form-input"
+            value={platformCommission}
+            onChange={(e) => setPlatformCommission(e.target.value)}
+            placeholder="Enter platform commission"
+          />
+        </div>{" "}
+        {/* Cash on Delivery */}
         <div className="tiger-form-group tiger-form-checkbox-group">
           <label className="tiger-form-label">Cash on Delivery:</label>
           <input
@@ -200,9 +261,8 @@ const ServiceForm = ({
             onChange={() => setIsCashOnDelivery(!isCashOnDelivery)}
           />
         </div>
-
         {/* Submit and Close Buttons */}
-        <div className="tiger-form-actions">
+        <div className="tiger-service-form__actions">
           <button type="submit" className="tiger-btn-submit">
             Add Service
           </button>

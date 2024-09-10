@@ -1,251 +1,273 @@
-import React, { useState } from "react";
-import { FaPlus, FaSearch, FaUpload } from "react-icons/fa";
-import {
-  saveLocations,
-  fetchPincodeLocation,
-  uploadCsvFile,
-} from "./api/Locations-api"; // Import API functions
-import { toast } from "react-hot-toast";
+import React, { useState, useEffect } from "react";
+import { deleteLocation, uploadCsvFile } from "./api/Locations-api";
+import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import Papa from "papaparse";
+import { confirmAlert } from "react-confirm-alert"; // Import for confirmation dialogs
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import default styles for confirmation
 import "./LocationManager.css";
-import LocationsList from "./LocationsList";
 
 const LocationManager = () => {
-  const [group, setGroup] = useState("default");
-  const [pincode, setPincode] = useState("");
-  const [csvFile, setCsvFile] = useState(null);
-  const [tierName, setTierName] = useState("");
-  const [locations, setLocations] = useState([]);
-  const [reloadLocations, setReloadLocations] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchPincode, setSearchPincode] = useState(""); // Search pincode for filtering locations
+  const [locations, setLocations] = useState([]); // State to hold locations
+  const [file, setFile] = useState(null);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
+  const [showActions, setShowActions] = useState(false);
 
-  // Handle group toggle between 'default' and 'custom'
-  const handleGroupToggle = (groupType) => {
-    setGroup(groupType);
+  // Fetch locations from the backend
+  const fetchLocations = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        "https://api.coolieno1.in/v1.0/core/locations",
+      );
+      setLocations(response.data);
+      setError("");
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+      setError("No Locations are available.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Function to add a pincode using the Mapbox API
-  const handlePincodeAdd = async () => {
-    if (!pincode) {
-      toast.error("Please enter a pincode.");
+  // Handle file upload
+  const handleUpload = async () => {
+    if (!file) {
+      setError("Please select a valid CSV file before uploading.");
       return;
     }
 
+    setIsUploading(true);
     try {
-      const place = await fetchPincodeLocation(pincode); // Fetch location data using API function
-      const newLocation = {
-        pincode,
-        location: place.place_name || "Unknown location",
-      };
+      await uploadCsvFile(file, "default");
 
-      setLocations((prevLocations) => [...prevLocations, newLocation]);
-      setPincode(""); // Reset the pincode input field
-      setIsModalOpen(true); // Show the modal after adding the location
+      await fetchLocations(); // Fetch updated locations after upload
     } catch (error) {
-      toast.error(error.message);
+      console.error("Error uploading file:", error);
+      setError("Failed to upload file.");
+    } finally {
+      setIsUploading(false);
     }
   };
 
-  // Handle CSV file upload
-  const handleCsvUpload = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  // Handle location deletion
+  const handleDelete = async (id) => {
+    confirmAlert({
+      title: "Confirm to delete",
+      message: "Are you sure to delete this location?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            try {
+              await deleteLocation(id);
 
-    setCsvFile(file);
-
-    try {
-      await uploadCsvFile(file, group); // Upload CSV using API function
-      toast.success("CSV file has been uploaded successfully.");
-      setReloadLocations((prev) => !prev);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  // Handle searching locations by pincode
-  const handleSearchChange = (e) => {
-    setSearchPincode(e.target.value); // Update searchPincode state on input change
-  };
-
-  // Format the manually added locations to send to the API
-  const formatLocationsForApi = (locations) => {
-    return locations.map((location) => {
-      const fullLocation = location.location || "Unknown location";
-      const splitLocation = fullLocation.split(",").map((part) => part.trim());
-
-      const pincode = location.pincode || "N/A";
-      const city = splitLocation[1] || "N/A"; // Assume city is the second part
-      const state = splitLocation[2] || "Andhra Pradesh"; // Assume state is the third part
-
-      return {
-        location: city,
-        pincode: pincode,
-        district: location.district || "N/A",
-        state: state,
-        category: location.category || "N/A",
-        subcategory: location.subcategory || "N/A",
-        servicename: location.servicename || "N/A",
-        price: location.price || {},
-        min: location.min || 0,
-        max: location.max || 0,
-        metric: location.metric || 0,
-        creditEligibility: location.creditEligibility || false,
-        taxPercentage: location.taxPercentage || 0,
-        miscFee: location.miscFee || 0,
-        platformCommission: location.platformCommission || 0,
-        isCash: location.isCash || false,
-        group: group || "default",
-        tierName: location.tierName || "",
-      };
+              setLocations(locations.filter((loc) => loc._id !== id)); // Remove from local state
+            } catch (error) {
+              console.error("Error deleting location:", error);
+              setError("Failed to delete location.");
+            }
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
     });
   };
 
-  // Handle saving manually added locations
-  const handleSaveLocations = async () => {
-    try {
-      const formattedLocations = formatLocationsForApi(locations);
-      await saveLocations(formattedLocations); // Save locations using API function
+  // Handle delete all locations
+  const handleDeleteAll = async () => {
+    confirmAlert({
+      title: "Confirm to delete all",
+      message: "Are you sure to delete all locations?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            try {
+              await axios.delete(
+                "https://api.coolieno1.in/v1.0/core/locations/delete",
+              );
 
-      toast.success("Locations saved successfully.");
-      setReloadLocations((prev) => !prev);
-      setLocations([]); // Clear the manually added locations after saving
-      setIsModalOpen(false); // Close the modal after saving
-    } catch (error) {
-      toast.error(error.message);
+              setLocations([]); // Clear local state
+            } catch (error) {
+              console.error("Error deleting all locations:", error);
+              setError("Failed to delete all locations.");
+            }
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
+  };
+
+  // Handle search input change
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value.toLowerCase());
+  };
+
+  // Filter locations based on search query
+  const filteredLocations = locations.filter((location) =>
+    Object.values(location).some((value) =>
+      String(value).toLowerCase().includes(searchQuery),
+    ),
+  );
+
+  // Handle sorting by column
+  const handleSort = (key) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
     }
+    setSortConfig({ key, direction });
   };
 
-  // Handle closing the modal
-  const handleCloseModal = () => {
-    setLocations([]); // Clear locations when modal is closed
-    setIsModalOpen(false); // Close the modal
-  };
+  // Sort locations based on sort configuration
+  const sortedLocations = [...filteredLocations].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === "ascending" ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === "ascending" ? 1 : -1;
+    }
+    return 0;
+  });
+
+  // Fetch all locations when the component mounts
+  useEffect(() => {
+    fetchLocations(); // Fetch on component mount
+  }, []);
+
+  // Display a loading message or error
+  if (isLoading) {
+    return <p>Loading locations...</p>;
+  }
 
   return (
-    <div className="location-manager-container">
-      {/* Tier input */}
-      <div className="tier-section">
-        <label htmlFor="tier-name" className="tier-label">
-          Tier Name
+    <div className="tiger-location-manager">
+      <h1 className="tiger-header">Upload Locations and Pricing</h1>
+
+      {/* File Upload Section */}
+      <div className="tiger-upload-container">
+        <label className="custom-file-label" htmlFor="file-upload">
+          <FontAwesomeIcon icon={faUpload} /> Choose File
         </label>
         <input
-          id="tier-name"
+          id="file-upload"
+          type="file"
+          accept=".csv"
+          onChange={(e) => {
+            setFile(e.target.files[0]);
+          }}
+          className="custom-file-input"
+        />
+
+        {/* Show the selected file name */}
+        {file && <p className="file-name">{file.name}</p>}
+
+        <button
+          onClick={handleUpload}
+          className="tiger-upload-btn"
+          disabled={!file || isUploading}
+        >
+          <FontAwesomeIcon icon={faUpload} />{" "}
+          {isUploading ? "Uploading..." : "Upload"}
+        </button>
+      </div>
+
+      {/* Error Message */}
+      {error && <p className="error-message">{error}</p>}
+
+      {/* Search Input */}
+      <div className="tiger-search-container">
+        <input
           type="text"
-          value={tierName}
-          onChange={(e) => setTierName(e.target.value)}
-          placeholder="Enter Tier Name"
-          className="tier-input"
+          className="tiger-search-input"
+          placeholder="Search locations..."
+          value={searchQuery}
+          onChange={handleSearchChange}
         />
       </div>
 
-      {/* Group toggle */}
-      <div className="location-container">
-        <div className="group-toggle">
-          <button
-            className={`group-btn ${group === "default" ? "active" : ""}`}
-            onClick={() => handleGroupToggle("default")}
-          >
-            Default
-          </button>
-          <button
-            className={`group-btn ${group === "custom" ? "active" : ""}`}
-            onClick={() => handleGroupToggle("custom")}
-          >
-            Custom
-          </button>
-        </div>
-
-        {/* Location actions: Pincode input, CSV upload, and search */}
-        <div className="location-actions">
-          <div className="location-inputs">
-            <div className="input-with-icon">
-              <input
-                type="text"
-                value={pincode}
-                onChange={(e) => setPincode(e.target.value)}
-                placeholder="Add a Pincode"
-                className="pincode-input"
-              />
-              <button className="icon-button" onClick={handlePincodeAdd}>
-                <FaPlus />
-              </button>
-            </div>
-
-            <div className="input-with-icon file-upload-container">
-              <label htmlFor="csv-upload" className="csv-upload-label">
-                Choose File
-              </label>
-              <input
-                type="file"
-                id="csv-upload"
-                className="csv-upload-input"
-                onChange={handleCsvUpload}
-              />
-              <button className="icon-button">
-                <FaUpload />
-              </button>
-            </div>
-
-            <div className="input-with-icon">
-              <input
-                type="text"
-                value={searchPincode}
-                onChange={handleSearchChange} // Track search input changes
-                placeholder="Search a Pincode"
-                className="search-input"
-              />
-              <button className="icon-button">
-                <FaSearch />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Show selected file if uploaded */}
-        {csvFile && (
-          <div className="file-upload-name">
-            <strong>Selected File:</strong> {csvFile.name}
-          </div>
-        )}
-
-        {/* Locations list */}
-        <div className="locations-list-api">
-          <LocationsList
-            group={group}
-            tierName={tierName}
-            reload={reloadLocations}
-            searchPincode={searchPincode} // Pass search pincode to LocationsList
+      {/* Toggle Show Actions Column */}
+      <div className="tiger-actions-toggle">
+        <label className="tiger-toggle-label">
+          <h4>Actions</h4>
+          <input
+            type="checkbox"
+            checked={showActions}
+            onChange={() => setShowActions(!showActions)}
+            className="tiger-toggle-input"
           />
-        </div>
+          <span className="tiger-toggle-slider"></span>
+        </label>
+        {/* Delete All Button */}
+        {showActions && (
+          <button className="tiger-delete-all-btn" onClick={handleDeleteAll}>
+            Delete All
+          </button>
+        )}
+      </div>
 
-        {/* Modal Popup */}
-        {isModalOpen && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <h3>Manually Added Locations</h3>
-              <div className="modal-locations-scrollable">
-                {locations.length > 0 ? (
-                  locations.map((location, index) => (
-                    <div className="modal-location-strip-card" key={index}>
-                      <span>{`${location.pincode} / ${location.location}`}</span>
-                    </div>
-                  ))
-                ) : (
-                  <p>No locations added manually</p>
-                )}
-              </div>
-
-              <button
-                className="modal-save-locations-btn"
-                onClick={handleSaveLocations}
-              >
-                Save Locations
-              </button>
-              <button className="modal-cancel-btn" onClick={handleCloseModal}>
-                Cancel
-              </button>
-            </div>
-          </div>
+      {/* Locations Table */}
+      <div className="tiger-locations-table-wrapper">
+        {locations.length > 0 ? (
+          <table className="tiger-locations-table">
+            <thead>
+              <tr>
+                <th onClick={() => handleSort("district")}>District</th>
+                <th onClick={() => handleSort("location")}>Location</th>
+                <th onClick={() => handleSort("pincode")}>Pincode</th>
+                <th onClick={() => handleSort("state")}>State</th>
+                <th onClick={() => handleSort("category")}>Category</th>
+                <th onClick={() => handleSort("subcategory")}>Subcategory</th>
+                <th onClick={() => handleSort("servicename")}>Service Name</th>
+                <th onClick={() => handleSort("price")}>Price</th>
+                <th onClick={() => handleSort("min")}>Min</th>
+                <th onClick={() => handleSort("max")}>Max</th>
+                {showActions && <th className="sticky-col">Actions</th>}
+              </tr>
+            </thead>
+            <tbody>
+              {sortedLocations.map((location) => (
+                <tr key={location._id}>
+                  <td>{location.district}</td>
+                  <td>{location.location}</td>
+                  <td>{location.pincode}</td>
+                  <td>{location.state}</td>
+                  <td>{location.category}</td>
+                  <td>{location.subcategory}</td>
+                  <td>{location.servicename}</td>
+                  <td>{JSON.stringify(location.price)}</td>
+                  <td>{location.min}</td>
+                  <td>{location.max}</td>
+                  {showActions && (
+                    <td className="sticky-col">
+                      <button className="tiger-edit-btn">
+                        <FontAwesomeIcon icon={faEdit} />
+                      </button>
+                      <button
+                        className="tiger-delete-btn"
+                        onClick={() => handleDelete(location._id)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No locations available.</p>
         )}
       </div>
     </div>

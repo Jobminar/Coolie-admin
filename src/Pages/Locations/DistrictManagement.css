@@ -1,0 +1,178 @@
+/* Container for District Management */
+.district-management {
+    background-color: #ffffff;
+    /* Light background */
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #ffdbbf;
+    /* Tiger orange border */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    /* Light shadow */
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Header Row */
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.tiger-header-row h2 {
+    color: #000000;
+    /* Tiger orange */
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+}
+
+/* Toggle Button for Add Service / Back */
+.toggle-button {
+    background-color: transparent;
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.toggle-button:hover {
+    color: rgb(74, 74, 74);
+    /* Darker tiger orange */
+    /* Hover shadow */
+}
+
+.toggle-button svg {
+    margin-right: 8px;
+}
+
+/* Dropdown Container */
+.dropdown-container {
+    margin-bottom: 20px;
+}
+
+.dropdown-container label {
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.dropdown-container select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.dropdown-container select:focus {
+    outline: none;
+    border-color: #ffdbbf;
+    /* Tiger orange */
+    box-shadow: 0 0 8px rgba(255, 111, 0, 0.4);
+}
+
+.dropdown-container select:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* District Profile Section */
+.district-profile {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    /* Light shadow */
+}
+
+.district-profile h3 {
+    color: #ffdbbf;
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+/* Category Section */
+.category-section {
+    margin-bottom: 20px;
+}
+
+.category-section h4 {
+    font-size: 20px;
+    color: #ffdbbf;
+    /* Tiger orange */
+    margin-bottom: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Subcategory Section */
+.subcategory-section h5 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 8px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Services List */
+.services-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.service-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.service-item:hover {
+    background-color: #ffdbbf;
+    /* Tiger orange on hover */
+    color: white;
+}
+
+.service-item span {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+}
+
+/* Error Message Styling */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 15px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Fade In Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
