@@ -117,34 +117,51 @@ const CustomPricing = ({ onLocationSelected }) => {
       p.trim().toLowerCase(),
     );
 
-    // Break down the fullAddress into smaller parts for comparison
-    const addressParts = fullAddress
-      .split(/[,\s]+/)
-      .map((part) => part.toLowerCase().trim());
+    // Break down the fullAddress into tokens for comparison
+    const addressTokens = fullAddress
+      .toLowerCase()
+      .split(/[,\s]+/) // Split by commas and spaces
+      .map((part) => part.trim());
 
-    // Helper function to match each address part with unique values
-    const containsMatch = (value, uniqueValues) => {
-      return uniqueValues.some(
-        (uniqueValue) =>
-          uniqueValue.includes(value) || value.includes(uniqueValue),
-      );
+    // Helper function to match tokens with unique values
+    const containsTokenMatch = (tokens, uniqueValues) => {
+      return tokens.some((token) => {
+        return uniqueValues.some(
+          (value) => value.includes(token) || token.includes(value),
+        );
+      });
     };
 
-    // Check for exact or partial matches
-    const isDistrictValid = containsMatch(
-      normalizedDistrict,
+    // Flexible field matching: match selected address with any relevant fields from the API data
+    const isDistrictValid = containsTokenMatch(
+      [
+        normalizedDistrict,
+        normalizedLocation,
+        normalizedPincode,
+        ...addressTokens,
+      ],
       normalizedUniqueDistricts,
     );
-    const isLocationValid = containsMatch(
-      normalizedLocation,
+    const isLocationValid = containsTokenMatch(
+      [
+        normalizedDistrict,
+        normalizedLocation,
+        normalizedPincode,
+        ...addressTokens,
+      ],
       normalizedUniqueLocations,
     );
-    const isPincodeValid = containsMatch(
-      normalizedPincode,
+    const isPincodeValid = containsTokenMatch(
+      [
+        normalizedDistrict,
+        normalizedLocation,
+        normalizedPincode,
+        ...addressTokens,
+      ],
       normalizedUniquePincodes,
     );
 
-    // Determine if the address is valid if any of the parts match
+    // Determine if the address is valid if any of the fields match with API data
     const isValid = isDistrictValid || isLocationValid || isPincodeValid;
 
     setIsValidLocation(isValid);

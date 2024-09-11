@@ -3,6 +3,7 @@ import { fetchCategories, fetchSubcategories, fetchServices } from "./api"; // A
 import { FaPlus, FaTrash, FaEdit, FaSave } from "react-icons/fa";
 import Switch from "react-switch"; // For toggling credit eligibility and cash payment
 import "./PricingForm.css"; // Custom CSS
+import axios from "axios";
 
 const PricingForm = ({ location, district, pincode, isValid }) => {
   // State for form fields

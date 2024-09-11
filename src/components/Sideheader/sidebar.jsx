@@ -1,5 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { FaCaretDown } from "react-icons/fa";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./sidebar.css";
 import FilterBar from "../FilterBar/FilterBar";
@@ -9,7 +11,7 @@ import { FilterBarContext } from "../../FilterBarContext";
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { filterBarProps, setFilterBarProps } = useContext(FilterBarContext);
+  const { filterBarProps } = useContext(FilterBarContext);
   const [activeItem, setActiveItem] = useState(location.pathname);
   const [serviceManagerDropdown, setServiceManagerDropdown] = useState(false);
   const [promotionsDropdown, setPromotionsDropdown] = useState(false);
@@ -17,12 +19,28 @@ const Sidebar = ({ children }) => {
   const [marketingDropdown, setMarketingDropdown] = useState(false);
   const [bannersDropdown, setBannersDropdown] = useState(false);
   const [inductionDropdown, setInductionDropdown] = useState(false);
-  const [locationsDropdown, setLocationsDropdown] = useState(false); // Added for Locations & Pricing
+  const [locationsDropdown, setLocationsDropdown] = useState(false);
   const [activeDropdownItem, setActiveDropdownItem] = useState("");
+
+  const sidebarRef = useRef(null); // Ref to detect clicks outside sidebar
 
   useEffect(() => {
     setActiveItem(location.pathname);
   }, [location.pathname]);
+
+  // Close dropdown when clicking outside the dropdown area
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        closeAllDropdowns();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleNavigation = (path, dropdownItem = "") => {
     setActiveItem(path);
@@ -44,11 +62,11 @@ const Sidebar = ({ children }) => {
     setMarketingDropdown(false);
     setBannersDropdown(false);
     setInductionDropdown(false);
-    setLocationsDropdown(false); // Close Locations dropdown
+    setLocationsDropdown(false);
   };
 
   const toggleDropdown = (setDropdownFn, isOpen, firstItem, firstPath) => {
-    closeAllDropdowns();
+    closeAllDropdowns(); // Close all other dropdowns first
     setDropdownFn(!isOpen);
     if (!isOpen) {
       setActiveDropdownItem(firstItem);
@@ -99,7 +117,6 @@ const Sidebar = ({ children }) => {
       "/induction",
     );
 
-  // New function for Locations & Pricing Dropdown
   const toggleLocationsDropdown = () =>
     toggleDropdown(
       setLocationsDropdown,
@@ -190,7 +207,7 @@ const Sidebar = ({ children }) => {
 
   return (
     <div className="mainContainer">
-      <div className="sidebar">
+      <div className="sidebar" ref={sidebarRef}>
         <div
           className={activeItem === "/" ? "active" : ""}
           onClick={() => handleNavigation("/")}
@@ -213,17 +230,29 @@ const Sidebar = ({ children }) => {
                 className={`dropdown-item ${
                   activeDropdownItem === "locations" ? "active" : ""
                 }`}
-                onClick={() => handleNavigation("/locations", "Locations")}
+                onClick={() => handleNavigation("/locations", "locations")}
               >
                 Locations
+                {activeDropdownItem === "locations" && (
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ color: "#ffa226", marginLeft: "5px" }}
+                  />
+                )}
               </div>
               <div
                 className={`dropdown-item ${
                   activeDropdownItem === "pricing" ? "active" : ""
                 }`}
-                onClick={() => handleNavigation("/pricing", "Pricing")}
+                onClick={() => handleNavigation("/pricing", "pricing")}
               >
                 Pricing
+                {activeDropdownItem === "pricing" && (
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ color: "#ffa226", marginLeft: "5px" }}
+                  />
+                )}
               </div>
             </div>
           )}
@@ -244,19 +273,31 @@ const Sidebar = ({ children }) => {
                 className={`dropdown-item ${
                   activeDropdownItem === "addservice" ? "active" : ""
                 }`}
-                onClick={() => handleNavigation("/addservice", "Add Service")}
+                onClick={() => handleNavigation("/addservice", "addservice")}
               >
                 Add Service
+                {activeDropdownItem === "addservice" && (
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ color: "#ffa226", marginLeft: "5px" }}
+                  />
+                )}
               </div>
               <div
                 className={`dropdown-item ${
                   activeDropdownItem === "manageservice" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/manageservice", "Manage Service")
+                  handleNavigation("/manageservice", "manageservice")
                 }
               >
                 Manage Service
+                {activeDropdownItem === "manageservice" && (
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ color: "#ffa226", marginLeft: "5px" }}
+                  />
+                )}
               </div>
             </div>
           )}
@@ -297,30 +338,48 @@ const Sidebar = ({ children }) => {
                   activeDropdownItem === "user-banners" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/user-banners", "User Banners")
+                  handleNavigation("/user-banners", "user-banners")
                 }
               >
                 User Banners
+                {activeDropdownItem === "user-banners" && (
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ color: "#ffa226", marginLeft: "5px" }}
+                  />
+                )}
               </div>
               <div
                 className={`dropdown-item ${
                   activeDropdownItem === "provider-banners" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/provider-banners", "Provider Banners")
+                  handleNavigation("/provider-banners", "provider-banners")
                 }
               >
                 Provider Banners
+                {activeDropdownItem === "provider-banners" && (
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ color: "#ffa226", marginLeft: "5px" }}
+                  />
+                )}
               </div>
               <div
                 className={`dropdown-item ${
                   activeDropdownItem === "popup-banners" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/popup-banners", "Popup Banner")
+                  handleNavigation("/popup-banners", "popup-banners")
                 }
               >
                 Popup Banner
+                {activeDropdownItem === "popup-banners" && (
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ color: "#ffa226", marginLeft: "5px" }}
+                  />
+                )}
               </div>
             </div>
           )}
@@ -341,20 +400,32 @@ const Sidebar = ({ children }) => {
                   activeDropdownItem === "user-promotion" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/user-promotion", "User Promotions")
+                  handleNavigation("/user-promotion", "user-promotion")
                 }
               >
                 User Promotions
+                {activeDropdownItem === "user-promotion" && (
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ color: "#ffa226", marginLeft: "5px" }}
+                  />
+                )}
               </div>
               <div
                 className={`dropdown-item ${
                   activeDropdownItem === "provider-promotion" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/provider-promotion", "Provider Promotions")
+                  handleNavigation("/provider-promotion", "provider-promotion")
                 }
               >
                 Provider Promotions
+                {activeDropdownItem === "provider-promotion" && (
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ color: "#ffa226", marginLeft: "5px" }}
+                  />
+                )}
               </div>
             </div>
           )}
@@ -375,20 +446,32 @@ const Sidebar = ({ children }) => {
                   activeDropdownItem === "user-packages" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/user-packages", "User Packages")
+                  handleNavigation("/user-packages", "user-packages")
                 }
               >
                 User Packages
+                {activeDropdownItem === "user-packages" && (
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ color: "#ffa226", marginLeft: "5px" }}
+                  />
+                )}
               </div>
               <div
                 className={`dropdown-item ${
                   activeDropdownItem === "provider-packages" ? "active" : ""
                 }`}
                 onClick={() =>
-                  handleNavigation("/provider-packages", "Provider Packages")
+                  handleNavigation("/provider-packages", "provider-packages")
                 }
               >
                 Provider Packages
+                {activeDropdownItem === "provider-packages" && (
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ color: "#ffa226", marginLeft: "5px" }}
+                  />
+                )}
               </div>
             </div>
           )}
@@ -410,12 +493,24 @@ const Sidebar = ({ children }) => {
                 onClick={() => handleNavigation("/induction")}
               >
                 Induction
+                {activeItem === "/induction" && (
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ color: "#ffa226", marginLeft: "5px" }}
+                  />
+                )}
               </div>
               <div
                 className={activeItem === "/training" ? "active" : ""}
                 onClick={() => handleNavigation("/training")}
               >
                 Training
+                {activeItem === "/training" && (
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ color: "#ffa226", marginLeft: "5px" }}
+                  />
+                )}
               </div>
             </div>
           )}

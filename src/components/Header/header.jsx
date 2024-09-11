@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import Person2OutlinedIcon from "@mui/icons-material/Person2Outlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import SearchInput from "./search";
-import logoimg from "../Images/logo.png";
+import logoimg from "../Images/brand-logo.png";
 import "./header.css";
 
 const Header = () => {

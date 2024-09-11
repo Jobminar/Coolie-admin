@@ -3,7 +3,7 @@
     height: 4rem;
     margin: none;
     padding: none;
-    background-color: #030B33;
+    background-color: black;
     display: grid;
     grid-template-columns: 30% 40% 30%;
     width: 100vw;
@@ -13,16 +13,20 @@
     border: 1px solid white;
 } */
 .logo-section {
-    /* border: 1px solid white; */
     display: flex;
-    /* justify-content: center; */
+    justify-content: center;
     align-items: center;
-    padding-left: 3rem;
+    background-color: aliceblue;
+    border-radius: 20px;
+    width: 12rem;
+    margin: 1rem;
+    height: auto;
+    padding: 0.1rem
 }
 
 .logo-section img {
-    width: 4.5rem;
-    height: 4.5rem;
+    width: auto;
+    height: 2rem;
 }
 
 .logic-section {
@@ -37,7 +41,7 @@
 
 .logic-section input {
     height: 2rem;
-    background-color: #030B33;
+    background-color: black;
     /* border: 1px solid #FFFFFF; */
     border-radius: 10px;
     color: white;
