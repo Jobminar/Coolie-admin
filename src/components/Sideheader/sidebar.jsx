@@ -9,7 +9,7 @@ import { FilterBarContext } from "../../FilterBarContext";
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { filterBarProps } = useContext(FilterBarContext);
+  const { filterBarProps, setFilterBarProps } = useContext(FilterBarContext);
   const [activeItem, setActiveItem] = useState(location.pathname);
   const [serviceManagerDropdown, setServiceManagerDropdown] = useState(false);
   const [promotionsDropdown, setPromotionsDropdown] = useState(false);
@@ -17,7 +17,7 @@ const Sidebar = ({ children }) => {
   const [marketingDropdown, setMarketingDropdown] = useState(false);
   const [bannersDropdown, setBannersDropdown] = useState(false);
   const [inductionDropdown, setInductionDropdown] = useState(false);
-  const [locationsDropdown, setLocationsDropdown] = useState(false);
+  const [locationsDropdown, setLocationsDropdown] = useState(false); // Added for Locations & Pricing
   const [activeDropdownItem, setActiveDropdownItem] = useState("");
 
   useEffect(() => {
@@ -44,26 +44,18 @@ const Sidebar = ({ children }) => {
     setMarketingDropdown(false);
     setBannersDropdown(false);
     setInductionDropdown(false);
-    setLocationsDropdown(false);
+    setLocationsDropdown(false); // Close Locations dropdown
   };
 
   const toggleDropdown = (setDropdownFn, isOpen, firstItem, firstPath) => {
-    closeAllDropdowns(); // Close all other dropdowns
-    setDropdownFn(!isOpen); // Toggle the clicked dropdown
+    closeAllDropdowns();
+    setDropdownFn(!isOpen);
     if (!isOpen) {
-      // If dropdown is being opened, make the first item active
       setActiveDropdownItem(firstItem);
-      handleNavigation(firstPath, firstItem); // Navigate to the first item
+      handleNavigation(firstPath, firstItem);
     }
   };
 
-  const toggleLocationsDropdown = () =>
-    toggleDropdown(
-      setLocationsDropdown,
-      locationsDropdown,
-      "locations",
-      "/locations",
-    );
   const toggleServiceManagerDropdown = () =>
     toggleDropdown(
       setServiceManagerDropdown,
@@ -71,6 +63,7 @@ const Sidebar = ({ children }) => {
       "addservice",
       "/addservice",
     );
+
   const togglePromotionsDropdown = () =>
     toggleDropdown(
       setPromotionsDropdown,
@@ -78,6 +71,7 @@ const Sidebar = ({ children }) => {
       "user-promotion",
       "/user-promotion",
     );
+
   const togglePackagesDropdown = () =>
     toggleDropdown(
       setPackagesDropdown,
@@ -85,14 +79,33 @@ const Sidebar = ({ children }) => {
       "user-packages",
       "/user-packages",
     );
+
   const toggleMarketingDropdown = () =>
     toggleDropdown(setMarketingDropdown, marketingDropdown, "user", "/user");
+
+  const toggleBannersDropdown = () =>
+    toggleDropdown(
+      setBannersDropdown,
+      bannersDropdown,
+      "user-banners",
+      "/user-banners",
+    );
+
   const toggleInductionDropdown = () =>
     toggleDropdown(
       setInductionDropdown,
       inductionDropdown,
       "induction",
       "/induction",
+    );
+
+  // New function for Locations & Pricing Dropdown
+  const toggleLocationsDropdown = () =>
+    toggleDropdown(
+      setLocationsDropdown,
+      locationsDropdown,
+      "locations",
+      "/locations",
     );
 
   const handleInclusionsNavigation = () => {
@@ -108,7 +121,6 @@ const Sidebar = ({ children }) => {
       "/loyality-cards",
       "/user-banners",
       "/provider-banners",
-      "/reels",
       "/popup-banners",
       "/promotionsDropdown",
       "/user-promotion",
@@ -186,7 +198,7 @@ const Sidebar = ({ children }) => {
           Jobs Area
         </div>
 
-        {/* Locations Dropdown */}
+        {/* Locations & Pricing Dropdown */}
         <div
           className={`dropdown locationsDropdown ${
             locationsDropdown ? "active" : ""
@@ -250,7 +262,70 @@ const Sidebar = ({ children }) => {
           )}
         </div>
 
-        {/* Promotions Dropdown */}
+        <div
+          className={activeItem === "/usercorner" ? "active" : ""}
+          onClick={() => handleNavigation("/usercorner")}
+        >
+          User Corner
+        </div>
+        <div
+          className={activeItem === "/providersrcorner" ? "active" : ""}
+          onClick={() => handleNavigation("/providersrcorner")}
+        >
+          Providers Corner
+        </div>
+        <div
+          className={activeItem === "/loyality-cards" ? "active" : ""}
+          onClick={() => handleNavigation("/loyality-cards")}
+        >
+          Loyalty Cards
+        </div>
+
+        {/* Banners Dropdown */}
+        <div
+          className={`dropdown bannersDropdown ${
+            bannersDropdown ? "active" : ""
+          }`}
+        >
+          <div onClick={toggleBannersDropdown}>
+            Banners <FaCaretDown />
+          </div>
+          {bannersDropdown && (
+            <div className="dropdown-menu">
+              <div
+                className={`dropdown-item ${
+                  activeDropdownItem === "user-banners" ? "active" : ""
+                }`}
+                onClick={() =>
+                  handleNavigation("/user-banners", "User Banners")
+                }
+              >
+                User Banners
+              </div>
+              <div
+                className={`dropdown-item ${
+                  activeDropdownItem === "provider-banners" ? "active" : ""
+                }`}
+                onClick={() =>
+                  handleNavigation("/provider-banners", "Provider Banners")
+                }
+              >
+                Provider Banners
+              </div>
+              <div
+                className={`dropdown-item ${
+                  activeDropdownItem === "popup-banners" ? "active" : ""
+                }`}
+                onClick={() =>
+                  handleNavigation("/popup-banners", "Popup Banner")
+                }
+              >
+                Popup Banner
+              </div>
+            </div>
+          )}
+        </div>
+
         <div
           className={`dropdown promotionsDropdown ${
             promotionsDropdown ? "active" : ""
@@ -285,7 +360,6 @@ const Sidebar = ({ children }) => {
           )}
         </div>
 
-        {/* Packages Dropdown */}
         <div
           className={`dropdown packagesDropdown ${
             packagesDropdown ? "active" : ""
@@ -309,7 +383,6 @@ const Sidebar = ({ children }) => {
               <div
                 className={`dropdown-item ${
                   activeDropdownItem === "provider-packages" ? "active" : ""
-                }
                 }`}
                 onClick={() =>
                   handleNavigation("/provider-packages", "Provider Packages")
@@ -348,59 +421,11 @@ const Sidebar = ({ children }) => {
           )}
         </div>
 
-        {/* Other sidebar items */}
-        <div
-          className={activeItem === "/reels" ? "active" : ""}
-          onClick={() => handleNavigation("/reels")}
-        >
-          Reels
-        </div>
         <div
           className={activeItem === "/subadmin" ? "active" : ""}
           onClick={() => handleNavigation("/subadmin")}
         >
           Sub-Admin
-        </div>
-
-        {/* Marketing Dropdown */}
-        <div
-          className={`dropdown marketingDropdown ${
-            marketingDropdown ? "active" : ""
-          }`}
-        >
-          <div onClick={toggleMarketingDropdown}>
-            Marketing <FaCaretDown />
-          </div>
-          {marketingDropdown && (
-            <div className="dropdown-menu">
-              <div
-                className={`dropdown-item ${
-                  activeDropdownItem === "user" ? "active" : ""
-                }`}
-                onClick={() => handleNavigation("/user", "User")}
-              >
-                User
-              </div>
-              <div
-                className={`dropdown-item ${
-                  activeDropdownItem === "provider" ? "active" : ""
-                }
-                }`}
-                onClick={() => handleNavigation("/provider", "Provider")}
-              >
-                Provider
-              </div>
-              <div
-                className={`dropdown-item ${
-                  activeDropdownItem === "non-user" ? "active" : ""
-                }
-                }`}
-                onClick={() => handleNavigation("/non-user", "Non-User")}
-              >
-                Non-User
-              </div>
-            </div>
-          )}
         </div>
 
         <div
