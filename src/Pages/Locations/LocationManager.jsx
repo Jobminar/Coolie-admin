@@ -21,10 +21,13 @@ const LocationManager = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [expandedDistricts, setExpandedDistricts] = useState({}); // Track expanded districts
+  const [expandedDistricts, setExpandedDistricts] = useState({});
   const [showActions, setShowActions] = useState(false);
 
-  // Fetch locations from the backend
+  useEffect(() => {
+    fetchLocations();
+  }, []);
+
   const fetchLocations = async () => {
     setIsLoading(true);
     try {
@@ -41,7 +44,6 @@ const LocationManager = () => {
     }
   };
 
-  // Handle file upload
   const handleUpload = async () => {
     if (!file) {
       setError("Please select a valid CSV file before uploading.");
@@ -61,12 +63,10 @@ const LocationManager = () => {
     }
   };
 
-  // Handle clearing the selected file
   const handleClearFile = () => {
     setFile(null);
   };
 
-  // Handle location deletion
   const handleDelete = async (id) => {
     confirmAlert({
       title: "Confirm to delete",
@@ -77,7 +77,7 @@ const LocationManager = () => {
           onClick: async () => {
             try {
               await deleteLocation(id);
-              setLocations(locations.filter((loc) => loc._id !== id)); // Remove from local state
+              setLocations(locations.filter((loc) => loc._id !== id));
             } catch (error) {
               console.error("Error deleting location:", error);
               setError("Failed to delete location.");
@@ -91,7 +91,6 @@ const LocationManager = () => {
     });
   };
 
-  // Handle delete all locations
   const handleDeleteAll = async () => {
     confirmAlert({
       title: "Confirm to delete all",
@@ -104,7 +103,7 @@ const LocationManager = () => {
               await axios.delete(
                 "https://api.coolieno1.in/v1.0/core/locations/delete",
               );
-              setLocations([]); // Clear local state
+              setLocations([]);
             } catch (error) {
               console.error("Error deleting all locations:", error);
               setError("Failed to delete all locations.");
@@ -118,19 +117,16 @@ const LocationManager = () => {
     });
   };
 
-  // Handle search input change
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value.toLowerCase());
   };
 
-  // Filter locations based on search query
   const filteredLocations = locations.filter((location) =>
     Object.values(location).some((value) =>
       String(value).toLowerCase().includes(searchQuery),
     ),
   );
 
-  // Toggle the expansion of a district's records
   const toggleDistrictExpansion = (district) => {
     setExpandedDistricts((prevState) => ({
       ...prevState,
@@ -138,14 +134,12 @@ const LocationManager = () => {
     }));
   };
 
-  // Group locations by district
   const groupedLocations = filteredLocations.reduce((acc, loc) => {
     acc[loc.district] = acc[loc.district] || [];
     acc[loc.district].push(loc);
     return acc;
   }, {});
 
-  // Display a loading message or error
   if (isLoading) {
     return <p>Loading locations...</p>;
   }
@@ -156,20 +150,21 @@ const LocationManager = () => {
 
       {/* File Upload Section */}
       <div className="tiger-upload-container">
+        {/* Custom Label to trigger file upload */}
         <label className="custom-file-label" htmlFor="file-upload">
           <FontAwesomeIcon icon={faUpload} /> Choose File
         </label>
+
+        {/* Hidden file input */}
         <input
           id="file-upload"
           type="file"
           accept=".csv"
-          onChange={(e) => {
-            setFile(e.target.files[0]);
-          }}
+          onChange={(e) => setFile(e.target.files[0])}
           className="custom-file-input"
         />
 
-        {/* Show the selected file name with close icon */}
+        {/* Display selected file name and clear button */}
         {file && (
           <div className="file-name-wrapper">
             <p className="file-name">{file.name}</p>
@@ -181,7 +176,7 @@ const LocationManager = () => {
           </div>
         )}
 
-        {/* Conditionally render the Upload button when file is selected */}
+        {/* Conditionally render the Upload button when a file is selected */}
         {file && (
           <button
             onClick={handleUpload}
@@ -220,6 +215,7 @@ const LocationManager = () => {
           />
           <span className="tiger-toggle-slider"></span>
         </label>
+
         {/* Delete All Button */}
         {showActions && (
           <button className="tiger-delete-all-btn" onClick={handleDeleteAll}>
@@ -242,7 +238,6 @@ const LocationManager = () => {
               />
             </div>
 
-            {/* Show the locations table for the district if expanded */}
             {expandedDistricts[district] && (
               <div className="district-records-table">
                 <table className="tiger-locations-table">

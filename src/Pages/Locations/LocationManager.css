@@ -1,9 +1,14 @@
+/* General Styling */
+
+
 /* Container Styles */
 .tiger-location-manager {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
-    border: 1px solid black
+    border: 1px solid black;
+    max-width: 1200px;
+    margin: auto;
 }
 
 /* Header */
@@ -18,9 +23,20 @@
 /* Upload Section */
 .tiger-upload-container {
     display: flex;
+    flex-direction: column;
+    /* Align elements in a column */
     justify-content: center;
+    align-items: center;
+    /* Center-align items */
     margin-bottom: 20px;
-    gap: 10px;
+    gap: 15px;
+    /* Spacing between elements */
+    padding: 20px;
+    /* Add some padding */
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Add a subtle shadow */
 }
 
 .tiger-file-label {
@@ -41,21 +57,20 @@
 }
 
 /* Upload Button Styles */
-.tiger-upload-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
 .custom-file-label {
     border: 2px solid #ff6f00;
     padding: 10px;
     border-radius: 8px;
     color: #ff6f00;
     cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
 }
 
+.custom-file-label:hover {
+    background-color: #ff6f00;
+    color: white;
+}
 
 .file-name-wrapper {
     position: relative;
@@ -84,7 +99,6 @@
     padding: 4px;
     font-size: 14px;
     z-index: 1000;
-    /* Ensure it is above other elements */
 }
 
 .tiger-upload-btn {
@@ -102,7 +116,6 @@
     background-color: #e65a00;
 }
 
-
 /* Search Input */
 .tiger-search-container {
     display: flex;
@@ -112,9 +125,11 @@
 
 .tiger-search-input {
     padding: 10px;
-    width: 250px;
+    width: 100%;
+    max-width: 400px;
     border: 1px solid #ff6f00;
     border-radius: 8px;
+    font-size: 16px;
 }
 
 /* Table Wrapper for Scroll */
@@ -190,7 +205,7 @@
 }
 
 .tiger-edit-btn:hover {
-    background-color: #000000;
+    background-color: #333;
 }
 
 .tiger-delete-btn {
@@ -221,63 +236,54 @@
 }
 
 .tiger-pagination-btn:hover {
-    background-color: #000000;
+    background-color: #444;
 }
 
 /* Toggle Switch */
-.tiger-actions-toggle {
+.tiger-actions-toggle-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    height: 2rem;
+    margin: 20px 0;
 }
 
 .tiger-toggle-label {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-    margin-right: 15px;
-    margin-top: 0.2rem;
+    display: flex;
+    align-items: center;
 }
 
 .tiger-toggle-input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+    display: none;
 }
 
 .tiger-toggle-slider {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: relative;
+    width: 50px;
+    height: 25px;
     background-color: #ccc;
-    transition: 0.4s;
-    border-radius: 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.tiger-toggle-slider::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 21px;
+    height: 21px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
 }
 
 .tiger-toggle-input:checked+.tiger-toggle-slider {
-    background-color: #000000;
-    margin-bottom: 0.1rem;
+    background-color: #66bb6a;
 }
 
-.tiger-toggle-slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 4px;
-    bottom: 3px;
-    background-color: white;
-    transition: 0.4s;
-    border-radius: 50%;
-}
-
-.tiger-toggle-input:checked+.tiger-toggle-slider:before {
-    transform: translateX(26px);
+.tiger-toggle-input:checked+.tiger-toggle-slider::before {
+    transform: translateX(25px);
 }
 
 /* Delete All Button */
@@ -295,51 +301,7 @@
     background-color: #cc3200;
 }
 
-/* Sticky column */
-.sticky-col {
-    position: -webkit-sticky;
-    position: sticky;
-    right: 0;
-    background-color: #f0f0f0;
-    z-index: 2;
-}
-
-
-.custom-file-input {
-    display: none;
-}
-
-
-/* Style the label to look like a button */
-.custom-file-label {
-    display: inline-block;
-    padding: 10px 20px;
-    border: 2px solid #ff6f00;
-    /* Custom orange border */
-    color: #ff6f00;
-    /* Custom orange text */
-    background-color: transparent;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-    transition: background-color 0.3s ease;
-}
-
-
-.custom-file-label:hover {
-    background-color: #ff6f00;
-    color: white;
-}
-
-/* File name display styles */
-.file-name {
-    margin-top: 10px;
-    font-family: 'Poppins', sans-serif;
-    color: #333;
-    font-size: 14px;
-}
-
-
+/* District Grouping */
 .district-wrapper {
     margin-bottom: 20px;
     border: 1px solid #ff9500;
@@ -379,4 +341,149 @@
     padding: 10px;
     background-color: #ffffff;
     border-radius: 0 0 8px 8px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+
+    /* For tablets and smaller screens */
+    .tiger-location-manager {
+        padding: 10px;
+    }
+
+    .tiger-header {
+        font-size: 22px;
+    }
+
+    .tiger-file-label,
+    .tiger-upload-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .tiger-actions-toggle-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tiger-locations-table-wrapper {
+        max-height: 300px;
+    }
+
+    .tiger-search-input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* For mobile screens */
+    .tiger-location-manager {
+        padding: 5px;
+    }
+
+    .tiger-header {
+        font-size: 20px;
+    }
+
+    .tiger-upload-container,
+    .tiger-actions-toggle-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tiger-file-label,
+    .tiger-upload-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .tiger-actions-toggle-wrapper {
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .tiger-locations-table-wrapper {
+        max-height: 200px;
+    }
+
+    .tiger-search-input {
+        width: 100%;
+    }
+}
+
+
+/* Hide the default input */
+.custom-file-input {
+    display: none;
+}
+
+/* Custom file upload button style */
+.custom-file-label {
+    display: inline-block;
+    padding: 12px 24px;
+    border: 2px solid #ff6f00;
+    color: #ff6f00;
+    background-color: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.custom-file-label:hover {
+    background-color: #ff6f00;
+    color: white;
+}
+
+/* File name display */
+.file-name-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    color: #333;
+    padding: 10px;
+    border: 1px solid #ff6f00;
+    border-radius: 8px;
+    background-color: #fff;
+    margin-top: 10px;
+}
+
+.file-clear-icon {
+    background-color: #ff6f00;
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 4px;
+    font-size: 14px;
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+}
+
+.file-clear-icon:hover {
+    background-color: #e65a00;
+}
+
+/* Upload button */
+.tiger-upload-btn {
+    background-color: #00ff80;
+    color: rgb(0, 0, 0);
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+}
+
+.tiger-upload-btn:hover {
+    background-color: #e65a00;
+    color: white;
 }
