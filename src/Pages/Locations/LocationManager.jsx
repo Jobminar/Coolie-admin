@@ -2,20 +2,26 @@ import React, { useState, useEffect } from "react";
 import { deleteLocation, uploadCsvFile } from "./api/Locations-api";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
-import Papa from "papaparse";
-import { confirmAlert } from "react-confirm-alert"; // Import for confirmation dialogs
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import default styles for confirmation
+import {
+  faUpload,
+  faTrash,
+  faEdit,
+  faClose,
+  faChevronDown,
+  faChevronUp,
+} from "@fortawesome/free-solid-svg-icons";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import "./LocationManager.css";
 
 const LocationManager = () => {
-  const [locations, setLocations] = useState([]); // State to hold locations
+  const [locations, setLocations] = useState([]);
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
+  const [expandedDistricts, setExpandedDistricts] = useState({}); // Track expanded districts
   const [showActions, setShowActions] = useState(false);
 
   // Fetch locations from the backend
@@ -45,14 +51,19 @@ const LocationManager = () => {
     setIsUploading(true);
     try {
       await uploadCsvFile(file, "default");
-
-      await fetchLocations(); // Fetch updated locations after upload
+      await fetchLocations();
+      setFile(null); // Reset file to null to hide upload button and clear file state
     } catch (error) {
       console.error("Error uploading file:", error);
       setError("Failed to upload file.");
     } finally {
       setIsUploading(false);
     }
+  };
+
+  // Handle clearing the selected file
+  const handleClearFile = () => {
+    setFile(null);
   };
 
   // Handle location deletion
@@ -66,7 +77,6 @@ const LocationManager = () => {
           onClick: async () => {
             try {
               await deleteLocation(id);
-
               setLocations(locations.filter((loc) => loc._id !== id)); // Remove from local state
             } catch (error) {
               console.error("Error deleting location:", error);
@@ -94,7 +104,6 @@ const LocationManager = () => {
               await axios.delete(
                 "https://api.coolieno1.in/v1.0/core/locations/delete",
               );
-
               setLocations([]); // Clear local state
             } catch (error) {
               console.error("Error deleting all locations:", error);
@@ -121,30 +130,20 @@ const LocationManager = () => {
     ),
   );
 
-  // Handle sorting by column
-  const handleSort = (key) => {
-    let direction = "ascending";
-    if (sortConfig.key === key && sortConfig.direction === "ascending") {
-      direction = "descending";
-    }
-    setSortConfig({ key, direction });
+  // Toggle the expansion of a district's records
+  const toggleDistrictExpansion = (district) => {
+    setExpandedDistricts((prevState) => ({
+      ...prevState,
+      [district]: !prevState[district],
+    }));
   };
 
-  // Sort locations based on sort configuration
-  const sortedLocations = [...filteredLocations].sort((a, b) => {
-    if (a[sortConfig.key] < b[sortConfig.key]) {
-      return sortConfig.direction === "ascending" ? -1 : 1;
-    }
-    if (a[sortConfig.key] > b[sortConfig.key]) {
-      return sortConfig.direction === "ascending" ? 1 : -1;
-    }
-    return 0;
-  });
-
-  // Fetch all locations when the component mounts
-  useEffect(() => {
-    fetchLocations(); // Fetch on component mount
-  }, []);
+  // Group locations by district
+  const groupedLocations = filteredLocations.reduce((acc, loc) => {
+    acc[loc.district] = acc[loc.district] || [];
+    acc[loc.district].push(loc);
+    return acc;
+  }, {});
 
   // Display a loading message or error
   if (isLoading) {
@@ -170,17 +169,29 @@ const LocationManager = () => {
           className="custom-file-input"
         />
 
-        {/* Show the selected file name */}
-        {file && <p className="file-name">{file.name}</p>}
+        {/* Show the selected file name with close icon */}
+        {file && (
+          <div className="file-name-wrapper">
+            <p className="file-name">{file.name}</p>
+            <FontAwesomeIcon
+              icon={faClose}
+              className="file-clear-icon"
+              onClick={handleClearFile}
+            />
+          </div>
+        )}
 
-        <button
-          onClick={handleUpload}
-          className="tiger-upload-btn"
-          disabled={!file || isUploading}
-        >
-          <FontAwesomeIcon icon={faUpload} />{" "}
-          {isUploading ? "Uploading..." : "Upload"}
-        </button>
+        {/* Conditionally render the Upload button when file is selected */}
+        {file && (
+          <button
+            onClick={handleUpload}
+            className="tiger-upload-btn"
+            disabled={isUploading}
+          >
+            <FontAwesomeIcon icon={faUpload} />{" "}
+            {isUploading ? "Uploading..." : "Upload"}
+          </button>
+        )}
       </div>
 
       {/* Error Message */}
@@ -217,58 +228,67 @@ const LocationManager = () => {
         )}
       </div>
 
-      {/* Locations Table */}
-      <div className="tiger-locations-table-wrapper">
-        {locations.length > 0 ? (
-          <table className="tiger-locations-table">
-            <thead>
-              <tr>
-                <th onClick={() => handleSort("district")}>District</th>
-                <th onClick={() => handleSort("location")}>Location</th>
-                <th onClick={() => handleSort("pincode")}>Pincode</th>
-                <th onClick={() => handleSort("state")}>State</th>
-                <th onClick={() => handleSort("category")}>Category</th>
-                <th onClick={() => handleSort("subcategory")}>Subcategory</th>
-                <th onClick={() => handleSort("servicename")}>Service Name</th>
-                <th onClick={() => handleSort("price")}>Price</th>
-                <th onClick={() => handleSort("min")}>Min</th>
-                <th onClick={() => handleSort("max")}>Max</th>
-                {showActions && <th className="sticky-col">Actions</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {sortedLocations.map((location) => (
-                <tr key={location._id}>
-                  <td>{location.district}</td>
-                  <td>{location.location}</td>
-                  <td>{location.pincode}</td>
-                  <td>{location.state}</td>
-                  <td>{location.category}</td>
-                  <td>{location.subcategory}</td>
-                  <td>{location.servicename}</td>
-                  <td>{JSON.stringify(location.price)}</td>
-                  <td>{location.min}</td>
-                  <td>{location.max}</td>
-                  {showActions && (
-                    <td className="sticky-col">
-                      <button className="tiger-edit-btn">
-                        <FontAwesomeIcon icon={faEdit} />
-                      </button>
-                      <button
-                        className="tiger-delete-btn"
-                        onClick={() => handleDelete(location._id)}
-                      >
-                        <FontAwesomeIcon icon={faTrash} />
-                      </button>
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>No locations available.</p>
-        )}
+      {/* Display Locations Grouped by District */}
+      <div className="tiger-locations-group">
+        {Object.keys(groupedLocations).map((district) => (
+          <div key={district} className="district-wrapper">
+            <div className="district-strap">
+              <span>{district}</span>
+              <span>{groupedLocations[district].length} records</span>
+              <FontAwesomeIcon
+                icon={expandedDistricts[district] ? faChevronUp : faChevronDown}
+                className="expand-icon"
+                onClick={() => toggleDistrictExpansion(district)}
+              />
+            </div>
+
+            {/* Show the locations table for the district if expanded */}
+            {expandedDistricts[district] && (
+              <div className="district-records-table">
+                <table className="tiger-locations-table">
+                  <thead>
+                    <tr>
+                      <th>Location</th>
+                      <th>State</th>
+                      <th>Category</th>
+                      <th>Subcategory</th>
+                      <th>Service Name</th>
+                      <th>Price</th>
+                      <th>Min</th>
+                      <th>Max</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {groupedLocations[district].map((location) => (
+                      <tr key={location._id}>
+                        <td>{location.location}</td>
+                        <td>{location.state}</td>
+                        <td>{location.category}</td>
+                        <td>{location.subcategory}</td>
+                        <td>{location.servicename}</td>
+                        <td>{JSON.stringify(location.price)}</td>
+                        <td>{location.min}</td>
+                        <td>{location.max}</td>
+                        <td>
+                          <button className="tiger-edit-btn">
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button
+                            className="tiger-delete-btn"
+                            onClick={() => handleDelete(location._id)}
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );

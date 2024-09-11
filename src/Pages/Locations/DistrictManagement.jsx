@@ -13,22 +13,30 @@ const DistrictManagement = () => {
   const [errorMessage, setErrorMessage] = useState(""); // To track errors
   const [loading, setLoading] = useState(true); // Loading state
 
-  // Fetch the districts from backend on component mount
+  // Fetch all locations and extract unique districts
   useEffect(() => {
-    const fetchDistricts = async () => {
+    const fetchLocations = async () => {
       try {
-        const response = await axios.get("/api/districts"); // Adjust API endpoint as needed
-        setDistricts(response.data);
+        const response = await axios.get(
+          "https://api.coolieno1.in/v1.0/core/locations",
+        ); // Adjust API endpoint as needed
+        const allLocations = response.data;
+
+        // Extract unique districts from the locations
+        const uniqueDistricts = [
+          ...new Set(allLocations.map((location) => location.district)),
+        ];
+        setDistricts(uniqueDistricts);
         setErrorMessage(""); // Clear any previous error
       } catch (error) {
-        console.error("Error fetching districts:", error);
+        console.error("Error fetching locations:", error);
         setErrorMessage("Failed to fetch districts.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDistricts();
+    fetchLocations();
   }, []);
 
   // Function to handle district selection
@@ -40,7 +48,9 @@ const DistrictManagement = () => {
   // Function to fetch data for the selected district
   const fetchDistrictData = async (district) => {
     try {
-      const response = await axios.get(`/api/districts/${district}`); // Adjust API endpoint as needed
+      const response = await axios.get(
+        `https://api.coolieno1.in/v1.0/core/locations/district/${district}`,
+      ); // Adjust API endpoint as needed
       setDistrictData(response.data);
       setErrorMessage(""); // Clear any previous error
     } catch (error) {
@@ -89,45 +99,48 @@ const DistrictManagement = () => {
             <label>Select a District: </label>
             <select value={selectedDistrict} onChange={handleDistrictChange}>
               <option value="">Select District</option>
-              {Array.isArray(districts) &&
-                districts.map((district) => (
-                  <option key={district.id} value={district.id}>
-                    {district.name}
-                  </option>
-                ))}
+              {districts.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
             </select>
           </div>
 
           {districtData && (
             <div className="district-profile">
-              <h3>{districtData.name} Profile</h3>
+              <h3>{selectedDistrict} Profile</h3>
 
-              {districtData.categories.map((category) => (
-                <div key={category.id} className="category-section">
-                  <h4>{category.name}</h4>
-
-                  {category.subcategories.map((subcategory) => (
-                    <div key={subcategory.id} className="subcategory-section">
-                      <h5>{subcategory.name}</h5>
-
-                      <ul className="services-list">
-                        {subcategory.services.map((service) => (
-                          <li key={service.id} className="service-item">
-                            <span
-                              onClick={() =>
-                                alert(`Showing pricing for ${service.name}`)
-                              }
-                            >
-                              {service.name}
-                            </span>
-                            {/* Here you can render the pricing when clicked */}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+              <table className="district-data-table">
+                <thead>
+                  <tr>
+                    <th>Location</th>
+                    <th>Pincode</th>
+                    <th>State</th>
+                    <th>Category</th>
+                    <th>Subcategory</th>
+                    <th>Service Name</th>
+                    <th>Price</th>
+                    <th>Min</th>
+                    <th>Max</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {districtData.map((location) => (
+                    <tr key={location._id}>
+                      <td>{location.location}</td>
+                      <td>{location.pincode}</td>
+                      <td>{location.state}</td>
+                      <td>{location.category}</td>
+                      <td>{location.subcategory}</td>
+                      <td>{location.servicename}</td>
+                      <td>{JSON.stringify(location.price)}</td>
+                      <td>{location.min}</td>
+                      <td>{location.max}</td>
+                    </tr>
                   ))}
-                </div>
-              ))}
+                </tbody>
+              </table>
             </div>
           )}
         </>

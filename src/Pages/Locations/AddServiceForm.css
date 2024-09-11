@@ -1,3 +1,28 @@
+/* Select Element Styling */
+.tiger-form-select {
+    width: 30%;
+    /* Apply width to select */
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+/* Option Element Styling */
+.tiger-form-select option {
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.3s ease;
+}
+
+/* Option Element Hover Effect */
+.tiger-form-select option:hover {
+    background-color: burlywood;
+    /* Change background on hover */
+}
+
+
+
 /* Container for Add Service Form */
 .add-service-form__container {
     background-color: #ffffff;

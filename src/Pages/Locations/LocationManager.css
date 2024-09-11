@@ -41,11 +41,57 @@
 }
 
 /* Upload Button Styles */
-.tiger-upload-btn {
+.tiger-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.custom-file-label {
+    border: 2px solid #ff6f00;
+    padding: 10px;
+    border-radius: 8px;
+    color: #ff6f00;
+    cursor: pointer;
+}
+
+
+.file-name-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.file-name {
+    font-size: 14px;
+    color: #333;
+    padding: 10px;
+    border: 1px solid #ff6f00;
+    border-radius: 5px;
+    background-color: #fff;
+    display: inline-block;
+}
+
+.file-clear-icon {
+    position: absolute;
+    top: -5px;
+    right: -10px;
     background-color: #ff6f00;
     color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 4px;
+    font-size: 14px;
+    z-index: 1000;
+    /* Ensure it is above other elements */
+}
+
+.tiger-upload-btn {
+    background-color: #00ff80;
+    color: rgb(0, 0, 0);
     padding: 10px 20px;
-    margin-left: 10px;
+    margin-top: 10px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -55,6 +101,7 @@
 .tiger-upload-btn:hover {
     background-color: #e65a00;
 }
+
 
 /* Search Input */
 .tiger-search-container {
@@ -278,31 +325,6 @@
     transition: background-color 0.3s ease;
 }
 
-.custom-file-label:hover {
-    background-color: #ff6f00;
-    color: white;
-}
-
-
-/* Hide the default file input */
-.custom-file-input {
-    display: none;
-}
-
-/* Style the label to look like a button */
-.custom-file-label {
-    display: inline-block;
-    padding: 10px 20px;
-    border: 2px solid #ff6f00;
-    /* Custom orange border */
-    color: #ff6f00;
-    /* Custom orange text */
-    background-color: transparent;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-    transition: background-color 0.3s ease;
-}
 
 .custom-file-label:hover {
     background-color: #ff6f00;
@@ -317,18 +339,44 @@
     font-size: 14px;
 }
 
-/* Upload Button Styles */
-.tiger-upload-btn {
-    background-color: #ff6f00;
-    color: white;
-    padding: 10px 20px;
-    margin-left: 10px;
-    border: none;
+
+.district-wrapper {
+    margin-bottom: 20px;
+    border: 1px solid #ff9500;
     border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    background-color: #fff5e6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: auto;
 }
 
-.tiger-upload-btn:hover {
-    background-color: #e65a00;
+.district-strap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #ff9500;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+}
+
+.district-strap span {
+    font-size: 16px;
+}
+
+.expand-icon {
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.district-strap:hover .expand-icon {
+    transform: scale(1.1);
+}
+
+.district-records-table {
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 0 0 8px 8px;
 }

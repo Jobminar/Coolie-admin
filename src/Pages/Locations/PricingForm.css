@@ -1,0 +1,147 @@
+/* Pricing Form Container */
+.pricing-form-container {
+    background-color: #fffaf0;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-width: 500px;
+    margin: 20px auto;
+    font-family: 'Poppins', sans-serif;
+    overflow: auto;
+}
+
+/* Form Title */
+.form-title {
+    color: #ff9900;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-control {
+    background-color: #fff;
+    border: 1px solid #ff9900;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+.form-control:focus {
+    border-color: #ff4500;
+    box-shadow: 0 0 8px rgba(255, 69, 0, 0.6);
+}
+
+/* Edit/Save Button */
+.edit-btn {
+    padding: 6px;
+    background-color: transparent;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.edit-btn:hover {
+    color: #ff9900;
+}
+
+/* Sticky Footer */
+.sticky-footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-submit {
+    background-color: #ff4500;
+    color: #fff;
+    padding: 12px 40px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #ff9900;
+}
+
+/* Add Variant Button */
+.btn-add-variant {
+    background-color: #ff4500;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-add-variant:hover {
+    background-color: #ff9900;
+}
+
+/* Delete Button */
+.delete-btn {
+    background-color: transparent;
+    color: #d9534f;
+    border: none;
+    border-radius: 5px;
+    font-size: large;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    color: #c9302c;
+}
+
+/* Variant List */
+.variant-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.variant-list li {
+    padding: 5px 0;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Variant Input Group */
+.variant-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.variant-group input {
+    flex: 1;
+}
+
+/* Grid Layout for Switch */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+}
