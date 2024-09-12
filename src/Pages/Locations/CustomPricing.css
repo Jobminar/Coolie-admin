@@ -1,22 +1,23 @@
-/* CustomPricing.css */
-
+/* General Container Styling */
 .tig-container {
     max-width: 900px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* Header Section */
 .tig-header {
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .tig-title {
-    font-size: 1.75rem;
+    font-size: 2rem;
     color: #333;
-    font-weight: 600;
+    font-weight: bold;
 }
 
 .tig-subtitle {
@@ -24,8 +25,10 @@
     color: #6c757d;
 }
 
+/* Input and Search Section */
 .tig-input-wrapper {
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .tig-input-box {
@@ -37,22 +40,23 @@
 
 .tig-input {
     width: 100%;
-    padding: 10px 15px;
-    font-size: 1rem;
+    padding: 12px 16px;
+    font-size: 1.1rem;
     color: #495057;
     background-color: #fff;
     border: 1px solid #ced4da;
-    border-radius: 4px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .tig-input:focus {
-    border-color: #80bdff;
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
     outline: none;
-    box-shadow: 0 0 8px rgba(128, 189, 255, 0.5);
 }
 
+/* Loading Spinner */
 .tig-spinner {
     position: absolute;
     right: 10px;
@@ -60,83 +64,89 @@
     transform: translateY(-50%);
 }
 
+/* Alert Messages */
 .tig-alert {
-    padding: 10px 15px;
-    border-radius: 4px;
-    font-size: 1rem;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 1.1rem;
     margin-top: 20px;
+    border: 1px solid transparent;
 }
 
 .alert-success {
     background-color: #d4edda;
     color: #155724;
-    border: 1px solid #c3e6cb;
+    border-color: #c3e6cb;
 }
 
 .alert-warning {
     background-color: #fff3cd;
     color: #856404;
-    border: 1px solid #ffeeba;
+    border-color: #ffeeba;
 }
 
+/* Location Info */
 .tig-location-info {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: #333;
     background-color: #e9ecef;
-    padding: 10px 15px;
-    border-radius: 4px;
+    padding: 12px 16px;
+    border-radius: 6px;
 }
 
+/* Expand Button */
 .tig-expand-btn-wrapper {
     margin-top: 30px;
 }
 
 .tig-expand-btn {
     display: inline-block;
-    background-color: #ff8400;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 1rem;
-    font-weight: 600;
+    background-color: #ff7b00;
+    color: #000000;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
     text-transform: uppercase;
-    transition: background-color 0.2s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
     cursor: pointer;
     border: none;
 }
 
 .tig-expand-btn:hover {
-    background-color: #ff6600;
+    background-color: #b33c00;
+    color: #fff;
 }
 
+/* Table Container */
 .tig-table-container {
-    margin-top: 20px;
+    margin-top: 30px;
     overflow-x: auto;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Scoped table styles to avoid affecting other tables */
+/* Table Styles */
 .tig-container .table {
     width: 100%;
-    max-width: 100%;
     margin-bottom: 1rem;
     background-color: transparent;
     border-collapse: collapse;
+    text-align: left;
 }
 
 .tig-container .table th,
 .tig-container .table td {
-    padding: 10px;
-    vertical-align: top;
+    padding: 12px 15px;
+    vertical-align: middle;
     border-top: 1px solid #dee2e6;
+    text-align: left;
 }
 
 .tig-container .table thead th {
-    vertical-align: bottom;
+    background-color: #343a40;
+    color: #fff;
+    font-weight: bold;
     border-bottom: 2px solid #dee2e6;
-}
-
-.tig-container .table tbody+tbody {
-    border-top: 2px solid #dee2e6;
 }
 
 .tig-container .table-bordered {
@@ -152,17 +162,12 @@
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-.tig-container .table th {
-    background-color: #343a40;
-    color: #fff;
-    text-align: left;
-    font-weight: 600;
-}
-
 .tig-container .table td {
     color: #495057;
+    word-break: break-word;
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
     .tig-container {
         padding: 15px;
@@ -174,10 +179,52 @@
 
     .tig-container .table th,
     .tig-container .table td {
-        padding: 8px;
+        padding: 10px;
     }
 
     .tig-expand-btn {
         width: 100%;
+    }
+
+    .tig-location-info {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tig-title {
+        font-size: 1.5rem;
+    }
+
+    .tig-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .tig-input {
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .tig-expand-btn {
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .tig-container .table th,
+    .tig-container .table td {
+        padding: 8px;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

@@ -1,107 +1,92 @@
-/* Pricing Form Container */
-.pricing-form-container {
-    background-color: #fffaf0;
+/* Container for the form */
+.zomato-pricing-form-container {
+    background-color: #fff;
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    max-width: 500px;
+    max-width: 600px;
     margin: 20px auto;
     font-family: 'Poppins', sans-serif;
     overflow: auto;
-}
-
-/* Form Title */
-.form-title {
-    color: #ff9900;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 1.8rem;
-}
-
-/* Form Group */
-.form-group {
-    margin-bottom: 20px;
+    height: 100%;
+    /* Allow overflow to manage larger content */
     position: relative;
 }
 
-.form-group label {
-    font-weight: 600;
-    display: block;
-    margin-bottom: 8px;
-    color: #333;
+/* Form Title */
+.zomato-form-title {
+    color: #ff4d4d;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 2rem;
 }
 
-.form-control {
+/* Form Group */
+.zomato-form-group {
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.zomato-form-group label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.zomato-form-control {
     background-color: #fff;
-    border: 1px solid #ff9900;
+    border: 2px solid #ff4d4d;
     padding: 12px;
     border-radius: 5px;
     font-size: 16px;
     color: #333;
+    outline: none;
+    transition: all 0.3s ease;
 }
 
-.form-control:focus {
-    border-color: #ff4500;
-    box-shadow: 0 0 8px rgba(255, 69, 0, 0.6);
+.zomato-form-control:focus {
+    border-color: #ff9900;
+    box-shadow: 0 0 8px rgba(255, 153, 0, 0.6);
 }
 
 /* Edit/Save Button */
-.edit-btn {
-    padding: 6px;
+.zomato-edit-btn {
+    padding: 10px;
     background-color: transparent;
-    color: #333;
+    color: #ff4d4d;
     border: none;
     border-radius: 5px;
     font-size: 18px;
-    margin-left: 5px;
     cursor: pointer;
+    transition: color 0.3s ease;
 }
 
-.edit-btn:hover {
+.zomato-edit-btn:hover {
     color: #ff9900;
 }
 
-/* Sticky Footer */
-.sticky-footer {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.btn-submit {
-    background-color: #ff4500;
-    color: #fff;
-    padding: 12px 40px;
+/* Buttons */
+.zomato-btn-add-variant {
+    color: #ff4d4d;
+    border: none;
+    border-radius: 5px;
+    padding: 2px 4px;
     font-size: 16px;
     font-weight: 600;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.btn-submit:hover {
-    background-color: #ff9900;
-}
-
-/* Add Variant Button */
-.btn-add-variant {
-    background-color: #ff4500;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 15px;
-    font-size: 14px;
-    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
-.btn-add-variant:hover {
-    background-color: #ff9900;
+.zomato-btn-add-variant:hover {
+    color: #ff9900;
+    transform: scale(1.05);
 }
 
-/* Delete Button */
-.delete-btn {
+.zomato-delete-btn {
     background-color: transparent;
     color: #d9534f;
     border: none;
@@ -110,17 +95,17 @@
     cursor: pointer;
 }
 
-.delete-btn:hover {
+.zomato-delete-btn:hover {
     color: #c9302c;
 }
 
 /* Variant List */
-.variant-list ul {
+.zomato-variant-list ul {
     list-style-type: none;
     padding: 0;
 }
 
-.variant-list li {
+.zomato-variant-list li {
     padding: 5px 0;
     font-size: 14px;
     display: flex;
@@ -128,20 +113,114 @@
     align-items: center;
 }
 
-/* Variant Input Group */
-.variant-group {
-    display: flex;
+/* Switches */
+.zomato-form-group.grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+}
+
+/* Sticky Footer */
+.zomato-sticky-footer {
+    position: sticky;
+    bottom: 0;
+    text-align: center;
+    padding-top: 20px;
+    background-color: #fff;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.zomato-btn-submit {
+    background-color: #ff4d4d;
+    color: #fff;
+    padding: 12px 40px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.zomato-btn-submit:hover {
+    background-color: #ff9900;
+    transform: scale(1.05);
+}
+
+/* Alerts */
+.zomato-alert {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.zomato-alert-warning {
+    background-color: #ffecb3;
+    color: #856404;
+    border: 1px solid #ffdd57;
+}
+
+.zomato-alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Grid for input and buttons */
+.zomato-variant-group {
+    display: grid;
+    grid-template-columns: 2fr 2fr auto;
     gap: 10px;
     align-items: center;
 }
 
-.variant-group input {
-    flex: 1;
+/* Animations */
+.zomato-animated {
+    animation: fadeIn 0.5s ease;
 }
 
-/* Grid Layout for Switch */
-.grid {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scrollable Form */
+.zomato-scrollable-form {
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Make the form responsive */
+@media (max-width: 768px) {
+    .zomato-pricing-form-container {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    .zomato-variant-group {
+        grid-template-columns: 1fr 1fr auto;
+    }
+
+    .zomato-btn-add-variant {
+        padding: 1px;
+    }
+
+    .zomato-btn-submit {
+        padding: 10px 30px;
+        font-size: 14px;
+    }
+
+    .zomato-form-control {
+        font-size: 14px;
+        padding: 10px;
+    }
 }

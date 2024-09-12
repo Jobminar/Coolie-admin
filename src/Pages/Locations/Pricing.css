@@ -1,257 +1,60 @@
-/* Container for the entire pricing component */
-.pricing-container {
-    display: flex;
-    flex-direction: column;
+/* Main container for the pricing page */
+.tiger-pricing-container {
     width: 100%;
     padding: 20px;
-    box-sizing: border-box;
-    border: 1px solid #eaeaea;
-    border-radius: 5px;
     background-color: #f4f6f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Tier Name Section */
-.pricing-tier-name-container {
+/* Header row with title and toggle button */
+.tiger-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+}
+
+/* Toggle button for switching between views */
+.tiger-toggle-button {
+    background-color: transparent;
+    color: #000000;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
+    transition: background-color 0.3s ease-in-out;
 }
 
-.pricing-tier-name-container h2 {
-    font-size: 20px;
-    margin: 0;
-    display: inline-block;
-}
-
-.pricing-edit-icon {
-    cursor: pointer;
+/* Arrow icon within the button */
+.tiger-arrow-icon {
     margin-left: 10px;
-    color: #000;
+    transition: transform 0.3s ease-in-out;
 }
 
-/* Edit button */
-.pricing-edit-button {
-    background-color: #007bff;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
+/* Hover effect for the toggle button */
+.tiger-toggle-button:hover {
+    background-color: #8a8a8a0c;
 }
 
-.pricing-edit-button:hover {
-    background-color: #0056b3;
+/* Centered form text */
+.tiger-text-center {
+    text-align: center;
 }
 
-/* Checklist groups for categories, subcategories, services */
-.pricing-sections-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 20px;
+/* Animation for smooth component transitions */
+.tiger-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Common checklist item styles */
-.pricing-checklist-group {
-    border: 1px solid #000;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #fff;
-    width: 220px;
-    max-height: 400px;
-    overflow-y: auto;
-}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
 
-.pricing-checklist-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.pricing-checklist-item input {
-    margin-right: 10px;
-}
-
-/* Styling the labels in checklist */
-.pricing-checklist-item label {
-    font-size: 16px;
-}
-
-/* Pricing Card */
-.pricing-card {
-    border: 1px solid #000;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-    width: 100%;
-    max-width: 500px;
-    background-color: #fff;
-}
-
-/* Pricing card fields */
-.pricing-field-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.pricing-field-container label {
-    font-size: 16px;
-    width: 40%;
-}
-
-.pricing-field-container p {
-    font-size: 16px;
-    width: 50%;
-    margin: 0;
-    padding: 5px;
-    border: 1px solid #eaeaea;
-    border-radius: 3px;
-    background-color: #f9f9f9;
-}
-
-.pricing-field-container input {
-    width: 50%;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    font-size: 16px;
-}
-
-/* Dropdown for pricing options */
-.pricing-card select {
-    width: 100%;
-    padding: 8px;
-    font-size: 16px;
-    margin-bottom: 15px;
-    border-radius: 3px;
-    border: 1px solid #ccc;
-}
-
-/* Update button centered */
-.pricing-update-button {
-    display: block;
-    margin: 20px auto;
-    /* Center the button */
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    width: 50%
-}
-
-.pricing-update-button:hover {
-    background-color: #218838;
-}
-
-/* Close button */
-.pricing-close-button {
-    display: inline-block;
-    background-color: #dc3545;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    margin-left: 10px;
-}
-
-.pricing-close-button:hover {
-    background-color: #c82333;
-}
-
-/* Toggle Switch Styling */
-.pricing-toggle-switch {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    /* Add space between the toggle and text */
-    width: 100%;
-}
-
-.pricing-switch {
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 20px;
-    margin-right: 10px;
-}
-
-.pricing-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.pricing-slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: 0.4s;
-    border-radius: 20px;
-    width: 2.5rem
-}
-
-.pricing-slider:before {
-    position: absolute;
-    content: "";
-    height: 12px;
-    width: 12px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: 0.4s;
-    border-radius: 50%;
-}
-
-.pricing-switch input:checked+.pricing-slider {
-    background-color: #28a745;
-}
-
-.pricing-switch input:checked+.pricing-slider:before {
-    transform: translateX(20px);
-}
-
-/* Scrollable checklist group */
-.pricing-categories-group,
-.pricing-subcategories-group,
-.pricing-services-group {
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #fff;
-    width: 220px;
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-/* Selected items for checklist */
-.selected-category,
-.selected-subcategory,
-.selected-service {
-    background-color: #f1f1f1;
-    border-radius: 5px;
-}
-
-/* Hover effect on checklist items */
-.pricing-checklist-item:hover {
-    background-color: #e9ecef;
-    border-radius: 5px;
-}
-
-/* Center toggle labels and switch */
-.pricing-toggle-label {
-    flex-grow: 1;
-    /* Ensure label takes space evenly */
+    to {
+        opacity: 1;
+    }
 }

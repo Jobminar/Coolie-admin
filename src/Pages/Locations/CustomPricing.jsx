@@ -6,16 +6,15 @@ import "./CustomPricing.css";
 const API_BASE_URL = "https://api.coolieno1.in/v1.0/core";
 
 const CustomPricing = ({ onLocationSelected }) => {
+  const [locations, setLocations] = useState([]); // For storing all location data fetched from API
+  const [uniqueRecords, setUniqueRecords] = useState([]); // For storing grouped locations
   const [selectedLocation, setSelectedLocation] = useState("");
-  const [selectedDistrict, setSelectedDistrict] = useState("");
-  const [selectedPincode, setSelectedPincode] = useState("");
   const [message, setMessage] = useState("");
   const [isValidLocation, setIsValidLocation] = useState(null);
-  const [uniqueDistricts, setUniqueDistricts] = useState([]);
-  const [uniqueLocations, setUniqueLocations] = useState([]);
-  const [uniquePincodes, setUniquePincodes] = useState([]);
-  const [isExpanded, setIsExpanded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [totalServices, setTotalServices] = useState(0); // Count of all services available
+  const [totalRegions, setTotalRegions] = useState(0); // Count of all regions available
 
   useEffect(() => {
     loadGoogleMapsScript();
@@ -35,153 +34,119 @@ const CustomPricing = ({ onLocationSelected }) => {
     const autocomplete = new window.google.maps.places.Autocomplete(
       searchInput,
     );
-
-    autocomplete.addListener("place_changed", async () => {
+    autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();
-      if (place.geometry) {
-        processAddressSelection(place);
-      }
+      processAddressSelection(place);
     });
   };
 
   const processAddressSelection = (place) => {
-    const addressComponents = place.address_components;
-
-    const districtComponent = addressComponents.find((component) =>
-      component.types.includes("administrative_area_level_2"),
-    );
-    const locationComponent = addressComponents.find((component) =>
-      component.types.includes("locality"),
-    );
-    const pincodeComponent = addressComponents.find((component) =>
-      component.types.includes("postal_code"),
-    );
-
-    const selectedLocation = locationComponent?.long_name || "";
-    const selectedDistrict = districtComponent?.long_name || "";
-    const selectedPincode = pincodeComponent?.long_name || "";
-
+    const selectedLocation = place.formatted_address || "";
     setSelectedLocation(selectedLocation);
-    setSelectedDistrict(selectedDistrict);
-    setSelectedPincode(selectedPincode);
-
-    setIsLoading(true);
-    setTimeout(() => {
-      validateAddress({
-        location: selectedLocation,
-        district: selectedDistrict,
-        pincode: selectedPincode,
-        fullAddress: place.formatted_address,
-      });
-      setIsLoading(false);
-    }, 1500);
+    validateAddress(selectedLocation);
   };
 
   const fetchLocationData = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/locations`);
-      const locations = response.data;
+      const locationsData = response.data;
 
-      setUniqueDistricts([
-        ...new Set(
-          locations.map((location) => location.district.toLowerCase()),
-        ),
-      ]);
-      setUniqueLocations([
-        ...new Set(
-          locations.map((location) => location.location.toLowerCase()),
-        ),
-      ]);
-      setUniquePincodes([
-        ...new Set(locations.map((location) => location.pincode.toLowerCase())),
-      ]);
+      // Update state with fetched locations and calculate services & regions
+      setLocations(locationsData);
+      setTotalRegions(locationsData.length); // Count of regions
+
+      const groupedRecords = groupLocations(locationsData);
+      setUniqueRecords(groupedRecords);
+
+      // Calculate total services served
+      const totalServiceCount = locationsData.reduce((sum, location) => {
+        return sum + (location.services?.length || 0); // Sum up services for each location
+      }, 0);
+      setTotalServices(totalServiceCount);
     } catch (error) {
       console.error("Error fetching location data", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const validateAddress = ({ location, district, pincode, fullAddress }) => {
-    // Normalize all values for consistent comparison
-    const normalizedDistrict = district.toLowerCase().trim();
-    const normalizedLocation = location.toLowerCase().trim();
-    const normalizedPincode = pincode.toLowerCase().trim();
+  // Group locations by district, location, and pincode
+  const groupLocations = (locations) => {
+    const grouped = {};
+    locations.forEach((location) => {
+      const key = `${location.district}_${location.location}_${location.pincode}`;
+      if (!grouped[key]) {
+        grouped[key] = { ...location, count: 1 };
+      } else {
+        grouped[key].count += 1;
+      }
+    });
+    return Object.values(grouped);
+  };
 
-    // Normalize unique districts, locations, pincodes for comparison
-    const normalizedUniqueDistricts = uniqueDistricts.map((d) =>
-      d.trim().toLowerCase(),
-    );
-    const normalizedUniqueLocations = uniqueLocations.map((l) =>
-      l.trim().toLowerCase(),
-    );
-    const normalizedUniquePincodes = uniquePincodes.map((p) =>
-      p.trim().toLowerCase(),
-    );
+  const validateAddress = (selectedLocation) => {
+    console.log("Selected Location:", selectedLocation);
 
-    // Break down the fullAddress into tokens for comparison
-    const addressTokens = fullAddress
+    // Normalize address and location fields, remove commas and extra spaces
+    const addressTokens = selectedLocation
       .toLowerCase()
-      .split(/[,\s]+/) // Split by commas and spaces
-      .map((part) => part.trim());
+      .replace(/,/g, "")
+      .split(" ")
+      .filter((token) => token.trim().length > 0); // Split by space, filter empty tokens
 
-    // Helper function to match tokens with unique values
-    const containsTokenMatch = (tokens, uniqueValues) => {
-      return tokens.some((token) => {
-        return uniqueValues.some(
-          (value) => value.includes(token) || token.includes(value),
-        );
+    console.log("Address Tokens:", addressTokens);
+
+    // Variable to track whether a match is found
+    let isValid = false;
+
+    // Loop through each record in the uniqueRecords and try to find matches
+    uniqueRecords.forEach((record) => {
+      const district = record.district?.toLowerCase() || "";
+      const location = record.location?.toLowerCase() || "";
+      const state = record.state?.toLowerCase() || "";
+      const pincode = record.pincode?.toString() || "";
+
+      // Log to see what tokens we're comparing against
+      console.log("Comparing with record:", {
+        district,
+        location,
+        state,
+        pincode,
       });
-    };
 
-    // Flexible field matching: match selected address with any relevant fields from the API data
-    const isDistrictValid = containsTokenMatch(
-      [
-        normalizedDistrict,
-        normalizedLocation,
-        normalizedPincode,
-        ...addressTokens,
-      ],
-      normalizedUniqueDistricts,
-    );
-    const isLocationValid = containsTokenMatch(
-      [
-        normalizedDistrict,
-        normalizedLocation,
-        normalizedPincode,
-        ...addressTokens,
-      ],
-      normalizedUniqueLocations,
-    );
-    const isPincodeValid = containsTokenMatch(
-      [
-        normalizedDistrict,
-        normalizedLocation,
-        normalizedPincode,
-        ...addressTokens,
-      ],
-      normalizedUniquePincodes,
-    );
+      // Check if any part of the address matches any part of district, location, state, or pincode
+      const districtMatch = addressTokens.some((token) =>
+        district.includes(token),
+      );
+      const locationMatch = addressTokens.some((token) =>
+        location.includes(token),
+      );
+      const stateMatch = addressTokens.some((token) => state.includes(token));
+      const pincodeMatch = addressTokens.includes(pincode);
 
-    // Determine if the address is valid if any of the fields match with API data
-    const isValid = isDistrictValid || isLocationValid || isPincodeValid;
+      if (districtMatch || locationMatch || stateMatch || pincodeMatch) {
+        isValid = true;
+      }
+    });
 
+    // Set the validation result
     setIsValidLocation(isValid);
 
-    // Display success or warning messages
+    // Set the message based on whether the location was valid
     if (isValid) {
       setMessage(
-        `Success: The address is valid! (District: ${district}, Location: ${location}, Pincode: ${pincode})`,
+        `Success: We are serving in this area! We currently offer services across ${totalRegions} locations.`,
       );
     } else {
       setMessage(
-        "Warning: The selected address is not within the service area.",
+        `Sorry, this location is not in our service area. We currently offer ${totalServices} services across ${totalRegions} locations.`,
       );
     }
 
-    // Send the validated location data back to the parent component
+    // Send validated data to the parent component
     onLocationSelected({
-      location,
-      district,
-      pincode,
+      location: selectedLocation,
       isValid,
     });
   };
@@ -190,8 +155,13 @@ const CustomPricing = ({ onLocationSelected }) => {
     <div className="tig-container mt-5">
       <div className="tig-header text-center">
         <h4 className="tig-title">Location Validator</h4>
-        <p className="tig-subtitle">
-          Validate your address to see if it matches our service areas!
+        <p className="tig-subtitle">Check if we are serving in your area.</p>
+      </div>
+
+      {/* Total services and regions */}
+      <div className="total-locations text-center mb-3">
+        <p>
+          <strong>Total no of service records:</strong> {totalRegions}
         </p>
       </div>
 
@@ -222,14 +192,10 @@ const CustomPricing = ({ onLocationSelected }) => {
         </div>
       </div>
 
-      {selectedLocation && selectedDistrict && selectedPincode && (
+      {selectedLocation && (
         <div className="tig-location-info text-center mt-4">
           <p>
-            <strong>Location:</strong> {selectedLocation}
-            <br />
-            <strong>District:</strong> {selectedDistrict}
-            <br />
-            <strong>Pincode:</strong> {selectedPincode}
+            <strong>Selected Location:</strong> {selectedLocation}
           </p>
         </div>
       )}
@@ -239,12 +205,12 @@ const CustomPricing = ({ onLocationSelected }) => {
           className="tig-expand-btn btn btn-lg"
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          {isExpanded ? "Hide" : "Expand"} Districts, Locations, and Pincodes
+          {isExpanded ? "Hide" : "Show"} Regions We Serve
         </button>
       </div>
 
       {isExpanded && (
-        <div className="tig-table-container mt-4">
+        <div className="tig-table-container mt-4 fade-in">
           <table className="table table-striped table-bordered">
             <thead className="thead-dark">
               <tr>
@@ -254,11 +220,11 @@ const CustomPricing = ({ onLocationSelected }) => {
               </tr>
             </thead>
             <tbody>
-              {uniqueDistricts.map((district, index) => (
+              {uniqueRecords.map((record, index) => (
                 <tr key={index}>
-                  <td>{district}</td>
-                  <td>{uniqueLocations[index] || "N/A"}</td>
-                  <td>{uniquePincodes[index] || "N/A"}</td>
+                  <td>{record.district}</td>
+                  <td>{record.location}</td>
+                  <td>{record.pincode}</td>
                 </tr>
               ))}
             </tbody>

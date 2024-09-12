@@ -1,26 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { fetchCategories, fetchSubcategories, fetchServices } from "./api"; // API methods
+import { fetchCategories, fetchSubcategories, fetchServices } from "./api";
 import { FaPlus, FaTrash, FaEdit, FaSave } from "react-icons/fa";
-import Switch from "react-switch"; // For toggling credit eligibility and cash payment
-import "./PricingForm.css"; // Custom CSS
+import Switch from "react-switch";
+import "./PricingForm.css";
 import axios from "axios";
 
 const PricingForm = ({ location, district, pincode, isValid }) => {
-  // State for form fields
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [services, setServices] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedSubcategory, setSelectedSubcategory] = useState("");
-  const [selectedService, setSelectedService] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState({
+    id: "",
+    name: "",
+  });
+  const [selectedSubcategory, setSelectedSubcategory] = useState({
+    id: "",
+    name: "",
+  });
+  const [selectedService, setSelectedService] = useState({ id: "", name: "" });
   const [priceVariants, setPriceVariants] = useState({});
-  const [variantKey, setVariantKey] = useState(""); // Variant name (e.g. Normal, Deep)
-  const [variantValue, setVariantValue] = useState(""); // Variant price
+  const [variantKey, setVariantKey] = useState("");
+  const [variantValue, setVariantValue] = useState("");
+
+  // Metric group state (toggle and fields)
+  const [showMetricFields, setShowMetricFields] = useState(false);
   const [metric, setMetric] = useState("");
+  const [minQuantity, setMinQuantity] = useState("");
+  const [maxQuantity, setMaxQuantity] = useState("");
+
   const [creditEligibility, setCreditEligibility] = useState(false);
   const [isCash, setIsCash] = useState(false);
+  const [taxPercentage, setTaxPercentage] = useState("");
+  const [miscFee, setMiscFee] = useState("");
+  const [platformCommission, setPlatformCommission] = useState("");
 
-  // Prefill form fields with props values
   const [isLocationEditable, setIsLocationEditable] = useState(false);
   const [isDistrictEditable, setIsDistrictEditable] = useState(false);
   const [isPincodeEditable, setIsPincodeEditable] = useState(false);
@@ -28,22 +41,19 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
   const [editedDistrict, setEditedDistrict] = useState(district || "");
   const [editedPincode, setEditedPincode] = useState(pincode || "");
 
-  // API URL for submitting form data
   const API_POST_URL = "https://api.coolieno1.in/v1.0/core/locations/post";
 
-  // Update form fields when props change (prefilling)
   useEffect(() => {
     setEditedLocation(location);
     setEditedDistrict(district);
     setEditedPincode(pincode);
   }, [location, district, pincode]);
 
-  // Fetch categories on mount
   useEffect(() => {
     const fetchAllCategories = async () => {
       try {
         const response = await fetchCategories();
-        setCategories(response.data); // Set categories from API response
+        setCategories(response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -51,36 +61,37 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
     fetchAllCategories();
   }, []);
 
-  // Handle category change and fetch subcategories
   const handleCategoryChange = async (e) => {
     const categoryId = e.target.value;
-    setSelectedCategory(categoryId);
-    setSelectedSubcategory("");
-    setServices([]); // Reset services when category changes
+    const categoryName =
+      categories.find((cat) => cat._id === categoryId)?.name || "";
+    setSelectedCategory({ id: categoryId, name: categoryName });
+    setSelectedSubcategory({ id: "", name: "" });
+    setServices([]);
 
     try {
       const response = await fetchSubcategories(categoryId);
-      setSubcategories(response.data); // Set subcategories from API response
+      setSubcategories(response.data);
     } catch (error) {
       console.error("Error fetching subcategories:", error);
     }
   };
 
-  // Handle subcategory change and fetch services
   const handleSubcategoryChange = async (e) => {
     const subCategoryId = e.target.value;
-    setSelectedSubcategory(subCategoryId);
-    setServices([]); // Reset services when subcategory changes
+    const subCategoryName =
+      subcategories.find((sub) => sub._id === subCategoryId)?.name || "";
+    setSelectedSubcategory({ id: subCategoryId, name: subCategoryName });
+    setServices([]);
 
     try {
-      const response = await fetchServices(selectedCategory, subCategoryId);
-      setServices(response.data); // Set services from API response
+      const response = await fetchServices(selectedCategory.id, subCategoryId);
+      setServices(response.data);
     } catch (error) {
       console.error("Error fetching services:", error);
     }
   };
 
-  // Add service variant (with price) to the form
   const handleAddVariant = () => {
     if (variantKey && variantValue) {
       setPriceVariants((prevVariants) => ({
@@ -94,14 +105,12 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
     }
   };
 
-  // Delete a service variant
   const handleDeleteVariant = (key) => {
     const updatedVariants = { ...priceVariants };
     delete updatedVariants[key];
     setPriceVariants(updatedVariants);
   };
 
-  // Toggle editable fields
   const handleToggleEdit = (field) => {
     if (field === "location") {
       setIsLocationEditable((prev) => !prev);
@@ -112,12 +121,10 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
     }
   };
 
-  // Submit the form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate required fields
-    if (!selectedCategory || !selectedService || !metric) {
+    if (!selectedCategory.id || !selectedService.id) {
       alert("Please complete all required fields.");
       return;
     }
@@ -126,19 +133,32 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
       district: editedDistrict,
       location: editedLocation,
       pincode: editedPincode,
-      category: selectedCategory,
-      subcategory: selectedSubcategory,
-      servicename: selectedService,
+      category: `${selectedCategory.name}(${selectedCategory.id})`,
+      subcategory: `${selectedSubcategory.name}(${selectedSubcategory.id})`,
+      servicename: `${selectedService.name}(${selectedService.id})`,
       price: priceVariants,
-      metric,
       creditEligibility,
+      taxPercentage,
+      miscFee,
+      platformCommission,
       isCash,
-      isCustom: true,
+      isCustom: true, // Always setting isCustom to true
     };
+
+    // Conditionally add metric-related data
+    if (showMetricFields) {
+      formData.metric = metric;
+      formData.min = minQuantity;
+      formData.max = maxQuantity;
+    }
 
     try {
       const response = await axios.post(API_POST_URL, formData);
-      alert("Form submitted successfully!");
+      if (response.status === 200 || response.status === 201) {
+        alert("Form submitted successfully!");
+      } else {
+        alert(`Form submission failed with status: ${response.status}`);
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("Failed to submit form.");
@@ -146,86 +166,82 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
   };
 
   return (
-    <div className="pricing-form-container">
-      <h3 className="form-title">Pricing Form</h3>
+    <div className="zomato-pricing-form-container">
+      <h3 className="zomato-form-title">Pricing Form</h3>
 
-      {/* Address validation message */}
       {!isValid ? (
-        <div className="alert alert-warning" role="alert">
+        <div className="zomato-alert zomato-alert-warning" role="alert">
           Warning: The selected address does not match the service area.
         </div>
       ) : (
-        <div className="alert alert-success" role="alert">
+        <div className="zomato-alert zomato-alert-success" role="alert">
           Success: The selected address is within the service area.
         </div>
       )}
 
-      {/* Form Content */}
-      <div className="pricing-form-content">
-        <form onSubmit={handleSubmit} className="scrollable-form">
-          {/* Editable Location */}
-          <div className="form-group">
+      <div className="zomato-pricing-form-content">
+        <form onSubmit={handleSubmit} className="zomato-scrollable-form">
+          {/* Location, District, and Pincode Fields */}
+          <div className="zomato-form-group zomato-animated">
             <label>Location</label>
             <input
               type="text"
-              className="form-control"
+              className="zomato-form-control"
               value={editedLocation}
               readOnly={!isLocationEditable}
               onChange={(e) => setEditedLocation(e.target.value)}
             />
             <button
               type="button"
-              className="edit-btn"
+              className="zomato-edit-btn"
               onClick={() => handleToggleEdit("location")}
             >
               {isLocationEditable ? <FaSave /> : <FaEdit />}
             </button>
           </div>
 
-          {/* Editable District */}
-          <div className="form-group">
+          <div className="zomato-form-group zomato-animated">
             <label>District</label>
             <input
               type="text"
-              className="form-control"
+              className="zomato-form-control"
               value={editedDistrict}
               readOnly={!isDistrictEditable}
               onChange={(e) => setEditedDistrict(e.target.value)}
             />
             <button
               type="button"
-              className="edit-btn"
+              className="zomato-edit-btn"
               onClick={() => handleToggleEdit("district")}
             >
               {isDistrictEditable ? <FaSave /> : <FaEdit />}
             </button>
           </div>
 
-          {/* Editable Pincode */}
-          <div className="form-group">
+          <div className="zomato-form-group zomato-animated">
             <label>Pincode</label>
             <input
               type="text"
-              className="form-control"
+              className="zomato-form-control"
               value={editedPincode}
               readOnly={!isPincodeEditable}
               onChange={(e) => setEditedPincode(e.target.value)}
             />
             <button
               type="button"
-              className="edit-btn"
+              className="zomato-edit-btn"
               onClick={() => handleToggleEdit("pincode")}
             >
               {isPincodeEditable ? <FaSave /> : <FaEdit />}
             </button>
           </div>
 
-          {/* Category Dropdown */}
-          <div className="form-group">
+          {/* Category and Subcategory Fields */}
+          <div className="zomato-form-group zomato-animated">
             <label>Category</label>
             <select
-              className="form-control"
-              value={selectedCategory}
+              className="zomato-form-control"
+              value={selectedCategory.id}
               onChange={handleCategoryChange}
               required
             >
@@ -238,14 +254,13 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
             </select>
           </div>
 
-          {/* Subcategory Dropdown */}
-          <div className="form-group">
+          <div className="zomato-form-group zomato-animated">
             <label>Subcategory</label>
             <select
-              className="form-control"
-              value={selectedSubcategory}
+              className="zomato-form-control"
+              value={selectedSubcategory.id}
               onChange={handleSubcategoryChange}
-              disabled={!selectedCategory}
+              disabled={!selectedCategory.id}
             >
               <option value="">Select Subcategory</option>
               {subcategories.map((subcategory) => (
@@ -256,14 +271,20 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
             </select>
           </div>
 
-          {/* Service Dropdown */}
-          <div className="form-group">
+          <div className="zomato-form-group zomato-animated">
             <label>Service</label>
             <select
-              className="form-control"
-              value={selectedService}
-              onChange={(e) => setSelectedService(e.target.value)}
-              disabled={!selectedSubcategory}
+              className="zomato-form-control"
+              value={selectedService.id}
+              onChange={(e) =>
+                setSelectedService({
+                  id: e.target.value,
+                  name:
+                    services.find((service) => service._id === e.target.value)
+                      ?.name || "",
+                })
+              }
+              disabled={!selectedSubcategory.id}
             >
               <option value="">Select Service</option>
               {services.map((service) => (
@@ -274,43 +295,42 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
             </select>
           </div>
 
-          {/* Add Service Variants */}
-          <div className="form-group">
+          {/* Price Variants */}
+          <div className="zomato-form-group zomato-animated">
             <label>Service Variants</label>
-            <div className="variant-group">
+            <div className="zomato-variant-group">
               <input
                 type="text"
-                className="form-control"
+                className="zomato-form-control"
                 placeholder="Variant Name (e.g. Normal, Deep)"
                 value={variantKey}
                 onChange={(e) => setVariantKey(e.target.value)}
               />
               <input
                 type="number"
-                className="form-control"
+                className="zomato-form-control"
                 placeholder="Variant Price"
                 value={variantValue}
                 onChange={(e) => setVariantValue(e.target.value)}
               />
               <button
                 type="button"
-                className="btn-add-variant"
+                className="zomato-btn-add-variant"
                 onClick={handleAddVariant}
               >
-                <FaPlus /> Add Variant
+                <FaPlus />
               </button>
             </div>
 
-            {/* Display added variants */}
             {Object.keys(priceVariants).length > 0 && (
-              <div className="variant-list">
+              <div className="zomato-variant-list">
                 <ul>
                   {Object.entries(priceVariants).map(([key, value]) => (
                     <li key={key}>
                       {key}: {value}{" "}
                       <button
                         type="button"
-                        className="delete-btn"
+                        className="zomato-delete-btn"
                         onClick={() => handleDeleteVariant(key)}
                       >
                         <FaTrash />
@@ -322,20 +342,89 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
             )}
           </div>
 
-          {/* Metric Input */}
-          <div className="form-group">
-            <label>Metric</label>
-            <input
-              type="text"
-              className="form-control"
-              value={metric}
-              onChange={(e) => setMetric(e.target.value)}
-              required
+          {/* Toggle Metric Group */}
+          <div className="zomato-form-group zomato-animated">
+            <label>Include Metric Information</label>
+            <Switch
+              onChange={() => setShowMetricFields(!showMetricFields)}
+              checked={showMetricFields}
+              onColor="#28a745"
+              offColor="#d9534f"
+              uncheckedIcon={false}
+              checkedIcon={false}
+              height={22}
+              width={44}
             />
           </div>
 
-          {/* Credit Eligibility Toggle */}
-          <div className="form-group grid">
+          {/* Conditional Metric, Min/Max Quantity Fields */}
+          {showMetricFields && (
+            <>
+              <div className="zomato-form-group zomato-animated">
+                <label>Metric (e.g., per unit, per hour)</label>
+                <input
+                  type="text"
+                  className="zomato-form-control"
+                  value={metric}
+                  onChange={(e) => setMetric(e.target.value)}
+                />
+              </div>
+
+              <div className="zomato-form-group zomato-animated">
+                <label>Min Quantity (Lower Limit)</label>
+                <input
+                  type="number"
+                  className="zomato-form-control"
+                  value={minQuantity}
+                  onChange={(e) => setMinQuantity(e.target.value)}
+                />
+              </div>
+
+              <div className="zomato-form-group zomato-animated">
+                <label>Max Quantity (Upper Limit)</label>
+                <input
+                  type="number"
+                  className="zomato-form-control"
+                  value={maxQuantity}
+                  onChange={(e) => setMaxQuantity(e.target.value)}
+                />
+              </div>
+            </>
+          )}
+
+          {/* Tax, Fees, Platform Commission */}
+          <div className="zomato-form-group zomato-animated">
+            <label>Tax Percentage (%)</label>
+            <input
+              type="number"
+              className="zomato-form-control"
+              value={taxPercentage}
+              onChange={(e) => setTaxPercentage(e.target.value)}
+            />
+          </div>
+
+          <div className="zomato-form-group zomato-animated">
+            <label>Miscellaneous Fees (₹)</label>
+            <input
+              type="number"
+              className="zomato-form-control"
+              value={miscFee}
+              onChange={(e) => setMiscFee(e.target.value)}
+            />
+          </div>
+
+          <div className="zomato-form-group zomato-animated">
+            <label>Platform Commission (%)</label>
+            <input
+              type="number"
+              className="zomato-form-control"
+              value={platformCommission}
+              onChange={(e) => setPlatformCommission(e.target.value)}
+            />
+          </div>
+
+          {/* Toggles for Credit Eligibility and Cash */}
+          <div className="zomato-form-group zomato-animated">
             <label>Credit Eligibility</label>
             <Switch
               onChange={() => setCreditEligibility(!creditEligibility)}
@@ -349,8 +438,7 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
             />
           </div>
 
-          {/* Cash Payment Toggle */}
-          <div className="form-group grid">
+          <div className="zomato-form-group zomato-animated">
             <label>Is Cash Payment</label>
             <Switch
               onChange={() => setIsCash(!isCash)}
@@ -364,9 +452,9 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
             />
           </div>
 
-          {/* Submit Button */}
-          <div className="sticky-footer">
-            <button type="submit" className="btn-submit">
+          {/* Submit Button in Sticky Footer */}
+          <div className="zomato-sticky-footer">
+            <button type="submit" className="zomato-btn-submit">
               Submit
             </button>
           </div>

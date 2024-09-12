@@ -1,0 +1,86 @@
+.swiggy-custom-location-table-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fffdf8;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.swiggy-custom-location-table-container:hover {
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.swiggy-table-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fc8019;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.swiggy-table-wrapper {
+    overflow-x: auto;
+}
+
+.swiggy-custom-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.swiggy-custom-table th,
+.swiggy-custom-table td {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 16px;
+}
+
+.swiggy-custom-table th {
+    background-color: #fc8019;
+    color: white;
+    cursor: pointer;
+}
+
+.swiggy-custom-table td {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.swiggy-custom-table tr:nth-child(odd) {
+    background-color: #fdf2e9;
+}
+
+.swiggy-custom-table-row:hover {
+    background-color: #fff7eb;
+}
+
+.swiggy-delete-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.swiggy-delete-btn:hover {
+    background-color: #c82333;
+}
+
+.swiggy-spinner {
+    animation: spin 1s linear infinite;
+    font-size: 24px;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.swiggy-loading {
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+}
