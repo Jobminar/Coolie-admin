@@ -252,6 +252,10 @@
     align-items: center;
 }
 
+.tiger-toggle-label h4 {
+    font-size: 1rem;
+}
+
 .tiger-toggle-input {
     display: none;
 }
@@ -280,6 +284,9 @@
 
 .tiger-toggle-input:checked+.tiger-toggle-slider {
     background-color: #66bb6a;
+    width: 3rem;
+    height: 1.6rem;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .tiger-toggle-input:checked+.tiger-toggle-slider::before {
@@ -290,9 +297,10 @@
 .tiger-delete-all-btn {
     background-color: #ff3d00;
     color: white;
-    padding: 10px 15px;
+    padding: 2px 5px;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
+    margin-bottom: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
