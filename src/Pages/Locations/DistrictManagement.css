@@ -191,7 +191,7 @@
     font-weight: bold;
     position: sticky;
     top: 0;
-    z-index: 2;
+    z-index: 0;
 }
 
 /* Table Cell Styling */
@@ -241,4 +241,66 @@
     font-size: 14px;
     margin-bottom: 15px;
     font-family: 'Poppins', sans-serif;
+}
+
+
+/* Edit Button Styling */
+.district-edit-button {
+    background-color: #007bff;
+    /* Bootstrap blue color */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.district-edit-button:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+    color: #ffffff;
+}
+
+/* Icon Styling within the Button */
+.district-edit-button svg {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+
+/* Modal container */
+.districtpop-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Adjusted modal content to make it shorter */
+.districtpop-modal-content {
+    background-color: #fff;
+    padding: 1.5rem;
+    width: 600px;
+    max-width: 100%;
+    max-height: 70vh;
+    /* Set max-height to 70% of viewport height */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    position: relative;
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    overflow-x: hidden;
+    /* Prevent horizontal scrolling */
 }

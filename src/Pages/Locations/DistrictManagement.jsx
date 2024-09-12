@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import AddServiceForm from "./AddServiceForm"; // The component for adding more services
+import { faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import "./DistrictManagement.css"; // Custom styling for this component
+import EditDistrictForm from "./EditDistrictForm"; // Import the new EditDistrictForm component
+import AddServiceForm from "./AddServiceForm"; // Import the AddServiceForm component
+import "./DistrictManagement.css";
 
 const DistrictManagement = () => {
-  const [districts, setDistricts] = useState([]); // Ensure this is an array by default
-  const [selectedDistrict, setSelectedDistrict] = useState(""); // The selected district
-  const [districtData, setDistrictData] = useState(null); // Data for the selected district
-  const [showAddService, setShowAddService] = useState(false); // Toggle for rendering the Add Service form
-  const [errorMessage, setErrorMessage] = useState(""); // To track errors
-  const [loading, setLoading] = useState(true); // Loading state
+  const [districts, setDistricts] = useState([]);
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [districtData, setDistrictData] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  // Modal states for Edit and Add forms
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [showAddService, setShowAddService] = useState(false); // Toggle for AddServiceForm
+  const [selectedRecord, setSelectedRecord] = useState(null); // Record to edit
 
   // Fetch all locations and extract unique districts
   useEffect(() => {
@@ -19,15 +24,13 @@ const DistrictManagement = () => {
       try {
         const response = await axios.get(
           "https://api.coolieno1.in/v1.0/core/locations",
-        ); // Adjust API endpoint as needed
+        );
         const allLocations = response.data;
-
-        // Extract unique districts from the locations
         const uniqueDistricts = [
           ...new Set(allLocations.map((location) => location.district)),
         ];
         setDistricts(uniqueDistricts);
-        setErrorMessage(""); // Clear any previous error
+        setErrorMessage("");
       } catch (error) {
         console.error("Error fetching locations:", error);
         setErrorMessage("Failed to fetch districts.");
@@ -39,27 +42,44 @@ const DistrictManagement = () => {
     fetchLocations();
   }, []);
 
-  // Function to handle district selection
+  // Handle district selection
   const handleDistrictChange = (e) => {
     setSelectedDistrict(e.target.value);
-    fetchDistrictData(e.target.value); // Fetch data for the selected district
+    fetchDistrictData(e.target.value);
   };
 
-  // Function to fetch data for the selected district
+  // Fetch data for the selected district
   const fetchDistrictData = async (district) => {
     try {
       const response = await axios.get(
         `https://api.coolieno1.in/v1.0/core/locations/district/${district}`,
-      ); // Adjust API endpoint as needed
+      );
       setDistrictData(response.data);
-      setErrorMessage(""); // Clear any previous error
+      setErrorMessage("");
     } catch (error) {
       console.error("Error fetching district data:", error);
       setErrorMessage("Failed to fetch district data.");
     }
   };
 
-  // Toggle between showing the add service form and district data
+  // Open modal for editing
+  const openModal = (record) => {
+    setSelectedRecord(record);
+    setModalIsOpen(true);
+  };
+
+  // Close modal
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  // Handle successful update from the form
+  const handleUpdateSuccess = () => {
+    fetchDistrictData(selectedDistrict); // Refresh the district data after update
+    setModalIsOpen(false);
+  };
+
+  // Toggle AddServiceForm visibility
   const toggleAddService = () => {
     setShowAddService(!showAddService);
   };
@@ -80,17 +100,17 @@ const DistrictManagement = () => {
         <button className="toggle-button" onClick={toggleAddService}>
           {showAddService ? (
             <>
-              <FontAwesomeIcon icon={faArrowLeft} /> Back to District Profile
+              <FontAwesomeIcon icon={faPlus} /> Back to District Data
             </>
           ) : (
             <>
-              <FontAwesomeIcon icon={faPlus} /> Add More Services
+              <FontAwesomeIcon icon={faPlus} /> Add New Service
             </>
           )}
         </button>
       </div>
 
-      {/* Toggle between adding services and viewing district data */}
+      {/* Toggle between AddServiceForm and viewing district data */}
       {showAddService ? (
         <AddServiceForm />
       ) : (
@@ -123,6 +143,7 @@ const DistrictManagement = () => {
                     <th>Price</th>
                     <th>Min</th>
                     <th>Max</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -137,6 +158,14 @@ const DistrictManagement = () => {
                       <td>{JSON.stringify(location.price)}</td>
                       <td>{location.min}</td>
                       <td>{location.max}</td>
+                      <td>
+                        <button
+                          className="district-edit-button"
+                          onClick={() => openModal(location)}
+                        >
+                          <FontAwesomeIcon icon={faEdit} /> Edit
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -144,6 +173,16 @@ const DistrictManagement = () => {
             </div>
           )}
         </>
+      )}
+
+      {/* Edit District Modal */}
+      {modalIsOpen && (
+        <EditDistrictForm
+          isOpen={modalIsOpen}
+          onClose={closeModal}
+          selectedRecord={selectedRecord}
+          onUpdateSuccess={handleUpdateSuccess}
+        />
       )}
     </div>
   );
