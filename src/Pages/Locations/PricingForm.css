@@ -9,8 +9,8 @@
     font-family: 'Poppins', sans-serif;
     overflow: auto;
     height: 100%;
-    /* Allow overflow to manage larger content */
     position: relative;
+    transition: all 0.3s ease;
 }
 
 /* Form Title */
@@ -19,24 +19,27 @@
     font-weight: bold;
     text-align: center;
     margin-bottom: 25px;
-    font-size: 2rem;
+    font-size: 2.2rem;
+    transition: all 0.3s ease;
 }
 
-/* Form Group */
+/* Form Group with grid layout */
 .zomato-form-group {
     margin-bottom: 20px;
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
     transition: all 0.3s ease;
 }
 
+/* Label */
 .zomato-form-group label {
     font-weight: 600;
     color: #333;
     margin-bottom: 8px;
 }
 
+/* Input Fields */
 .zomato-form-control {
     background-color: #fff;
     border: 2px solid #ff4d4d;
@@ -46,6 +49,7 @@
     color: #333;
     outline: none;
     transition: all 0.3s ease;
+    margin-right: 2px;
 }
 
 .zomato-form-control:focus {
@@ -53,7 +57,7 @@
     box-shadow: 0 0 8px rgba(255, 153, 0, 0.6);
 }
 
-/* Edit/Save Button */
+/* Edit/Save Button inside the input field */
 .zomato-edit-btn {
     padding: 10px;
     background-color: transparent;
@@ -69,23 +73,28 @@
     color: #ff9900;
 }
 
-/* Buttons */
+/* Add Button with cute look */
 .zomato-btn-add-variant {
-    color: #ff4d4d;
+    background-color: #ff4d4d;
+    color: #fff;
     border: none;
-    border-radius: 5px;
-    padding: 2px 4px;
+    border-radius: 2.5px;
+    padding: 1px 2px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .zomato-btn-add-variant:hover {
-    color: #ff9900;
-    transform: scale(1.05);
+    background-color: #ff9900;
+    transform: scale(1.1);
 }
 
+/* Delete Button */
 .zomato-delete-btn {
     background-color: transparent;
     color: #d9534f;
@@ -93,10 +102,12 @@
     border-radius: 5px;
     font-size: large;
     cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .zomato-delete-btn:hover {
     color: #c9302c;
+    transform: scale(1.1);
 }
 
 /* Variant List */
@@ -111,6 +122,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: all 0.3s ease;
 }
 
 /* Switches */
@@ -118,6 +130,7 @@
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
+    gap: 10px;
 }
 
 /* Sticky Footer */
@@ -128,8 +141,10 @@
     padding-top: 20px;
     background-color: #fff;
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
+/* Submit Button */
 .zomato-btn-submit {
     background-color: #ff4d4d;
     color: #fff;
@@ -153,6 +168,7 @@
     margin-bottom: 20px;
     font-weight: bold;
     text-align: center;
+    transition: all 0.3s ease;
 }
 
 .zomato-alert-warning {
@@ -180,6 +196,10 @@
     animation: fadeIn 0.5s ease;
 }
 
+.variant-label {
+    margin-right: 2px;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -199,7 +219,7 @@
     padding-right: 10px;
 }
 
-/* Make the form responsive */
+/* Responsive Design */
 @media (max-width: 768px) {
     .zomato-pricing-form-container {
         padding: 15px;
@@ -211,7 +231,7 @@
     }
 
     .zomato-btn-add-variant {
-        padding: 1px;
+        padding: 8px;
     }
 
     .zomato-btn-submit {

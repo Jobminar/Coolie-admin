@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchCategories, fetchSubcategories, fetchServices } from "./api";
-import { FaPlus, FaTrash, FaEdit, FaSave } from "react-icons/fa";
+import { FaEdit, FaSave, FaPlus, FaTrash } from "react-icons/fa";
 import Switch from "react-switch";
 import "./PricingForm.css";
 import axios from "axios";
@@ -34,6 +34,7 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
   const [miscFee, setMiscFee] = useState("");
   const [platformCommission, setPlatformCommission] = useState("");
 
+  // Editable fields
   const [isLocationEditable, setIsLocationEditable] = useState(false);
   const [isDistrictEditable, setIsDistrictEditable] = useState(false);
   const [isPincodeEditable, setIsPincodeEditable] = useState(false);
@@ -184,56 +185,59 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
           {/* Location, District, and Pincode Fields */}
           <div className="zomato-form-group zomato-animated">
             <label>Location</label>
-            <input
-              type="text"
-              className="zomato-form-control"
-              value={editedLocation}
-              readOnly={!isLocationEditable}
-              onChange={(e) => setEditedLocation(e.target.value)}
-            />
-            <button
-              type="button"
-              className="zomato-edit-btn"
-              onClick={() => handleToggleEdit("location")}
-            >
-              {isLocationEditable ? <FaSave /> : <FaEdit />}
-            </button>
+            <div className="input-with-icon">
+              <input
+                type="text"
+                className="zomato-form-control"
+                value={editedLocation}
+                readOnly={!isLocationEditable}
+                onChange={(e) => setEditedLocation(e.target.value)}
+              />
+              <span
+                className="edit-icon"
+                onClick={() => handleToggleEdit("location")}
+              >
+                {isLocationEditable ? <FaSave /> : <FaEdit />}
+              </span>
+            </div>
           </div>
 
           <div className="zomato-form-group zomato-animated">
             <label>District</label>
-            <input
-              type="text"
-              className="zomato-form-control"
-              value={editedDistrict}
-              readOnly={!isDistrictEditable}
-              onChange={(e) => setEditedDistrict(e.target.value)}
-            />
-            <button
-              type="button"
-              className="zomato-edit-btn"
-              onClick={() => handleToggleEdit("district")}
-            >
-              {isDistrictEditable ? <FaSave /> : <FaEdit />}
-            </button>
+            <div className="input-with-icon">
+              <input
+                type="text"
+                className="zomato-form-control"
+                value={editedDistrict}
+                readOnly={!isDistrictEditable}
+                onChange={(e) => setEditedDistrict(e.target.value)}
+              />
+              <span
+                className="edit-icon"
+                onClick={() => handleToggleEdit("district")}
+              >
+                {isDistrictEditable ? <FaSave /> : <FaEdit />}
+              </span>
+            </div>
           </div>
 
           <div className="zomato-form-group zomato-animated">
             <label>Pincode</label>
-            <input
-              type="text"
-              className="zomato-form-control"
-              value={editedPincode}
-              readOnly={!isPincodeEditable}
-              onChange={(e) => setEditedPincode(e.target.value)}
-            />
-            <button
-              type="button"
-              className="zomato-edit-btn"
-              onClick={() => handleToggleEdit("pincode")}
-            >
-              {isPincodeEditable ? <FaSave /> : <FaEdit />}
-            </button>
+            <div className="input-with-icon">
+              <input
+                type="text"
+                className="zomato-form-control"
+                value={editedPincode}
+                readOnly={!isPincodeEditable}
+                onChange={(e) => setEditedPincode(e.target.value)}
+              />
+              <span
+                className="edit-icon"
+                onClick={() => handleToggleEdit("pincode")}
+              >
+                {isPincodeEditable ? <FaSave /> : <FaEdit />}
+              </span>
+            </div>
           </div>
 
           {/* Category and Subcategory Fields */}
@@ -297,7 +301,7 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
 
           {/* Price Variants */}
           <div className="zomato-form-group zomato-animated">
-            <label>Service Variants</label>
+            <label className="variant-label">Service Variants</label>
             <div className="zomato-variant-group">
               <input
                 type="text"
