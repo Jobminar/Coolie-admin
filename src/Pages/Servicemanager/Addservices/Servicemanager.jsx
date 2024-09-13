@@ -121,7 +121,7 @@ const ServiceManager = () => {
       api
         .fetchServices(selectedCategoryRef.current._id, subCategoryId)
         .then((response) => {
-          setServices(response.data.data);
+          setServices(response.data);
           setShowServiceList(true);
           setSelectedService(null);
           sessionStorage.setItem("subCategoryId", subCategoryId);

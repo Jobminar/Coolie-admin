@@ -75,7 +75,7 @@ const ManageService = () => {
         `${API_BASE_URL}/v1.0/core/services/filter/${categoryId}/${subCategoryId}`,
       )
       .then((response) => {
-        setServices(response.data.data);
+        setServices(response.data);
       })
       .catch((error) => {
         console.error("Error fetching services:", error);
