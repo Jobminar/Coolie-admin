@@ -45,15 +45,18 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
   const API_POST_URL = "https://api.coolieno1.in/v1.0/core/locations/post";
 
   useEffect(() => {
+    // Initialize edited fields with prop values
     setEditedLocation(location);
     setEditedDistrict(district);
     setEditedPincode(pincode);
   }, [location, district, pincode]);
 
   useEffect(() => {
+    // Fetch all categories when the component mounts
     const fetchAllCategories = async () => {
       try {
         const response = await fetchCategories();
+        console.log("Categories fetched:", response.data);
         setCategories(response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -63,6 +66,7 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
   }, []);
 
   const handleCategoryChange = async (e) => {
+    // Handle category change
     const categoryId = e.target.value;
     const categoryName =
       categories.find((cat) => cat._id === categoryId)?.name || "";
@@ -70,8 +74,15 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
     setSelectedSubcategory({ id: "", name: "" });
     setServices([]);
 
+    console.log("Selected category:", categoryName);
+
     try {
       const response = await fetchSubcategories(categoryId);
+      console.log(
+        "Subcategories fetched for category:",
+        categoryName,
+        response.data,
+      );
       setSubcategories(response.data);
     } catch (error) {
       console.error("Error fetching subcategories:", error);
@@ -79,14 +90,22 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
   };
 
   const handleSubcategoryChange = async (e) => {
+    // Handle subcategory change
     const subCategoryId = e.target.value;
     const subCategoryName =
       subcategories.find((sub) => sub._id === subCategoryId)?.name || "";
     setSelectedSubcategory({ id: subCategoryId, name: subCategoryName });
     setServices([]);
 
+    console.log("Selected subcategory:", subCategoryName);
+
     try {
       const response = await fetchServices(selectedCategory.id, subCategoryId);
+      console.log(
+        "Services fetched for subcategory:",
+        subCategoryName,
+        response.data,
+      );
       setServices(response.data);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -94,6 +113,7 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
   };
 
   const handleAddVariant = () => {
+    // Add a new service variant
     if (variantKey && variantValue) {
       setPriceVariants((prevVariants) => ({
         ...prevVariants,
@@ -101,18 +121,22 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
       }));
       setVariantKey("");
       setVariantValue("");
+      console.log("Added variant:", variantKey, variantValue);
     } else {
       alert("Please enter both variant name and price.");
     }
   };
 
   const handleDeleteVariant = (key) => {
+    // Delete a service variant
     const updatedVariants = { ...priceVariants };
     delete updatedVariants[key];
     setPriceVariants(updatedVariants);
+    console.log("Deleted variant:", key);
   };
 
   const handleToggleEdit = (field) => {
+    // Toggle editing for location, district, or pincode
     if (field === "location") {
       setIsLocationEditable((prev) => !prev);
     } else if (field === "district") {
@@ -120,12 +144,14 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
     } else if (field === "pincode") {
       setIsPincodeEditable((prev) => !prev);
     }
+    console.log(`Toggled edit for ${field}`);
   };
 
   const handleSubmit = async (e) => {
+    // Handle form submission
     e.preventDefault();
 
-    if (!selectedCategory.id || !selectedService.id) {
+    if (!selectedCategory.name || !selectedService.name) {
       alert("Please complete all required fields.");
       return;
     }
@@ -134,9 +160,9 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
       district: editedDistrict,
       location: editedLocation,
       pincode: editedPincode,
-      category: `${selectedCategory.name}(${selectedCategory.id})`,
-      subcategory: `${selectedSubcategory.name}(${selectedSubcategory.id})`,
-      servicename: `${selectedService.name}(${selectedService.id})`,
+      category: selectedCategory.name, // Send name only
+      subcategory: selectedSubcategory.name, // Send name only
+      servicename: selectedService.name, // Send name only
       price: priceVariants,
       creditEligibility,
       taxPercentage,
@@ -153,12 +179,16 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
       formData.max = maxQuantity;
     }
 
+    console.log("Form data to be submitted:", formData);
+
     try {
       const response = await axios.post(API_POST_URL, formData);
       if (response.status === 200 || response.status === 201) {
         alert("Form submitted successfully!");
+        console.log("Form submission success:", response.data);
       } else {
         alert(`Form submission failed with status: ${response.status}`);
+        console.log("Form submission failed:", response);
       }
     } catch (error) {
       console.error("Error submitting form:", error);

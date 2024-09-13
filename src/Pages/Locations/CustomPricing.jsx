@@ -43,7 +43,8 @@ const CustomPricing = ({ onLocationSelected }) => {
   const processAddressSelection = (place) => {
     const selectedLocation = place.formatted_address || "";
     setSelectedLocation(selectedLocation);
-    validateAddress(selectedLocation);
+    console.log("Selected location:", selectedLocation);
+    validateAddress(selectedLocation); // Call the validation function
   };
 
   const fetchLocationData = async () => {
@@ -51,7 +52,6 @@ const CustomPricing = ({ onLocationSelected }) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/locations`);
       const locationsData = response.data;
-
       setLocations(locationsData);
       setTotalRegions(locationsData.length);
 
@@ -83,11 +83,14 @@ const CustomPricing = ({ onLocationSelected }) => {
   };
 
   const validateAddress = (selectedLocation) => {
+    // Tokenize the input address into words, remove commas, and filter out empty tokens
     const addressTokens = selectedLocation
       .toLowerCase()
       .replace(/,/g, "")
       .split(" ")
       .filter((token) => token.trim().length > 0);
+
+    console.log("Address tokens for validation:", addressTokens);
 
     let isValid = false;
 
@@ -104,12 +107,16 @@ const CustomPricing = ({ onLocationSelected }) => {
         pincode,
       ];
 
+      console.log("Record tokens for comparison:", allTokens);
+
+      // Check if any token from the input address matches any of the record tokens
       const hasMatch = addressTokens.some((token) =>
         allTokens.some((recordToken) => recordToken.includes(token)),
       );
 
       if (hasMatch) {
         isValid = true;
+        console.log(`Match found for record:`, record);
       }
     });
 
