@@ -132,7 +132,9 @@ const Sidebar = ({ children }) => {
   const handleFAQNavigation = () => {
     handleNavigation("/faq");
   };
-
+  const handleLocationNavigation = () => {
+    handleNavigation("/locations");
+  };
   const renderFilterBar = () => {
     const filterBarExcludedComponents = [
       "/loyality-cards",
@@ -216,46 +218,12 @@ const Sidebar = ({ children }) => {
         </div>
 
         {/* Locations & Pricing Dropdown */}
+        {/* Replace Locations & Pricing Dropdown with a Single Div */}
         <div
-          className={`dropdown locationsDropdown ${
-            locationsDropdown ? "active" : ""
-          }`}
+          className={activeItem === "/locations-pricing" ? "active" : ""}
+          onClick={handleLocationNavigation}
         >
-          <div onClick={toggleLocationsDropdown}>
-            Locations & Pricing <FaCaretDown />
-          </div>
-          {locationsDropdown && (
-            <div className="dropdown-menu">
-              <div
-                className={`dropdown-item ${
-                  activeDropdownItem === "locations" ? "active" : ""
-                }`}
-                onClick={() => handleNavigation("/locations", "locations")}
-              >
-                Locations
-                {activeDropdownItem === "locations" && (
-                  <FontAwesomeIcon
-                    icon={faPlay}
-                    style={{ color: "#ffa226", marginLeft: "5px" }}
-                  />
-                )}
-              </div>
-              <div
-                className={`dropdown-item ${
-                  activeDropdownItem === "pricing" ? "active" : ""
-                }`}
-                onClick={() => handleNavigation("/pricing", "pricing")}
-              >
-                Pricing
-                {activeDropdownItem === "pricing" && (
-                  <FontAwesomeIcon
-                    icon={faPlay}
-                    style={{ color: "#ffa226", marginLeft: "5px" }}
-                  />
-                )}
-              </div>
-            </div>
-          )}
+          Locations & Pricing
         </div>
 
         {/* Service Manager Dropdown */}

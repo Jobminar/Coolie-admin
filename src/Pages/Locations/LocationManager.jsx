@@ -7,21 +7,23 @@ import {
   faTrash,
   faEdit,
   faClose,
-  faChevronDown,
-  faChevronUp,
+  faDownload,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "./LocationManager.css";
 
+// Import the LocationPriceFilter component
+import LocationPriceFilter from "./LocationPriceFilter";
+
 const LocationManager = () => {
   const [locations, setLocations] = useState([]);
+  const [filteredLocations, setFilteredLocations] = useState([]);
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [expandedDistricts, setExpandedDistricts] = useState({});
   const [showActions, setShowActions] = useState(false);
 
   useEffect(() => {
@@ -35,6 +37,7 @@ const LocationManager = () => {
         "https://api.coolieno1.in/v1.0/core/locations",
       );
       setLocations(response.data);
+      setFilteredLocations(response.data); // Set initial filtered locations to all
       setError("");
     } catch (error) {
       console.error("Error fetching locations:", error);
@@ -42,6 +45,39 @@ const LocationManager = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleFilterChange = (filters) => {
+    let filtered = locations;
+
+    // Apply filters if any filter is selected
+    if (filters.state) {
+      filtered = filtered.filter((loc) => loc.state === filters.state);
+    }
+    if (filters.district) {
+      filtered = filtered.filter((loc) => loc.district === filters.district);
+    }
+    if (filters.location) {
+      filtered = filtered.filter((loc) => loc.location === filters.location);
+    }
+    if (filters.pincode) {
+      filtered = filtered.filter((loc) => loc.pincode === filters.pincode);
+    }
+    if (filters.category) {
+      filtered = filtered.filter((loc) => loc.category === filters.category);
+    }
+    if (filters.subcategory) {
+      filtered = filtered.filter(
+        (loc) => loc.subcategory === filters.subcategory,
+      );
+    }
+    if (filters.servicename) {
+      filtered = filtered.filter(
+        (loc) => loc.servicename === filters.servicename,
+      );
+    }
+
+    setFilteredLocations(filtered);
   };
 
   const handleUpload = async () => {
@@ -78,6 +114,7 @@ const LocationManager = () => {
             try {
               await deleteLocation(id);
               setLocations(locations.filter((loc) => loc._id !== id));
+              handleFilterChange({});
             } catch (error) {
               console.error("Error deleting location:", error);
               setError("Failed to delete location.");
@@ -90,59 +127,6 @@ const LocationManager = () => {
       ],
     });
   };
-
-  const handleDeleteAll = async () => {
-    confirmAlert({
-      title: "Confirm to delete all",
-      message: "Are you sure to delete all locations?",
-      buttons: [
-        {
-          label: "Yes",
-          onClick: async () => {
-            try {
-              await axios.delete(
-                "https://api.coolieno1.in/v1.0/core/locations/delete",
-              );
-              setLocations([]);
-            } catch (error) {
-              console.error("Error deleting all locations:", error);
-              setError("Failed to delete all locations.");
-            }
-          },
-        },
-        {
-          label: "No",
-        },
-      ],
-    });
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value.toLowerCase());
-  };
-
-  const filteredLocations = locations.filter((location) =>
-    Object.values(location).some((value) =>
-      String(value).toLowerCase().includes(searchQuery),
-    ),
-  );
-
-  const toggleDistrictExpansion = (district) => {
-    setExpandedDistricts((prevState) => ({
-      ...prevState,
-      [district]: !prevState[district],
-    }));
-  };
-
-  const groupedLocations = filteredLocations.reduce((acc, loc) => {
-    acc[loc.district] = acc[loc.district] || [];
-    acc[loc.district].push(loc);
-    return acc;
-  }, {});
-
-  if (isLoading) {
-    return <p>Loading locations...</p>;
-  }
 
   return (
     <div className="tiger-location-manager">
@@ -192,98 +176,66 @@ const LocationManager = () => {
       {/* Error Message */}
       {error && <p className="error-message">{error}</p>}
 
-      {/* Search Input */}
-      <div className="tiger-search-container">
-        <input
-          type="text"
-          className="tiger-search-input"
-          placeholder="Search locations..."
-          value={searchQuery}
-          onChange={handleSearchChange}
-        />
-      </div>
+      {/* Filters Section */}
+      <LocationPriceFilter onFilterChange={handleFilterChange} />
 
-      {/* Toggle Show Actions Column */}
-      <div className="tiger-actions-toggle">
-        <label className="tiger-toggle-label">
-          <h4>Actions</h4>
-          <input
-            type="checkbox"
-            checked={showActions}
-            onChange={() => setShowActions(!showActions)}
-            className="tiger-toggle-input"
-          />
-          <span className="tiger-toggle-slider"></span>
-        </label>
-
-        {/* Delete All Button */}
-        {showActions && (
-          <button className="tiger-delete-all-btn" onClick={handleDeleteAll}>
-            Delete All
+      {/* Buttons Section (Add Location, Add Services, Export) */}
+      <div className="district-strap">
+        <div className="strap-actions">
+          <button className="add-location-btn">
+            <FontAwesomeIcon icon={faPlus} /> Add Location
           </button>
-        )}
+          <button className="add-services-btn">
+            <FontAwesomeIcon icon={faPlus} /> Add More Services
+          </button>
+          <button className="export-btn">
+            <FontAwesomeIcon icon={faDownload} /> Download as Excel
+          </button>
+        </div>
       </div>
 
-      {/* Display Locations Grouped by District */}
-      <div className="tiger-locations-group">
-        {Object.keys(groupedLocations).map((district) => (
-          <div key={district} className="district-wrapper">
-            <div className="district-strap">
-              <span>{district}</span>
-              <span>{groupedLocations[district].length} records</span>
-              <FontAwesomeIcon
-                icon={expandedDistricts[district] ? faChevronUp : faChevronDown}
-                className="expand-icon"
-                onClick={() => toggleDistrictExpansion(district)}
-              />
-            </div>
-
-            {expandedDistricts[district] && (
-              <div className="district-records-table">
-                <table className="tiger-locations-table">
-                  <thead>
-                    <tr>
-                      <th>Location</th>
-                      <th>State</th>
-                      <th>Category</th>
-                      <th>Subcategory</th>
-                      <th>Service Name</th>
-                      <th>Price</th>
-                      <th>Min</th>
-                      <th>Max</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {groupedLocations[district].map((location) => (
-                      <tr key={location._id}>
-                        <td>{location.location}</td>
-                        <td>{location.state}</td>
-                        <td>{location.category}</td>
-                        <td>{location.subcategory}</td>
-                        <td>{location.servicename}</td>
-                        <td>{JSON.stringify(location.price)}</td>
-                        <td>{location.min}</td>
-                        <td>{location.max}</td>
-                        <td>
-                          <button className="tiger-edit-btn">
-                            <FontAwesomeIcon icon={faEdit} />
-                          </button>
-                          <button
-                            className="tiger-delete-btn"
-                            onClick={() => handleDelete(location._id)}
-                          >
-                            <FontAwesomeIcon icon={faTrash} />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        ))}
+      {/* Table Section */}
+      <div className="district-records-table">
+        <table className="tiger-locations-table">
+          <thead>
+            <tr>
+              <th>Location</th>
+              <th>State</th>
+              <th>Category</th>
+              <th>Subcategory</th>
+              <th>Service Name</th>
+              <th>Price</th>
+              <th>Min</th>
+              <th>Max</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredLocations.map((location) => (
+              <tr key={location._id}>
+                <td>{location.location}</td>
+                <td>{location.state}</td>
+                <td>{location.category}</td>
+                <td>{location.subcategory}</td>
+                <td>{location.servicename}</td>
+                <td>{JSON.stringify(location.price)}</td>
+                <td>{location.min}</td>
+                <td>{location.max}</td>
+                <td>
+                  <button className="tiger-edit-btn">
+                    <FontAwesomeIcon icon={faEdit} />
+                  </button>
+                  <button
+                    className="tiger-delete-btn"
+                    onClick={() => handleDelete(location._id)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

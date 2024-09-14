@@ -335,6 +335,38 @@
     font-size: 16px;
 }
 
+/* Styling for new button group */
+.strap-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.add-location-btn,
+.add-services-btn,
+.export-btn {
+    background-color: white;
+    color: #ff9500;
+    border: 1px solid #ff9500;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.add-location-btn:hover,
+.add-services-btn:hover,
+.export-btn:hover {
+    background-color: #ffe6cc;
+}
+
+.add-location-btn svg,
+.add-services-btn svg,
+.export-btn svg {
+    margin-right: 5px;
+}
+
 .expand-icon {
     font-size: 18px;
     cursor: pointer;
@@ -352,6 +384,7 @@
     box-sizing: border-box;
     overflow: auto;
 }
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
