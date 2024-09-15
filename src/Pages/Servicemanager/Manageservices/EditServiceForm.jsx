@@ -7,12 +7,12 @@ const EditServiceForm = ({
   service,
   category,
   subCategory,
+  variantName,
   onSave,
   onClose,
 }) => {
   const [serviceName, setServiceName] = useState(service.name || "");
   const [description, setDescription] = useState(service.description || "");
-  const [variantName] = useState(service.variantName || ""); // Display as text, not editable
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -46,8 +46,7 @@ const EditServiceForm = ({
     const formData = new FormData();
     formData.append("name", serviceName);
     formData.append("description", description);
-    formData.append("variantName", variantName); // Directly using variantName from backend data
-
+    formData.append("variantName", variantName || "N/A"); // Directly using variantName from backend data
     formData.append("isActive", true);
     formData.append("isDeleted", false);
 
@@ -110,7 +109,7 @@ const EditServiceForm = ({
         <input
           type="text"
           className="service-input-borders"
-          value={service.variantName}
+          value={variantName}
           readOnly
         />
       </div>
@@ -157,13 +156,13 @@ EditServiceForm.propTypes = {
     _id: PropTypes.string.isRequired,
     name: PropTypes.string,
     description: PropTypes.string,
-    variantName: PropTypes.string,
     image: PropTypes.string,
   }).isRequired,
   category: PropTypes.string.isRequired,
   subCategory: PropTypes.string.isRequired,
   onSave: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  variantName: PropTypes.string,
 };
 
 export default EditServiceForm;

@@ -20,11 +20,13 @@ const ServiceManager = () => {
   const [subCategoryName, setSubCategoryName] = useState("");
   const [categoryError, setCategoryError] = useState("");
   const [subCategoryError, setSubCategoryError] = useState("");
-  // const [uiVariants, setUiVariants] = useState([]);
+  const [uiVariants, setUiVariants] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [services, setServices] = useState([]);
   const [reload, setReload] = useState(false);
+  const [selectedVariantName, setSelectedVariantName] = useState("");
+
   // const [subCategoryErrorStatus, setSubCategoryErrorStatus] = useState(false);
   const [subcategoryClicked, setSubcategoryClicked] = useState(false);
 
@@ -33,6 +35,10 @@ const ServiceManager = () => {
   const lastCategoryIdRef = useRef(null);
 
   const [selectedService, setSelectedService] = useState(null);
+  //variant names for subcategory
+  const variantNames = [
+    ...new Set(subCategories.map((subCategory) => subCategory.variantName)),
+  ].sort();
 
   useEffect(() => {
     api
@@ -121,14 +127,14 @@ const ServiceManager = () => {
       api
         .fetchServices(selectedCategoryRef.current._id, subCategoryId)
         .then((response) => {
-          setServices(response.data);
-          setShowServiceList(true);
-          setSelectedService(null);
+          setServices(response.data); // Services should be set here
+          setShowServiceList(true); // Ensure this is set to true to show the services
+          setSelectedService(null); // Clear the selected service
           sessionStorage.setItem("subCategoryId", subCategoryId);
         })
         .catch((error) => {
           console.error("Error fetching services:", error);
-          setShowServiceList(false);
+          setShowServiceList(false); // Hide the service list if fetching fails
         });
     },
     [],
@@ -167,7 +173,7 @@ const ServiceManager = () => {
       return;
     }
 
-    fetchServices(subCategoryId);
+    fetchServices(subCategoryId); // Ensure this is called correctly
     const selectedSubCategory = subCategories.find(
       (subCat) => subCat._id === subCategoryId,
     );
@@ -176,7 +182,7 @@ const ServiceManager = () => {
       selectedSubCategoryRef.current = selectedSubCategory;
       sessionStorage.setItem("subCategoryId", subCategoryId);
       setShowServiceForm(false);
-      setSubcategoryClicked(true);
+      setSubcategoryClicked(true); // Set this to true to show the services
     } else {
       selectedSubCategoryRef.current = null;
       sessionStorage.removeItem("subCategoryId");
@@ -451,42 +457,74 @@ const ServiceManager = () => {
                     onClick={() =>
                       setShowAddSubCategoryForm(!showAddSubCategoryForm)
                     }
+                    aria-label="Add Sub-Category"
                   >
                     +
                   </button>
                   <button
                     className="servermanager-close-icon"
                     onClick={() => setShowSubCategoryMenu(false)}
+                    aria-label="Close Menu"
                   >
                     <FontAwesomeIcon icon={faTimes} />
                   </button>
                 </div>
-              </div>
-              {showSubCategoryMenu && (
-                <div className="servermanager-menu">
-                  {subCategories.length > 0 ? (
-                    subCategories.map((subCategory) => (
-                      <div
-                        key={subCategory._id}
-                        className={`servermanager-menu-item ${
-                          selectedSubCategoryRef.current &&
-                          selectedSubCategoryRef.current._id === subCategory._id
-                            ? "selected"
-                            : ""
-                        }`}
-                        onClick={() => {
-                          handleSubCategorySelect(subCategory._id);
-                          handleSubCategoryClick();
-                        }}
-                      >
-                        {subCategory.name}
-                      </div>
-                    ))
-                  ) : (
-                    <div>No subcategories available</div>
-                  )}
+
+                {/* Dropdown for filtering */}
+                <div className="servermanager-filter-group">
+                  <label htmlFor="variant-filter">Filter by Variant:</label>
+                  <select
+                    id="variant-filter"
+                    value={selectedVariantName}
+                    onChange={(e) => setSelectedVariantName(e.target.value)}
+                  >
+                    <option value="">All Variants</option>
+                    {variantNames.map((variant) => (
+                      <option key={variant} value={variant}>
+                        {variant}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-              )}
+              </div>
+
+              {/* Subcategories List */}
+              <div className="servermanager-menu">
+                {subCategories.length > 0 ? (
+                  subCategories
+                    .filter((subCategory) =>
+                      selectedVariantName
+                        ? subCategory.variantName === selectedVariantName
+                        : true,
+                    )
+                    .map((subCategory, index) => {
+                      const subCategoryId =
+                        subCategory._id?.$oid || subCategory._id; // Adjust access here
+
+                      return (
+                        <div
+                          key={subCategoryId || index} // Use subCategoryId or fallback to index
+                          className={`servermanager-menu-item ${
+                            selectedSubCategoryRef.current &&
+                            selectedSubCategoryRef.current._id?.$oid ===
+                              subCategoryId
+                              ? "selected"
+                              : ""
+                          }`}
+                          onClick={() => {
+                            console.log("Subcategory ID:", subCategoryId); // Log for debugging
+                            handleSubCategorySelect(subCategoryId);
+                            handleSubCategoryClick();
+                          }}
+                        >
+                          {subCategory.name} ({subCategory.variantName})
+                        </div>
+                      );
+                    })
+                ) : (
+                  <div>No subcategories available</div>
+                )}
+              </div>
             </div>
           )}
 
@@ -580,7 +618,10 @@ const ServiceManager = () => {
         <>
           <hr style={{ borderTop: "2px solid #ccc", height: "1px" }} />
           <ServiceDetailCard
-            service={selectedService}
+            service={{
+              ...selectedService,
+              variantName: selectedService.variantName || "N/A", // Provide a fallback if variantName is undefined
+            }}
             category={selectedCategoryRef.current}
             subCategory={selectedSubCategoryRef.current}
             onClose={() => setSelectedService(null)}

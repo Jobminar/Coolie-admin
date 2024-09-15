@@ -287,6 +287,7 @@ const ManageService = () => {
         </div>
         {selectedService && (
           <EditServiceForm
+            variantName={selectedSubCategory.variantName}
             service={selectedService}
             category={selectedCategory._id}
             subCategory={selectedSubCategory._id}
