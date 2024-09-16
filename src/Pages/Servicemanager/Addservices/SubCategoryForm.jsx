@@ -66,61 +66,65 @@ const SubCategoryForm = ({
           </button>
         </div>
       </div>
-      <div className="servermanagerinputcontainer">
-        <label htmlFor="subCategoryName">Sub-Category Name:</label>
-        <input
-          type="text"
-          id="subCategoryName"
-          className="servermanager-bottom-border-input"
-          value={subCategoryName}
-          onChange={(e) => setSubCategoryName(e.target.value)}
-          aria-label="Sub-Category Name"
-        />
-        {subCategoryError && <span className="error">{subCategoryError}</span>}
-      </div>
-      <div className="servermanageruploadcontainer">
-        <input
-          type="file"
-          id="subCategoryIcon"
-          onChange={handleSubCategoryIconChange}
-          className="servermanager-file-upload"
-          aria-label="Sub-Category Icon"
-        />
-        <label
-          htmlFor="subCategoryIcon"
-          className="servermanager-upload-icon-label"
-        >
-          Choose Icon
-          <FontAwesomeIcon
-            icon={faArrowUpFromBracket}
-            className="servermanager-upload-icon"
+      <div className="servermanagerinput-wrapper">
+        <div className="servermanagerinputcontainer">
+          <label htmlFor="subCategoryName">Sub-Category Name:</label>
+          <input
+            type="text"
+            id="subCategoryName"
+            className="servermanager-bottom-border-input"
+            value={subCategoryName}
+            onChange={(e) => setSubCategoryName(e.target.value)}
+            aria-label="Sub-Category Name"
           />
-        </label>
-        {subCategoryIcon && (
-          <img
-            src={URL.createObjectURL(subCategoryIcon)}
-            alt="Sub-Category Icon Preview"
-            className="servermanager-upload-preview"
+          {subCategoryError && (
+            <span className="error">{subCategoryError}</span>
+          )}
+        </div>
+        <div className="servermanageruploadcontainer">
+          <input
+            type="file"
+            id="subCategoryIcon"
+            onChange={handleSubCategoryIconChange}
+            className="servermanager-file-upload"
+            aria-label="Sub-Category Icon"
           />
-        )}
-      </div>
-      <div className="servermanagerinputcontainer">
-        <label htmlFor="variantSelect">Select Variant:</label>
-        <select
-          id="variantSelect"
-          value={selectedVariant}
-          onChange={handleVariantChange}
-          aria-label="Variant Name"
-        >
-          <option value="" disabled>
-            Select a variant
-          </option>
-          {variants.map((variant, index) => (
-            <option key={index} value={variant}>
-              {variant}
+          <label
+            htmlFor="subCategoryIcon"
+            className="servermanager-upload-icon-label"
+          >
+            Choose Icon
+            <FontAwesomeIcon
+              icon={faArrowUpFromBracket}
+              className="servermanager-upload-icon"
+            />
+          </label>
+          {subCategoryIcon && (
+            <img
+              src={URL.createObjectURL(subCategoryIcon)}
+              alt="Sub-Category Icon Preview"
+              className="servermanager-upload-preview"
+            />
+          )}
+        </div>
+        <div className="servermanagerinputcontainer">
+          <label htmlFor="variantSelect">Select Variant:</label>
+          <select
+            id="variantSelect"
+            value={selectedVariant}
+            onChange={handleVariantChange}
+            aria-label="Variant Name"
+          >
+            <option value="" disabled>
+              Select a variant
             </option>
-          ))}
-        </select>
+            {variants.map((variant, index) => (
+              <option key={index} value={variant}>
+                {variant}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <button
         className="servermanager-submit-button"
