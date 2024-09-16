@@ -472,7 +472,6 @@ const ServiceManager = () => {
 
                 {/* Dropdown for filtering */}
                 <div className="servermanager-filter-group">
-                  <label htmlFor="variant-filter">Filter by Variant:</label>
                   <select
                     id="variant-filter"
                     value={selectedVariantName}
@@ -594,7 +593,10 @@ const ServiceManager = () => {
       </div>
       {selectedCategoryRef.current && selectedSubCategoryRef.current && (
         <div className="selected-category-info">
-          <h6>
+          <h6
+            id="selected-category-titles"
+            style={{ fontSize: "0.8rem", marginTop: "14px" }}
+          >
             Category: {selectedCategoryRef.current.name} | Sub-Category:{" "}
             {selectedSubCategoryRef.current.name}
           </h6>
