@@ -435,14 +435,13 @@ const ServiceManager = () => {
         {showAddCategoryForm && (
           <CategoryForm
             setUiVariants={setUiVariants}
-            {...{
-              categoryName,
-              setCategoryName,
-              categoryError,
-              handleCategoryIconChange,
-              categoryIcon,
-              handleAddCategory,
-            }}
+            categoryName={categoryName}
+            setCategoryName={setCategoryName}
+            categoryError={categoryError}
+            handleCategoryIconChange={handleCategoryIconChange}
+            categoryIcon={categoryIcon}
+            handleAddCategory={handleAddCategory}
+            onClose={() => setShowAddCategoryForm(false)} // Close handler
           />
         )}
         {selectedCategoryRef.current &&
