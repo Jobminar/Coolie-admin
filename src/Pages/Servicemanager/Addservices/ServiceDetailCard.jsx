@@ -77,33 +77,6 @@ const ServiceDetailCard = ({ service, category, subCategory, onClose }) => {
             readOnly
           />
         </div>
-        <div className="form-group toggle-group">
-          <label>Active:</label>
-          <input
-            type="checkbox"
-            className="toggle-input"
-            checked={serviceData.isActive}
-            readOnly
-          />
-        </div>
-        <div className="form-group toggle-group">
-          <label>Deleted:</label>
-          <input
-            type="checkbox"
-            className="toggle-input"
-            checked={serviceData.isDeleted}
-            readOnly
-          />
-        </div>
-        <div className="form-group toggle-group">
-          <label>Tag:</label>
-          <input
-            type="checkbox"
-            className="toggle-input"
-            checked={serviceData.tag}
-            readOnly
-          />
-        </div>
         <button type="button" className="submissionbutton" onClick={onClose}>
           Close
         </button>

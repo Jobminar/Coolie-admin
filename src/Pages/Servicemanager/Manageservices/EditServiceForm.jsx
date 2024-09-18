@@ -14,6 +14,9 @@ const EditServiceForm = ({
   const [serviceName, setServiceName] = useState(service.name || "");
   const [description, setDescription] = useState(service.description || "");
   const [imageFile, setImageFile] = useState(null);
+  const [isMostBooked, setIsMostBooked] = useState(
+    service.isMostBooked || false,
+  ); // Added isMostBooked state
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
@@ -47,8 +50,7 @@ const EditServiceForm = ({
     formData.append("name", serviceName);
     formData.append("description", description);
     formData.append("variantName", variantName || "N/A"); // Directly using variantName from backend data
-    formData.append("isActive", true);
-    formData.append("isDeleted", false);
+    formData.append("isMostBooked", isMostBooked); // Appending the updated isMostBooked value
 
     if (imageFile) {
       formData.append("image", imageFile);
@@ -133,6 +135,17 @@ const EditServiceForm = ({
         )}
       </div>
 
+      {/* Added Most Booked toggle */}
+      <div className="servermanager-form-group toggle-group">
+        <label>Most Booked:</label>
+        <input
+          type="checkbox"
+          className="toggle-input"
+          checked={isMostBooked}
+          onChange={(e) => setIsMostBooked(e.target.checked)} // Toggle state
+        />
+      </div>
+
       <button type="submit" className="servermanager-submissionbutton">
         {loading ? "Updating..." : "Update"}
       </button>
@@ -157,6 +170,7 @@ EditServiceForm.propTypes = {
     name: PropTypes.string,
     description: PropTypes.string,
     image: PropTypes.string,
+    isMostBooked: PropTypes.bool, // Added prop for isMostBooked
   }).isRequired,
   category: PropTypes.string.isRequired,
   subCategory: PropTypes.string.isRequired,

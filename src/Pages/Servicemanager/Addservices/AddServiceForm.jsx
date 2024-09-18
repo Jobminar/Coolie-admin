@@ -6,10 +6,9 @@ import "./styles/servicemanager.css";
 const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
   const [serviceName, setServiceName] = useState("");
   const [description, setDescription] = useState("");
-  const [isMostBooked, setIsMostBooked] = useState(false);
+  const [isMostBooked, setIsMostBooked] = useState(false); // Added toggle for Most Booked
   const [imageFile, setImageFile] = useState(null);
   const [variantName, setVariantName] = useState(""); // To store fetched variantName
-  const [tag, setTag] = useState(false); // To manage the tag state
   const [errors, setErrors] = useState({});
 
   // Fetch the subcategory details and set the variantName using the provided API
@@ -66,6 +65,7 @@ const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
     formData.append("categoryId", category._id);
     formData.append("subCategoryId", subCategoryId); // Add subCategoryId
     formData.append("variantName", variantName); // Directly set the variantName from subcategory
+    formData.append("isMostBooked", isMostBooked); // Append the isMostBooked field
 
     // Log formData for debugging purposes
     for (let [key, value] of formData.entries()) {
@@ -128,6 +128,16 @@ const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
             onChange={handleImageChange}
           />
           {errors.image && <span className="error">{errors.image}</span>}
+        </div>
+
+        <div className="servermanager-form-group toggle-group">
+          <label>Most Booked:</label>
+          <input
+            type="checkbox"
+            checked={isMostBooked}
+            onChange={(e) => setIsMostBooked(e.target.checked)} // Handle the toggle switch state
+            className="toggle-input"
+          />
         </div>
 
         <button type="submit" className="servermanager-submissionbutton">
