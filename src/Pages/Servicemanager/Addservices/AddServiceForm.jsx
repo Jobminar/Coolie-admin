@@ -3,7 +3,14 @@ import PropTypes from "prop-types";
 import * as api from "./api/servicemanager-api"; // Import your API functions
 import "./styles/servicemanager.css";
 
-const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
+const AddServiceForm = ({
+  category,
+  subCategory,
+  subCategoryId,
+  onSubmit,
+  onClose,
+}) => {
+  // Add onClose prop
   const [serviceName, setServiceName] = useState("");
   const [description, setDescription] = useState("");
   const [isMostBooked, setIsMostBooked] = useState(false); // Added toggle for Most Booked
@@ -15,7 +22,7 @@ const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
   useEffect(() => {
     if (subCategoryId) {
       api
-        .fetchSubcategoryDetails(subCategoryId) // Use the new API to fetch subcategory details
+        .fetchSubcategoryDetails(subCategoryId)
         .then((response) => {
           if (response.data) {
             setVariantName(response.data.variantName);
@@ -57,14 +64,12 @@ const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
     }
 
     const formData = new FormData();
-
-    // Add the fields corresponding to the servicesSchema
     formData.append("image", imageFile);
     formData.append("name", serviceName);
     formData.append("description", description);
     formData.append("categoryId", category._id);
-    formData.append("subCategoryId", subCategoryId); // Add subCategoryId
-    formData.append("variantName", variantName); // Directly set the variantName from subcategory
+    formData.append("subCategoryId", subCategoryId);
+    formData.append("variantName", variantName);
     formData.append("isMostBooked", isMostBooked); // Append the isMostBooked field
 
     // Log formData for debugging purposes
@@ -72,8 +77,7 @@ const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
       console.log(`${key}: ${value}`);
     }
 
-    // Submit the form data
-    onSubmit(formData);
+    onSubmit(formData); // Submit the form data
   };
 
   return (
@@ -143,6 +147,13 @@ const AddServiceForm = ({ category, subCategory, subCategoryId, onSubmit }) => {
         <button type="submit" className="servermanager-submissionbutton">
           Submit
         </button>
+        <button
+          type="button"
+          className="servermanager-submissionbutton"
+          onClick={onClose} // Trigger the onClose function to hide the form
+        >
+          Close
+        </button>
       </form>
     </>
   );
@@ -153,6 +164,7 @@ AddServiceForm.propTypes = {
   subCategory: PropTypes.object.isRequired,
   subCategoryId: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired, // Add prop validation for onClose
 };
 
 export default AddServiceForm;

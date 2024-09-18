@@ -613,6 +613,7 @@ const ServiceManager = () => {
               : null
           }
           onSubmit={handleAddService}
+          onClose={() => setShowServiceForm(false)} // Pass onClose to close the AddServiceForm
         />
       )}
       {selectedService && (
