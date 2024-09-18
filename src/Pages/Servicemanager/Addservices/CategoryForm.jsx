@@ -7,17 +7,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const CategoryForm = ({
-  categoryName,
-  setCategoryName,
-  categoryError,
   handleCategoryIconChange,
-  categoryIcon,
   handleAddCategory,
   setUiVariants,
-  onClose, // Close handler passed as a prop
 }) => {
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryError, setCategoryError] = useState("");
+  const [categoryIcon, setCategoryIcon] = useState(null);
   const [serviceTypeSelection, setServiceTypeSelection] = useState("");
   const [imageError, setImageError] = useState("");
+  const [isVisible, setIsVisible] = useState(true); // State to control visibility
 
   const handleServiceTypeChange = (e) => {
     setServiceTypeSelection(e.target.value);
@@ -27,12 +26,18 @@ const CategoryForm = ({
     const file = e.target.files[0];
     if (file) {
       setImageError("");
+      setCategoryIcon(file);
       handleCategoryIconChange(e);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!categoryName) {
+      setCategoryError("Category name is required");
+      return;
+    }
+
     const selectedUiVariants = [];
 
     switch (serviceTypeSelection) {
@@ -57,12 +62,35 @@ const CategoryForm = ({
 
     setUiVariants(selectedUiVariants);
     handleAddCategory(selectedUiVariants);
+
+    // Reset fields after submitting
+    setCategoryName("");
+    setCategoryIcon(null);
+    setServiceTypeSelection("");
   };
+
+  const handleCloseForm = () => {
+    // Reset fields
+    setCategoryName("");
+    setCategoryIcon(null);
+    setServiceTypeSelection("");
+    setCategoryError("");
+    setImageError("");
+
+    // Hide the form by setting isVisible to false
+    setIsVisible(false);
+  };
+
+  // Apply 'display: none' when the form is not visible
+  if (!isVisible) {
+    return null; // Return null to hide the component completely
+  }
 
   return (
     <form
       className="servermanager-card servermanager-add-category-form"
       onSubmit={handleSubmit}
+      style={{ display: isVisible ? "block" : "none" }} // Toggle display
     >
       <div className="servermanager-form-group">
         <div className="servermanager-category-header">
@@ -70,7 +98,7 @@ const CategoryForm = ({
           <button
             type="button"
             className="servermanager-close-icon"
-            onClick={onClose}
+            onClick={handleCloseForm} // Close form on button click
           >
             <FontAwesomeIcon icon={faTimes} />
           </button>
@@ -119,10 +147,7 @@ const CategoryForm = ({
         <div className="servermanagerinputcontainer">
           <label>Service Types:</label>
           <div className="radio-group">
-            <label
-              className="servermanager-radio-label"
-              style={{ fontSize: "12px" }} // Inline styling for smaller font size
-            >
+            <label className="servermanager-radio-label">
               <input
                 type="radio"
                 name="serviceType"
@@ -132,10 +157,7 @@ const CategoryForm = ({
               />
               Cleaning (Normal/Deep)
             </label>
-            <label
-              className="servermanager-radio-label"
-              style={{ fontSize: "12px" }} // Inline styling for smaller font size
-            >
+            <label className="servermanager-radio-label">
               <input
                 type="radio"
                 name="serviceType"
@@ -145,10 +167,7 @@ const CategoryForm = ({
               />
               Gender (Female/Male)
             </label>
-            <label
-              className="servermanager-radio-label"
-              style={{ fontSize: "12px" }} // Inline styling for smaller font size
-            >
+            <label className="servermanager-radio-label">
               <input
                 type="radio"
                 name="serviceType"
@@ -158,10 +177,7 @@ const CategoryForm = ({
               />
               Time (Hourly/Daily/Monthly)
             </label>
-            <label
-              className="servermanager-radio-label"
-              style={{ fontSize: "12px" }} // Inline styling for smaller font size
-            >
+            <label className="servermanager-radio-label">
               <input
                 type="radio"
                 name="serviceType"
@@ -171,10 +187,7 @@ const CategoryForm = ({
               />
               Cloth (Men/Women/Kids/Households)
             </label>
-            <label
-              className="servermanager-radio-label"
-              style={{ fontSize: "12px" }} // Inline styling for smaller font size
-            >
+            <label className="servermanager-radio-label">
               <input
                 type="radio"
                 name="serviceType"
@@ -199,14 +212,9 @@ const CategoryForm = ({
 };
 
 CategoryForm.propTypes = {
-  categoryName: PropTypes.string.isRequired,
-  setCategoryName: PropTypes.func.isRequired,
-  categoryError: PropTypes.string,
   handleCategoryIconChange: PropTypes.func.isRequired,
-  categoryIcon: PropTypes.instanceOf(File),
   handleAddCategory: PropTypes.func.isRequired,
   setUiVariants: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired, // Adding propTypes for onClose
 };
 
 export default CategoryForm;
