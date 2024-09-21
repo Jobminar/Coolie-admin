@@ -1,6 +1,5 @@
 /* General Styling */
 
-
 /* Container Styles */
 .tiger-location-manager {
     background-color: #ffffff;
@@ -24,36 +23,14 @@
 .tiger-upload-container {
     display: flex;
     flex-direction: column;
-    /* Align elements in a column */
     justify-content: center;
     align-items: center;
-    /* Center-align items */
     margin-bottom: 20px;
     gap: 15px;
-    /* Spacing between elements */
     padding: 20px;
-    /* Add some padding */
     border-radius: 10px;
     background-color: #f9f9f9;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    /* Add a subtle shadow */
-}
-
-.tiger-file-label {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border: 2px solid #ff6f00;
-    background-color: white;
-    color: #ff6f00;
-    font-weight: bold;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.tiger-file-label:hover {
-    background-color: #ffe0b3;
 }
 
 /* Upload Button Styles */
@@ -73,47 +50,91 @@
 }
 
 .file-name-wrapper {
-    position: relative;
-    display: inline-block;
-    margin-top: 10px;
-}
-
-.file-name {
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
     color: #333;
     padding: 10px;
     border: 1px solid #ff6f00;
-    border-radius: 5px;
+    border-radius: 8px;
     background-color: #fff;
-    display: inline-block;
 }
 
 .file-clear-icon {
-    position: absolute;
-    top: -5px;
-    right: -10px;
     background-color: #ff6f00;
     color: white;
     border-radius: 50%;
     cursor: pointer;
     padding: 4px;
     font-size: 14px;
-    z-index: 1000;
+    transition: background-color 0.3s ease;
 }
 
+.file-clear-icon:hover {
+    background-color: #e65a00;
+}
+
+/* Upload button */
 .tiger-upload-btn {
     background-color: #00ff80;
-    color: rgb(0, 0, 0);
-    padding: 10px 20px;
-    margin-top: 10px;
+    color: black;
+    padding: 12px 24px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
     transition: background-color 0.3s ease;
+    margin-top: 15px;
 }
 
 .tiger-upload-btn:hover {
     background-color: #e65a00;
+    color: white;
+}
+
+/* React-Select Custom Styles */
+.react-select-container {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 15px;
+}
+
+.react-select__control {
+    border-radius: 8px;
+    padding: 5px;
+    border: 1px solid #ff6f00;
+    background-color: #fff;
+    box-shadow: none;
+}
+
+.react-select__control:hover {
+    border-color: #e65a00;
+}
+
+.react-select__menu {
+    border-radius: 8px;
+    z-index: 2000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.react-select__option--is-focused {
+    background-color: #ffe0b3;
+}
+
+.react-select__option--is-selected {
+    background-color: #ff6f00;
+    color: white;
+}
+
+/* Filters Section */
+.tiger-filters-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 15px;
 }
 
 /* Search Input */
@@ -166,7 +187,7 @@
     font-weight: bold;
     position: sticky;
     top: 0;
-    z-index: 2;
+    z-index: 100;
 }
 
 .tiger-locations-table td {
@@ -177,14 +198,15 @@
     background-color: #ffe0b3;
 }
 
-/* Sticky Column for Actions */
-.sticky-col {
+/* Sticky Actions Column */
+.tiger-locations-table th.sticky-col,
+.tiger-locations-table td.sticky-col {
     position: sticky;
     right: 0;
-    background-color: #ffffff;
-    z-index: 1;
+    background-color: #ff9500;
+    z-index: 101;
+    /* Higher than other columns */
     box-shadow: -1px 0 5px rgba(0, 0, 0, 0.1);
-    white-space: nowrap;
 }
 
 /* Action Button Styles */
@@ -367,6 +389,7 @@
     margin-right: 5px;
 }
 
+/* Expand Icon */
 .expand-icon {
     font-size: 18px;
     cursor: pointer;
@@ -377,6 +400,7 @@
     transform: scale(1.1);
 }
 
+/* District Records Table */
 .district-records-table {
     padding: 10px;
     background-color: #ffffff;
@@ -384,7 +408,6 @@
     box-sizing: border-box;
     overflow: auto;
 }
-
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -455,76 +478,232 @@
     }
 }
 
-
 /* Hide the default input */
 .custom-file-input {
     display: none;
 }
 
-/* Custom file upload button style */
-.custom-file-label {
-    display: inline-block;
-    padding: 12px 24px;
-    border: 2px solid #ff6f00;
-    color: #ff6f00;
-    background-color: transparent;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    transition: background-color 0.3s ease;
-}
-
-.custom-file-label:hover {
-    background-color: #ff6f00;
-    color: white;
-}
-
-/* File name display */
-.file-name-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 16px;
-    color: #333;
-    padding: 10px;
-    border: 1px solid #ff6f00;
-    border-radius: 8px;
+/* Z-index fix for dropdown filters */
+.react-select__menu {
+    z-index: 2000 !important;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     background-color: #fff;
-    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 5px;
 }
 
-.file-clear-icon {
-    background-color: #ff6f00;
+.react-select__option {
+    padding: 8px 10px;
+}
+
+.react-select__option--is-focused {
+    background-color: #ffe6cc;
+}
+
+.react-select__option--is-selected {
+    background-color: #ff9500;
     color: white;
-    border-radius: 50%;
-    cursor: pointer;
-    padding: 4px;
-    font-size: 14px;
-    z-index: 1000;
+}
+
+/* Additional hover effect for table rows */
+.tiger-locations-table tr:hover {
+    background-color: #fff0cc;
     transition: background-color 0.3s ease;
 }
 
-.file-clear-icon:hover {
-    background-color: #e65a00;
+
+/* General Styling for Filters */
+.filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+    justify-content: center;
 }
 
-/* Upload button */
-.tiger-upload-btn {
-    background-color: #00ff80;
-    color: rgb(0, 0, 0);
-    padding: 12px 24px;
+.filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+.filter-select {
+    width: 200px;
+    flex-grow: 1;
+}
+
+.select__control {
+    border-color: #ff6f00 !important;
+    box-shadow: none !important;
+    border-radius: 8px;
+}
+
+.select__menu {
+    z-index: 2000 !important;
+    border: 1px solid #ff6f00;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.select__menu-list {
+    padding: 0;
+}
+
+.select__option {
+    padding: 10px;
+}
+
+.select__option--is-focused {
+    background-color: #ffe6cc !important;
+    color: #333;
+}
+
+.select__option--is-selected {
+    background-color: #ff9500 !important;
+    color: white;
+}
+
+/* Grid Layout for Filters */
+@media (min-width: 768px) {
+    .filter-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+}
+
+/* Table Wrapper for Scroll */
+.district-records-table {
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 0 0 8px 8px;
+    box-sizing: border-box;
+    overflow: auto;
+    margin-top: 20px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Table Styles */
+.tiger-locations-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1000px;
+    table-layout: auto;
+}
+
+.tiger-locations-table th,
+.tiger-locations-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.tiger-locations-table th {
+    background-color: #ff9500;
+    color: white;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.tiger-locations-table td {
+    background-color: #fff5e6;
+}
+
+.tiger-locations-table tr:hover {
+    background-color: #ffe0b3;
+}
+
+/* Filter Section */
+.filter-section {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+    .filter-select {
+        width: 100%;
+    }
+
+    .filter-section {
+        gap: 10px;
+    }
+}
+
+/* Pagination (optional) */
+.tiger-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.tiger-pagination-btn {
+    background-color: #000000;
+    color: white;
+    padding: 10px 15px;
     border: none;
+    margin: 0 5px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
     transition: background-color 0.3s ease;
-    margin-top: 15px;
 }
 
-.tiger-upload-btn:hover {
-    background-color: #e65a00;
+.tiger-pagination-btn:hover {
+    background-color: #444;
+}
+
+/* new styling */
+
+/* Sticky Actions Column */
+.tiger-locations-table td:last-child,
+.tiger-locations-table th:last-child {
+    position: sticky;
+    right: 0;
+    background-color: #ff9500;
+    /* Match table background color */
+    z-index: 10;
+    /* Lower than the table header */
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    /* Add a subtle shadow for clarity */
+}
+
+/* Ensure the header is above the sticky actions column */
+.tiger-locations-table th {
+    z-index: 100;
+    /* Ensure header stays above sticky actions */
+}
+
+/* Action Button Styles */
+.tiger-edit-btn,
+.tiger-delete-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-right: 5px;
+}
+
+.tiger-edit-btn {
+    background-color: #000;
     color: white;
+}
+
+.tiger-edit-btn:hover {
+    background-color: #333;
+}
+
+.tiger-delete-btn {
+    background-color: #e60000;
+    color: white;
+}
+
+.tiger-delete-btn:hover {
+    background-color: #cc0000;
 }
