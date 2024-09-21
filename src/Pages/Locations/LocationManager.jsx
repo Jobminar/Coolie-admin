@@ -2,17 +2,23 @@ import React, { useState, useEffect } from "react";
 import { deleteLocation, uploadCsvFile } from "./api/Locations-api";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUpload,
+  faClose,
+  faPlus,
+  faEdit,
+} from "@fortawesome/free-solid-svg-icons";
 import { confirmAlert } from "react-confirm-alert";
-import Select from "react-select"; // For multi-select filters
-import Form from "react-bootstrap/Form"; // For the toggle switch
-import Modal from "react-bootstrap/Modal"; // For modals
+import Select from "react-select";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "./LocationManager.css";
-import LocationsTable from "./LocationsTable"; // Import LocationsTable component
-import AddServiceForm from "./AddServiceForm"; // Import the AddServiceForm component
-import PricingForm from "./PricingForm"; // Import the PricingForm component
+import LocationsTable from "./LocationsTable";
+import AddServiceForm from "./AddServiceForm";
+import PricingForm from "./PricingForm";
+import EditDistrictForm from "./EditDistrictForm"; // Import the EditDistrictForm component
 
 const LocationManager = () => {
   const [locations, setLocations] = useState([]);
@@ -29,11 +35,15 @@ const LocationManager = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [showActions, setShowActions] = useState(false); // Toggle state for Actions column
+  const [showActions, setShowActions] = useState(false);
 
   // State for showing modals
   const [showAddServiceModal, setShowAddServiceModal] = useState(false);
   const [showAddLocationModal, setShowAddLocationModal] = useState(false);
+
+  // State for editing district record
+  const [showEditDistrictModal, setShowEditDistrictModal] = useState(false); // Control modal visibility
+  const [selectedRecord, setSelectedRecord] = useState(null); // Store the selected record for editing
 
   useEffect(() => {
     fetchLocations();
@@ -48,8 +58,8 @@ const LocationManager = () => {
       setLocations(response.data);
       setFilteredLocations(response.data);
       setError("");
-    } catch (error) {
-      console.error("Error fetching locations:", error);
+    } catch (err) {
+      console.error("Error fetching locations:", err);
       setError("No Locations are available.");
     } finally {
       setIsLoading(false);
@@ -115,8 +125,8 @@ const LocationManager = () => {
       await uploadCsvFile(file, "default");
       await fetchLocations();
       setFile(null);
-    } catch (error) {
-      console.error("Error uploading file:", error);
+    } catch (err) {
+      console.error("Error uploading file:", err);
       setError("Failed to upload file.");
     } finally {
       setIsUploading(false);
@@ -139,8 +149,8 @@ const LocationManager = () => {
               await deleteLocation(id);
               setLocations(locations.filter((loc) => loc._id !== id));
               applyFilters(filters);
-            } catch (error) {
-              console.error("Error deleting location:", error);
+            } catch (err) {
+              console.error("Error deleting location:", err);
               setError("Failed to delete location.");
             }
           },
@@ -148,6 +158,18 @@ const LocationManager = () => {
         { label: "No" },
       ],
     });
+  };
+
+  // Function to handle opening the edit district modal
+  const handleEdit = (record) => {
+    setSelectedRecord(record);
+    setShowEditDistrictModal(true); // Show the modal
+  };
+
+  // Function to handle updating the record successfully
+  const handleUpdateSuccess = () => {
+    fetchLocations(); // Re-fetch the updated list
+    setShowEditDistrictModal(false); // Close the modal
   };
 
   return (
@@ -189,6 +211,7 @@ const LocationManager = () => {
       </div>
 
       {error && <p className="error-message">{error}</p>}
+
       {/* Filter Section */}
       <div className="filter-section">
         <Select
@@ -196,7 +219,7 @@ const LocationManager = () => {
           name="servicename"
           options={locations
             .map((loc) => loc.servicename)
-            .filter((v, i, a) => a.indexOf(v) === i) // Unique values
+            .filter((v, i, a) => a.indexOf(v) === i)
             .map((value) => ({ value, label: value }))}
           className="filter-select"
           classNamePrefix="select"
@@ -210,7 +233,7 @@ const LocationManager = () => {
           name="category"
           options={locations
             .map((loc) => loc.category)
-            .filter((v, i, a) => a.indexOf(v) === i) // Unique values
+            .filter((v, i, a) => a.indexOf(v) === i)
             .map((value) => ({ value, label: value }))}
           className="filter-select"
           classNamePrefix="select"
@@ -224,7 +247,7 @@ const LocationManager = () => {
           name="subcategory"
           options={locations
             .map((loc) => loc.subcategory)
-            .filter((v, i, a) => a.indexOf(v) === i) // Unique values
+            .filter((v, i, a) => a.indexOf(v) === i)
             .map((value) => ({ value, label: value }))}
           className="filter-select"
           classNamePrefix="select"
@@ -238,7 +261,7 @@ const LocationManager = () => {
           name="state"
           options={locations
             .map((loc) => loc.state)
-            .filter((v, i, a) => a.indexOf(v) === i) // Unique values
+            .filter((v, i, a) => a.indexOf(v) === i)
             .map((value) => ({ value, label: value }))}
           className="filter-select"
           classNamePrefix="select"
@@ -252,7 +275,7 @@ const LocationManager = () => {
           name="district"
           options={locations
             .map((loc) => loc.district)
-            .filter((v, i, a) => a.indexOf(v) === i) // Unique values
+            .filter((v, i, a) => a.indexOf(v) === i)
             .map((value) => ({ value, label: value }))}
           className="filter-select"
           classNamePrefix="select"
@@ -266,7 +289,7 @@ const LocationManager = () => {
           name="pincode"
           options={locations
             .map((loc) => loc.pincode?.toString())
-            .filter((v, i, a) => a.indexOf(v) === i) // Unique values
+            .filter((v, i, a) => a.indexOf(v) === i)
             .map((value) => ({ value, label: value }))}
           className="filter-select"
           classNamePrefix="select"
@@ -307,6 +330,7 @@ const LocationManager = () => {
       <LocationsTable
         locations={filteredLocations}
         handleDelete={handleDelete}
+        handleEdit={handleEdit} // Pass edit handler for each row
         showActions={showActions} // Pass the toggle state to LocationsTable
       />
 
@@ -335,6 +359,25 @@ const LocationManager = () => {
         </Modal.Header>
         <Modal.Body>
           <PricingForm />
+        </Modal.Body>
+      </Modal>
+
+      {/* Edit District Modal */}
+      <Modal
+        show={showEditDistrictModal}
+        onHide={() => setShowEditDistrictModal(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Edit District Record</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <EditDistrictForm
+            isOpen={showEditDistrictModal}
+            onClose={() => setShowEditDistrictModal(false)}
+            selectedRecord={selectedRecord}
+            onUpdateSuccess={handleUpdateSuccess}
+          />
         </Modal.Body>
       </Modal>
     </div>

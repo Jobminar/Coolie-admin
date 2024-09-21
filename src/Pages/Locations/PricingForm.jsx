@@ -5,7 +5,7 @@ import Switch from "react-switch";
 import "./PricingForm.css";
 import axios from "axios";
 
-const PricingForm = ({ location, district, pincode, isValid }) => {
+const PricingForm = ({ location, district, pincode, isValid, isCustom }) => {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [services, setServices] = useState([]);
@@ -169,7 +169,7 @@ const PricingForm = ({ location, district, pincode, isValid }) => {
       miscFee,
       platformCommission,
       isCash,
-      isCustom: true, // Always setting isCustom to true
+      isCustom, // Always setting isCustom to true
     };
 
     // Conditionally add metric-related data

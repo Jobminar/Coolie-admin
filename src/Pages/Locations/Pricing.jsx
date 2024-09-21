@@ -1,32 +1,17 @@
 import React, { useState } from "react";
-import CustomPricing from "./CustomPricing"; // Component for adding custom pricing
 import PricingForm from "./PricingForm"; // Component to display the pricing form
 import CustomLocationTable from "./CustomLocationTable"; // Corrected component name
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import "./Pricing.css"; // Custom CSS for the Pricing component
 
-const Pricing = () => {
+const Pricing = ({ isCustom }) => {
   const [showCustomPricingTable, setShowCustomPricingTable] = useState(false); // To toggle between forms and table
-  const [selectedLocation, setSelectedLocation] = useState("");
-  const [selectedDistrict, setSelectedDistrict] = useState("");
-  const [selectedPincode, setSelectedPincode] = useState("");
-  const [isValid, setIsValid] = useState(false); // Track the validity
-  const [isFormVisible, setIsFormVisible] = useState(false); // To control form visibility after location selection
+  const [isFormVisible, setIsFormVisible] = useState(true); // Always show the form by default
 
-  // Callback function to handle location selection from CustomPricing component
-  const handleLocationSelected = ({ location, district, pincode, isValid }) => {
-    setSelectedLocation(location);
-    setSelectedDistrict(district);
-    setSelectedPincode(pincode);
-    setIsValid(isValid);
-    setIsFormVisible(true); // Show the form after location is selected
-  };
-
-  // Toggle between CustomLocationTable and (CustomPricing + PricingForm)
+  // Toggle between CustomLocationTable and PricingForm
   const toggleComponent = () => {
     setShowCustomPricingTable((prevState) => !prevState); // Toggle between table and form views
-    setIsFormVisible(false); // Hide form when switching to table view
   };
 
   return (
@@ -58,36 +43,19 @@ const Pricing = () => {
 
       <hr />
 
-      {/* Conditionally render CustomLocationTable or (CustomPricing + PricingForm) */}
+      {/* Conditionally render CustomLocationTable or PricingForm */}
       {showCustomPricingTable ? (
         <CustomLocationTable />
       ) : (
         <>
-          <CustomPricing onLocationSelected={handleLocationSelected} />
-
-          {/* Show the form toggle button if a valid address is selected */}
-          {selectedLocation && selectedDistrict && selectedPincode && (
-            <div className="tiger-text-center mt-4">
-              <button
-                className="btn btn-info"
-                onClick={() => setIsFormVisible((prev) => !prev)}
-              >
-                {isFormVisible ? "Hide Pricing Form" : "Show Pricing Form"}
-              </button>
-            </div>
-          )}
-
-          <hr />
-
-          {/* Conditionally render PricingForm if the form is visible */}
-          {isFormVisible && (
-            <PricingForm
-              location={selectedLocation}
-              district={selectedDistrict}
-              pincode={selectedPincode}
-              isValid={isValid} // Pass the validity status for user information
-            />
-          )}
+          {/* PricingForm is always displayed now */}
+          <PricingForm
+            location="Default Location"
+            district="Default District"
+            pincode="000000"
+            isValid={true}
+            isCustom={isCustom}
+          />
         </>
       )}
     </div>

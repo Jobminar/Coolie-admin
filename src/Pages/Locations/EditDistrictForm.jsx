@@ -40,13 +40,11 @@ const EditDistrictForm = ({
     }
   }, [selectedRecord]);
 
-  // Handle input change for form fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Submit the form to update the record
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -179,7 +177,7 @@ const EditDistrictForm = ({
               </div>
 
               <div className="districtpop-form-group">
-                <label htmlFor="min">Min</label>
+                <label htmlFor="min">Min Quantity</label>
                 <input
                   type="number"
                   id="min"
@@ -192,7 +190,7 @@ const EditDistrictForm = ({
               </div>
 
               <div className="districtpop-form-group">
-                <label htmlFor="max">Max</label>
+                <label htmlFor="max">Max Quantity</label>
                 <input
                   type="number"
                   id="max"

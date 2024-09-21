@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import LocationManager from "./LocationManager"; // Import the LocationManager component
 import Pricing from "./Pricing"; // Import the Pricing component
+import CustomPricing from "./CustomPricing"; // Import CustomPricing component
 import "./Locations.css"; // Styling for tabs and content
 
 const Locations = () => {
@@ -34,6 +35,16 @@ const Locations = () => {
         >
           Add Location and Custom Pricing
         </button>
+
+        {/* Tab 3: Location Validator */}
+        <button
+          className={`tab-button ${
+            selectedTab === "Location Validator" ? "active" : ""
+          }`}
+          onClick={() => handleTabClick("Location Validator")}
+        >
+          Location Validator
+        </button>
       </div>
 
       {/* Render Tab Content */}
@@ -41,7 +52,10 @@ const Locations = () => {
         {selectedTab === "Add Location and Default Pricing" && (
           <LocationManager />
         )}
-        {selectedTab === "Add Location and Custom Pricing" && <Pricing />}
+        {selectedTab === "Add Location and Custom Pricing" && (
+          <Pricing isCustom={true} />
+        )}
+        {selectedTab === "Location Validator" && <CustomPricing />}
       </div>
     </div>
   );
