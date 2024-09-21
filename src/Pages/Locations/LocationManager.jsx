@@ -303,12 +303,14 @@ const LocationManager = () => {
       {/* Buttons for adding service and location */}
       <div className="tiger-actions-buttons">
         <Button
+          style={{ background: "#ff6f00", color: "white" }}
           className="tiger-add-service-btn"
           onClick={() => setShowAddServiceModal(true)}
         >
           <FontAwesomeIcon icon={faPlus} /> Add Service
         </Button>
         <Button
+          style={{ background: "#ff6f00", color: "white" }}
           className="tiger-add-location-btn"
           onClick={() => setShowAddLocationModal(true)}
         >
