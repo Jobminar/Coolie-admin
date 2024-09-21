@@ -198,46 +198,6 @@
     background-color: #ffe0b3;
 }
 
-/* Sticky Actions Column */
-.tiger-locations-table th.sticky-col,
-.tiger-locations-table td.sticky-col {
-    position: sticky;
-    right: 0;
-    background-color: #ff9500;
-    z-index: 101;
-    /* Higher than other columns */
-    box-shadow: -1px 0 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Action Button Styles */
-.tiger-edit-btn,
-.tiger-delete-btn {
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-.tiger-edit-btn {
-    background-color: #000000;
-    color: white;
-    margin-right: 10px;
-}
-
-.tiger-edit-btn:hover {
-    background-color: #333;
-}
-
-.tiger-delete-btn {
-    background-color: #e60000;
-    color: white;
-}
-
-.tiger-delete-btn:hover {
-    background-color: #cc0000;
-}
 
 /* Pagination (optional) */
 .tiger-pagination {
@@ -316,78 +276,8 @@
 }
 
 /* Delete All Button */
-.tiger-delete-all-btn {
-    background-color: #ff3d00;
-    color: white;
-    padding: 2px 5px;
-    border: none;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
 
-.tiger-delete-all-btn:hover {
-    background-color: #cc3200;
-}
 
-/* District Grouping */
-.district-wrapper {
-    margin-bottom: 20px;
-    border: 1px solid #ff9500;
-    border-radius: 8px;
-    background-color: #fff5e6;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: auto;
-}
-
-.district-strap {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    background-color: #ff9500;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 8px 8px 0 0;
-}
-
-.district-strap span {
-    font-size: 16px;
-}
-
-/* Styling for new button group */
-.strap-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.add-location-btn,
-.add-services-btn,
-.export-btn {
-    background-color: white;
-    color: #ff9500;
-    border: 1px solid #ff9500;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-
-.add-location-btn:hover,
-.add-services-btn:hover,
-.export-btn:hover {
-    background-color: #ffe6cc;
-}
-
-.add-location-btn svg,
-.add-services-btn svg,
-.export-btn svg {
-    margin-right: 5px;
-}
 
 /* Expand Icon */
 .expand-icon {
@@ -396,9 +286,7 @@
     transition: transform 0.3s ease;
 }
 
-.district-strap:hover .expand-icon {
-    transform: scale(1.1);
-}
+
 
 /* District Records Table */
 .district-records-table {
@@ -635,33 +523,9 @@
     }
 }
 
-/* Pagination (optional) */
-.tiger-pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.tiger-pagination-btn {
-    background-color: #000000;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    margin: 0 5px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.tiger-pagination-btn:hover {
-    background-color: #444;
-}
-
-/* new styling */
-
 /* Sticky Actions Column */
-.tiger-locations-table td:last-child,
-.tiger-locations-table th:last-child {
+.tiger-locations-table th.sticky-actions,
+.tiger-locations-table td.sticky-actions {
     position: sticky;
     right: 0;
     background-color: #ff9500;
@@ -671,6 +535,13 @@
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     /* Add a subtle shadow for clarity */
 }
+
+/* Ensure the header is above the sticky actions column */
+.tiger-locations-table th {
+    z-index: 100;
+    /* Ensure header stays above sticky actions */
+}
+
 
 /* Ensure the header is above the sticky actions column */
 .tiger-locations-table th {
@@ -706,4 +577,185 @@
 
 .tiger-delete-btn:hover {
     background-color: #cc0000;
+}
+
+.actions-toggle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+
+/* popup modals UI */
+
+
+/* Modal Styles */
+.modal-content {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.modal-header .modal-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.modal-header .close {
+    font-size: 1.5rem;
+    color: #333;
+    opacity: 1;
+}
+
+.modal-body {
+    padding: 20px 15px;
+}
+
+/* Modal Buttons */
+.tiger-actions-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.tiger-add-service-btn,
+.tiger-add-location-btn {
+    background-color: #ff6f00;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.tiger-add-service-btn:hover,
+.tiger-add-location-btn:hover {
+    background-color: #e65a00;
+}
+
+/* Form Group */
+.tigershade-form-group,
+.zomato-form-group {
+    margin-bottom: 15px;
+}
+
+.tigershade-form-group label,
+.zomato-form-group label {
+    font-weight: bold;
+    color: #333;
+}
+
+.tigershade-form-control,
+.zomato-form-control {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.tigershade-form-control:focus,
+.zomato-form-control:focus {
+    border-color: #ff6f00;
+}
+
+/* Variant Group */
+.tigershade-variant-group,
+.zomato-variant-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.tigershade-btn-add-variant,
+.zomato-btn-add-variant {
+    background-color: #ff6f00;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tigershade-btn-add-variant:hover,
+.zomato-btn-add-variant:hover {
+    background-color: #e65a00;
+}
+
+/* Variant List */
+.tigershade-variant-list ul,
+.zomato-variant-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.tigershade-variant-list li,
+.zomato-variant-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 5px;
+}
+
+.tigershade-delete-btn,
+.zomato-delete-btn {
+    background-color: #e60000;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tigershade-delete-btn:hover,
+.zomato-delete-btn:hover {
+    background-color: #cc0000;
+}
+
+/* Submit Button */
+.tigershade-btn-submit,
+.zomato-btn-submit {
+    background-color: #00c853;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tigershade-btn-submit:hover,
+.zomato-btn-submit:hover {
+    background-color: #00b248;
+}
+
+/* Modal Sticky Footer */
+.zomato-sticky-footer {
+    position: sticky;
+    bottom: 0;
+    background-color: #fff;
+    padding: 15px;
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+    text-align: right;
 }

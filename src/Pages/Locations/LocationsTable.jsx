@@ -1,11 +1,10 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import PropTypes from "prop-types";
 
-const LocationsTable = ({ locations, handleDelete }) => {
+const LocationsTable = ({ locations, handleDelete, showActions }) => {
   return (
-    <div className="district-records-table">
+    <div className="tiger-locations-table-wrapper">
       <table className="tiger-locations-table">
         <thead>
           <tr>
@@ -26,7 +25,7 @@ const LocationsTable = ({ locations, handleDelete }) => {
             <th>Misc Fee</th>
             <th>Platform Commission</th>
             <th>Is Cash Payment</th>
-            <th>Actions</th>
+            {showActions && <th className="sticky-actions">Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -49,29 +48,25 @@ const LocationsTable = ({ locations, handleDelete }) => {
               <td>{location.miscFee || "N/A"}</td>
               <td>{location.platformCommission || "N/A"}</td>
               <td>{location.isCash ? "Yes" : "No"}</td>
-              <td>
-                <button className="tiger-edit-btn">
-                  <FontAwesomeIcon icon={faEdit} />
-                </button>
-                <button
-                  className="tiger-delete-btn"
-                  onClick={() => handleDelete(location._id)}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
-              </td>
+              {showActions && (
+                <td className="sticky-actions">
+                  <button className="tiger-edit-btn">
+                    <FontAwesomeIcon icon={faEdit} />
+                  </button>
+                  <button
+                    className="tiger-delete-btn"
+                    onClick={() => handleDelete(location._id)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
       </table>
     </div>
   );
-};
-
-// Prop validation
-LocationsTable.propTypes = {
-  locations: PropTypes.array.isRequired,
-  handleDelete: PropTypes.func.isRequired,
 };
 
 export default LocationsTable;

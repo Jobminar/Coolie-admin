@@ -2,12 +2,17 @@ import React, { useState, useEffect } from "react";
 import { deleteLocation, uploadCsvFile } from "./api/Locations-api";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload, faClose } from "@fortawesome/free-solid-svg-icons";
+import { faUpload, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { confirmAlert } from "react-confirm-alert";
 import Select from "react-select"; // For multi-select filters
+import Form from "react-bootstrap/Form"; // For the toggle switch
+import Modal from "react-bootstrap/Modal"; // For modals
+import Button from "react-bootstrap/Button";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "./LocationManager.css";
-import LocationsTable from "./LocationsTable"; // Import the new LocationsTable component
+import LocationsTable from "./LocationsTable"; // Import LocationsTable component
+import AddServiceForm from "./AddServiceForm"; // Import the AddServiceForm component
+import PricingForm from "./PricingForm"; // Import the PricingForm component
 
 const LocationManager = () => {
   const [locations, setLocations] = useState([]);
@@ -24,6 +29,11 @@ const LocationManager = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [showActions, setShowActions] = useState(false); // Toggle state for Actions column
+
+  // State for showing modals
+  const [showAddServiceModal, setShowAddServiceModal] = useState(false);
+  const [showAddLocationModal, setShowAddLocationModal] = useState(false);
 
   useEffect(() => {
     fetchLocations();
@@ -44,12 +54,6 @@ const LocationManager = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const getUniqueValues = (key) => {
-    return [...new Set(locations.map((loc) => loc[key]?.trim()))].filter(
-      Boolean,
-    );
   };
 
   const handleFilterChange = (selectedOptions, field) => {
@@ -185,16 +189,15 @@ const LocationManager = () => {
       </div>
 
       {error && <p className="error-message">{error}</p>}
-
-      {/* Filters Section */}
+      {/* Filter Section */}
       <div className="filter-section">
         <Select
           isMulti
           name="servicename"
-          options={getUniqueValues("servicename").map((value) => ({
-            value,
-            label: value,
-          }))}
+          options={locations
+            .map((loc) => loc.servicename)
+            .filter((v, i, a) => a.indexOf(v) === i) // Unique values
+            .map((value) => ({ value, label: value }))}
           className="filter-select"
           classNamePrefix="select"
           onChange={(selectedOptions) =>
@@ -205,10 +208,10 @@ const LocationManager = () => {
         <Select
           isMulti
           name="category"
-          options={getUniqueValues("category").map((value) => ({
-            value,
-            label: value,
-          }))}
+          options={locations
+            .map((loc) => loc.category)
+            .filter((v, i, a) => a.indexOf(v) === i) // Unique values
+            .map((value) => ({ value, label: value }))}
           className="filter-select"
           classNamePrefix="select"
           onChange={(selectedOptions) =>
@@ -219,10 +222,10 @@ const LocationManager = () => {
         <Select
           isMulti
           name="subcategory"
-          options={getUniqueValues("subcategory").map((value) => ({
-            value,
-            label: value,
-          }))}
+          options={locations
+            .map((loc) => loc.subcategory)
+            .filter((v, i, a) => a.indexOf(v) === i) // Unique values
+            .map((value) => ({ value, label: value }))}
           className="filter-select"
           classNamePrefix="select"
           onChange={(selectedOptions) =>
@@ -233,10 +236,10 @@ const LocationManager = () => {
         <Select
           isMulti
           name="state"
-          options={getUniqueValues("state").map((value) => ({
-            value,
-            label: value,
-          }))}
+          options={locations
+            .map((loc) => loc.state)
+            .filter((v, i, a) => a.indexOf(v) === i) // Unique values
+            .map((value) => ({ value, label: value }))}
           className="filter-select"
           classNamePrefix="select"
           onChange={(selectedOptions) =>
@@ -247,10 +250,10 @@ const LocationManager = () => {
         <Select
           isMulti
           name="district"
-          options={getUniqueValues("district").map((value) => ({
-            value,
-            label: value,
-          }))}
+          options={locations
+            .map((loc) => loc.district)
+            .filter((v, i, a) => a.indexOf(v) === i) // Unique values
+            .map((value) => ({ value, label: value }))}
           className="filter-select"
           classNamePrefix="select"
           onChange={(selectedOptions) =>
@@ -261,10 +264,10 @@ const LocationManager = () => {
         <Select
           isMulti
           name="pincode"
-          options={getUniqueValues("pincode").map((value) => ({
-            value,
-            label: value,
-          }))}
+          options={locations
+            .map((loc) => loc.pincode?.toString())
+            .filter((v, i, a) => a.indexOf(v) === i) // Unique values
+            .map((value) => ({ value, label: value }))}
           className="filter-select"
           classNamePrefix="select"
           onChange={(selectedOptions) =>
@@ -274,11 +277,66 @@ const LocationManager = () => {
         />
       </div>
 
-      {/* Pass Filtered Locations and Delete Handler to LocationsTable */}
+      {/* Buttons for adding service and location */}
+      <div className="tiger-actions-buttons">
+        <Button
+          className="tiger-add-service-btn"
+          onClick={() => setShowAddServiceModal(true)}
+        >
+          <FontAwesomeIcon icon={faPlus} /> Add Service
+        </Button>
+        <Button
+          className="tiger-add-location-btn"
+          onClick={() => setShowAddLocationModal(true)}
+        >
+          <FontAwesomeIcon icon={faPlus} /> Add Location
+        </Button>
+      </div>
+
+      {/* Toggle Switch for Actions Column */}
+      <Form.Check
+        type="switch"
+        id="actions-toggle"
+        label="Enable Edit"
+        checked={showActions}
+        onChange={(e) => setShowActions(e.target.checked)}
+        className="actions-toggle"
+      />
+
+      {/* Pass Filtered Locations, Delete Handler, and ShowActions to LocationsTable */}
       <LocationsTable
         locations={filteredLocations}
         handleDelete={handleDelete}
+        showActions={showActions} // Pass the toggle state to LocationsTable
       />
+
+      {/* Add Service Modal */}
+      <Modal
+        show={showAddServiceModal}
+        onHide={() => setShowAddServiceModal(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Service</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AddServiceForm />
+        </Modal.Body>
+      </Modal>
+
+      {/* Add Location Modal */}
+      <Modal
+        show={showAddLocationModal}
+        onHide={() => setShowAddLocationModal(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Location</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <PricingForm />
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
