@@ -418,9 +418,23 @@
 }
 
 .filter-select {
-    width: 200px;
-    flex-grow: 1;
+    flex: 1 1 250px;
+    /* Each filter takes at least 250px, but can grow */
+    min-width: 200px;
+    /* Ensures a minimum width for smaller screens */
+    max-width: 300px;
+    /* Ensures filters don't become too large on big screens */
+    box-sizing: border-box;
+    /* Ensures padding doesn't affect width calculation */
 }
+
+@media (max-width: 768px) {
+    .filter-select {
+        flex: 1 1 100%;
+        /* On smaller screens, filters take full width */
+    }
+}
+
 
 .select__control {
     border-color: #ff6f00 !important;
@@ -510,7 +524,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
-    justify-content: space-between;
 }
 
 @media (max-width: 768px) {

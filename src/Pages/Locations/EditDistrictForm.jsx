@@ -20,6 +20,7 @@ const EditDistrictForm = ({
     min: "",
     max: "",
   });
+  const [priceFields, setPriceFields] = useState([]); // State for managing price inputs
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -37,6 +38,9 @@ const EditDistrictForm = ({
         min: selectedRecord.min || "",
         max: selectedRecord.max || "",
       });
+
+      // Convert the price object into an array of key-value pairs for inputs
+      setPriceFields(Object.entries(selectedRecord.price || {}));
     }
   }, [selectedRecord]);
 
@@ -45,15 +49,45 @@ const EditDistrictForm = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle dynamic price inputs change
+  const handlePriceChange = (index, key, value) => {
+    const updatedPriceFields = [...priceFields];
+    updatedPriceFields[index] = [key, value]; // Update the specific price variant
+    setPriceFields(updatedPriceFields);
+  };
+
+  // Add a new price variant
+  const addPriceVariant = () => {
+    setPriceFields([...priceFields, ["", ""]]); // Add an empty key-value pair
+  };
+
+  // Remove a price variant
+  const removePriceVariant = (index) => {
+    const updatedPriceFields = [...priceFields];
+    updatedPriceFields.splice(index, 1); // Remove the specific key-value pair
+    setPriceFields(updatedPriceFields);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setErrorMessage("");
 
+    // Convert priceFields (array of key-value pairs) back into an object
+    const updatedPrice = priceFields.reduce((acc, [key, value]) => {
+      if (key.trim() !== "") {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+
     try {
       const response = await axios.patch(
         `https://api.coolieno1.in/v1.0/core/locations/${selectedRecord._id}`,
-        formData,
+        {
+          ...formData,
+          price: updatedPrice, // Set the reconstructed price object
+        },
         {
           headers: { "Content-Type": "application/json" },
         },
@@ -163,17 +197,47 @@ const EditDistrictForm = ({
                 />
               </div>
 
+              {/* Dynamic Price Fields */}
               <div className="districtpop-form-group">
-                <label htmlFor="price">Price</label>
-                <input
-                  type="text"
-                  id="price"
-                  name="price"
-                  className="districtpop-form-control"
-                  value={JSON.stringify(formData.price)}
-                  onChange={handleChange}
-                  required
-                />
+                <label>Price Variants</label>
+                {priceFields.map(([key, value], index) => (
+                  <div key={index} className="districtpop-price-field">
+                    <input
+                      type="text"
+                      placeholder="Variant Name"
+                      value={key}
+                      onChange={(e) =>
+                        handlePriceChange(index, e.target.value, value)
+                      }
+                      className="districtpop-form-control"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Variant Price"
+                      value={value}
+                      onChange={(e) =>
+                        handlePriceChange(index, key, e.target.value)
+                      }
+                      className="districtpop-form-control"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removePriceVariant(index)}
+                      className="districtpop-remove-variant-btn"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+
+                {/* Button to Add New Variant */}
+                <button
+                  type="button"
+                  onClick={addPriceVariant}
+                  className="districtpop-add-variant-btn"
+                >
+                  Add New Variant
+                </button>
               </div>
 
               <div className="districtpop-form-group">

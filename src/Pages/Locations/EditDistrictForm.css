@@ -116,3 +116,142 @@
     color: red;
     font-size: 0.875rem;
 }
+
+
+/* Styling for the Add New Variant and Remove buttons */
+.districtpop-btn-add {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.districtpop-btn-add:hover {
+    background-color: #218838;
+}
+
+.districtpop-btn-remove {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.districtpop-btn-remove:hover {
+    background-color: #c82333;
+}
+
+/* Layout for the variant input fields */
+.price-variant-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.price-variant-row input {
+    margin-right: 10px;
+    width: 40%;
+}
+
+
+/* Remove Variant Button Styling */
+/* General Styling for Price Variants Group */
+.districtpop-price-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    animation: fadeIn 0.3s ease-in-out;
+    /* Fade-in animation for each field */
+}
+
+.districtpop-form-control {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+    width: 45%;
+    /* Adjusted width */
+}
+
+/* Focused state for input fields */
+.districtpop-form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+    /* Light blue glow */
+}
+
+/* Remove Button Styling with animation */
+.districtpop-remove-variant-btn {
+    background-color: #e74c3c;
+    /* Red color */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.districtpop-remove-variant-btn:hover {
+    background-color: #c0392b;
+    /* Darker red on hover */
+    transform: scale(1.05);
+    /* Slight zoom effect */
+}
+
+/* Add Button Styling */
+.districtpop-add-variant-btn {
+    background-color: #27ae60;
+    /* Green color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.districtpop-add-variant-btn:hover {
+    background-color: #229954;
+    /* Darker green on hover */
+    transform: scale(1.05);
+    /* Slight zoom effect */
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Layout for smaller screens */
+@media (max-width: 768px) {
+    .districtpop-price-field {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .districtpop-form-control {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
