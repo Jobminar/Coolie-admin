@@ -135,6 +135,10 @@ const Sidebar = ({ children }) => {
   const handleLocationNavigation = () => {
     handleNavigation("/locations");
   };
+
+  const handleBlogsNavigation = () => {
+    handleNavigation("/blogs");
+  };
   const renderFilterBar = () => {
     const filterBarExcludedComponents = [
       "/loyality-cards",
@@ -490,7 +494,12 @@ const Sidebar = ({ children }) => {
         >
           Sub-Admin
         </div>
-
+        <div
+          className={activeItem === "/blogs" ? "active" : ""}
+          onClick={handleBlogsNavigation}
+        >
+          Blogs
+        </div>
         <div
           className={activeItem === "/inclusions-exclusions" ? "active" : ""}
           onClick={handleInclusionsNavigation}

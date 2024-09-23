@@ -37,6 +37,7 @@ import Inductionmain from "./Pages/Induction/inductionmain";
 import Trainingmain from "./Pages/Induction/trainingmain";
 import Locations from "./Pages/Locations/Locations";
 import Pricing from "./Pages/Locations/Pricing";
+import Blogs from "./Pages/Blogs/Blogs";
 
 const Routing = () => {
   return (
@@ -103,6 +104,7 @@ const Routing = () => {
             <Route path="/locations" element={<Locations />} />
             <Route path="/pricing" element={<Pricing />} />
             {/* Default redirect */}
+            <Route path="/blogs" element={<Blogs />} />
             <Route path="*" element={<Navigate to="/" />} />{" "}
           </Routes>
         </Sidebar>
