@@ -12,10 +12,10 @@ const Blogs = () => {
   const [pageCount, setPageCount] = useState(0); // Total number of pages
   const [currentPage, setCurrentPage] = useState(0); // Tracks current page
   const blogsPerPage = 5; // Number of blogs per page
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingBlog, setEditingBlog] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [videoPreview, setVideoPreview] = useState(null);
+  const [isEditing, setIsEditing] = useState(false); // Controls edit modal visibility
+  const [editingBlog, setEditingBlog] = useState(null); // Stores blog being edited
+  const [imagePreview, setImagePreview] = useState(null); // Preview of the image
+  const [videoPreview, setVideoPreview] = useState(null); // Preview of the video
 
   // Fetch all blogs from API
   const fetchBlogs = async () => {
@@ -46,11 +46,13 @@ const Blogs = () => {
     fetchBlogs();
   }, []);
 
+  // Add a new blog
   const addBlog = (newBlog) => {
     setBlogs([newBlog, ...blogs]); // Add new blog to the list
     paginateBlogs([newBlog, ...blogs], currentPage); // Update the page content
   };
 
+  // Delete a blog
   const deleteBlog = async (index, blogId) => {
     try {
       await fetch(`https://api.coolieno1.in/v1.0/admin/blogs/${blogId}`, {
@@ -64,15 +66,48 @@ const Blogs = () => {
     }
   };
 
-  const editBlog = (updatedBlog) => {
-    const updatedBlogs = blogs.map((blog, index) =>
-      index === editingBlog.index ? updatedBlog : blog,
-    );
-    setBlogs(updatedBlogs);
-    paginateBlogs(updatedBlogs, currentPage); // Update the page content after editing
-    setIsEditing(false); // Close the edit modal
+  // Update (PATCH) the blog with new data
+  const editBlog = async (updatedBlog) => {
+    try {
+      // Create a formData object to handle potential file uploads
+      const formData = new FormData();
+      formData.append("title", updatedBlog.title);
+      formData.append("subject", updatedBlog.subject);
+      formData.append("text", updatedBlog.text);
+
+      // Append files (image, video) if present
+      if (updatedBlog.image instanceof File) {
+        formData.append("image", updatedBlog.image);
+      }
+      if (updatedBlog.video instanceof File) {
+        formData.append("video", updatedBlog.video);
+      }
+
+      // Send a PATCH request to update the blog
+      const response = await fetch(
+        `https://api.coolieno1.in/v1.0/admin/blogs/${updatedBlog._id}`,
+        {
+          method: "PATCH",
+          body: formData,
+        },
+      );
+
+      if (response.ok) {
+        const updatedBlogs = blogs.map((blog, index) =>
+          index === editingBlog.index ? updatedBlog : blog,
+        );
+        setBlogs(updatedBlogs);
+        paginateBlogs(updatedBlogs, currentPage); // Update the page content after editing
+        setIsEditing(false); // Close the edit modal
+      } else {
+        console.error("Error updating blog:", await response.json());
+      }
+    } catch (error) {
+      console.error("Error updating blog:", error);
+    }
   };
 
+  // Open the edit modal and set the current blog data
   const handleEdit = (index) => {
     const blogToEdit = blogs[index];
     setEditingBlog({ index, ...blogToEdit });
@@ -81,6 +116,7 @@ const Blogs = () => {
     setIsEditing(true); // Open the edit modal
   };
 
+  // Close the edit modal without saving changes
   const handleCancelEdit = () => {
     setIsEditing(false); // Close the edit modal when clicking "Cancel"
   };
@@ -119,11 +155,15 @@ const Blogs = () => {
 
   return (
     <div className="tigress-container">
+      {/* Add new blogs */}
       <AddBlogs onAdd={addBlog} />
+
+      {/* Display blogs with pagination */}
       {currentPageBlogs.length > 0 ? (
         <div className="tigress-grid">
           {currentPageBlogs.map((blog, index) => (
             <div key={index} className="tigress-blog-card">
+              {/* Blog Edit/Delete buttons */}
               <div className="tigress-card-actions">
                 <button
                   className="tigress-btn-edit"
@@ -133,13 +173,13 @@ const Blogs = () => {
                 </button>
                 <button
                   className="tigress-btn-delete"
-                  onClick={() => deleteBlog(index, blog._id)} // Assuming blogs have _id field
+                  onClick={() => deleteBlog(index, blog._id)}
                 >
                   <FaTrashAlt /> Delete
                 </button>
               </div>
+              {/* Blog content */}
               <h3>{blog.title}</h3>
-
               {blog.image && (
                 <img
                   src={blog.image}
@@ -187,6 +227,7 @@ const Blogs = () => {
               }}
             >
               <div className="edit-wrapper">
+                {/* Blog title */}
                 <input
                   type="text"
                   value={editingBlog.title}
@@ -197,6 +238,7 @@ const Blogs = () => {
                   className="tigress-input"
                   required
                 />
+                {/* Blog subject */}
                 <input
                   type="text"
                   value={editingBlog.subject}
@@ -207,13 +249,11 @@ const Blogs = () => {
                   className="tigress-input"
                   required
                 />
+                {/* Blog description */}
                 <textarea
                   value={editingBlog.text}
                   onChange={(e) =>
-                    setEditingBlog({
-                      ...editingBlog,
-                      text: e.target.value,
-                    })
+                    setEditingBlog({ ...editingBlog, text: e.target.value })
                   }
                   placeholder="Description"
                   className="tigress-textarea"
@@ -248,6 +288,7 @@ const Blogs = () => {
                   />
                 )}
               </div>
+              {/* Modal actions: Save or Cancel */}
               <div className="edit-modal-actions">
                 <button type="submit" className="tigress-btn-save">
                   Save Changes
