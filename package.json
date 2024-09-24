@@ -60,6 +60,7 @@
     "react-switch": "^7.0.0",
     "react-to-print": "^2.15.1",
     "react-toastify": "^10.0.5",
+    "reactjs-popup": "^2.0.6",
     "slate": "^0.103.0",
     "slate-react": "^0.108.0",
     "slick-carousel": "^1.8.1",

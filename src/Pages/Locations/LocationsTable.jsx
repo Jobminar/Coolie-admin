@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
@@ -9,7 +9,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { CSVLink } from "react-csv";
 import toast, { Toaster } from "react-hot-toast";
-import Modal from "react-modal";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css"; // Import the reactjs-popup CSS
 
 const LocationsTable = ({
   locations,
@@ -19,8 +20,9 @@ const LocationsTable = ({
 }) => {
   const [isConverting, setIsConverting] = useState(false);
   const [csvData, setCsvData] = useState([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const csvLinkRef = useRef(); // Reference to the CSVLink component
 
   // Prepare the data for CSV download
   const prepareCsvData = () => {
@@ -47,26 +49,32 @@ const LocationsTable = ({
     }));
 
     setCsvData(data);
-    return data;
   };
 
-  // Handle CSV conversion process with feedback
+  // Trigger the CSV download after data preparation is complete
+  useEffect(() => {
+    if (csvData.length > 0) {
+      csvLinkRef.current.link.click(); // Trigger the CSV download after data is ready
+    }
+  }, [csvData]);
+
+  // Handle CSV conversion process with feedback and trigger the download
   const handleDownloadCsv = () => {
     setIsConverting(true);
     toast.promise(
       new Promise((resolve, reject) => {
         setTimeout(() => {
-          const data = prepareCsvData();
-          if (data.length > 0) {
+          prepareCsvData(); // Prepare CSV data
+          if (locations.length > 0) {
             resolve();
             setIsSuccess(true);
             setIsConverting(false);
-            openModal();
+            setPopupOpen(true);
           } else {
             reject();
             setIsSuccess(false);
             setIsConverting(false);
-            openModal();
+            setPopupOpen(true);
           }
         }, 2000); // Simulate conversion delay
       }),
@@ -78,30 +86,24 @@ const LocationsTable = ({
     );
   };
 
-  // Modal Control
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
   return (
     <div className="tiger-locations-table-wrapper">
       <Toaster />
+      <h2>Manage Locations</h2>
+
       {/* Download Button */}
       <div className="download-section">
         <button className="tiger-download-btn" onClick={handleDownloadCsv}>
           <FontAwesomeIcon icon={faDownload} /> Download as CSV
         </button>
-        {csvData.length > 0 && (
-          <CSVLink
-            data={csvData}
-            filename="locations_data.csv"
-            className="hidden-link"
-          />
-        )}
+
+        {/* Hidden CSVLink to programmatically trigger the download */}
+        <CSVLink
+          data={csvData}
+          filename="locations_data.csv"
+          className="hidden-link"
+          ref={csvLinkRef}
+        />
       </div>
 
       {/* Table Display */}
@@ -179,15 +181,13 @@ const LocationsTable = ({
         </div>
       )}
 
-      {/* Modal for CSV conversion result */}
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Conversion Result"
-        className="csv-modal-content"
-        overlayClassName="csv-modal-overlay"
+      {/* Popup for CSV conversion result */}
+      <Popup
+        open={popupOpen}
+        onClose={() => setPopupOpen(false)}
+        closeOnDocumentClick
       >
-        <div className="csv-modal-body">
+        <div className="tiger-popup-content">
           {isSuccess ? (
             <>
               <FontAwesomeIcon icon={faCheckCircle} className="success-icon" />
@@ -199,11 +199,14 @@ const LocationsTable = ({
               <h2>CSV Conversion Failed</h2>
             </>
           )}
-          <button onClick={closeModal} className="csv-modal-close-btn">
+          <button
+            onClick={() => setPopupOpen(false)}
+            className="popup-close-btn"
+          >
             Close
           </button>
         </div>
-      </Modal>
+      </Popup>
     </div>
   );
 };
