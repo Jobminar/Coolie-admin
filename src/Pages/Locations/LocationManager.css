@@ -772,3 +772,94 @@
     box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
     text-align: right;
 }
+
+
+/* csv downloads */
+.csv-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 1000;
+}
+
+.csv-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    outline: none;
+    width: 400px;
+    text-align: center;
+}
+
+.csv-modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.success-icon {
+    font-size: 48px;
+    color: green;
+    animation: fadeIn 1s ease;
+}
+
+.error-icon {
+    font-size: 48px;
+    color: red;
+    animation: fadeIn 1s ease;
+}
+
+.csv-modal-close-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.csv-conversion-animation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.loading-animation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+.tiger-download-btn {
+    color: rgb(200, 100, 0)3;
+    border: none;
+    padding: 10px;
+    margin: 0.25rem;
+    background-color: transparent;
+}
+
+.tiger-download-btn:hover {
+    color: #00c853;
+}

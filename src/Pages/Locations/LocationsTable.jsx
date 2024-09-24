@@ -1,6 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faTrash,
+  faDownload,
+  faCheckCircle,
+  faTimesCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { CSVLink } from "react-csv";
+import toast, { Toaster } from "react-hot-toast";
+import Modal from "react-modal";
 
 const LocationsTable = ({
   locations,
@@ -8,8 +17,94 @@ const LocationsTable = ({
   handleEdit,
   showActions,
 }) => {
+  const [isConverting, setIsConverting] = useState(false);
+  const [csvData, setCsvData] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  // Prepare the data for CSV download
+  const prepareCsvData = () => {
+    const data = locations.map((location) => ({
+      Location: location.location,
+      Pincode: location.pincode,
+      District: location.district,
+      State: location.state,
+      Category: location.category,
+      Subcategory: location.subcategory,
+      "Service Name": location.servicename,
+      Price: location.price ? JSON.stringify(location.price) : "N/A",
+      "Offer Price": location.offerPrice
+        ? JSON.stringify(location.offerPrice)
+        : "N/A",
+      Min: location.min || "N/A",
+      Max: location.max || "N/A",
+      Metric: location.metric || "N/A",
+      "Credit Eligibility": location.creditEligibility ? "Yes" : "No",
+      "Tax Percentage": location.taxPercentage || "N/A",
+      "Misc Fee": location.miscFee || "N/A",
+      "Platform Commission": location.platformCommission || "N/A",
+      "Is Cash Payment": location.isCash ? "Yes" : "No",
+    }));
+
+    setCsvData(data);
+    return data;
+  };
+
+  // Handle CSV conversion process with feedback
+  const handleDownloadCsv = () => {
+    setIsConverting(true);
+    toast.promise(
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          const data = prepareCsvData();
+          if (data.length > 0) {
+            resolve();
+            setIsSuccess(true);
+            setIsConverting(false);
+            openModal();
+          } else {
+            reject();
+            setIsSuccess(false);
+            setIsConverting(false);
+            openModal();
+          }
+        }, 2000); // Simulate conversion delay
+      }),
+      {
+        loading: "Converting to CSV...",
+        success: "CSV file ready to download!",
+        error: "Failed to convert data.",
+      },
+    );
+  };
+
+  // Modal Control
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
   return (
     <div className="tiger-locations-table-wrapper">
+      <Toaster />
+      {/* Download Button */}
+      <div className="download-section">
+        <button className="tiger-download-btn" onClick={handleDownloadCsv}>
+          <FontAwesomeIcon icon={faDownload} /> Download as CSV
+        </button>
+        {csvData.length > 0 && (
+          <CSVLink
+            data={csvData}
+            filename="locations_data.csv"
+            className="hidden-link"
+          />
+        )}
+      </div>
+
+      {/* Table Display */}
       <table className="tiger-locations-table">
         <thead>
           <tr>
@@ -73,6 +168,42 @@ const LocationsTable = ({
           ))}
         </tbody>
       </table>
+
+      {/* CSV Conversion Animation */}
+      {isConverting && (
+        <div className="csv-conversion-animation">
+          <div className="loading-animation">
+            <FontAwesomeIcon icon={faDownload} spin />
+            <p>Converting to CSV...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Modal for CSV conversion result */}
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Conversion Result"
+        className="csv-modal-content"
+        overlayClassName="csv-modal-overlay"
+      >
+        <div className="csv-modal-body">
+          {isSuccess ? (
+            <>
+              <FontAwesomeIcon icon={faCheckCircle} className="success-icon" />
+              <h2>CSV Downloaded Successfully!</h2>
+            </>
+          ) : (
+            <>
+              <FontAwesomeIcon icon={faTimesCircle} className="error-icon" />
+              <h2>CSV Conversion Failed</h2>
+            </>
+          )}
+          <button onClick={closeModal} className="csv-modal-close-btn">
+            Close
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };
