@@ -18,7 +18,7 @@ import Providerbanners from "./Pages/Banners/Providerbanners";
 import Userbanners from "./Pages/Banners/userBanners";
 import EditUserPromotion from "./Pages/Promotions/Edituserpromotions";
 import EditproviderPromotion from "./Pages/Promotions/Editproviderpromotions";
-import EditUserPackage from "./Pages/Packages/Edit-user-packages";
+
 import EditProviderPackage from "./Pages/Packages/Edit-provider-package";
 import Viewadmin from "./Pages/Subadmin/view-admin";
 import Addadmin from "./Pages/Subadmin/Addsubadmin";
@@ -84,7 +84,6 @@ const Routing = () => {
               path="/edit-provider-package"
               element={<EditProviderPackage />}
             />
-            <Route path="/edit-user-package" element={<EditUserPackage />} />
             {/* Induction & Training */}
             <Route path="/induction" element={<Inductionmain />} />
             <Route path="/training" element={<Trainingmain />} />

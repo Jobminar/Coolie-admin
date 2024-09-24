@@ -1,95 +1,160 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./providerpackage.css";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import EditModaluser from "./EditModaluser"; // Import EditModal
+import "./providerpackage.css"; // Your custom CSS
 
-const Manageuserpackage = () => {
-  const [packages, setPackages] = useState([]);
-  const navigate = useNavigate();
+const ManageUserPackage = () => {
+  const [packages, setPackages] = useState([]); // Store the packages
+  const [loading, setLoading] = useState(false); // Handle loading state
+  const [editingPackage, setEditingPackage] = useState(null); // Store the package being edited
+  const [showModal, setShowModal] = useState(false); // Show/Hide the edit modal
 
   useEffect(() => {
-    fetchPackages();
+    fetchPackages(); // Fetch packages on component mount
   }, []);
 
+  // Fetch packages from the server
   const fetchPackages = async () => {
+    setLoading(true); // Start loading
     try {
       const response = await fetch(
-        "https://api.coolieno1.in/v1.0/admin/user-package",
+        "https://api.coolieno1.in/v1.0/admin/admin-user-package",
       );
       if (!response.ok) {
         throw new Error("Failed to fetch packages");
       }
       const data = await response.json();
-      setPackages(data);
+      setPackages(data); // Set the fetched packages to state
     } catch (error) {
       console.error(error);
+      toast.error("Failed to fetch packages");
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
-  const handleEdit = (packageItem) => {
-    navigate("/edit-user-package", { state: { package: packageItem } });
-  };
-
+  // Handle delete functionality
   const handleDelete = async (id) => {
     if (!id) {
-      console.log("ID not provided");
+      toast.error("Package ID not found.");
       return;
     }
-    console.log(id);
 
+    if (window.confirm("Are you sure you want to delete this package?")) {
+      try {
+        const response = await fetch(
+          `https://api.coolieno1.in/v1.0/admin/admin-user-package/${id}`,
+          {
+            method: "DELETE",
+          },
+        );
+
+        if (response.ok) {
+          toast.success("Package deleted successfully.");
+          setPackages((prevData) =>
+            prevData.filter((packageItem) => packageItem._id !== id),
+          );
+        } else {
+          toast.error("Failed to delete package.");
+        }
+      } catch (err) {
+        console.error("Error deleting package", err);
+        toast.error("An error occurred while deleting the package.");
+      }
+    }
+  };
+
+  // Handle edit functionality (open modal)
+  const handleEdit = (packageItem) => {
+    setEditingPackage(packageItem); // Set the package to edit
+    setShowModal(true); // Show the modal
+  };
+
+  // Handle closing the modal
+  const closeModal = () => {
+    setShowModal(false); // Close the modal
+    setEditingPackage(null); // Clear the selected package
+  };
+
+  // Handle updating the package in the modal
+  const handleUpdate = async (updatedData) => {
     try {
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/admin/user-package/${id}`,
+        `https://api.coolieno1.in/v1.0/admin/admin-user-package/${editingPackage._id}`,
         {
-          method: "DELETE",
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedData),
         },
       );
 
       if (response.ok) {
-        alert("Deleted successfully");
+        const updatedPackage = await response.json();
+        // Update the state with the edited package
         setPackages((prevData) =>
-          prevData.filter((promotion) => promotion._id !== id),
+          prevData.map((pkg) =>
+            pkg._id === updatedPackage._id ? updatedPackage : pkg,
+          ),
         );
+        toast.success("Package updated successfully.");
+        closeModal(); // Close the modal after successful update
       } else {
-        alert("Error: Failed to delete promotion.");
+        toast.error("Failed to update package.");
       }
-    } catch (err) {
-      console.error("Error", err);
-      alert("An error occurred while deleting");
+    } catch (error) {
+      console.error("Error updating package", error);
+      toast.error("An error occurred while updating the package.");
     }
   };
 
   return (
-    <>
-      <div className="u-manage-con">
-        {packages.map((packageItem, index) => (
+    <div className="u-manage-con">
+      {loading ? (
+        <p>Loading packages...</p>
+      ) : (
+        packages.map((packageItem, index) => (
           <div key={index} className="u-manage-sub-con">
             <div className="u-manage-buttons">
               <h3>{packageItem.packageName}</h3>
+              {/* Edit button */}
               <EditOutlinedIcon
-                style={{ fontSize: "30px" }}
-                onClick={() => {
-                  handleEdit(packageItem);
-                }}
+                style={{ fontSize: "30px", cursor: "pointer" }}
+                onClick={() => handleEdit(packageItem)}
               />
+              {/* Delete button */}
               <DeleteOutlineOutlinedIcon
+                style={{ fontSize: "30px", cursor: "pointer" }}
                 onClick={() => handleDelete(packageItem._id)}
-                style={{ fontSize: "30px" }}
               />
             </div>
             <p>Price in RS: {packageItem.priceRs}</p>
-            <p>Price in Cr: {packageItem.priceCr}</p>
-            <p>
-              Discount in Platform commission: {packageItem.discountPlatformCom}
-              %
-            </p>
+            <p>Validity: {packageItem.validity}</p>
+            <p>Discount: {packageItem.discount}%</p>
             <p>Comments: {packageItem.comments}</p>
+            <p>Description: {packageItem.description}</p>
           </div>
-        ))}
-      </div>
-    </>
+        ))
+      )}
+
+      {/* Edit Modal */}
+      {showModal && editingPackage && (
+        <EditModaluser
+          packageData={editingPackage}
+          onClose={closeModal}
+          onSave={handleUpdate}
+        />
+      )}
+
+      {/* Toastify container for showing notifications */}
+      <ToastContainer />
+    </div>
   );
 };
 
-export default Manageuserpackage;
+export default ManageUserPackage;
