@@ -421,7 +421,7 @@ const Sidebar = ({ children }) => {
                   handleNavigation("/user-packages", "user-packages")
                 }
               >
-                User Packages
+                User Promotions
                 {activeDropdownItem === "user-packages" && (
                   <FontAwesomeIcon
                     icon={faPlay}
