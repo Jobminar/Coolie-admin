@@ -41,7 +41,7 @@ const EditLoyaltyCards = () => {
       }
 
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/admin/loyalty/${editdata._id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/loyalty/${editdata._id}`,
         {
           method: "PATCH",
           body: formDataToSend,

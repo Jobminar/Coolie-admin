@@ -11,7 +11,7 @@ export const saveLocations = async (locations) => {
     // Send each location individually to the API
     for (const location of locations) {
       const response = await axios.post(
-        "https://api.coolieno1.in/v1.0/core/locations/post",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/post",
         location, // Send each location object
         {
           headers: {
@@ -64,7 +64,7 @@ export const uploadCsvFile = async (file, group) => {
 
   try {
     const response = await axios.post(
-      "https://api.coolieno1.in/v1.0/core/locations/upload",
+      "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/upload",
       formData,
       {
         headers: {
@@ -108,7 +108,7 @@ const handleError = (error) => {
 export const deleteLocation = async (id) => {
   try {
     const response = await axios.delete(
-      `https://api.coolieno1.in/v1.0/core/locations/delete/${id}`,
+      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/delete/${id}`,
     );
     return response.data;
   } catch (error) {

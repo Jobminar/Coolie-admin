@@ -12,7 +12,8 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import toast, { Toaster } from "react-hot-toast";
 import "./styles/manageservice.css";
 
-const API_BASE_URL = "https://api.coolieno1.in";
+const API_BASE_URL =
+  "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net";
 const AWS_BASE_URL = "https://coolie1-dev.s3.ap-south-1.amazonaws.com";
 
 const ManageService = () => {

@@ -22,7 +22,7 @@ const AddInclusionExclusion = ({ onClose, onDataAdded }) => {
     const fetchServices = async () => {
       try {
         const response = await axios.get(
-          "https://api.coolieno1.in/v1.0/core/services",
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services",
         );
         setServices(response.data);
       } catch (error) {
@@ -111,7 +111,7 @@ const AddInclusionExclusion = ({ onClose, onDataAdded }) => {
 
     try {
       const response = await axios.post(
-        "https://api.coolieno1.in/v1.0/core/inclusion-exclusion",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/inclusion-exclusion",
         formData,
         {
           headers: {

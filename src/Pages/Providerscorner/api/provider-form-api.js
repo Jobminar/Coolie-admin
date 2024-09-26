@@ -3,7 +3,7 @@ export const fetchProviderDetails = async () => {
   console.log("Fetching provider details from the API...");
   try {
     const response = await fetch(
-      "https://api.coolieno1.in/v1.0/providers/provider-details",
+      "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-details",
     );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -25,7 +25,7 @@ export const fetchProviderDetailsId = async (providerId) => {
   );
   try {
     const response = await fetch(
-      `https://api.coolieno1.in/v1.0/providers/provider-details/${providerId}`, // Include providerId in the URL
+      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-details/${providerId}`, // Include providerId in the URL
     );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -46,7 +46,7 @@ export const fetchProviders = async () => {
   console.log("Fetching provider details from the API...");
   try {
     const response = await fetch(
-      "https://api.coolieno1.in/v1.0/providers/provider-details",
+      "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-details",
     );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);

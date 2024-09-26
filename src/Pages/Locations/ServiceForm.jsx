@@ -61,7 +61,7 @@ const ServiceForm = ({
 
     try {
       await axios.post(
-        `https://api.coolieno1.in/v1.0/core/locations/post`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/post`,
         newLocationData,
       );
       alert("Location and service added successfully!");

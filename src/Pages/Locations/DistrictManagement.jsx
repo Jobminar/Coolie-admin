@@ -23,7 +23,7 @@ const DistrictManagement = () => {
     const fetchLocations = async () => {
       try {
         const response = await axios.get(
-          "https://api.coolieno1.in/v1.0/core/locations",
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations",
         );
         const allLocations = response.data;
         const uniqueDistricts = [
@@ -52,7 +52,7 @@ const DistrictManagement = () => {
   const fetchDistrictData = async (district) => {
     try {
       const response = await axios.get(
-        `https://api.coolieno1.in/v1.0/core/locations/district/${district}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/district/${district}`,
       );
       setDistrictData(response.data);
       setErrorMessage("");

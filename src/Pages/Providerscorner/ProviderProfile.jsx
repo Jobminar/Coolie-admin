@@ -18,7 +18,7 @@ const ProviderProfile = ({ onDocumentsClick, onBackClick, providerId }) => {
       );
       try {
         const response = await fetch(
-          `https://api.coolieno1.in/v1.0/providers/provider-details/${providerId}`,
+          `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-details/${providerId}`,
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -35,7 +35,7 @@ const ProviderProfile = ({ onDocumentsClick, onBackClick, providerId }) => {
     const fetchProviderWorkDetails = async (providerId) => {
       try {
         const response = await fetch(
-          `https://api.coolieno1.in/v1.0/providers/work/${providerId}`,
+          `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/work/${providerId}`,
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

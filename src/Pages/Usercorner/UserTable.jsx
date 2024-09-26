@@ -8,7 +8,7 @@ const UserTable = ({ data, loading, error, userOrdersCount }) => {
   const handleRowClick = async (userId) => {
     try {
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/users/order/${userId}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/users/order/${userId}`,
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch orders for user ${userId}`);

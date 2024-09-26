@@ -29,10 +29,13 @@ const EditFAQPopup = ({ faq, isOpen, onClose, onUpdate }) => {
 
     setLoading(true);
     axios
-      .put(`https://api.coolieno1.in/v1.0/users/faq/${faq._id}`, {
-        question: sanitizedQuestion,
-        answer: sanitizedAnswer,
-      })
+      .put(
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/users/faq/${faq._id}`,
+        {
+          question: sanitizedQuestion,
+          answer: sanitizedAnswer,
+        },
+      )
       .then((response) => {
         onUpdate(response.data); // Pass the updated FAQ back to the parent
         onClose(); // Close the popup

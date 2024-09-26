@@ -22,7 +22,7 @@ const Mostbookedservices = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://api.coolieno1.in/v1.0/core/services",
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services",
         );
         if (!response.ok) {
           throw new Error("Error occurred");
@@ -77,7 +77,7 @@ const Mostbookedservices = () => {
 
     try {
       const response = await fetch(
-        "https://api.coolieno1.in/v1.0/admin/most-booked",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/most-booked",
         {
           method: "POST",
           body: data,
@@ -100,7 +100,7 @@ const Mostbookedservices = () => {
     const fetchMostBooked = async () => {
       try {
         const response = await fetch(
-          "https://api.coolieno1.in/v1.0/admin/most-booked",
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/most-booked",
         );
         if (!response.ok) {
           throw new Error("Error while getting the most booked data");
@@ -129,7 +129,7 @@ const Mostbookedservices = () => {
 
     try {
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/admin/most-booked/${id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/most-booked/${id}`,
         {
           method: "DELETE",
         },

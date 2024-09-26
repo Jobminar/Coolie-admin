@@ -16,7 +16,9 @@ const Providerbanners = () => {
 
   useEffect(() => {
     axios
-      .get("https://api.coolieno1.in/v1.0/admin/provider-banners")
+      .get(
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/provider-banners",
+      )
       .then((response) => setData(response.data))
       .catch((error) => setError(error));
   }, []);
@@ -41,7 +43,7 @@ const Providerbanners = () => {
       formData.append("name", name);
       formData.append("image", image);
       const response = await fetch(
-        "https://api.coolieno1.in/v1.0/admin/provider-banners",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/provider-banners",
         {
           method: "POST",
           body: formData,
@@ -67,7 +69,7 @@ const Providerbanners = () => {
 
     try {
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/admin/provider-banners/banners/${id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/provider-banners/banners/${id}`,
         {
           method: "DELETE",
         },

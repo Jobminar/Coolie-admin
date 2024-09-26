@@ -29,7 +29,7 @@ const EditBanner = () => {
         formData.append("image", image);
       }
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/admin/${apiEndpoint}/${banner._id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/${apiEndpoint}/${banner._id}`,
         {
           method: "PATCH",
           body: formData,

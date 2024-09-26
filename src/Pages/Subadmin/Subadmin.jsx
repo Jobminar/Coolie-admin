@@ -12,7 +12,7 @@ const Subadmin = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://api.coolieno1.in/v1.0/admin/sub-admin",
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/sub-admin",
         );
         if (!response.ok) {
           throw new Error("Error occurred");

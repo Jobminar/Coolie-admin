@@ -58,7 +58,7 @@ const EditServiceForm = ({
 
     try {
       const response = await axios.put(
-        `https://api.coolieno1.in/v1.0/core/services/${service._id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services/${service._id}`,
         formData,
       );
       setSuccessMessage("Service updated successfully.");

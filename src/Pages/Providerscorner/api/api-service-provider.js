@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "https://api.coolieno1.in/v1.0/providers";
+const BASE_URL =
+  "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers";
 
 // Function to generate OTP
 export const generateOtp = async (phone) => {

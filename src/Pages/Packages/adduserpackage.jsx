@@ -52,7 +52,7 @@ const AddUserPackage = () => {
 
     try {
       const response = await axios.post(
-        "https://api.coolieno1.in/v1.0/admin/admin-user-package",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/admin-user-package",
         data,
         {
           headers: {

@@ -20,7 +20,9 @@ const Blogs = () => {
   // Fetch all blogs from API
   const fetchBlogs = async () => {
     try {
-      const response = await fetch("https://api.coolieno1.in/v1.0/admin/blogs");
+      const response = await fetch(
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/blogs",
+      );
       const data = await response.json();
       if (response.ok) {
         setBlogs(data); // Store all blogs
@@ -55,9 +57,12 @@ const Blogs = () => {
   // Delete a blog
   const deleteBlog = async (index, blogId) => {
     try {
-      await fetch(`https://api.coolieno1.in/v1.0/admin/blogs/${blogId}`, {
-        method: "DELETE",
-      });
+      await fetch(
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/blogs/${blogId}`,
+        {
+          method: "DELETE",
+        },
+      );
       const updatedBlogs = blogs.filter((_, i) => i !== index);
       setBlogs(updatedBlogs);
       paginateBlogs(updatedBlogs, currentPage); // Update the current page after deletion
@@ -85,7 +90,7 @@ const Blogs = () => {
 
       // Send a PATCH request to update the blog
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/admin/blogs/${updatedBlog._id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/blogs/${updatedBlog._id}`,
         {
           method: "PATCH",
           body: formData,

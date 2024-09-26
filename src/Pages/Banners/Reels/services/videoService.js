@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "https://api.coolieno1.in/v1.0/admin/reels/video";
+const API_URL =
+  "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/reels/video";
 
 export const uploadMedia = async (formData) => {
   try {

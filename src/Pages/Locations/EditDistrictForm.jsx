@@ -83,7 +83,7 @@ const EditDistrictForm = ({
 
     try {
       const response = await axios.patch(
-        `https://api.coolieno1.in/v1.0/core/locations/${selectedRecord._id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/${selectedRecord._id}`,
         {
           ...formData,
           price: updatedPrice, // Set the reconstructed price object

@@ -29,7 +29,7 @@ const EditProviderPackage = () => {
     console.log("Submitting package data:", packageData);
     try {
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/admin/provider-package/${packageData._id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/provider-package/${packageData._id}`,
         {
           method: "PATCH",
           headers: {

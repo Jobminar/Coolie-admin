@@ -6,8 +6,10 @@ import Switch from "react-switch";
 import toast, { Toaster } from "react-hot-toast"; // Import react-hot-toast
 import "./AddServiceForm.css";
 
-const API_BASE_URL = "https://api.coolieno1.in/v1.0/core";
-const API_POST_URL = "https://api.coolieno1.in/v1.0/core/locations/post";
+const API_BASE_URL =
+  "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core";
+const API_POST_URL =
+  "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/post";
 
 // Fetch Locations API
 const fetchLocations = async () => {

@@ -40,7 +40,7 @@ const Loyalitycards = () => {
       formData.append("image", image);
 
       const response = await fetch(
-        "https://api.coolieno1.in/v1.0/admin/loyalty",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/loyalty",
         {
           method: "POST",
           body: formData,
@@ -64,7 +64,9 @@ const Loyalitycards = () => {
 
   useEffect(() => {
     axios
-      .get("https://api.coolieno1.in/v1.0/admin/loyalty")
+      .get(
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/loyalty",
+      )
       .then((response) => setGetData(response.data))
       .catch((error) => setError(error));
   }, []);
@@ -78,7 +80,7 @@ const Loyalitycards = () => {
     }
     try {
       const response = await axios.delete(
-        `https://api.coolieno1.in/v1.0/admin/loyalty/${id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/loyalty/${id}`,
       );
       //   http://localhost:3000/v1.0/admin/loyalty/id
       if (response.status == 200) {

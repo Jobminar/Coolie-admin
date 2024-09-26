@@ -53,7 +53,7 @@ const LocationManager = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        "https://api.coolieno1.in/v1.0/core/locations",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations",
       );
       setLocations(response.data);
       setFilteredLocations(response.data);

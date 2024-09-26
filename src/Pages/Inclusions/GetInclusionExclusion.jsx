@@ -24,8 +24,12 @@ const GetInclusionExclusion = ({ refresh }) => {
       try {
         const [inclusionExclusionResponse, servicesResponse] =
           await Promise.all([
-            axios.get("https://api.coolieno1.in/v1.0/core/inclusion-exclusion"),
-            axios.get("https://api.coolieno1.in/v1.0/core/services"),
+            axios.get(
+              "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/inclusion-exclusion",
+            ),
+            axios.get(
+              "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services",
+            ),
           ]);
         setData(inclusionExclusionResponse.data);
         setServices(servicesResponse.data);

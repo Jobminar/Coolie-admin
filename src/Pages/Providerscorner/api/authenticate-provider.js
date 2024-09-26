@@ -4,7 +4,7 @@ import axios from "axios";
 export const fetchProviders = async () => {
   try {
     const response = await axios.get(
-      "https://api.coolieno1.in/v1.0/providers/provider-details",
+      "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-details",
     );
     console.log("Fetched providers:", response.data);
     return response.data;
@@ -18,7 +18,7 @@ export const fetchProviders = async () => {
 export const fetchProviderCertificates = async (providerId) => {
   try {
     const response = await axios.get(
-      `https://api.coolieno1.in/v1.0/providers/provider-certificate/${providerId}`,
+      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-certificate/${providerId}`,
     );
     console.log("Fetched provider certificates:", response.data);
     return response.data;
@@ -32,7 +32,7 @@ export const fetchProviderCertificates = async (providerId) => {
 export const fetchProviderDetails = async (providerId) => {
   try {
     const response = await axios.get(
-      `https://api.coolieno1.in/v1.0/providers/provider-details/${providerId}`,
+      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-details/${providerId}`,
     );
     console.log("Fetched provider details:", response.data);
     return response.data;
@@ -46,7 +46,7 @@ export const fetchProviderDetails = async (providerId) => {
 export const updateProviderCertificate = async (documentId, updateData) => {
   try {
     const response = await axios.patch(
-      `https://api.coolieno1.in/v1.0/providers/provider-certificate/${documentId}`,
+      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-certificate/${documentId}`,
       updateData,
     );
     console.log("Updated provider certificate:", response.data);
@@ -63,7 +63,7 @@ export const updateProviderDetails = async (providerId, updateData) => {
     console.log("Updating provider with ID:", providerId);
     console.log("Update data:", updateData);
     const response = await axios.patch(
-      `https://api.coolieno1.in/v1.0/providers/provider-details/${providerId}`,
+      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-details/${providerId}`,
       updateData,
     );
     console.log("Updated provider details:", response.data);

@@ -17,7 +17,9 @@ const Popupbanners = () => {
 
   useEffect(() => {
     axios
-      .get("https://api.coolieno1.in/v1.0/admin/user-banners")
+      .get(
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/user-banners",
+      )
       .then((response) => setData(response.data))
       .catch((error) => setError(error));
   }, []);
@@ -42,7 +44,7 @@ const Popupbanners = () => {
       formData.append("name", name);
       formData.append("image", image);
       const response = await fetch(
-        "https://api.coolieno1.in/v1.0/admin/user-banners",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/user-banners",
         {
           method: "POST",
           body: formData,
@@ -68,7 +70,7 @@ const Popupbanners = () => {
 
     try {
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/admin/user-banners/banners/${id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/user-banners/banners/${id}`,
         {
           method: "DELETE",
         },
@@ -87,7 +89,9 @@ const Popupbanners = () => {
   };
 
   const handleEdit = (banner) => {
-    navigate("/edit-banner", { state: { banner, apiEndpoint: "user-banners" } });
+    navigate("/edit-banner", {
+      state: { banner, apiEndpoint: "user-banners" },
+    });
   };
 
   const toggleFormVisibility = () => {

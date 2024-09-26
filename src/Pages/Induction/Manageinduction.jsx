@@ -19,7 +19,7 @@ export default function ManageInduction() {
     const fetchInductionVideos = async () => {
       try {
         const response = await axios.get(
-          "https://api.coolieno1.in/v1.0/admin/induction"
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/induction",
         );
         const videoData = response.data.map((video) => ({
           ...video,
@@ -45,7 +45,9 @@ export default function ManageInduction() {
     setInductionVideos(updatedVideos);
 
     axios
-      .delete(`https://api.coolieno1.in/v1.0/admin/induction/${id}`)
+      .delete(
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/induction/${id}`,
+      )
       .then(() => {
         console.log("Video deleted successfully");
       })

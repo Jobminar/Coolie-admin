@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import './managesubadmin.css'
+import React, { useState, useEffect } from "react";
+import "./managesubadmin.css";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-
 
 const Managesubadmin = () => {
   const [subAdmins, setSubAdmins] = useState([]);
@@ -10,15 +9,17 @@ const Managesubadmin = () => {
   useEffect(() => {
     const fetchSubAdmins = async () => {
       try {
-        const response = await fetch('https://api.coolieno1.in/v1.0/admin/sub-admin');
+        const response = await fetch(
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/sub-admin",
+        );
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const data = await response.json();
         setSubAdmins(data);
-        console.log(data)
+        console.log(data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -34,7 +35,7 @@ const Managesubadmin = () => {
 
     try {
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/admin/sub-admin/${id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/sub-admin/${id}`,
         {
           method: "DELETE",
         },
@@ -61,26 +62,24 @@ const Managesubadmin = () => {
   return (
     <>
       <h1>Manage Subadmins</h1>
-      <div className='manage-sa-main-con'>
+      <div className="manage-sa-main-con">
         {subAdmins.map((subAdmin) => (
-           <div className='manage-sa-sub-con'>
-               <div className='sd-img-con'>
-                 
-               </div>
-               <p>{subAdmin.fullName}</p>
-               <div className='sa-button-con'>
-                    <EditOutlinedIcon
-                        style={{ fontSize: "30px" }}
-                        onClick={() => {
-                        handleEdit(packageItem);
-                        }}
-                    />
-                    <DeleteOutlineOutlinedIcon
-                        onClick={() => handleDelete(subAdmin._id)}
-                        style={{ fontSize: "30px" }}
-                    />
-                </div>
-           </div>
+          <div className="manage-sa-sub-con">
+            <div className="sd-img-con"></div>
+            <p>{subAdmin.fullName}</p>
+            <div className="sa-button-con">
+              <EditOutlinedIcon
+                style={{ fontSize: "30px" }}
+                onClick={() => {
+                  handleEdit(packageItem);
+                }}
+              />
+              <DeleteOutlineOutlinedIcon
+                onClick={() => handleDelete(subAdmin._id)}
+                style={{ fontSize: "30px" }}
+              />
+            </div>
+          </div>
         ))}
       </div>
     </>

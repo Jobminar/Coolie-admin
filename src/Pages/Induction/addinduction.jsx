@@ -26,7 +26,7 @@ function InductionForm() {
     const fetchCategories = async () => {
       try {
         const response = await fetch(
-          "https://api.coolieno1.in/v1.0/core/categories",
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/categories",
         );
         const data = await response.json();
         setCategories(data);
@@ -82,7 +82,7 @@ function InductionForm() {
 
     try {
       const response = await fetch(
-        "https://api.coolieno1.in/v1.0/admin/induction",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/induction",
         {
           method: "POST",
           body: formData,

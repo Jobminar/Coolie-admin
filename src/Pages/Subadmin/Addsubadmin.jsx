@@ -59,14 +59,14 @@ const Addsubadmin = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        "https://api.coolieno1.in/v1.0/admin/sub-admin",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/sub-admin",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(addAdmin),
-        }
+        },
       );
       if (response.ok) {
         alert("Form submitted");

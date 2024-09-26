@@ -16,7 +16,7 @@ const MapboxView = ({ providers }) => {
     const fetchCoordinates = async () => {
       try {
         const response = await fetch(
-          "https://api.coolieno1.in/v1.0/providers/cordinates",
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/cordinates",
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

@@ -13,7 +13,7 @@ const ManagePromotions = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://api.coolieno1.in/v1.0/admin/provider-promotions",
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/provider-promotions",
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -41,7 +41,7 @@ const ManagePromotions = () => {
 
     try {
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/admin/provider-promotions/${id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/provider-promotions/${id}`,
         {
           method: "DELETE",
         },

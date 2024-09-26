@@ -21,7 +21,7 @@ const OurCoreServices = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://api.coolieno1.in/v1.0/admin/our-core-services",
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/our-core-services",
         );
         if (!response.ok) {
           throw new Error("Error occurred");
@@ -74,7 +74,7 @@ const OurCoreServices = () => {
 
     try {
       const response = await fetch(
-        "https://api.coolieno1.in/v1.0/admin/our-core-services",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/our-core-services",
         {
           method: "POST",
           body: data,
@@ -101,7 +101,7 @@ const OurCoreServices = () => {
     const fetchCoreServices = async () => {
       try {
         const response = await fetch(
-          "https://api.coolieno1.in/v1.0/admin/our-core-services",
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/our-core-services",
         );
         if (!response.ok) {
           throw new Error("Error while fetching the core services data");
@@ -132,7 +132,7 @@ const OurCoreServices = () => {
 
     try {
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/admin/our-core-services/${id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/our-core-services/${id}`,
         {
           method: "DELETE",
         },

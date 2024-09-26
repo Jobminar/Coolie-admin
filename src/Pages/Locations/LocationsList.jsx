@@ -18,7 +18,7 @@ const LocationList = ({ group, tierName, reload, searchPincode }) => {
   const fetchLocations = async () => {
     try {
       const response = await axios.get(
-        "https://api.coolieno1.in/v1.0/core/locations",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations",
         {
           params: { group: group }, // Send group as a query param
         },
@@ -129,7 +129,7 @@ const LocationList = ({ group, tierName, reload, searchPincode }) => {
 
     try {
       await axios.put(
-        "https://api.coolieno1.in/v1.0/core/locations/update-tiername",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/update-tiername",
         {
           ids: locationIds,
           newTierName: tierName,

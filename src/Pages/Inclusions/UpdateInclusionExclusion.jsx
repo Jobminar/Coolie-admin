@@ -33,7 +33,7 @@ const UpdateInclusionExclusion = ({ item, isOpen, onClose, onUpdate }) => {
     const fetchServices = async () => {
       try {
         const response = await axios.get(
-          "https://api.coolieno1.in/v1.0/core/services",
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services",
         );
         setServices(response.data);
       } catch (error) {
@@ -119,7 +119,7 @@ const UpdateInclusionExclusion = ({ item, isOpen, onClose, onUpdate }) => {
     setLoading(true);
     try {
       const response = await axios.patch(
-        `https://api.coolieno1.in/v1.0/core/inclusion-exclusion/${item._id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/inclusion-exclusion/${item._id}`,
         formData,
         {
           headers: {

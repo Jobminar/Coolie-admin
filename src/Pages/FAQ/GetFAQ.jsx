@@ -60,8 +60,12 @@ const GetFAQ = ({ refresh, onEditFAQClick }) => {
   useEffect(() => {
     setLoading(true);
     Promise.all([
-      axios.get("https://api.coolieno1.in/v1.0/core/services"),
-      axios.get("https://api.coolieno1.in/v1.0/users/faq"),
+      axios.get(
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services",
+      ),
+      axios.get(
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/users/faq",
+      ),
     ])
       .then(([servicesResponse, faqsResponse]) => {
         setServices(servicesResponse.data);

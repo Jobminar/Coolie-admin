@@ -15,7 +15,7 @@ const ManageProviderPackages = () => {
   const fetchPackages = async () => {
     try {
       const response = await fetch(
-        "https://api.coolieno1.in/v1.0/admin/provider-package",
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/provider-package",
       );
       if (!response.ok) {
         throw new Error("Failed to fetch packages");
@@ -40,7 +40,7 @@ const ManageProviderPackages = () => {
 
     try {
       const response = await fetch(
-        `https://api.coolieno1.in/v1.0/admin/provider-package/${id}`,
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/provider-package/${id}`,
         {
           method: "DELETE",
         },

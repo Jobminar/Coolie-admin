@@ -15,7 +15,7 @@ export const fetchCategories = async () => {
 export const fetchProviderWorkDetails = async (providerId) => {
   try {
     const response = await fetch(
-      `https://api.coolieno1.in/v1.0/providers/work/${providerId}`,
+      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/work/${providerId}`,
     );
     if (!response.ok) throw new Error("Network response was not ok");
     return await response.json();
@@ -29,7 +29,7 @@ export const fetchProviderWorkDetails = async (providerId) => {
 export const fetchProviderCertificates = async (providerId) => {
   try {
     const response = await fetch(
-      `https://api.coolieno1.in/v1.0/providers/provider-certificate/${providerId}`,
+      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-certificate/${providerId}`,
     );
     if (!response.ok) throw new Error("Network response was not ok");
     const data = await response.json();
@@ -44,7 +44,7 @@ export const fetchProviderCertificates = async (providerId) => {
 export const fetchProviders = async () => {
   try {
     const response = await axios.get(
-      "https://api.coolieno1.in/v1.0/providers/provider-details",
+      "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-details",
     );
     console.log("Fetched providers:", response.data);
     return response.data;

@@ -19,7 +19,7 @@ export default function ManageTraining() {
     const fetchTrainingVideos = async () => {
       try {
         const response = await axios.get(
-          "https://api.coolieno1.in/v1.0/admin/training",
+          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/training",
         );
         const videoData = response.data.map((video) => ({
           ...video,
@@ -57,7 +57,9 @@ export default function ManageTraining() {
     setTrainingVideos(updatedVideos);
 
     axios
-      .delete(`https://api.coolieno1.in/v1.0/admin/training/${id}`)
+      .delete(
+        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/training/${id}`,
+      )
       .then(() => {
         console.log("Video deleted successfully");
       })

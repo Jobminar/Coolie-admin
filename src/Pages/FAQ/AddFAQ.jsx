@@ -103,7 +103,9 @@ const AddFAQ = () => {
     // Fetch the list of services for the dropdown
     setLoading(true);
     axios
-      .get("https://api.coolieno1.in/v1.0/core/services")
+      .get(
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services",
+      )
       .then((response) => {
         if (Array.isArray(response.data)) {
           setServices(response.data);
@@ -131,7 +133,10 @@ const AddFAQ = () => {
     const newFAQ = { serviceId, customerName, question, answer };
 
     axios
-      .post("https://api.coolieno1.in/v1.0/users/faq", newFAQ)
+      .post(
+        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/users/faq",
+        newFAQ,
+      )
       .then((response) => {
         console.log("FAQ added:", response.data);
         setSuccessMessage("FAQ added successfully!");

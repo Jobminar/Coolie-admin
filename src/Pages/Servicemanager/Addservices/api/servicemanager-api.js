@@ -1,7 +1,8 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const API_BASE_URL = "https://api.coolieno1.in/v1.0/core";
+const API_BASE_URL =
+  "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core";
 
 export const fetchCategories = () => {
   return axios.get(`${API_BASE_URL}/categories`);
