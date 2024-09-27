@@ -50,11 +50,10 @@ const LocationManager = () => {
   }, []);
 
   const fetchLocations = async () => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     setIsLoading(true);
     try {
-      const response = await axios.get(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations",
-      );
+      const response = await axios.get(`${AZURE_BASE_URL}/v1.0/core/locations`);
       setLocations(response.data);
       setFilteredLocations(response.data);
       setError("");

@@ -20,10 +20,9 @@ const Mostbookedservices = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
-        const response = await fetch(
-          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services",
-        );
+        const response = await fetch(`${AZURE_BASE_URL}/v1.0/core/services`);
         if (!response.ok) {
           throw new Error("Error occurred");
         }
@@ -74,15 +73,12 @@ const Mostbookedservices = () => {
     data.append("price", formData.price);
     data.append("image", image);
     data.append("serviceId", formData.id);
-
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     try {
-      const response = await fetch(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/most-booked",
-        {
-          method: "POST",
-          body: data,
-        },
-      );
+      const response = await fetch(`${AZURE_BASE_URL}/v1.0/admin/most-booked`, {
+        method: "POST",
+        body: data,
+      });
 
       if (!response.ok) {
         throw new Error("Failed to submit data");
@@ -98,9 +94,10 @@ const Mostbookedservices = () => {
 
   useEffect(() => {
     const fetchMostBooked = async () => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
         const response = await fetch(
-          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/most-booked",
+          `${AZURE_BASE_URL}/v1.0/admin/most-booked`,
         );
         if (!response.ok) {
           throw new Error("Error while getting the most booked data");
@@ -122,6 +119,7 @@ const Mostbookedservices = () => {
   };
 
   const handleDelete = async (id) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     if (!id) {
       console.log("ID not provided");
       return;
@@ -129,7 +127,7 @@ const Mostbookedservices = () => {
 
     try {
       const response = await fetch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/most-booked/${id}`,
+        `${AZURE_BASE_URL}/v1.0/admin/most-booked/${id}`,
         {
           method: "DELETE",
         },

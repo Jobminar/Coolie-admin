@@ -6,12 +6,12 @@ import axios from "axios";
  */
 export const saveLocations = async (locations) => {
   console.log("Locations sent to API:", JSON.stringify(locations, null, 2)); // Log the locations being sent
-
+  const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
   try {
     // Send each location individually to the API
     for (const location of locations) {
       const response = await axios.post(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/post",
+        `${AZURE_BASE_URL}/v1.0/core/locations/post`,
         location, // Send each location object
         {
           headers: {
@@ -58,13 +58,14 @@ export const fetchPincodeLocation = async (pincode) => {
  * @param {string} group - The selected group for the file
  */
 export const uploadCsvFile = async (file, group) => {
+  const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
   const formData = new FormData();
   formData.append("file", file);
   formData.append("group", group);
 
   try {
     const response = await axios.post(
-      "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/upload",
+      `${AZURE_BASE_URL}/v1.0/core/locations/upload`,
       formData,
       {
         headers: {
@@ -106,9 +107,10 @@ const handleError = (error) => {
  * @param {string} id - The ID of the location to delete
  */
 export const deleteLocation = async (id) => {
+  const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
   try {
     const response = await axios.delete(
-      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/delete/${id}`,
+      `${AZURE_BASE_URL}/v1.0/core/locations/delete/${id}`,
     );
     return response.data;
   } catch (error) {

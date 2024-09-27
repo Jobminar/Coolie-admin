@@ -26,6 +26,7 @@ const EditUserPromotion = () => {
   };
 
   const handleSubmit = async (e) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     e.preventDefault();
     try {
       const formData = new FormData();
@@ -34,7 +35,7 @@ const EditUserPromotion = () => {
       }
 
       const response = await fetch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/user-promotions/${promotion._id}`,
+        `${AZURE_BASE_URL}/v1.0/admin/user-promotions/${promotion._id}`,
         {
           method: "PATCH",
           body: formData,

@@ -21,9 +21,10 @@ const DistrictManagement = () => {
   // Fetch all locations and extract unique districts
   useEffect(() => {
     const fetchLocations = async () => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
         const response = await axios.get(
-          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations",
+          `${AZURE_BASE_URL}/v1.0/core/locations`,
         );
         const allLocations = response.data;
         const uniqueDistricts = [
@@ -50,9 +51,10 @@ const DistrictManagement = () => {
 
   // Fetch data for the selected district
   const fetchDistrictData = async (district) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     try {
       const response = await axios.get(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/district/${district}`,
+        `${AZURE_BASE_URL}/v1.0/core/locations/district/${district}`,
       );
       setDistrictData(response.data);
       setErrorMessage("");

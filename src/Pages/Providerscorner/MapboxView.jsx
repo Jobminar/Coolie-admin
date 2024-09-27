@@ -14,9 +14,10 @@ const MapboxView = ({ providers }) => {
 
   useEffect(() => {
     const fetchCoordinates = async () => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
         const response = await fetch(
-          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/cordinates",
+          `${AZURE_BASE_URL}/v1.0/providers/cordinates`,
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

@@ -19,10 +19,11 @@ const ManageUserPackage = () => {
 
   // Fetch packages from the server
   const fetchPackages = async () => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     setLoading(true); // Start loading
     try {
       const response = await fetch(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/admin-user-package",
+        `${AZURE_BASE_URL}/v1.0/admin/admin-user-package`,
       );
       if (!response.ok) {
         throw new Error("Failed to fetch packages");
@@ -39,6 +40,7 @@ const ManageUserPackage = () => {
 
   // Handle delete functionality
   const handleDelete = async (id) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     if (!id) {
       toast.error("Package ID not found.");
       return;
@@ -47,7 +49,7 @@ const ManageUserPackage = () => {
     if (window.confirm("Are you sure you want to delete this package?")) {
       try {
         const response = await fetch(
-          `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/admin-user-package/${id}`,
+          `${AZURE_BASE_URL}/v1.0/admin/admin-user-package/${id}`,
           {
             method: "DELETE",
           },
@@ -84,7 +86,7 @@ const ManageUserPackage = () => {
   const handleUpdate = async (updatedData) => {
     try {
       const response = await fetch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/admin-user-package/${editingPackage._id}`,
+        `${AZURE_BASE_URL}/v1.0/admin/admin-user-package/${editingPackage._id}`,
         {
           method: "PATCH",
           headers: {

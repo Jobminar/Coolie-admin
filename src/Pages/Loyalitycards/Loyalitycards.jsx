@@ -29,6 +29,7 @@ const Loyalitycards = () => {
     setImage(e.target.files[0]);
   };
   const handlesubmit = async (e) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     e.preventDefault();
     try {
       const formData = new FormData();
@@ -39,13 +40,10 @@ const Loyalitycards = () => {
       formData.append("discount", discount);
       formData.append("image", image);
 
-      const response = await fetch(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/loyalty",
-        {
-          method: "POST",
-          body: formData,
-        },
-      );
+      const response = await fetch(`${AZURE_BASE_URL}/v1.0/admin/loyalty`, {
+        method: "POST",
+        body: formData,
+      });
       if (response.ok) {
         alert("Loyalty card submitted");
         console.log("Loyalty card submitted");
@@ -63,16 +61,16 @@ const Loyalitycards = () => {
   };
 
   useEffect(() => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     axios
-      .get(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/loyalty",
-      )
+      .get(`${AZURE_BASE_URL}/v1.0/admin/loyalty`)
       .then((response) => setGetData(response.data))
       .catch((error) => setError(error));
   }, []);
 
   //  DElete
   const handleDelete = async (id) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     console.log(id);
     if (!id) {
       console.log("ID not provided");
@@ -80,7 +78,7 @@ const Loyalitycards = () => {
     }
     try {
       const response = await axios.delete(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/loyalty/${id}`,
+        `${AZURE_BASE_URL}/v1.0/admin/loyalty/${id}`,
       );
       //   http://localhost:3000/v1.0/admin/loyalty/id
       if (response.status == 200) {

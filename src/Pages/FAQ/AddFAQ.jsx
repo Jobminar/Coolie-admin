@@ -100,12 +100,11 @@ const AddFAQ = () => {
   const [successMessage, setSuccessMessage] = useState(""); // To capture success message
 
   useEffect(() => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     // Fetch the list of services for the dropdown
     setLoading(true);
     axios
-      .get(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services",
-      )
+      .get(`${AZURE_BASE_URL}/v1.0/core/services`)
       .then((response) => {
         if (Array.isArray(response.data)) {
           setServices(response.data);
@@ -125,6 +124,7 @@ const AddFAQ = () => {
   }, []);
 
   const handleSubmit = (e) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -133,10 +133,7 @@ const AddFAQ = () => {
     const newFAQ = { serviceId, customerName, question, answer };
 
     axios
-      .post(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/users/faq",
-        newFAQ,
-      )
+      .post(`${AZURE_BASE_URL}/v1.0/users/faq`, newFAQ)
       .then((response) => {
         console.log("FAQ added:", response.data);
         setSuccessMessage("FAQ added successfully!");

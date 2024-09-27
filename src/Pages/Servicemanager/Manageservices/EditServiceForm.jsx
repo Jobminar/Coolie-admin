@@ -40,6 +40,7 @@ const EditServiceForm = ({
   };
 
   const handleSubmit = async (e) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     e.preventDefault();
     if (!validateForm()) {
       return;
@@ -58,7 +59,7 @@ const EditServiceForm = ({
 
     try {
       const response = await axios.put(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services/${service._id}`,
+        `${AZURE_BASE_URL}/v1.0/core/services/${service._id}`,
         formData,
       );
       setSuccessMessage("Service updated successfully.");

@@ -13,9 +13,10 @@ const ManageProviderPackages = () => {
   }, []);
 
   const fetchPackages = async () => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     try {
       const response = await fetch(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/provider-package",
+        `${AZURE_BASE_URL}/v1.0/admin/provider-package`,
       );
       if (!response.ok) {
         throw new Error("Failed to fetch packages");
@@ -28,10 +29,12 @@ const ManageProviderPackages = () => {
   };
 
   const handleEdit = (packageItem) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     navigate("/edit-provider-package", { state: { package: packageItem } });
   };
 
   const handleDelete = async (id) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     if (!id) {
       console.log("ID not provided");
       return;
@@ -40,7 +43,7 @@ const ManageProviderPackages = () => {
 
     try {
       const response = await fetch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/provider-package/${id}`,
+        `${AZURE_BASE_URL}/v1.0/admin/provider-package/${id}`,
         {
           method: "DELETE",
         },

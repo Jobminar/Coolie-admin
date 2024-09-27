@@ -3,8 +3,8 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./CustomPricing.css";
 
-const API_BASE_URL =
-  "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core";
+const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
+const API_BASE_URL = `${AZURE_BASE_URL}/v1.0/core`;
 
 const CustomPricing = ({ onLocationSelected }) => {
   const [locations, setLocations] = useState([]);

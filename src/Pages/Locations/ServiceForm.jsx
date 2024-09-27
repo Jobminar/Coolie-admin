@@ -29,6 +29,7 @@ const ServiceForm = ({
 
   // Handle form submission
   const handleFormSubmit = async (e) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     e.preventDefault();
 
     // Validate mandatory fields
@@ -61,7 +62,7 @@ const ServiceForm = ({
 
     try {
       await axios.post(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/post`,
+        `${AZURE_BASE_URL}/v1.0/core/locations/post`,
         newLocationData,
       );
       alert("Location and service added successfully!");

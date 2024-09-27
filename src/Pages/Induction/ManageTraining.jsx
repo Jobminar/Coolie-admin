@@ -17,9 +17,10 @@ export default function ManageTraining() {
 
   useEffect(() => {
     const fetchTrainingVideos = async () => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
         const response = await axios.get(
-          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/training",
+          `${AZURE_BASE_URL}/v1.0/admin/training`,
         );
         const videoData = response.data.map((video) => ({
           ...video,
@@ -53,13 +54,12 @@ export default function ManageTraining() {
   };
 
   const handleDeleteClick = (id) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     const updatedVideos = trainingVideos.filter((video) => video._id !== id);
     setTrainingVideos(updatedVideos);
 
     axios
-      .delete(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/training/${id}`,
-      )
+      .delete(`${AZURE_BASE_URL}/v1.0/admin/training/${id}`)
       .then(() => {
         console.log("Video deleted successfully");
       })

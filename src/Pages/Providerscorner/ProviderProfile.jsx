@@ -12,13 +12,14 @@ const ProviderProfile = ({ onDocumentsClick, onBackClick, providerId }) => {
 
   useEffect(() => {
     const fetchProviderDetails = async (providerId) => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       console.log(
         "Fetching provider details from the API for providerId:",
         providerId,
       );
       try {
         const response = await fetch(
-          `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-details/${providerId}`,
+          `${AZURE_BASE_URL}/v1.0/providers/provider-details/${providerId}`,
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -33,9 +34,10 @@ const ProviderProfile = ({ onDocumentsClick, onBackClick, providerId }) => {
     };
 
     const fetchProviderWorkDetails = async (providerId) => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
         const response = await fetch(
-          `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/work/${providerId}`,
+          `${AZURE_BASE_URL}/v1.0/providers/work/${providerId}`,
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

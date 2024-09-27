@@ -21,15 +21,12 @@ const GetInclusionExclusion = ({ refresh }) => {
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
         const [inclusionExclusionResponse, servicesResponse] =
           await Promise.all([
-            axios.get(
-              "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/inclusion-exclusion",
-            ),
-            axios.get(
-              "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services",
-            ),
+            axios.get(`${AZURE_BASE_URL}/v1.0/core/inclusion-exclusion`),
+            axios.get(`${AZURE_BASE_URL}/v1.0/core/services`),
           ]);
         setData(inclusionExclusionResponse.data);
         setServices(servicesResponse.data);

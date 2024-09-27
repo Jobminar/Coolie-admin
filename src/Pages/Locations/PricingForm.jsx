@@ -42,8 +42,8 @@ const PricingForm = ({ location, district, pincode, isValid, isCustom }) => {
   const [editedDistrict, setEditedDistrict] = useState(district || "");
   const [editedPincode, setEditedPincode] = useState(pincode || "");
 
-  const API_POST_URL =
-    "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/post";
+  const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
+  const API_POST_URL = `${AZURE_BASE_URL}/v1.0/core/locations/post`;
 
   useEffect(() => {
     // Initialize edited fields with prop values

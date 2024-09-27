@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL =
-  "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core";
+const API_BASE_URL = "${AZURE_BASE_URL}/v1.0/core";
 
 // Fetch categories
 export const fetchCategories = () => {

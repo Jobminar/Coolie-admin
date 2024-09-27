@@ -6,15 +6,11 @@ import Switch from "react-switch";
 import toast, { Toaster } from "react-hot-toast"; // Import react-hot-toast
 import "./AddServiceForm.css";
 
-const API_BASE_URL =
-  "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core";
-const API_POST_URL =
-  "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/post";
-
 // Fetch Locations API
 const fetchLocations = async () => {
+  const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
   try {
-    const response = await axios.get(`${API_BASE_URL}/locations`);
+    const response = await axios.get(`${AZURE_BASE_URL}/locations`);
     return response.data;
   } catch (error) {
     console.error("Error fetching locations:", error);

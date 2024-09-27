@@ -21,6 +21,7 @@ const EditBanner = () => {
   };
 
   const handleSubmit = async (e) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     e.preventDefault();
     try {
       const formData = new FormData();
@@ -29,7 +30,7 @@ const EditBanner = () => {
         formData.append("image", image);
       }
       const response = await fetch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/${apiEndpoint}/${banner._id}`,
+        `${AZURE_BASE_URL}/v1.0/admin/${apiEndpoint}/${banner._id}`,
         {
           method: "PATCH",
           body: formData,

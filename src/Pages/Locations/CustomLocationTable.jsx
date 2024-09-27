@@ -9,8 +9,8 @@ import "./CustomLocationTable.css"; // Updated CSS
 import "./LocationManager.css"; // Reuse common styles from LocationManager
 import { ConstructionOutlined } from "@mui/icons-material";
 
-const API_URL =
-  "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/custom-locations";
+const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
+const API_URL = `${AZURE_BASE_URL}/v1.0/core/locations/custom-locations`;
 
 const CustomLocationTable = () => {
   const [customLocations, setCustomLocations] = useState([]);

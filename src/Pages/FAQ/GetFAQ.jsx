@@ -58,14 +58,11 @@ const GetFAQ = ({ refresh, onEditFAQClick }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     setLoading(true);
     Promise.all([
-      axios.get(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services",
-      ),
-      axios.get(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/users/faq",
-      ),
+      axios.get(`${AZURE_BASE_URL}/v1.0/core/services`),
+      axios.get(`${AZURE_BASE_URL}/v1.0/users/faq`),
     ])
       .then(([servicesResponse, faqsResponse]) => {
         setServices(servicesResponse.data);

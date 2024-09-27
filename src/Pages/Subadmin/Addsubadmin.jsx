@@ -58,16 +58,13 @@ const Addsubadmin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/sub-admin",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(addAdmin),
+      const response = await fetch("${AZURE_BASE_URL}/v1.0/admin/sub-admin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(addAdmin),
+      });
       if (response.ok) {
         alert("Form submitted");
       }

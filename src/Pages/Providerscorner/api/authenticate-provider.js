@@ -2,9 +2,10 @@ import axios from "axios";
 
 // Fetch providers list
 export const fetchProviders = async () => {
+  const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
   try {
     const response = await axios.get(
-      "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-details",
+      `${AZURE_BASE_URL}/v1.0/providers/provider-details`,
     );
     console.log("Fetched providers:", response.data);
     return response.data;
@@ -16,9 +17,10 @@ export const fetchProviders = async () => {
 
 // Fetch provider certificates
 export const fetchProviderCertificates = async (providerId) => {
+  const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
   try {
     const response = await axios.get(
-      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-certificate/${providerId}`,
+      `${AZURE_BASE_URL}/v1.0/providers/provider-certificate/${providerId}`,
     );
     console.log("Fetched provider certificates:", response.data);
     return response.data;
@@ -30,9 +32,10 @@ export const fetchProviderCertificates = async (providerId) => {
 
 // Fetch provider details
 export const fetchProviderDetails = async (providerId) => {
+  const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
   try {
     const response = await axios.get(
-      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-details/${providerId}`,
+      `${AZURE_BASE_URL}/v1.0/providers/provider-details/${providerId}`,
     );
     console.log("Fetched provider details:", response.data);
     return response.data;
@@ -44,9 +47,10 @@ export const fetchProviderDetails = async (providerId) => {
 
 // Update provider certificate status
 export const updateProviderCertificate = async (documentId, updateData) => {
+  const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
   try {
     const response = await axios.patch(
-      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-certificate/${documentId}`,
+      `${AZURE_BASE_URL}/v1.0/providers/provider-certificate/${documentId}`,
       updateData,
     );
     console.log("Updated provider certificate:", response.data);
@@ -59,11 +63,12 @@ export const updateProviderCertificate = async (documentId, updateData) => {
 
 // Update provider details
 export const updateProviderDetails = async (providerId, updateData) => {
+  const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
   try {
     console.log("Updating provider with ID:", providerId);
     console.log("Update data:", updateData);
     const response = await axios.patch(
-      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-details/${providerId}`,
+      `${AZURE_BASE_URL}/v1.0/providers/provider-details/${providerId}`,
       updateData,
     );
     console.log("Updated provider details:", response.data);

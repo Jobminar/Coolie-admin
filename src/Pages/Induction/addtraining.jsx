@@ -25,10 +25,9 @@ const AddTraining = () => {
 
   useEffect(() => {
     const fetchServices = async () => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
-        const response = await fetch(
-          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services",
-        );
+        const response = await fetch(`${AZURE_BASE_URL}/v1.0/core/services`);
         const data = await response.json();
         setServices(data);
       } catch (error) {
@@ -72,6 +71,7 @@ const AddTraining = () => {
   };
 
   const handleSubmit = async (e) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     e.preventDefault();
     const submitData = new FormData();
     submitData.append(
@@ -87,13 +87,10 @@ const AddTraining = () => {
     const toastId = toast.loading("Submitting form...");
 
     try {
-      const response = await fetch(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/training",
-        {
-          method: "POST",
-          body: submitData,
-        },
-      );
+      const response = await fetch(`${AZURE_BASE_URL}/v1.0/admin/training`, {
+        method: "POST",
+        body: submitData,
+      });
       if (response.ok) {
         toast.success("Form submitted successfully!", { id: toastId });
       } else {

@@ -19,9 +19,10 @@ const OurCoreServices = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
         const response = await fetch(
-          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/our-core-services",
+          `${AZURE_BASE_URL}/v1.0/admin/our-core-services`,
         );
         if (!response.ok) {
           throw new Error("Error occurred");
@@ -66,7 +67,7 @@ const OurCoreServices = () => {
     data.append("serviceName", formData.serviceName);
     data.append("description", formData.description);
     data.append("image", image);
-
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     // Debugging: Log FormData content
     for (let pair of data.entries()) {
       console.log(pair[0] + ": " + pair[1]);
@@ -74,7 +75,7 @@ const OurCoreServices = () => {
 
     try {
       const response = await fetch(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/our-core-services",
+        `${AZURE_BASE_URL}/v1.0/admin/our-core-services`,
         {
           method: "POST",
           body: data,
@@ -99,9 +100,10 @@ const OurCoreServices = () => {
 
   useEffect(() => {
     const fetchCoreServices = async () => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
         const response = await fetch(
-          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/our-core-services",
+          `${AZURE_BASE_URL}/v1.0/admin/our-core-services`,
         );
         if (!response.ok) {
           throw new Error("Error while fetching the core services data");
@@ -125,6 +127,7 @@ const OurCoreServices = () => {
   };
 
   const handleDelete = async (id) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     if (!id) {
       console.log("ID not provided");
       return;
@@ -132,7 +135,7 @@ const OurCoreServices = () => {
 
     try {
       const response = await fetch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/our-core-services/${id}`,
+        `${AZURE_BASE_URL}/v1.0/admin/our-core-services/${id}`,
         {
           method: "DELETE",
         },

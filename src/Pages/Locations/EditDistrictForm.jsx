@@ -69,6 +69,7 @@ const EditDistrictForm = ({
   };
 
   const handleSubmit = async (e) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     e.preventDefault();
     setLoading(true);
     setErrorMessage("");
@@ -83,7 +84,7 @@ const EditDistrictForm = ({
 
     try {
       const response = await axios.patch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/${selectedRecord._id}`,
+        `${AZURE_BASE_URL}/v1.0/core/locations/${selectedRecord._id}`,
         {
           ...formData,
           price: updatedPrice, // Set the reconstructed price object

@@ -74,13 +74,10 @@ const AddBlogs = ({ onAdd }) => {
     }
 
     try {
-      const response = await fetch(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/blogs",
-        {
-          method: "POST",
-          body: formData,
-        },
-      );
+      const response = await fetch("${AZURE_BASE_URL}/v1.0/admin/blogs", {
+        method: "POST",
+        body: formData,
+      });
       const result = await response.json();
 
       if (response.ok) {

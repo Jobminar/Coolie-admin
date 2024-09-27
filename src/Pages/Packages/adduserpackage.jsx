@@ -47,12 +47,13 @@ const AddUserPackage = () => {
 
   // Function to handle form submission
   const onSubmit = async (data) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     setLoading(true); // Start loading
     console.log("Data to be sent to API:", data); // Log the data before sending to API
 
     try {
       const response = await axios.post(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/admin-user-package",
+        `${AZURE_BASE_URL}/v1.0/admin/admin-user-package`,
         data,
         {
           headers: {

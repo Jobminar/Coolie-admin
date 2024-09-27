@@ -6,9 +6,10 @@ const UserTable = ({ data, loading, error, userOrdersCount }) => {
   const [showOrdersPopup, setShowOrdersPopup] = useState(false);
 
   const handleRowClick = async (userId) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     try {
       const response = await fetch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/users/order/${userId}`,
+        `${AZURE_BASE_URL}/v1.0/users/order/${userId}`,
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch orders for user ${userId}`);

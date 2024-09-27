@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const BASE_URL =
-  "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers";
+const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
+const BASE_URL = `${AZURE_BASE_URL}/v1.0/providers`;
 
 // Function to generate OTP
 export const generateOtp = async (phone) => {

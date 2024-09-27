@@ -16,10 +16,9 @@ const Popupbanners = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     axios
-      .get(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/user-banners",
-      )
+      .get(`${AZURE_BASE_URL}/v1.0/admin/user-banners`)
       .then((response) => setData(response.data))
       .catch((error) => setError(error));
   }, []);
@@ -37,6 +36,7 @@ const Popupbanners = () => {
   };
 
   const handleSubmit = async (e) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     e.preventDefault();
     console.log(name, "name", image, "image");
     try {
@@ -44,7 +44,7 @@ const Popupbanners = () => {
       formData.append("name", name);
       formData.append("image", image);
       const response = await fetch(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/user-banners",
+        `${AZURE_BASE_URL}/v1.0/admin/user-banners`,
         {
           method: "POST",
           body: formData,
@@ -63,6 +63,7 @@ const Popupbanners = () => {
   };
 
   const handleDelete = async (id) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     if (!id) {
       console.log("ID not provided");
       return;
@@ -70,7 +71,7 @@ const Popupbanners = () => {
 
     try {
       const response = await fetch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/user-banners/banners/${id}`,
+        `${AZURE_BASE_URL}/v1.0/admin/user-banners/banners/${id}`,
         {
           method: "DELETE",
         },

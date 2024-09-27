@@ -13,9 +13,10 @@ export const fetchCategories = async () => {
 };
 
 export const fetchProviderWorkDetails = async (providerId) => {
+  const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
   try {
     const response = await fetch(
-      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/work/${providerId}`,
+      `${AZURE_BASE_URL}/v1.0/providers/work/${providerId}`,
     );
     if (!response.ok) throw new Error("Network response was not ok");
     return await response.json();
@@ -27,9 +28,10 @@ export const fetchProviderWorkDetails = async (providerId) => {
 
 // Function to fetch provider certificates by providerId
 export const fetchProviderCertificates = async (providerId) => {
+  const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
   try {
     const response = await fetch(
-      `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-certificate/${providerId}`,
+      `${AZURE_BASE_URL}/v1.0/providers/provider-certificate/${providerId}`,
     );
     if (!response.ok) throw new Error("Network response was not ok");
     const data = await response.json();
@@ -42,9 +44,10 @@ export const fetchProviderCertificates = async (providerId) => {
 };
 
 export const fetchProviders = async () => {
+  const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
   try {
     const response = await axios.get(
-      "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/providers/provider-details",
+      `${AZURE_BASE_URL}/v1.0/providers/provider-details`,
     );
     console.log("Fetched providers:", response.data);
     return response.data;

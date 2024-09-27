@@ -20,19 +20,17 @@ const AddProviderPackage = () => {
   };
 
   const handleSubmit = async (e) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     e.preventDefault();
     console.log(propackage);
     try {
-      const response = await fetch(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/package",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(propackage),
+      const response = await fetch(`${AZURE_BASE_URL}/v1.0/admin/package`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(propackage),
+      });
 
       if (response.ok) {
         alert("Success");

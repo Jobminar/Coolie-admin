@@ -19,10 +19,9 @@ const Blogs = () => {
 
   // Fetch all blogs from API
   const fetchBlogs = async () => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     try {
-      const response = await fetch(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/blogs",
-      );
+      const response = await fetch(`${AZURE_BASE_URL}/v1.0/admin/blogs`);
       const data = await response.json();
       if (response.ok) {
         setBlogs(data); // Store all blogs
@@ -56,13 +55,11 @@ const Blogs = () => {
 
   // Delete a blog
   const deleteBlog = async (index, blogId) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     try {
-      await fetch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/blogs/${blogId}`,
-        {
-          method: "DELETE",
-        },
-      );
+      await fetch(`${AZURE_BASE_URL}/v1.0/admin/blogs/${blogId}`, {
+        method: "DELETE",
+      });
       const updatedBlogs = blogs.filter((_, i) => i !== index);
       setBlogs(updatedBlogs);
       paginateBlogs(updatedBlogs, currentPage); // Update the current page after deletion
@@ -73,6 +70,7 @@ const Blogs = () => {
 
   // Update (PATCH) the blog with new data
   const editBlog = async (updatedBlog) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     try {
       // Create a formData object to handle potential file uploads
       const formData = new FormData();
@@ -90,7 +88,7 @@ const Blogs = () => {
 
       // Send a PATCH request to update the blog
       const response = await fetch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/blogs/${updatedBlog._id}`,
+        `${AZURE_BASE_URL}/v1.0/admin/blogs/${updatedBlog._id}`,
         {
           method: "PATCH",
           body: formData,

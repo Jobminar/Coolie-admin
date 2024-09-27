@@ -24,10 +24,9 @@ function InductionForm() {
 
   useEffect(() => {
     const fetchCategories = async () => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
-        const response = await fetch(
-          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/categories",
-        );
+        const response = await fetch(`${AZURE_BASE_URL}/v1.0/core/categories`);
         const data = await response.json();
         setCategories(data);
       } catch (error) {
@@ -71,6 +70,7 @@ function InductionForm() {
   };
 
   const handleSubmit = async (e) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     e.preventDefault();
     setIsSubmitting(true);
     const formData = new FormData();
@@ -81,13 +81,10 @@ function InductionForm() {
     formData.append("video", video);
 
     try {
-      const response = await fetch(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/induction",
-        {
-          method: "POST",
-          body: formData,
-        },
-      );
+      const response = await fetch(`${AZURE_BASE_URL}/v1.0/admin/induction`, {
+        method: "POST",
+        body: formData,
+      });
       if (response.ok) {
         toast.success("Form submitted successfully!");
       } else {

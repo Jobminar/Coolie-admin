@@ -16,9 +16,10 @@ const LocationList = ({ group, tierName, reload, searchPincode }) => {
 
   // Fetch locations from the API using the group as a query param
   const fetchLocations = async () => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     try {
       const response = await axios.get(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations",
+        `${AZURE_BASE_URL}/v1.0/core/locations`,
         {
           params: { group: group }, // Send group as a query param
         },
@@ -115,6 +116,7 @@ const LocationList = ({ group, tierName, reload, searchPincode }) => {
 
   // Handle adding the tier
   const handleAddTier = async () => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     if (!tierName) {
       toast.error("Please enter a Tier Name before adding.");
       return;
@@ -128,13 +130,10 @@ const LocationList = ({ group, tierName, reload, searchPincode }) => {
     }
 
     try {
-      await axios.put(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/locations/update-tiername",
-        {
-          ids: locationIds,
-          newTierName: tierName,
-        },
-      );
+      await axios.put(`${AZURE_BASE_URL}/v1.0/core/locations/update-tiername`, {
+        ids: locationIds,
+        newTierName: tierName,
+      });
       toast.success("Tier name updated successfully!");
 
       // Refetch the locations after successful update

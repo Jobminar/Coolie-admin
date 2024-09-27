@@ -20,9 +20,10 @@ const AddInclusionExclusion = ({ onClose, onDataAdded }) => {
   // Fetch services from the API
   useEffect(() => {
     const fetchServices = async () => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
         const response = await axios.get(
-          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/services",
+          `${AZURE_BASE_URL}/v1.0/core/services`,
         );
         setServices(response.data);
       } catch (error) {
@@ -110,8 +111,9 @@ const AddInclusionExclusion = ({ onClose, onDataAdded }) => {
     });
 
     try {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       const response = await axios.post(
-        "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/core/inclusion-exclusion",
+        `${AZURE_BASE_URL}/v1.0/core/inclusion-exclusion`,
         formData,
         {
           headers: {

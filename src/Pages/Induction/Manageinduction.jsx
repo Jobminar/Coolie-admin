@@ -17,9 +17,10 @@ export default function ManageInduction() {
 
   useEffect(() => {
     const fetchInductionVideos = async () => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
         const response = await axios.get(
-          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/induction",
+          `${AZURE_BASE_URL}/v1.0/admin/induction`,
         );
         const videoData = response.data.map((video) => ({
           ...video,
@@ -41,13 +42,12 @@ export default function ManageInduction() {
   };
 
   const handleDeleteClick = (id) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     const updatedVideos = inductionVideos.filter((video) => video._id !== id);
     setInductionVideos(updatedVideos);
 
     axios
-      .delete(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/induction/${id}`,
-      )
+      .delete(`${AZURE_BASE_URL}/v1.0/admin/induction/${id}`)
       .then(() => {
         console.log("Video deleted successfully");
       })

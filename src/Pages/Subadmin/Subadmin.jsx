@@ -11,9 +11,7 @@ const Subadmin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/sub-admin",
-        );
+        const response = await fetch("${AZURE_BASE_URL}/v1.0/admin/sub-admin");
         if (!response.ok) {
           throw new Error("Error occurred");
         }

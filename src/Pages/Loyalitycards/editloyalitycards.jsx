@@ -33,6 +33,7 @@ const EditLoyaltyCards = () => {
   };
 
   const handleSubmit = async (e) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
@@ -41,7 +42,7 @@ const EditLoyaltyCards = () => {
       }
 
       const response = await fetch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/loyalty/${editdata._id}`,
+        `${AZURE_BASE_URL}/v1.0/admin/loyalty/${editdata._id}`,
         {
           method: "PATCH",
           body: formDataToSend,

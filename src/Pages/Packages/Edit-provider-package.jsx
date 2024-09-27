@@ -25,11 +25,12 @@ const EditProviderPackage = () => {
   };
 
   const handleSubmit = async (e) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     e.preventDefault();
     console.log("Submitting package data:", packageData);
     try {
       const response = await fetch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/provider-package/${packageData._id}`,
+        `${AZURE_BASE_URL}/v1.0/admin/provider-package/${packageData._id}`,
         {
           method: "PATCH",
           headers: {

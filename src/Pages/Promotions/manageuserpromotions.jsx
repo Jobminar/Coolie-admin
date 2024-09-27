@@ -11,9 +11,10 @@ const Manageuserpromotions = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
       try {
         const response = await fetch(
-          "https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/user-promotions",
+          `${AZURE_BASE_URL}/v1.0/admin/user-promotions`,
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -36,6 +37,7 @@ const Manageuserpromotions = () => {
   };
 
   const handleDelete = async (id) => {
+    const AZURE_BASE_URL = import.meta.env.VITE_AZURE_BASE_URL;
     if (!id) {
       console.log("ID not provided");
       return;
@@ -43,7 +45,7 @@ const Manageuserpromotions = () => {
 
     try {
       const response = await fetch(
-        `https://admin-tasktigers-f4esbabqggekahc9.southindia-01.azurewebsites.net/v1.0/admin/user-promotions/${id}`,
+        `${AZURE_BASE_URL}/v1.0/admin/user-promotions/${id}`,
         {
           method: "DELETE",
         },
